@@ -85,18 +85,18 @@ describe('core/linked-list', () => {
 		const
 			list = new LinkedList([-0, 1, NaN, 3]);
 
-		expect(list.includes(0)).toBeTrue();
-		expect(list.includes(1)).toBeTrue();
-		expect(list.includes(NaN)).toBeTrue();
-		expect(list.includes(10)).toBeFalse();
+		expect(list.includes(0)).toBe(true);
+		expect(list.includes(1)).toBe(true);
+		expect(list.includes(NaN)).toBe(true);
+		expect(list.includes(10)).toBe(false);
 	});
 
 	it('should implement the iterable API', () => {
 		const
 			list = new LinkedList([1, 2, 3]);
 
-		expect(Object.isIterable(list)).toBeTrue();
-		expect(Object.isIterator(list.values())).toBeTrue();
+		expect(Object.isIterable(list)).toBe(true);
+		expect(Object.isIterator(list.values())).toBe(true);
 
 		expect([...list]).toEqual([1, 2, 3]);
 		expect([...list.values()]).toEqual([1, 2, 3]);
@@ -106,7 +106,7 @@ describe('core/linked-list', () => {
 		const
 			list = new LinkedList([1, 2, 3]);
 
-		expect(Object.isIterator(list.reverse())).toBeTrue();
+		expect(Object.isIterator(list.reverse())).toBe(true);
 		expect([...list.reverse()]).toEqual([3, 2, 1]);
 		expect([...new LinkedList(list.reverse())]).toEqual([3, 2, 1]);
 	});

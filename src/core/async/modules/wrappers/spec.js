@@ -12,6 +12,7 @@ import express from 'express';
 
 import Async from 'core/async';
 import Provider, { provider } from 'core/data';
+import EventEmitter from 'events';
 
 describe('core/async/modules/wrappers', () => {
 	let server;
@@ -20,8 +21,8 @@ describe('core/async/modules/wrappers', () => {
 		server = createServer();
 	});
 
-	afterAll((done) => {
-		server.close(done);
+	afterAll(async () => {
+		await server.close();
 	});
 
 	@provider
@@ -36,11 +37,11 @@ describe('core/async/modules/wrappers', () => {
 				provider = new ProviderExample(),
 				wrappedProvider = $a.wrapDataProvider(provider);
 
-			spyOn(provider, 'name');
+			jest.spyOn(provider, 'name');
 			wrappedProvider.name();
 			expect(provider.name).toHaveBeenCalled();
 
-			spyOn(provider, 'base');
+			jest.spyOn(provider, 'base');
 			wrappedProvider.base('bar');
 			expect(provider.base).toHaveBeenCalledWith('bar');
 		});
@@ -51,11 +52,11 @@ describe('core/async/modules/wrappers', () => {
 				provider = new ProviderExample(),
 				wrappedProvider = $a.wrapDataProvider(provider);
 
-			spyOn(provider, 'get');
+			jest.spyOn(provider, 'get');
 			wrappedProvider.get();
 			expect(provider.get).toHaveBeenCalled();
 
-			spyOn(provider, 'upd');
+			jest.spyOn(provider, 'upd');
 			wrappedProvider.upd();
 			expect(provider.upd).toHaveBeenCalled();
 		});
@@ -66,23 +67,23 @@ describe('core/async/modules/wrappers', () => {
 				provider = new ProviderExample(),
 				wrappedProvider = $a.wrapDataProvider(provider);
 
-			spyOn($a, 'request');
+			jest.spyOn($a, 'request');
 			wrappedProvider.get({id: 1});
-			expect($a.request.calls.mostRecent().args[1]).toEqual({group: 'ProviderExample'});
+			expect($a.request.mock.lastCall[1]).toEqual({group: 'ProviderExample'});
 		});
 
-		it('should concatenate a global group and local group', () => {
+		it('should concatenate a global group and local group', async () => {
 			const
 				$a = new Async(),
 				provider = new ProviderExample(),
 				wrappedProvider = $a.wrapDataProvider(provider, {group: 'example'});
 
-			spyOn($a, 'request');
-			wrappedProvider.get({id: 1});
-			expect($a.request.calls.mostRecent().args[1]).toEqual({group: 'example'});
+			jest.spyOn($a, 'request');
+			await wrappedProvider.get({id: 1});
+			expect($a.request.mock.lastCall[1]).toEqual({group: 'example'});
 
-			wrappedProvider.upd({id: 1}, {group: 'foo'});
-			expect($a.request.calls.mostRecent().args[1]).toEqual({group: 'example:foo'});
+			await wrappedProvider.upd({id: 1}, {group: 'foo'});
+			expect($a.request.mock.lastCall[1]).toEqual({group: 'example:foo'});
 		});
 
 		it('should provide a group into a nested event emitter wrapper and replace the original emitter with a wrapper', () => {
@@ -91,12 +92,12 @@ describe('core/async/modules/wrappers', () => {
 				provider = new ProviderExample(),
 				fakeWrapper = {info: 'Is a wrapped event emitter'};
 
-			spyOn($a, 'wrapEventEmitter').and.returnValue(fakeWrapper);
+			jest.spyOn($a, 'wrapEventEmitter').mockReturnValue(fakeWrapper);
 
 			const
 				wrappedProvider = $a.wrapDataProvider(provider, {group: 'example'});
 
-			expect($a.wrapEventEmitter.calls.mostRecent().args).toEqual([provider.emitter, {group: 'example'}]);
+			expect($a.wrapEventEmitter.mock.lastCall).toEqual([provider.emitter, {group: 'example'}]);
 			expect(wrappedProvider.emitter).toEqual(fakeWrapper);
 		});
 	});
@@ -139,15 +140,15 @@ describe('core/async/modules/wrappers', () => {
 				$a = new Async(),
 				emitterWithGroup = $a.wrapEventEmitter({on: () => null}, {group: 'example'});
 
-			spyOn($a, 'on');
+			jest.spyOn($a, 'on');
 			emitterWithGroup.on('foo', () => null, {
 				group: 'example2'
 			});
 
-			expect($a.on.calls.mostRecent().args[3]).toEqual({group: 'example:example2'});
+			expect($a.on.mock.lastCall[3]).toEqual({group: 'example:example2'});
 
 			emitterWithGroup.on('bar', () => null);
-			expect($a.on.calls.mostRecent().args[3]).toEqual({group: 'example'});
+			expect($a.on.mock.lastCall[3]).toEqual({group: 'example'});
 
 			const emitterWithoutGroup = $a.wrapEventEmitter({
 				on: () => null
@@ -157,10 +158,10 @@ describe('core/async/modules/wrappers', () => {
 				group: 'example3'
 			});
 
-			expect($a.on.calls.mostRecent().args[3]).toEqual({group: 'example3'});
+			expect($a.on.mock.lastCall[3]).toEqual({group: 'example3'});
 
 			emitterWithoutGroup.on('bar', () => null);
-			expect($a.on.calls.mostRecent().args[3]).toEqual({});
+			expect($a.on.mock.lastCall[3]).toEqual({});
 		});
 
 		it('normalizes of input parameters', () => {
@@ -168,15 +169,15 @@ describe('core/async/modules/wrappers', () => {
 				$a = new Async(),
 				emitter = $a.wrapEventEmitter({on: () => null});
 
-			spyOn($a, 'on');
+			jest.spyOn($a, 'on');
 
 			// [] => [{}]
 			emitter.on('foo', () => null);
-			expect($a.on.calls.mostRecent().args.slice(3)).toEqual([{}]);
+			expect($a.on.mock.lastCall.slice(3)).toEqual([{}]);
 
 			// [true] => [{}, true]
 			emitter.on('foo', () => null, true);
-			expect($a.on.calls.mostRecent().args.slice(3)).toEqual([{}, true]);
+			expect($a.on.mock.lastCall.slice(3)).toEqual([{}, true]);
 
 			/*
 			 * [{foo: 'foo', group: 'group', label: 'label'}, null, 5]
@@ -184,17 +185,17 @@ describe('core/async/modules/wrappers', () => {
 			 * [{group: 'group', label: 'label'}, {foo: 'foo'}, null, 5]
 			 */
 			emitter.on('foo', () => null, {foo: 'foo', group: 'group', label: 'label'}, null, 5);
-			expect($a.on.calls.mostRecent().args.slice(3)).toEqual([{group: 'group', label: 'label'}, {foo: 'foo'}, null, 5]);
+			expect($a.on.mock.lastCall.slice(3)).toEqual([{group: 'group', label: 'label'}, {foo: 'foo'}, null, 5]);
 		});
 
 		it('`off`, `once`, `promisifyOnce` should call async wrappers', () => {
 			const
 				$a = new Async(),
-				emitter = $a.wrapEventEmitter({});
+				emitter = $a.wrapEventEmitter(new EventEmitter());
 
-			spyOn($a, 'once');
-			spyOn($a, 'promisifyOnce');
-			spyOn($a, 'off');
+			jest.spyOn($a, 'once');
+			jest.spyOn($a, 'promisifyOnce');
+			jest.spyOn($a, 'off');
 
 			emitter.once('foo', () => null);
 			emitter.promisifyOnce('bar', () => null);
@@ -279,8 +280,10 @@ describe('core/async/modules/wrappers', () => {
 			$a = new Async();
 			methodArgs = [Symbol('firstArg'), Symbol('secondArg'), Symbol('thirdArg')];
 			expectedResult = Symbol('result');
-			jasmine.setDefaultSpyStrategy((and) => and.returnValue(Promise.resolve(expectedResult)));
-			mockedStorage = jasmine.createSpyObj(methodsWithNamespace);
+			mockedStorage = methodsWithNamespace.reduce((cur, name) => {
+				cur[name] = jest.fn().mockResolvedValue(expectedResult);
+				return cur;
+			}, {});
 		});
 
 		mainMethods.forEach(testMethod);
@@ -299,7 +302,7 @@ describe('core/async/modules/wrappers', () => {
 				it('should mark a storage by the global group', async () => {
 					const
 						wrappedStorage = $a.wrapStorage(mockedStorage, {group: 'bla'}),
-						spyPromise = jasmine.createSpy();
+						spyPromise = jest.fn().mockResolvedValue(expectedResult);
 
 					const promise = wrappedStorage[methodName](...methodArgs).then(
 						() => spyPromise('resolved'),
@@ -308,13 +311,14 @@ describe('core/async/modules/wrappers', () => {
 
 					await $a.clearAll({group: 'bla'});
 					await promise;
-					expect(spyPromise).toHaveBeenCalledOnceWith({type: 'clearAsync', reason: 'group'});
+					expect(spyPromise).toHaveBeenLastCalledWith({type: 'clearAsync', reason: 'group'});
+					expect(spyPromise).toHaveBeenCalledTimes(1);
 				});
 
 				it('should consider the `group` parameter', async () => {
 					const
 						wrappedStorage = $a.wrapStorage(mockedStorage),
-						spyPromise = jasmine.createSpy();
+						spyPromise = jest.fn().mockResolvedValue(expectedResult);
 
 					const promise = wrappedStorage[methodName](...methodArgs, {group: 'bla'}).then(
 						() => spyPromise('resolved'),
@@ -323,13 +327,14 @@ describe('core/async/modules/wrappers', () => {
 
 					await $a.clearAll({group: 'bla'});
 					await promise;
-					expect(spyPromise).toHaveBeenCalledOnceWith({type: 'clearAsync', reason: 'group'});
+					expect(spyPromise).toHaveBeenLastCalledWith({type: 'clearAsync', reason: 'group'});
+					expect(spyPromise).toHaveBeenCalledTimes(1);
 				});
 
 				it('should consider the `label` parameter', async () => {
 					const
 						wrappedStorage = $a.wrapStorage(mockedStorage),
-						spyPromise = jasmine.createSpy();
+						spyPromise = jest.fn().mockResolvedValue(expectedResult);
 
 					const promise = wrappedStorage[methodName](...methodArgs, {label: 'qoo'}).then(
 						() => spyPromise('resolved'),
@@ -338,13 +343,14 @@ describe('core/async/modules/wrappers', () => {
 
 					await $a.clearAll({label: 'qoo'});
 					await promise;
-					expect(spyPromise).toHaveBeenCalledOnceWith({type: 'clearAsync', reason: 'label'});
+					expect(spyPromise).toHaveBeenLastCalledWith({type: 'clearAsync', reason: 'label'});
+					expect(spyPromise).toHaveBeenCalledTimes(1);
 				});
 
 				it('should consider the `join` parameter', async () => {
 					const
 						wrappedStorage = $a.wrapStorage(mockedStorage),
-						spyPromise = jasmine.createSpy(),
+						spyPromise = jest.fn().mockResolvedValue(expectedResult),
 						label = Symbol('label'),
 						promise1 = wrappedStorage[methodName](...methodArgs, {label, join: true}).then(() => spyPromise()),
 						promise2 = wrappedStorage[methodName](...methodArgs, {label, join: true}).then(() => spyPromise());
@@ -356,8 +362,8 @@ describe('core/async/modules/wrappers', () => {
 				it('should concatenate global and local groups', async () => {
 					const
 						wrappedStorage = $a.wrapStorage(mockedStorage, {group: 'bla'}),
-						spyWithoutLocal = jasmine.createSpy(),
-						spyWithLocal = jasmine.createSpy();
+						spyWithoutLocal = jest.fn().mockResolvedValue(expectedResult),
+						spyWithLocal = jest.fn().mockResolvedValue(expectedResult);
 
 					const promiseWithoutLocal = wrappedStorage[methodName](...methodArgs).then(
 						() => spyWithoutLocal('resolved'),
@@ -372,8 +378,11 @@ describe('core/async/modules/wrappers', () => {
 					await $a.clearAll({group: 'bla:foo'});
 					await Promise.all([promiseWithoutLocal, promiseWithLocal]);
 
-					expect(spyWithoutLocal).toHaveBeenCalledOnceWith('resolved');
-					expect(spyWithLocal).toHaveBeenCalledOnceWith({type: 'clearAsync', reason: 'group'});
+					expect(spyWithoutLocal).toHaveBeenLastCalledWith('resolved');
+					expect(spyWithoutLocal).toHaveBeenCalledTimes(1);
+
+					expect(spyWithLocal).toHaveBeenLastCalledWith({type: 'clearAsync', reason: 'group'});
+					expect(spyWithLocal).toHaveBeenCalledTimes(1);
 				});
 
 				it('should separate async options from additional parameters', () => {
@@ -386,8 +395,8 @@ describe('core/async/modules/wrappers', () => {
 						notAsyncOption: true
 					});
 
-					expect(mockedStorage[methodName].calls.mostRecent().args[2]).toEqual({additionalArg: true});
-					expect(mockedStorage[methodName].calls.mostRecent().args[3]).toEqual({notAsyncOption: true});
+					expect(mockedStorage[methodName].mock.lastCall[2]).toEqual({additionalArg: true});
+					expect(mockedStorage[methodName].mock.lastCall[3]).toEqual({notAsyncOption: true});
 				});
 			});
 		}
@@ -400,23 +409,23 @@ describe('core/async/modules/wrappers', () => {
 					storageNamespace = Symbol('storageNamespace'),
 					wrappedStorageNamespace = Symbol('wrappedStorageNamespace');
 
-				spyOn($a, 'wrapStorage');
-				mockedStorage.namespace.and.returnValue(storageNamespace);
-				$a.wrapStorage.and.returnValue(wrappedStorageNamespace);
+				jest.spyOn($a, 'wrapStorage');
+				mockedStorage.namespace.mockReturnValue(storageNamespace);
+				$a.wrapStorage.mockReturnValue(wrappedStorageNamespace);
 
 				const returnedStorage = parentStorage.namespace(name);
 
 				expect(mockedStorage.namespace).toHaveBeenCalledWith(name);
-				expect($a.wrapStorage.calls.mostRecent().args[0]).toBe(storageNamespace);
+				expect($a.wrapStorage.mock.lastCall[0]).toBe(storageNamespace);
 				expect(returnedStorage).toBe(wrappedStorageNamespace);
 			});
 
 			it('should concatenate global and local groups', () => {
 				const parentStorage = $a.wrapStorage(mockedStorage, {group: 'bla'});
 
-				spyOn($a, 'wrapStorage');
+				jest.spyOn($a, 'wrapStorage');
 				parentStorage.namespace('someName', {group: 'foo'});
-				expect($a.wrapStorage.calls.mostRecent().args[1]).toEqual({group: 'bla:foo'});
+				expect($a.wrapStorage.mock.lastCall[1]).toEqual({group: 'bla:foo'});
 			});
 		});
 	});

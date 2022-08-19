@@ -112,7 +112,7 @@ describe('core/async/modules/proxy `proxy`', () => {
 		{
 			const
 				$a = new Async(),
-				spy = jasmine.createSpy(),
+				spy = jest.fn(),
 				res = [];
 
 			const
@@ -129,7 +129,7 @@ describe('core/async/modules/proxy `proxy`', () => {
 		{
 			const
 				$a = new Async(),
-				spy = jasmine.createSpy(),
+				spy = jest.fn(),
 				res = [];
 
 			const
@@ -146,7 +146,7 @@ describe('core/async/modules/proxy `proxy`', () => {
 		{
 			const
 				$a = new Async(),
-				spy = jasmine.createSpy(),
+				spy = jest.fn(),
 				res = [];
 
 			const

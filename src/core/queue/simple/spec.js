@@ -80,7 +80,7 @@ describe('core/queue/simple', () => {
 		queue.push(2);
 		queue.push(3);
 
-		expect(Object.isIterator(queue.values())).toBeTrue();
+		expect(Object.isIterator(queue.values())).toBe(true);
 		expect([...queue.values()]).toEqual([1, 2, 3]);
 		expect([...queue]).toEqual([1, 2, 3]);
 	});

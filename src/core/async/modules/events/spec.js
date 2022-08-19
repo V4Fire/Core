@@ -219,7 +219,7 @@ describe('core/async/modules/events', () => {
 			const
 				$a = new Async(),
 				$e = new EventEmitter(),
-				spy = jasmine.createSpy(),
+				spy = jest.fn(),
 				res = [];
 
 			$a.on($e, 'foo', onResolve(res, 'first'), {label: $$.foo, onClear: onReject(spy)});
@@ -234,7 +234,7 @@ describe('core/async/modules/events', () => {
 			const
 				$a = new Async(),
 				$e = new EventEmitter(),
-				spy = jasmine.createSpy(),
+				spy = jest.fn(),
 				res = [];
 
 			$a.on($e, 'foo', onResolve(res, 'first'), {label: $$.foo, join: true, onMerge: onMerge(spy, 'first')});
@@ -249,7 +249,7 @@ describe('core/async/modules/events', () => {
 			const
 				$a = new Async(),
 				$e = new EventEmitter(),
-				spy = jasmine.createSpy(),
+				spy = jest.fn(),
 				res = [];
 
 			$a.on($e, 'foo', onResolve(res, 'first'), {label: $$.foo, join: 'replace', onClear: onReject(spy)});

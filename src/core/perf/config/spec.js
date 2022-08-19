@@ -10,7 +10,7 @@ import { perf as perfFactory } from 'core/perf';
 
 describe('core/perf', () => {
 	it('providing an engine to use', () => {
-		const spy = spyOn(console, 'warn');
+		const spy = jest.spyOn(console, 'warn');
 
 		const perf = perfFactory({
 			timer: {
@@ -32,7 +32,7 @@ describe('core/perf', () => {
 	});
 
 	it('should log only filtered events', () => {
-		const spy = spyOn(console, 'warn');
+		const spy = jest.spyOn(console, 'warn');
 
 		const perf = perfFactory({
 			timer: {
@@ -57,7 +57,7 @@ describe('core/perf', () => {
 	});
 
 	it('should filter namespaces too', () => {
-		const spy = spyOn(console, 'warn');
+		const spy = jest.spyOn(console, 'warn');
 
 		const perf = perfFactory({
 			timer: {
@@ -84,7 +84,7 @@ describe('core/perf', () => {
 	});
 
 	it('should filter only `manual`', () => {
-		const spy = spyOn(console, 'warn');
+		const spy = jest.spyOn(console, 'warn');
 
 		const perf = perfFactory({
 			timer: {
@@ -104,7 +104,7 @@ describe('core/perf', () => {
 	});
 
 	it('should log only filtered events provided via `include`', () => {
-		const spy = spyOn(console, 'warn');
+		const spy = jest.spyOn(console, 'warn');
 
 		const perf = perfFactory({
 			timer: {
@@ -136,7 +136,7 @@ describe('core/perf', () => {
 	});
 
 	it("shouldn't log events provided via `exclude`", () => {
-		const spy = spyOn(console, 'warn');
+		const spy = jest.spyOn(console, 'warn');
 
 		const perf = perfFactory({
 			timer: {
@@ -168,7 +168,7 @@ describe('core/perf', () => {
 	});
 
 	it('should ignore `exclude` if provided `include`', () => {
-		const spy = spyOn(console, 'warn');
+		const spy = jest.spyOn(console, 'warn');
 
 		const perf = perfFactory({
 			timer: {

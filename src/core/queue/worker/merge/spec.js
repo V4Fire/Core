@@ -100,7 +100,7 @@ describe('core/queue/worker/merge', () => {
 			}
 		};
 
-		await expectAsync(iterate()).toBeResolvedTo([1, 2, 3]);
+		await expect(iterate()).resolves.toEqual([1, 2, 3]);
 	});
 
 	it('calling `clone` should clone the queue', () => {

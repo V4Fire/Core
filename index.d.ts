@@ -772,6 +772,16 @@ interface ObjectConstructor {
 	hasOwnProperty(obj: any, key: PropertyKey): boolean;
 
 	/**
+	 * Sets the passed symbol property to the given object.
+	 * The character is set as non-enumerable to avoid implicit copying when using the spread operation.
+	 *
+	 * @param obj
+	 * @param symbol
+	 * @param value
+	 * */
+	defineSymbol<T>(obj: T, symbol: symbol, value: any): T;
+
+	/**
 	 * Sets a value to the passed object by the specified path.
 	 * The final function returns a value that was added.
 	 *

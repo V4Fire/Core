@@ -82,7 +82,7 @@ describe('core/request/modules/stream-buffer', () => {
 	});
 
 	it('destroying the stream with throwing an error if an asynchronous iterator is already called', async () => {
-		await expectAsync((async () => {
+		await expect((async () => {
 			const
 				streamBuffer = new StreamBuffer();
 
@@ -93,18 +93,18 @@ describe('core/request/modules/stream-buffer', () => {
 			for await (const val of streamBuffer) {
 				console.log('Unreachable code', val);
 			}
-		})()).toBeRejectedWith('Reason to destroy');
+		})()).rejects.toBe('Reason to destroy');
 	});
 
 	it("destroying the stream without throwing an error if an asynchronous iterator isn't already called", async () => {
-		await expectAsync(Promise.resolve().then(() => {
+		await expect(Promise.resolve().then(() => {
 			const streamBuffer = new StreamBuffer();
 			streamBuffer.destroy('reason');
-		})).not.toBeRejected();
+		})).resolves.toBe(undefined);
 	});
 
 	it('destroying the already closed stream should do nothing', async () => {
-		await expectAsync((async () => {
+		await expect((async () => {
 			const
 				streamBuffer = new StreamBuffer();
 
@@ -117,6 +117,6 @@ describe('core/request/modules/stream-buffer', () => {
 			}
 
 			streamBuffer.destroy('reason');
-		})()).not.toBeRejected();
+		})()).resolves.toBe(undefined);
 	});
 });

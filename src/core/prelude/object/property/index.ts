@@ -167,6 +167,11 @@ extend(Object, 'hasOwnProperty', function hasOwnProperty(
 	return (key) => Object.hasOwnProperty(obj, key);
 });
 
+/** @see [[ObjectConstructor.defineSymbol]] */
+extend(Object, 'defineSymbol', function defineSymbol<T>(obj: T, symbol: symbol, value: unknown): T {
+	return Object.defineProperty(obj, symbol, {value, configurable: true, enumerable: false, writable: true});
+});
+
 /** @see [[ObjectConstructor.set]] */
 extend(Object, 'set', function set(
 	obj: unknown,

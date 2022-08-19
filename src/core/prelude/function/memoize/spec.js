@@ -12,7 +12,7 @@ describe('core/prelude/function/memoize', () => {
 			rand = Math.random.once(),
 			res = rand();
 
-		expect(Object.isNumber(res)).toBeTrue();
+		expect(Object.isNumber(res)).toBe(true);
 		expect(rand()).toBe(res);
 		expect(rand()).toBe(res);
 	});
@@ -28,7 +28,7 @@ describe('core/prelude/function/memoize', () => {
 			rand = Function.once(Math.random),
 			res = rand();
 
-		expect(Object.isNumber(res)).toBeTrue();
+		expect(Object.isNumber(res)).toBe(true);
 		expect(rand()).toBe(res);
 		expect(rand()).toBe(res);
 	});

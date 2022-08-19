@@ -26,10 +26,10 @@ describe('core/promise', () => {
 		it('should provide a getter to check if the promise is pending', () => {
 			const promise = createControllablePromise();
 
-			expect(promise.isPending).toBeTrue();
+			expect(promise.isPending).toBe(true);
 			promise.resolve(10);
 
-			expect(promise.isPending).toBeFalse();
+			expect(promise.isPending).toBe(false);
 		});
 
 		it('providing a custom promise constructor', () => {
@@ -104,14 +104,14 @@ describe('core/promise', () => {
 
 	describe('`isControllablePromise`', () => {
 		it('should return true for controllable promises', () => {
-			expect(isControllablePromise(createControllablePromise())).toBeTrue();
-			expect(isControllablePromise(createControllablePromise({type: AbortablePromise}))).toBeTrue();
+			expect(isControllablePromise(createControllablePromise())).toBe(true);
+			expect(isControllablePromise(createControllablePromise({type: AbortablePromise}))).toBe(true);
 		});
 
 		it('should return false for non-controllable promises or non-promise values', () => {
-			expect(isControllablePromise(Promise.resolve(1))).toBeFalse();
-			expect(isControllablePromise(AbortablePromise.resolve(1))).toBeFalse();
-			expect(isControllablePromise(1)).toBeFalse();
+			expect(isControllablePromise(Promise.resolve(1))).toBe(false);
+			expect(isControllablePromise(AbortablePromise.resolve(1))).toBe(false);
+			expect(isControllablePromise(1)).toBe(false);
 		});
 	});
 });

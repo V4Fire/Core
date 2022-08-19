@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/* eslint-disable capitalized-comments,no-tabs */
+
 import express from 'express';
 import Provider, { provider, providers } from 'core/data';
 
@@ -40,7 +42,7 @@ describe('core/data', () => {
 		expect(await dp.get().data)
 			.toEqual({id: 1, value: 'things'});
 
-		const spy = jasmine.createSpy();
+		const spy = jest.fn();
 		dp.emitter.on('add', (getData) => spy('add', getData()));
 
 		expect(await dp.add({id: 12345, value: 'abc-def-ghi'}).data)
@@ -57,7 +59,7 @@ describe('core/data', () => {
 			dp = new TestOverrideProvider(),
 			mdp = dp.name('bla').url('json');
 
-		const spy = jasmine.createSpy();
+		const spy = jest.fn();
 		mdp.emitter.on('bla', async (getData) => spy('bla', await getData()));
 
 		expect(await mdp.post({id: 12345, value: 'abc-def-ghi'}).data)
@@ -102,7 +104,7 @@ describe('core/data', () => {
 		expect(await dp.get().data)
 			.toEqual({id: '1', value: 'things'});
 
-		const spy = jasmine.createSpy();
+		const spy = jest.fn();
 		dp.emitter.on('upd', async (getData) => spy('upd', await getData()));
 
 		expect(await dp.upd({id: 12345, value: ['abc', 'def', 'ghi']}).data)

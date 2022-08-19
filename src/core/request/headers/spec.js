@@ -67,7 +67,7 @@ describe('core/request/headers', () => {
 					headers = new Headers();
 
 				headers['cache-control'] = 'no-cache';
-				expect(headers.has('Cache-Control')).toBeTrue();
+				expect(headers.has('Cache-Control')).toBe(true);
 			});
 
 			it('deleting a header value', () => {
@@ -76,7 +76,7 @@ describe('core/request/headers', () => {
 				});
 
 				delete headers['cache-control'];
-				expect(headers.has('cache-control')).toBeFalse();
+				expect(headers.has('cache-control')).toBe(false);
 			});
 
 			it('getting headers keys', () => {
@@ -169,11 +169,11 @@ describe('core/request/headers', () => {
 					'Content-Language': ['en', 'ru']
 				});
 
-				expect(headers.has('Content-Language')).toBeTrue();
+				expect(headers.has('Content-Language')).toBe(true);
 				headers.delete('Content-Language');
 
 				expect(headers.get('Content-Language')).toBeNull();
-				expect(headers.has('Content-Language')).toBeFalse();
+				expect(headers.has('Content-Language')).toBe(false);
 			});
 
 			it('freezing headers', () => {

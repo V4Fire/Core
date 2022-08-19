@@ -62,7 +62,7 @@ describe('core/prelude/object/clone/fastClone', () => {
 
 		expect(clone).not.toBe(obj);
 		expect(clone).toEqual(obj);
-		expect(!Object.isExtensible(clone)).toBeTrue();
+		expect(!Object.isExtensible(clone)).toBe(true);
 	});
 
 	it('cloning of sealed objects', () => {
@@ -72,7 +72,7 @@ describe('core/prelude/object/clone/fastClone', () => {
 
 		expect(clone).not.toBe(obj);
 		expect(clone).toEqual(obj);
-		expect(Object.isSealed(clone)).toBeTrue();
+		expect(Object.isSealed(clone)).toBe(true);
 	});
 
 	it('cloning of frozen objects', () => {
@@ -81,7 +81,7 @@ describe('core/prelude/object/clone/fastClone', () => {
 			clone = Object.fastClone(obj, {freezable: true});
 
 		expect(clone).toBe(obj);
-		expect(Object.isFrozen(clone)).toBeTrue();
+		expect(Object.isFrozen(clone)).toBe(true);
 	});
 
 	it('cloning of date objects', () => {

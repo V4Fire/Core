@@ -14,8 +14,8 @@ import addPersistent from 'core/cache/decorators/persistent';
 import SimpleCache from 'core/cache/simple';
 import RestrictedCache from 'core/cache/restricted';
 
-import engines from 'core/cache/decorators/persistent/engines';
 import { INDEX_STORAGE_NAME, TTL_POSTFIX } from 'core/cache/decorators/persistent/engines/const';
+import engines from 'core/cache/decorators/persistent/engines';
 
 describe('core/cache/decorators/persistent', () => {
 	beforeEach(async () => {
@@ -23,7 +23,7 @@ describe('core/cache/decorators/persistent', () => {
 	});
 
 	beforeAll(() => {
-		spyOn(Date, 'now').and.returnValue(0);
+		jest.spyOn(Date, 'now').mockImplementation(() => 0);
 	});
 
 	describe('core functionality', () => {
@@ -53,11 +53,11 @@ describe('core/cache/decorators/persistent', () => {
 				cache = new SimpleCache(),
 				persistentCache = await addPersistent(cache, asyncLocal, opts);
 
-			spyOn(asyncLocal, 'set').and.callThrough();
+			jest.spyOn(asyncLocal, 'set');
 			persistentCache.set('foo', 1);
 			await persistentCache.set('foo', 2);
 
-			expect(asyncLocal.set.calls.first().args).toEqual(['foo', 2]);
+			expect(asyncLocal.set.mock.calls[0]).toEqual(['foo', 2]);
 		});
 
 		it('should delete a value from the storage if a side effect has deleted it', async () => {
@@ -220,11 +220,19 @@ describe('core/cache/decorators/persistent', () => {
 
 	describe('`onDemand` loading from the storage', () => {
 		it('should work by default', async () => {
-			spyOn(engines, 'onDemand').and.callThrough();
+			const fn = jest.fn();
+			const {onDemand} = engines;
+
+			engines.onDemand = function onDemand() {
+				fn();
+			};
 
 			await addPersistent(new SimpleCache(), asyncLocal);
 
-			expect(engines.onDemand.calls.count()).toBe(1);
+			// eslint-disable-next-line require-atomic-updates
+			engines.onDemand = onDemand;
+
+			expect(fn.mock.calls.length).toBe(1);
 		});
 
 		it('must save an item at the first demand', async () => {
@@ -319,11 +327,10 @@ describe('core/cache/decorators/persistent', () => {
 				newCache = new SimpleCache(),
 				copyOfCache = await addPersistent(newCache, asyncLocal, opts);
 
-			spyOn(netModule, 'isOnline').and.returnValues(
-				Promise.resolve({status: false}),
-				Promise.resolve({status: true}),
-				Promise.resolve({status: false})
-			);
+			jest.spyOn(netModule, 'isOnline')
+				.mockReturnValueOnce(Promise.resolve({status: false}))
+				.mockReturnValueOnce(Promise.resolve({status: true}))
+				.mockReturnValueOnce(Promise.resolve({status: false}));
 
 			expect(newCache.get('foo')).toEqual(undefined);
 			expect(await copyOfCache.get('foo')).toEqual('bar');

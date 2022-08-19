@@ -64,7 +64,7 @@ describe('core/queue/order', () => {
 		queue.push(1);
 		queue.push(7);
 
-		expect(Object.isIterator(queue.values())).toBeTrue();
+		expect(Object.isIterator(queue.values())).toBe(true);
 		expect([...queue.values()]).toEqual([7, 5, 1]);
 		expect([...queue]).toEqual([7, 5, 1]);
 	});

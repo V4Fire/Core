@@ -25,7 +25,7 @@ describe('core/async/modules/base `clearAll`', () => {
 		}, 5);
 
 		const
-			spy = jasmine.createSpy();
+			spy = jest.fn();
 
 		$a.promise(Promise.resolve()).then(() => i++, (err) => spy(Object.select(err, ['type', 'reason'])));
 		$a.clearAll();
@@ -53,7 +53,7 @@ describe('core/async/modules/base `clearAll`', () => {
 		}, 5, {group: 'foo'});
 
 		const
-			spy = jasmine.createSpy();
+			spy = jest.fn();
 
 		$a.promise(Promise.resolve(), {group: 'foo'})
 			.then(() => i++, (err) => spy(Object.select(err, ['type', 'reason'])));
@@ -84,7 +84,7 @@ describe('core/async/modules/base `clearAll`', () => {
 		}, 5, {group: 'foo1'});
 
 		const
-			spy = jasmine.createSpy();
+			spy = jest.fn();
 
 		$a.promise(Promise.resolve(), {group: 'foo2'})
 			.then(() => i++, (err) => spy(Object.select(err, ['type', 'reason'])));
@@ -115,7 +115,7 @@ describe('core/async/modules/base `clearAll`', () => {
 		}, 5, {label: 'foo'});
 
 		const
-			spy = jasmine.createSpy();
+			spy = jest.fn();
 
 		$a.promise(Promise.resolve(), {label: 'foo'})
 			.then(() => i++, (err) => spy(Object.select(err, ['type', 'reason'])));
@@ -146,7 +146,7 @@ describe('core/async/modules/base `clearAll`', () => {
 		}, 5, {group: 'foo', label: 'foo'});
 
 		const
-			spy = jasmine.createSpy();
+			spy = jest.fn();
 
 		$a.promise(Promise.resolve(), {group: 'foo'})
 			.then(() => i++, (err) => spy(Object.select(err, ['type', 'reason'])));
@@ -177,7 +177,7 @@ describe('core/async/modules/base `clearAll`', () => {
 		}, 5, {group: 'foo', label: 'foo'});
 
 		const
-			spy = jasmine.createSpy();
+			spy = jest.fn();
 
 		$a.promise(Promise.resolve(), {group: 'foo', label: 'foo'})
 			.then(() => i++, (err) => spy(Object.select(err, ['type', 'reason'])));

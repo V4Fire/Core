@@ -11,13 +11,13 @@ import NeverCache from 'core/cache/never';
 describe('core/cache/never', () => {
 	it('crud', () => {
 		const cache = new NeverCache();
-		expect(cache.has('foo')).toBeFalse();
+		expect(cache.has('foo')).toBe(false);
 		expect(cache.set('foo', 1)).toBe(1);
 		expect(cache.get('foo')).toBeUndefined();
-		expect(cache.has('foo')).toBeFalse();
+		expect(cache.has('foo')).toBe(false);
 		expect(cache.size).toBe(0);
 		expect(cache.remove('foo')).toBeUndefined();
-		expect(cache.has('foo')).toBeFalse();
+		expect(cache.has('foo')).toBe(false);
 	});
 
 	it('default iterator', () => {

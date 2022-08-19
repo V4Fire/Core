@@ -1,5 +1,4 @@
-/* eslint-disable max-lines-per-function, max-lines */
-
+/* eslint-disable max-lines */
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -25,7 +24,7 @@ describe('core/object/watch', () => {
 			it('simple watching for an object', (done) => {
 				const
 					obj = {a: 1, b: 2},
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(obj, {engine}, (mutations) => {
 					spy(mutations.map((el) => el.slice(0, 2).concat(el[2].path)));
@@ -49,7 +48,7 @@ describe('core/object/watch', () => {
 			it('watching for an object with the `immediate` option', () => {
 				const
 					obj = {a: 1, b: 2},
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue) => {
 					spy(value, oldValue);
@@ -65,7 +64,7 @@ describe('core/object/watch', () => {
 			it('watching for an object with collapsing', (done) => {
 				const
 					obj = {a: 1, b: 2},
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(obj, {collapse: true, engine}, (mutations) => {
 					spy(mutations.map((el) => el.slice(0, 2).concat(el[2].path)));
@@ -89,7 +88,7 @@ describe('core/object/watch', () => {
 			it('deep watching for an object', () => {
 				const
 					obj = {a: {b: [], c: {e: 1}}},
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(obj, {immediate: true, deep: true, engine}, (value, oldValue) => {
 					spy(value, oldValue);
@@ -112,7 +111,7 @@ describe('core/object/watch', () => {
 
 				{
 					const
-						spy = jasmine.createSpy();
+						spy = jest.fn();
 
 					const {proxy} = watch(obj, 'a.b', {immediate: true, engine}, (value, oldValue) => {
 						spy(value, oldValue);
@@ -124,7 +123,7 @@ describe('core/object/watch', () => {
 
 				{
 					const
-						spy = jasmine.createSpy();
+						spy = jest.fn();
 
 					const {proxy} = watch(obj, 'c.e', {immediate: true, engine}, (value, oldValue) => {
 						spy(value, oldValue);
@@ -146,7 +145,7 @@ describe('core/object/watch', () => {
 					obj = {a: {b: []}};
 
 				const
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(obj, 'a.b', {engine}, (value, oldValue, info) => {
 					spy(value, oldValue, info.path, info.originalPath);
@@ -164,7 +163,7 @@ describe('core/object/watch', () => {
 					obj = {a: {b: []}};
 
 				const
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(obj, 'a.b', {engine, collapse: false}, (mutations) => {
 					mutations.forEach(([value, oldValue, info]) => {
@@ -185,7 +184,7 @@ describe('core/object/watch', () => {
 					obj = {a: {b: []}};
 
 				const
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(obj, 'a.b.0', {engine, collapse: false}, (mutations) => {
 					mutations.forEach(([value, oldValue, info]) => {
@@ -212,8 +211,8 @@ describe('core/object/watch', () => {
 			it('isolated watchers', () => {
 				const
 					obj = {a: {b: [], c: {e: 1}}},
-					spy1 = jasmine.createSpy('spy1'),
-					spy2 = jasmine.createSpy('spy2');
+					spy1 = jest.fn().mockName('spy1'),
+					spy2 = jest.fn().mockName('spy2');
 
 				const handler = (spy) => (value, oldValue) => {
 					spy(value, oldValue);
@@ -235,8 +234,8 @@ describe('core/object/watch', () => {
 			it('shared watchers', () => {
 				const
 					obj = {a: {b: [], c: {e: 1}}},
-					spy1 = jasmine.createSpy('spy1'),
-					spy2 = jasmine.createSpy('spy2');
+					spy1 = jest.fn().mockName('spy1'),
+					spy2 = jest.fn().mockName('spy2');
 
 				const handler = (spy) => (value, oldValue) => {
 					spy(value, oldValue);
@@ -258,8 +257,8 @@ describe('core/object/watch', () => {
 			it('deep watching for an object with prototypes', () => {
 				const
 					obj = {a: {b: [], __proto__: {c: {e: 1}}}},
-					protoSpy = jasmine.createSpy('with the prototype'),
-					nonProtoSpy = jasmine.createSpy('without the prototype');
+					protoSpy = jest.fn().mockName('with the prototype'),
+					nonProtoSpy = jest.fn().mockName('without the prototype');
 
 				const handler = (spy) => (value, oldValue, info) => {
 					spy(value, oldValue, info.fromProto);
@@ -281,7 +280,7 @@ describe('core/object/watch', () => {
 			it('deep watching with collapsing', (done) => {
 				const
 					obj = {a: {b: [], c: {e: 1}}, c: []},
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const opts = {
 					deep: true,
@@ -316,7 +315,7 @@ describe('core/object/watch', () => {
 			it('deep watching with collapsing and the `immediate` option', () => {
 				const
 					obj = {a: {b: [], c: {e: 1}}, c: []},
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const opts = {
 					immediate: true,
@@ -365,8 +364,8 @@ describe('core/object/watch', () => {
 				};
 
 				const
-					spy = jasmine.createSpy('global'),
-					localSpy = jasmine.createSpy('local');
+					spy = jest.fn().mockName('global'),
+					localSpy = jest.fn().mockName('local');
 
 				const opts = {
 					immediate: true,
@@ -444,8 +443,8 @@ describe('core/object/watch', () => {
 				for (let i = 0; i < deps.length; i++) {
 					const
 						obj = fork(),
-						spy = jasmine.createSpy('global'),
-						localSpy = jasmine.createSpy('local');
+						spy = jest.fn().mockName('global'),
+						localSpy = jest.fn().mockName('local');
 
 					const opts = {
 						immediate: true,
@@ -487,7 +486,7 @@ describe('core/object/watch', () => {
 				};
 
 				const
-					spy = jasmine.createSpy('global');
+					spy = jest.fn().mockName('global');
 
 				const opts = {
 					immediate: true,
@@ -509,7 +508,7 @@ describe('core/object/watch', () => {
 			it('watching for an array', () => {
 				const
 					arr = [],
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(arr, {immediate: true, engine}, (value, oldValue, info) => {
 					spy(value, oldValue, info.path);
@@ -581,7 +580,7 @@ describe('core/object/watch', () => {
 			it("watching for an array' iterator", () => {
 				const
 					arr = [{a: 1}],
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(arr, {deep: true, immediate: true, engine}, (value, oldValue, info) => {
 					spy(value, oldValue, info.path);
@@ -605,7 +604,7 @@ describe('core/object/watch', () => {
 			it('watching for a set', () => {
 				const
 					set = new Set([]),
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(set, {immediate: true, engine}, (value, oldValue, info) => {
 					spy(value, oldValue, info.path);
@@ -613,26 +612,26 @@ describe('core/object/watch', () => {
 
 				expect(proxy.add(1)).toBe(proxy);
 				expect(spy).toHaveBeenCalledWith(1, undefined, [1]);
-				expect(set.has(1)).toBeTrue();
+				expect(set.has(1)).toBe(true);
 
 				expect(proxy.add(2)).toBe(proxy);
 				expect(spy).toHaveBeenCalledWith(2, undefined, [2]);
-				expect(set.has(2)).toBeTrue();
+				expect(set.has(2)).toBe(true);
 
-				expect(proxy.delete(2)).toBeTrue();
+				expect(proxy.delete(2)).toBe(true);
 				expect(spy).toHaveBeenCalledWith(undefined, 2, [2]);
-				expect(set.has(2)).toBeFalse();
+				expect(set.has(2)).toBe(false);
 
 				expect(proxy.clear()).toBeUndefined();
 				expect(spy).toHaveBeenCalledWith(undefined, undefined, []);
-				expect(set.has(1)).toBeFalse();
+				expect(set.has(1)).toBe(false);
 			});
 
 			it("watching for a set' iterator", () => {
 				const
 					key = {a: 1},
 					set = new Set([key]),
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(set, {deep: true, immediate: true, engine}, (value, oldValue, info) => {
 					spy(value, oldValue, info.path);
@@ -656,7 +655,7 @@ describe('core/object/watch', () => {
 			it('watching for a weak set', () => {
 				const
 					set = new WeakSet([]),
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(set, {immediate: true, engine}, (value, oldValue, info) => {
 					spy(value, oldValue, info.path);
@@ -667,24 +666,24 @@ describe('core/object/watch', () => {
 
 				expect(proxy.add(key1)).toBe(proxy);
 				expect(spy).toHaveBeenCalledWith(key1, undefined, [key1]);
-				expect(set.has(key1)).toBeTrue();
+				expect(set.has(key1)).toBe(true);
 
 				const
 					key2 = {};
 
 				expect(proxy.add(key2)).toBe(proxy);
 				expect(spy).toHaveBeenCalledWith(key2, undefined, [key2]);
-				expect(set.has(key2)).toBeTrue();
+				expect(set.has(key2)).toBe(true);
 
-				expect(proxy.delete(key2)).toBeTrue();
+				expect(proxy.delete(key2)).toBe(true);
 				expect(spy).toHaveBeenCalledWith(undefined, key2, [key2]);
-				expect(set.has(key2)).toBeFalse();
+				expect(set.has(key2)).toBe(false);
 			});
 
 			it('watching for a map', () => {
 				const
 					map = new Map([[0, 1], [1, 2]]),
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(map, {immediate: true, engine}, (value, oldValue, info) => {
 					spy(value, oldValue, info.path);
@@ -698,21 +697,21 @@ describe('core/object/watch', () => {
 				expect(spy).toHaveBeenCalledWith(2, undefined, [5]);
 				expect(map.get(5)).toBe(2);
 
-				expect(proxy.delete(5)).toBeTrue();
+				expect(proxy.delete(5)).toBe(true);
 				expect(spy).toHaveBeenCalledWith(undefined, 2, [5]);
-				expect(map.has(5)).toBeFalse();
+				expect(map.has(5)).toBe(false);
 
 				expect(proxy.clear()).toBeUndefined();
 				expect(spy).toHaveBeenCalledWith(undefined, undefined, []);
-				expect(map.has(0)).toBeFalse();
-				expect(map.has(1)).toBeFalse();
+				expect(map.has(0)).toBe(false);
+				expect(map.has(1)).toBe(false);
 			});
 
 			it("watching for a map' iterator", () => {
 				const
 					key = {b: 1},
 					map = new Map([[key, {a: 1}]]),
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(map, {deep: true, immediate: true, engine}, (value, oldValue, info) => {
 					spy(value, oldValue, info.path);
@@ -738,7 +737,7 @@ describe('core/object/watch', () => {
 			it('watching for a weak map', () => {
 				const
 					map = new WeakMap([]),
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(map, {immediate: true, engine}, (value, oldValue, info) => {
 					spy(value, oldValue, info.path);
@@ -758,16 +757,16 @@ describe('core/object/watch', () => {
 				expect(spy).toHaveBeenCalledWith(23, undefined, [key2]);
 				expect(map.get(key2)).toBe(23);
 
-				expect(proxy.delete(key2)).toBeTrue();
+				expect(proxy.delete(key2)).toBe(true);
 				expect(spy).toHaveBeenCalledWith(undefined, 23, [key2]);
-				expect(map.has(key2)).toBeFalse();
+				expect(map.has(key2)).toBe(false);
 			});
 
 			it('tying a watcher to another object', () => {
 				const
 					another = {},
 					obj = {a: 1, b: 2},
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				watch(obj, {immediate: true, tiedWith: another, engine}, (value, oldValue) => {
 					spy(value, oldValue);
@@ -783,7 +782,7 @@ describe('core/object/watch', () => {
 			it('filtering of mutations', () => {
 				const
 					obj = {a: 1, b: 2},
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const
 					eventFilter = (value, oldValue, info) => info.path.join('.') === 'a';
@@ -802,7 +801,7 @@ describe('core/object/watch', () => {
 			it('modifying of mutations', () => {
 				const
 					obj = {a: 1, b: 2},
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const
 					pathModifier = (path) => path.join('.') === 'a' ? ['b'] : path;
@@ -821,7 +820,7 @@ describe('core/object/watch', () => {
 			it('muting of mutations', () => {
 				const
 					obj = {a: 1, b: 2},
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
 					spy(value, oldValue, info.path);
@@ -841,7 +840,7 @@ describe('core/object/watch', () => {
 			it('marking a part of the watched object as unwatchable', () => {
 				const
 					obj = {a: 1, b: unwatchable({c: 2, d: {e: 3}}, engine)},
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy, set} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
 					spy(value, oldValue, info.path);
@@ -862,7 +861,7 @@ describe('core/object/watch', () => {
 			it('canceling of watching', () => {
 				const
 					obj = {a: 1, b: 2},
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy, unwatch} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
 					spy(value, oldValue, info.path);
@@ -878,7 +877,7 @@ describe('core/object/watch', () => {
 				{
 					const
 						obj = {},
-						spy = jasmine.createSpy();
+						spy = jest.fn();
 
 					const {proxy, set} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
 						spy(value, oldValue, info.path);
@@ -894,7 +893,7 @@ describe('core/object/watch', () => {
 				{
 					const
 						obj = {},
-						spy = jasmine.createSpy();
+						spy = jest.fn();
 
 					const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
 						spy(value, oldValue, info.path);
@@ -912,7 +911,7 @@ describe('core/object/watch', () => {
 				{
 					const
 						obj = {},
-						spy = jasmine.createSpy();
+						spy = jest.fn();
 
 					const {proxy, set} = watch(obj, {immediate: true, engine, deep: true}, (value, oldValue, info) => {
 						spy(value, oldValue, info.path);
@@ -932,7 +931,7 @@ describe('core/object/watch', () => {
 				{
 					const
 						obj = {},
-						spy = jasmine.createSpy();
+						spy = jest.fn();
 
 					const {proxy} = watch(obj, {immediate: true, engine, deep: true}, (value, oldValue, info) => {
 						spy(value, oldValue, info.path);
@@ -954,7 +953,7 @@ describe('core/object/watch', () => {
 				{
 					const
 						obj = {a: 1},
-						spy = jasmine.createSpy();
+						spy = jest.fn();
 
 					const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
 						spy(value, info.path);
@@ -973,7 +972,7 @@ describe('core/object/watch', () => {
 				{
 					const
 						obj = {a: 1},
-						spy = jasmine.createSpy();
+						spy = jest.fn();
 
 					const watcher = watch(obj, {immediate: true, deep: true, engine}, (value, oldValue, info) => {
 						spy(value, oldValue, info.path);
@@ -995,7 +994,7 @@ describe('core/object/watch', () => {
 				{
 					const
 						obj = {a: 1},
-						spy = jasmine.createSpy();
+						spy = jest.fn();
 
 					const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
 						spy(value, oldValue, info.path);
@@ -1015,7 +1014,7 @@ describe('core/object/watch', () => {
 			it('modifying prototype values', () => {
 				const
 					obj = {a: {a: 1}, __proto__: {b: {b: 1}}},
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(obj, {deep: true, immediate: true, withProto: true, engine}, (value, oldValue, info) => {
 					spy(value, oldValue, info.path);
@@ -1032,9 +1031,9 @@ describe('core/object/watch', () => {
 			});
 
 			it('isProxy', () => {
-				expect(isProxy(watch({}, {immediate: true, engine}).proxy)).toBeTrue();
-				expect(isProxy(null)).toBeFalse();
-				expect(isProxy({})).toBeFalse();
+				expect(isProxy(watch({}, {immediate: true, engine}).proxy)).toBe(true);
+				expect(isProxy(null)).toBe(false);
+				expect(isProxy({})).toBe(false);
 			});
 
 			if (engineName === 'proxy') {
@@ -1054,7 +1053,7 @@ describe('core/object/watch', () => {
 				it('should watch properties added via `Object.defineProperty`', () => {
 					const
 						obj = {},
-						spy = jasmine.createSpy();
+						spy = jest.fn();
 
 					const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
 						spy(value, oldValue, info.path);
