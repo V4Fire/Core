@@ -773,7 +773,7 @@ interface ObjectConstructor {
 
 	/**
 	 * Sets the passed symbol property to the given object.
-	 * Returns the object.
+	 * The character is set as non-enumerable to avoid implicit copying when using the spread operation.
 	 *
 	 * @param obj
 	 * @param symbol
