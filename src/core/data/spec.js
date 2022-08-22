@@ -47,6 +47,8 @@ describe('core/data', () => {
 
 		expect(await dp.add({id: 12345, value: 'abc-def-ghi'}).data)
 			.toEqual({message: 'Success'});
+
+		expect(true).toBe(false);
 	});
 
 	it('provider with overrides', async () => {
