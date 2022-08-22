@@ -13,7 +13,7 @@
 
 export default {
 	projects: ['<rootDir>'],
-	testMatch: ['<rootDir>/dist/server/**/*[sS]pec.js', '<rootDir>/src/**/*[sS]pec.ts'],
+	testMatch: ['<rootDir>/dist/server/**/*[sS]pec.js'],// '<rootDir>/src/**/*[sS]pec.ts'],
 	rootDir: './',
 	testTimeout: 20000,
 	testEnvironment: 'node',
@@ -26,5 +26,9 @@ export default {
 	collectCoverage: true,
 	coverageReporters: ['lcov'],
 	coverageDirectory: '<rootDir>/coverage',
-	coverageProvider: 'v8'
+	coverageProvider: 'v8',
+
+	transform: {
+		'.+\\.ts$': 'ts-jest'
+	}
 };
