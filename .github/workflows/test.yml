@@ -29,9 +29,6 @@ jobs:
       - name: Build tsconfig
         run: npx gulp build:tsconfig
 
-      - name: Run tests
-        run: npm run test:linters
-
   tests:
     runs-on: ubuntu-latest
 
