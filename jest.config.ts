@@ -6,14 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/*
- * For a detailed explanation regarding each configuration property and type check, visit:
- * https://jestjs.io/docs/configuration
- */
-
+/** @type {import('ts-jest').InitialOptionsTsJest} */
 export default {
 	projects: ['<rootDir>'],
-	testMatch: ['<rootDir>/dist/server/**/*[sS]pec.js'],// '<rootDir>/src/**/*[sS]pec.ts'],
+	testMatch: ['<rootDir>/dist/server/**/*[sS]pec.js', '<rootDir>/src/**/*[sS]pec.ts'],
 	rootDir: './',
 	testTimeout: 20000,
 	testEnvironment: 'node',
@@ -28,7 +24,7 @@ export default {
 	coverageDirectory: '<rootDir>/coverage',
 	coverageProvider: 'v8',
 
-	transform: {
-		'.+\\.ts$': 'ts-jest'
-	}
+	preset: 'ts-jest',
+	modulePaths: ['<rootDir>/src/'],
+	setupFilesAfterEnv: ['<rootDir>/src/test.ts']
 };
