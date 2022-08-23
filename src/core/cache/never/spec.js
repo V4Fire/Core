@@ -84,13 +84,13 @@ describe('core/cache/never', () => {
 			cache = new NeverCache();
 
 		cache.set('foo', 1);
-		expect(cache.has('foo')).toBeFalse();
+		expect(cache.has('foo')).toBe(false);
 
 		const
 			newCache = cache.clone();
 
-		expect(cache !== newCache).toBeTrue();
-		expect(newCache.has('foo')).toBeFalse();
-		expect(cache.storage !== newCache.storage).toBeTrue();
+		expect(cache !== newCache).toBe(true);
+		expect(newCache.has('foo')).toBe(false);
+		expect(cache.storage !== newCache.storage).toBe(true);
 	});
 });
