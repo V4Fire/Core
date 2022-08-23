@@ -133,16 +133,16 @@ describe('core/cache/restricted', () => {
 		cache.set('foo', 1);
 		cache.set('bar', obj);
 
-		expect(cache.has('foo')).toBeTrue();
-		expect(cache.has('bar')).toBeTrue();
+		expect(cache.has('foo')).toBe(true);
+		expect(cache.has('bar')).toBe(true);
 
 		const newCache = cache.clone();
 
-		expect(cache !== newCache).toBeTrue();
-		expect(newCache.has('foo')).toBeTrue();
-		expect(newCache.has('bar')).toBeTrue();
-		expect(cache.storage !== newCache.storage).toBeTrue();
-		expect(cache.queue !== newCache.queue).toBeTrue();
-		expect(cache.get('bar') === newCache.get('bar')).toBeTrue();
+		expect(cache !== newCache).toBe(true);
+		expect(newCache.has('foo')).toBe(true);
+		expect(newCache.has('bar')).toBe(true);
+		expect(cache.storage !== newCache.storage).toBe(true);
+		expect(cache.queue !== newCache.queue).toBe(true);
+		expect(cache.get('bar') === newCache.get('bar')).toBe(true);
 	});
 });
