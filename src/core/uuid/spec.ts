@@ -14,6 +14,7 @@ describe('core/uuid', () => {
 
 	it('`generate`', () => {
 		expect(generate()).toBeInstanceOf(Uint8Array);
+		expect(true).toBe(false);
 	});
 
 	it('`serialize`', () => {
