@@ -13,7 +13,7 @@ Changelog
 
 #### :bug: Bug Fix
 
-* Fixed TS type inferring
+* Fixed type inference
 
 ####  :boom: Breaking Change
 

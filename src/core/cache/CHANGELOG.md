@@ -9,15 +9,20 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v3.??.? (2022-0?-??)
+## v3.??.0 (2022-0?-??)
+
+#### :boom: Breaking Change
+* Changed typed parameters of `Cache` interface from `<V, K>` to `<K, V>`
+* Change a default `Cache` interface key type
 
 #### :rocket: New Feature
 
-* Add a new method `clone`
+* Added new cache `DefaultCache`
+* Added a new method `clone`
 
-####  :boom: Breaking Change
+#### :bug: Bug Fix
 
-* Change type parameters from `<V, K>` to `<K, V>`
+* Fixed type inference in decorator
 
 ## v3.50.0 (2021-06-07)
 
