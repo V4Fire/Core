@@ -9,8 +9,7 @@ import LinkedList from 'core/linked-list';
 const
   list = new LinkedList();
 
-list.push(10);
-list.push(11);
+list.push(10, 11);
 
 // 2
 console.log(list.length);
@@ -109,8 +108,7 @@ For convenience, the LinkedList API is similar to the regular JS Array API:
    const
      list = new LinkedList();
 
-   list.push(10);
-   list.push(11);
+   list.push(10, 11);
    list.unshift(9);
 
    // 11
@@ -142,9 +140,8 @@ For convenience, the LinkedList API is similar to the regular JS Array API:
    const
      list = new LinkedList();
 
-   list.push(10);   // 1
-   list.push(11);   // 2
-   list.unshift(9); // 3
+   list.push(10, 11); // 2
+   list.unshift(9);   // 3
 
    // 3
    console.log(list.length);

@@ -71,21 +71,24 @@ export default class List<T> {
 	 * Adds the passed data to the beginning of the list and returns its new length
 	 * @param data
 	 */
-	unshift(data: T): number {
-		const
-			link = new Node<T>(data);
+	unshift(...data: T[]): number {
+		data.forEach((data) => {
+			const
+				link = new Node<T>(data);
 
-		if (this.firstNode != null) {
-			this.firstNode.prev = link;
+			if (this.firstNode != null) {
+				this.firstNode.prev = link;
 
-		} else {
-			this.lastNode = link;
-		}
+			} else {
+				this.lastNode = link;
+			}
 
-		link.next = this.firstNode;
-		this.firstNode = link;
+			link.next = this.firstNode;
+			this.firstNode = link;
+			this.lengthStore++;
+		});
 
-		return ++this.lengthStore;
+		return this.lengthStore;
 	}
 
 	/**
@@ -121,20 +124,24 @@ export default class List<T> {
 	 * Adds the passed data to the end of the list and returns its new length
 	 * @param data
 	 */
-	push(data: T): number {
-		const
-			link = new Node<T>(data);
+	push(...data: T[]): number {
+		data.forEach((data) => {
+			const
+				link = new Node<T>(data);
 
-		if (this.lastNode == null) {
-			this.firstNode = link;
+			if (this.lastNode == null) {
+				this.firstNode = link;
 
-		} else {
-			this.lastNode.next = link;
-			link.prev = this.lastNode;
-		}
+			} else {
+				this.lastNode.next = link;
+				link.prev = this.lastNode;
+			}
 
-		this.lastNode = link;
-		return ++this.lengthStore;
+			this.lastNode = link;
+			this.lengthStore++;
+		});
+
+		return this.lengthStore;
 	}
 
 	/**
