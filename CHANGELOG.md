@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2022-??-??)
+
+#### :rocket: New Feature
+
+* Now `push` and `unshift` methods support multiple arguments `core/linked-list`
+
 ## v3.88.0 (2022-08-22)
 
 #### :rocket: New Feature
