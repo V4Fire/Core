@@ -11,11 +11,15 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.??.?? (2022-??-??)
+## v3.89.0 (2022-09-15)
 
 #### :rocket: New Feature
 
 * Now `push` and `unshift` methods support multiple arguments `core/linked-list`
+
+#### :boom: Breaking Change
+
+* By default, the `ES` flag is set to `ES2019` for development builds `config`
 
 ## v3.88.0 (2022-08-22)
 
