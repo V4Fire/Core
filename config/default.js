@@ -399,7 +399,7 @@ module.exports = config.createConfig(
 		es() {
 			return o('es', {
 				env: true,
-				default: isProd ? 'ES6' : 'ES2021',
+				default: isProd ? 'ES6' : 'ES2019',
 				coerce(value) {
 					return value.toUpperCase();
 				}
