@@ -50,43 +50,89 @@ export default function addTTL<
 		remove: originalRemove,
 		set: originalSet,
 		clear: originalClear,
+		clone: originalClone,
 		subscribe
 	} = addEmitter<TTLCache<K, V>, K, V>(<TTLCache<K, V>><unknown>cache);
 
 	const
 		cacheWithTTL: TTLCache<K, V> = Object.create(cache),
-		ttlTimers = new Map<K, number | NodeJS.Timeout>();
+		ttlTimers = new Map<K, [number | NodeJS.Timeout, Promise<CanUndef<V>>]>();
 
-	cacheWithTTL.set = (key: K, value: V, opts?: TTLDecoratorOptions & Parameters<T['set']>[2]) => {
-		updateTTL(key, opts?.ttl);
-		return originalSet(key, value, opts);
+	const descriptor = {
+			enumerable: false,
+			writable: true,
+			configurable: true
 	};
 
-	cacheWithTTL.remove = (key: K) => {
-		cacheWithTTL.removeTTLFrom(key);
-		return originalRemove(key);
-	};
+	Object.defineProperties(cacheWithTTL, {
+		ttlTimers: {
+			get() {
+				return new Map(ttlTimers);
+			},
+			enumerable: true
+		},
 
-	cacheWithTTL.removeTTLFrom = (key: K) => {
-		if (ttlTimers.has(key)) {
-			clearTimeout(<number>ttlTimers.get(key));
-			ttlTimers.delete(key);
-			return true;
+		set: {
+			value: (key: K, value: V, opts?: TTLDecoratorOptions & Parameters<T['set']>[2]) => {
+				updateTTL(key, opts?.ttl);
+				return originalSet(key, value, opts);
+			},
+			...descriptor
+		},
+
+		remove: {
+			value: (key: K) => {
+				cacheWithTTL.removeTTLFrom(key);
+				return originalRemove(key);
+			},
+			...descriptor
+		},
+
+		removeTTLFrom: {
+			value: (key: K) => {
+				if (ttlTimers.has(key)) {
+					clearTimeout(<number>ttlTimers.get(key)?.[0]);
+					ttlTimers.delete(key);
+					return true;
+				}
+
+				return false;
+			},
+			...descriptor
+		},
+
+		clear: {
+			value: (filter?: ClearFilter<V, K>) => {
+				const
+					removed = originalClear(filter);
+
+				removed.forEach((_, key) => {
+					cacheWithTTL.removeTTLFrom(key);
+				});
+
+				return removed;
+			},
+			...descriptor
+		},
+
+		clone: {
+			value: () => {
+				const
+					cache = addTTL(originalClone(), ttl);
+
+				for (const [key, [,promise]] of ttlTimers) {
+					void promise.then(() => {
+						if (!cache.ttlTimers.has(key)) {
+							cache.remove(key);
+						}
+					});
+				}
+
+				return cache;
+			},
+			...descriptor
 		}
-
-		return false;
-	};
-
-	cacheWithTTL.clear = (filter?: ClearFilter<V, K>) => {
-		const
-			removed = originalClear(filter);
-
-		removed.forEach((_, key) => {
-			cacheWithTTL.removeTTLFrom(key);
-		});
-
-		return removed;
-	};
+	});
 
 	subscribe('remove', cacheWithTTL, ({args}) =>
 		cacheWithTTL.removeTTLFrom(args[0]));
@@ -98,12 +144,22 @@ export default function addTTL<
 		result.forEach((_, key) => cacheWithTTL.removeTTLFrom(key));
 	});
 
+	subscribe('clone', cacheWithTTL, () =>
+		cacheWithTTL.clone());
+
 	return cacheWithTTL;
 
 	function updateTTL(key: K, optionTTL?: number): void {
 		if (optionTTL != null || ttl != null) {
 			const time = optionTTL ?? ttl;
-			ttlTimers.set(key, setTimeout(() => cacheWithTTL.remove(key), time));
+
+			let timerId;
+
+			const promise = new Promise<CanUndef<V>>((resolve) => {
+				timerId = setTimeout(() => resolve(cacheWithTTL.remove(key)), time);
+			});
+
+			ttlTimers.set(key, [timerId, promise]);
 
 		} else {
 			cacheWithTTL.removeTTLFrom(key);

@@ -14,7 +14,8 @@ import type Cache from 'core/cache/interface';
 export type MethodsToWrap =
 	'set' |
 	'remove' |
-	'clear';
+	'clear' |
+	'clone';
 
 export interface MutationEvent<M extends AnyFunction = AnyFunction> {
 	args: Parameters<M>;
@@ -51,6 +52,9 @@ export interface AddEmitterReturn<T extends Cache<K, V>, K = unknown, V = unknow
 
 	/** @see [[Cache.clear]] */
 	clear: T['clear'];
+
+	/** @see [[Cache.clone]] */
+	clone: T['clone'];
 
 	/**
 	 * Subscribes for mutations of the specified cache object

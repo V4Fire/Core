@@ -15,6 +15,10 @@ Changelog
 
 * Change type parameters from `<V, K>` to `<K, V>`
 
+####  :rocket: New Feature
+
+* Added a new method `clone` processing
+
 ## v3.59.1 (2021-09-21)
 
 #### :bug: Bug Fix

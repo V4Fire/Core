@@ -66,7 +66,10 @@ const addEmitter: AddEmitter = <T extends Cache<K, V>, K = unknown, V = unknown>
 		originalRemove = cacheWithEmitter.remove,
 
 		// eslint-disable-next-line @typescript-eslint/unbound-method
-		originalClear = cacheWithEmitter.clear;
+		originalClear = cacheWithEmitter.clear,
+
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		originalClone = cacheWithEmitter.clone;
 
 	if (originalSet[eventEmitter] == null) {
 		cacheWithEmitter[$$.set] = originalSet;
@@ -131,10 +134,29 @@ const addEmitter: AddEmitter = <T extends Cache<K, V>, K = unknown, V = unknown>
 		originalClear = cacheWithEmitter[$$.clear] ?? originalClear;
 	}
 
+	if (originalClone[eventEmitter] == null) {
+		cacheWithEmitter[$$.clone] = originalClone;
+
+		cacheWithEmitter.clone = function clone(): Cache<K, V> {
+			const
+				result = originalClone.call(this);
+
+			emitter.emit('clone', cacheWithEmitter, {result});
+
+			return result;
+		};
+
+		cacheWithEmitter.clone[eventEmitter] = true;
+
+	} else {
+		originalClone = cacheWithEmitter[$$.clone] ?? originalClone;
+	}
+
 	return <AddEmitterReturn<T>>{
 		set: originalSet.bind(cacheWithEmitter),
 		remove: originalRemove.bind(cacheWithEmitter),
 		clear: originalClear.bind(cacheWithEmitter),
+		clone: originalClone.bind(cacheWithEmitter),
 
 		subscribe: ((method, obj, cb): void => {
 			emitter.on(method, handler);
