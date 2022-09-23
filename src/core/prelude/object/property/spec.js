@@ -42,51 +42,51 @@ describe('core/prelude/object/property/get', () => {
 
 describe('core/prelude/object/property/has', () => {
 	it('simple has', () => {
-		expect(Object.has({a: 1}, 'a')).toBeTrue();
-		expect(Object.has({a: 1}, 'b')).toBeFalse();
-		expect(Object.has({a: {b: 1}}, 'a.b')).toBeTrue();
-		expect(Object.has({a: {b: 1}}, 'a.b.c.e')).toBeFalse();
-		expect(Object.has({a: {b: [{c: 1}]}}, 'a.b.0.c')).toBeTrue();
-		expect(Object.has({a: {b: [{c: 1}]}}, 'a.b.1.c')).toBeFalse();
+		expect(Object.has({a: 1}, 'a')).toBe(true);
+		expect(Object.has({a: 1}, 'b')).toBe(false);
+		expect(Object.has({a: {b: 1}}, 'a.b')).toBe(true);
+		expect(Object.has({a: {b: 1}}, 'a.b.c.e')).toBe(false);
+		expect(Object.has({a: {b: [{c: 1}]}}, 'a.b.0.c')).toBe(true);
+		expect(Object.has({a: {b: [{c: 1}]}}, 'a.b.1.c')).toBe(false);
 	});
 
 	it('array as a path', () => {
 		const key = {};
-		expect(Object.has({a: {b: new Map([[key, 1]])}}, ['a', 'b', key])).toBeTrue();
-		expect(Object.has({a: {b: new Map([[key, 1]])}}, ['a', 'b', {}])).toBeFalse();
+		expect(Object.has({a: {b: new Map([[key, 1]])}}, ['a', 'b', key])).toBe(true);
+		expect(Object.has({a: {b: new Map([[key, 1]])}}, ['a', 'b', {}])).toBe(false);
 
-		expect(Object.has({a: {b: new WeakMap([[key, 1]])}}, ['a', 'b', key])).toBeTrue();
-		expect(Object.has({a: {b: new WeakMap([[key, 1]])}}, ['a', 'b', 1, 5])).toBeFalse();
+		expect(Object.has({a: {b: new WeakMap([[key, 1]])}}, ['a', 'b', key])).toBe(true);
+		expect(Object.has({a: {b: new WeakMap([[key, 1]])}}, ['a', 'b', 1, 5])).toBe(false);
 
-		expect(Object.has({a: {b: new Set([key])}}, ['a', 'b', key])).toBeTrue();
-		expect(Object.has({a: {b: new Set([key])}}, ['a', 'b', 1, 5])).toBeFalse();
+		expect(Object.has({a: {b: new Set([key])}}, ['a', 'b', key])).toBe(true);
+		expect(Object.has({a: {b: new Set([key])}}, ['a', 'b', 1, 5])).toBe(false);
 
-		expect(Object.has({a: {b: new WeakSet([key])}}, ['a', 'b', key])).toBeTrue();
-		expect(Object.has({a: {b: new WeakSet([key])}}, ['a', 'b', 1, 5])).toBeFalse();
+		expect(Object.has({a: {b: new WeakSet([key])}}, ['a', 'b', key])).toBe(true);
+		expect(Object.has({a: {b: new WeakSet([key])}}, ['a', 'b', 1, 5])).toBe(false);
 	});
 
 	it('custom separator', () => {
-		expect(Object.has({a: {b: 1}}, 'a:b', {separator: ':'})).toBeTrue();
+		expect(Object.has({a: {b: 1}}, 'a:b', {separator: ':'})).toBe(true);
 	});
 
 	it('functional overloads', () => {
-		expect(Object.has({a: 1})('a')).toBeTrue();
-		expect(Object.has({a: {b: 1}}, {separator: ':'})('a:b')).toBeTrue();
+		expect(Object.has({a: 1})('a')).toBe(true);
+		expect(Object.has({a: {b: 1}}, {separator: ':'})('a:b')).toBe(true);
 
-		expect(Object.has('a')({a: 1})).toBeTrue();
-		expect(Object.has('a:b', {separator: ':'})({a: {b: 1}})).toBeTrue();
+		expect(Object.has('a')({a: 1})).toBe(true);
+		expect(Object.has('a:b', {separator: ':'})({a: {b: 1}})).toBe(true);
 	});
 });
 
 describe('core/prelude/object/property/hasOwnProperty', () => {
 	it('simple hasOwnProperty', () => {
-		expect(Object.hasOwnProperty({a: 1}, 'a')).toBeTrue();
-		expect(Object.hasOwnProperty({__proto__: {a: 1}}, 'a')).toBeFalse();
+		expect(Object.hasOwnProperty({a: 1}, 'a')).toBe(true);
+		expect(Object.hasOwnProperty({__proto__: {a: 1}}, 'a')).toBe(false);
 	});
 
 	it('functional overloads', () => {
-		expect(Object.hasOwnProperty({a: 1})('a')).toBeTrue();
-		expect(Object.hasOwnProperty('a')({__proto__: {a: 1}})).toBeFalse();
+		expect(Object.hasOwnProperty({a: 1})('a')).toBe(true);
+		expect(Object.hasOwnProperty('a')({__proto__: {a: 1}})).toBe(false);
 	});
 });
 
@@ -223,37 +223,37 @@ describe('core/prelude/object/property/delete', () => {
 	it('simple delete', () => {
 		{
 			const obj = {a: 1};
-			expect(Object.delete(obj, 'a')).toBeTrue();
-			expect('a' in obj).toBeFalse();
+			expect(Object.delete(obj, 'a')).toBe(true);
+			expect('a' in obj).toBe(false);
 		}
 
 		{
 			const obj = {a: 1};
-			expect(Object.delete(obj, 'b')).toBeFalse();
+			expect(Object.delete(obj, 'b')).toBe(false);
 			expect(obj).toEqual({a: 1});
 		}
 
 		{
 			const obj = {a: {b: 1}};
-			expect(Object.delete(obj, 'a.b')).toBeTrue();
-			expect('b' in obj.a).toBeFalse();
+			expect(Object.delete(obj, 'a.b')).toBe(true);
+			expect('b' in obj.a).toBe(false);
 		}
 
 		{
 			const obj = {a: {b: 1}};
-			expect(Object.delete(obj, 'a.b.c.e')).toBeFalse();
+			expect(Object.delete(obj, 'a.b.c.e')).toBe(false);
 			expect(obj).toEqual({a: {b: 1}});
 		}
 
 		{
 			const obj = {a: {b: [{c: 1}]}};
-			expect(Object.delete(obj, 'a.b.0.c')).toBeTrue();
+			expect(Object.delete(obj, 'a.b.0.c')).toBe(true);
 			expect(obj).toEqual({a: {b: [{}]}});
 		}
 
 		{
 			const obj = {a: {b: [{c: 1}]}};
-			expect(Object.delete(obj, 'a.b.1.c')).toBeFalse();
+			expect(Object.delete(obj, 'a.b.1.c')).toBe(false);
 			expect(obj).toEqual({a: {b: [{c: 1}]}});
 		}
 	});
@@ -267,8 +267,8 @@ describe('core/prelude/object/property/delete', () => {
 				obj = {a: {b: new Map([[key, 1]])}},
 				path = ['a', 'b', key];
 
-			expect(Object.delete(obj, path)).toBeTrue();
-			expect(Object.has(obj, path)).toBeFalse();
+			expect(Object.delete(obj, path)).toBe(true);
+			expect(Object.has(obj, path)).toBe(false);
 		}
 
 		{
@@ -276,7 +276,7 @@ describe('core/prelude/object/property/delete', () => {
 				obj = {a: {b: new Map([[key, 1]])}},
 				path = ['a', 'b', key, {}, 'ff'];
 
-			expect(Object.delete(obj, path)).toBeFalse();
+			expect(Object.delete(obj, path)).toBe(false);
 		}
 
 		{
@@ -284,8 +284,8 @@ describe('core/prelude/object/property/delete', () => {
 				obj = {a: {b: new WeakMap([[key, 1]])}},
 				path = ['a', 'b', key];
 
-			expect(Object.delete(obj, path)).toBeTrue();
-			expect(Object.has(obj, path)).toBeFalse();
+			expect(Object.delete(obj, path)).toBe(true);
+			expect(Object.has(obj, path)).toBe(false);
 		}
 
 		{
@@ -293,7 +293,7 @@ describe('core/prelude/object/property/delete', () => {
 				obj = {a: {b: new WeakMap([[key, 1]])}},
 				path = ['a', 'b', key, {}, 'ff'];
 
-			expect(Object.delete(obj, path)).toBeFalse();
+			expect(Object.delete(obj, path)).toBe(false);
 		}
 
 		{
@@ -301,8 +301,8 @@ describe('core/prelude/object/property/delete', () => {
 				obj = {a: {b: new Set([key])}},
 				path = ['a', 'b', key];
 
-			expect(Object.delete(obj, path)).toBeTrue();
-			expect(Object.has(obj, path)).toBeFalse();
+			expect(Object.delete(obj, path)).toBe(true);
+			expect(Object.has(obj, path)).toBe(false);
 		}
 
 		{
@@ -310,7 +310,7 @@ describe('core/prelude/object/property/delete', () => {
 				obj = {a: {b: new Set([key])}},
 				path = ['a', 'b', key, {}, 'ff'];
 
-			expect(Object.delete(obj, path)).toBeFalse();
+			expect(Object.delete(obj, path)).toBe(false);
 		}
 
 		{
@@ -318,8 +318,8 @@ describe('core/prelude/object/property/delete', () => {
 				obj = {a: {b: new WeakSet([key])}},
 				path = ['a', 'b', key];
 
-			expect(Object.delete(obj, path)).toBeTrue();
-			expect(Object.has(obj, path)).toBeFalse();
+			expect(Object.delete(obj, path)).toBe(true);
+			expect(Object.has(obj, path)).toBe(false);
 		}
 
 		{
@@ -327,19 +327,19 @@ describe('core/prelude/object/property/delete', () => {
 				obj = {a: {b: new WeakSet([key])}},
 				path = ['a', 'b', key, {}, 'ff'];
 
-			expect(Object.delete(obj, path)).toBeFalse();
+			expect(Object.delete(obj, path)).toBe(false);
 		}
 	});
 
 	it('custom separator', () => {
-		expect(Object.delete({a: {b: 1}}, 'a:b', {separator: ':'})).toBeTrue();
+		expect(Object.delete({a: {b: 1}}, 'a:b', {separator: ':'})).toBe(true);
 	});
 
 	it('functional overloads', () => {
-		expect(Object.delete({a: 1})('a')).toBeTrue();
-		expect(Object.delete({a: {b: 1}}, {separator: ':'})('a:b')).toBeTrue();
+		expect(Object.delete({a: 1})('a')).toBe(true);
+		expect(Object.delete({a: {b: 1}}, {separator: ':'})('a:b')).toBe(true);
 
-		expect(Object.delete('a')({a: 1})).toBeTrue();
-		expect(Object.delete('a:b', {separator: ':'})({a: {b: 1}})).toBeTrue();
+		expect(Object.delete('a')({a: 1})).toBe(true);
+		expect(Object.delete('a:b', {separator: ':'})({a: {b: 1}})).toBe(true);
 	});
 });

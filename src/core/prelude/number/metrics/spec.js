@@ -8,204 +8,204 @@
 
 describe('core/prelude/number/metrics', () => {
 	it('`isInteger`', () => {
-		expect((1).isInteger()).toBeTrue();
-		expect((-1).isInteger()).toBeTrue();
-		expect((0).isInteger()).toBeTrue();
-		expect(1.4.isInteger()).toBeFalse();
-		expect(NaN.isInteger()).toBeFalse();
-		expect(Infinity.isInteger()).toBeFalse();
+		expect((1).isInteger()).toBe(true);
+		expect((-1).isInteger()).toBe(true);
+		expect((0).isInteger()).toBe(true);
+		expect(1.4.isInteger()).toBe(false);
+		expect(NaN.isInteger()).toBe(false);
+		expect(Infinity.isInteger()).toBe(false);
 	});
 
 	it('`Number.isInteger`', () => {
-		expect(Number.isInteger(1)).toBeTrue();
-		expect(Number.isInteger(-1)).toBeTrue();
-		expect(Number.isInteger(0)).toBeTrue();
-		expect(Number.isInteger(1.4)).toBeFalse();
-		expect(Number.isInteger(NaN)).toBeFalse();
-		expect(Number.isInteger(Infinity)).toBeFalse();
-		expect(Number.isInteger(null)).toBeFalse();
-		expect(Number.isInteger('foo')).toBeFalse();
+		expect(Number.isInteger(1)).toBe(true);
+		expect(Number.isInteger(-1)).toBe(true);
+		expect(Number.isInteger(0)).toBe(true);
+		expect(Number.isInteger(1.4)).toBe(false);
+		expect(Number.isInteger(NaN)).toBe(false);
+		expect(Number.isInteger(Infinity)).toBe(false);
+		expect(Number.isInteger(null)).toBe(false);
+		expect(Number.isInteger('foo')).toBe(false);
 	});
 
 	it('`isFloat`', () => {
-		expect(1.4.isFloat()).toBeTrue();
-		expect((-1.2).isFloat()).toBeTrue();
-		expect((0).isFloat()).toBeFalse();
-		expect(NaN.isFloat()).toBeFalse();
-		expect(Infinity.isFloat()).toBeFalse();
+		expect(1.4.isFloat()).toBe(true);
+		expect((-1.2).isFloat()).toBe(true);
+		expect((0).isFloat()).toBe(false);
+		expect(NaN.isFloat()).toBe(false);
+		expect(Infinity.isFloat()).toBe(false);
 	});
 
 	it('`Number.isFloat`', () => {
-		expect(Number.isFloat(1.4)).toBeTrue();
-		expect(Number.isFloat(-1.2)).toBeTrue();
-		expect(Number.isFloat(0)).toBeFalse();
-		expect(Number.isFloat(NaN)).toBeFalse();
-		expect(Number.isFloat(Infinity)).toBeFalse();
-		expect(Number.isFloat(null)).toBeFalse();
-		expect(Number.isFloat('foo')).toBeFalse();
+		expect(Number.isFloat(1.4)).toBe(true);
+		expect(Number.isFloat(-1.2)).toBe(true);
+		expect(Number.isFloat(0)).toBe(false);
+		expect(Number.isFloat(NaN)).toBe(false);
+		expect(Number.isFloat(Infinity)).toBe(false);
+		expect(Number.isFloat(null)).toBe(false);
+		expect(Number.isFloat('foo')).toBe(false);
 	});
 
 	it('`isEven`', () => {
-		expect((2).isEven()).toBeTrue();
-		expect((0).isEven()).toBeTrue();
-		expect((3).isEven()).toBeFalse();
-		expect(NaN.isEven()).toBeFalse();
-		expect(Infinity.isEven()).toBeFalse();
+		expect((2).isEven()).toBe(true);
+		expect((0).isEven()).toBe(true);
+		expect((3).isEven()).toBe(false);
+		expect(NaN.isEven()).toBe(false);
+		expect(Infinity.isEven()).toBe(false);
 	});
 
 	it('`Number.isEven`', () => {
-		expect(Number.isEven(2)).toBeTrue();
-		expect(Number.isEven(0)).toBeTrue();
-		expect(Number.isEven(3)).toBeFalse();
-		expect(Number.isEven(NaN)).toBeFalse();
-		expect(Number.isEven(Infinity)).toBeFalse();
+		expect(Number.isEven(2)).toBe(true);
+		expect(Number.isEven(0)).toBe(true);
+		expect(Number.isEven(3)).toBe(false);
+		expect(Number.isEven(NaN)).toBe(false);
+		expect(Number.isEven(Infinity)).toBe(false);
 	});
 
 	it('`isOdd`', () => {
-		expect((3).isOdd()).toBeTrue();
-		expect((2).isOdd()).toBeFalse();
-		expect((0).isOdd()).toBeFalse();
-		expect(NaN.isOdd()).toBeFalse();
-		expect(Infinity.isOdd()).toBeFalse();
+		expect((3).isOdd()).toBe(true);
+		expect((2).isOdd()).toBe(false);
+		expect((0).isOdd()).toBe(false);
+		expect(NaN.isOdd()).toBe(false);
+		expect(Infinity.isOdd()).toBe(false);
 	});
 
 	it('`Number.isOdd`', () => {
-		expect(Number.isOdd(1)).toBeTrue();
-		expect(Number.isOdd(2)).toBeFalse();
-		expect(Number.isOdd(0)).toBeFalse();
-		expect(Number.isOdd(NaN)).toBeFalse();
-		expect(Number.isOdd(Infinity)).toBeFalse();
+		expect(Number.isOdd(1)).toBe(true);
+		expect(Number.isOdd(2)).toBe(false);
+		expect(Number.isOdd(0)).toBe(false);
+		expect(Number.isOdd(NaN)).toBe(false);
+		expect(Number.isOdd(Infinity)).toBe(false);
 	});
 
 	it('`isNatural`', () => {
-		expect((1).isNatural()).toBeTrue();
-		expect((3).isNatural()).toBeTrue();
-		expect((0).isNatural()).toBeFalse();
-		expect((-1).isNatural()).toBeFalse();
-		expect(1.2.isNatural()).toBeFalse();
-		expect(NaN.isNatural()).toBeFalse();
-		expect(Infinity.isNatural()).toBeFalse();
+		expect((1).isNatural()).toBe(true);
+		expect((3).isNatural()).toBe(true);
+		expect((0).isNatural()).toBe(false);
+		expect((-1).isNatural()).toBe(false);
+		expect(1.2.isNatural()).toBe(false);
+		expect(NaN.isNatural()).toBe(false);
+		expect(Infinity.isNatural()).toBe(false);
 	});
 
 	it('`Number.isNatural`', () => {
-		expect(Number.isNatural(1)).toBeTrue();
-		expect(Number.isNatural(3)).toBeTrue();
-		expect(Number.isNatural(0)).toBeFalse();
-		expect(Number.isNatural(-1)).toBeFalse();
-		expect(Number.isNatural(1.2)).toBeFalse();
-		expect(Number.isNatural(NaN)).toBeFalse();
-		expect(Number.isNatural(Infinity)).toBeFalse();
-		expect(Number.isNatural(null)).toBeFalse();
-		expect(Number.isNatural('foo')).toBeFalse();
+		expect(Number.isNatural(1)).toBe(true);
+		expect(Number.isNatural(3)).toBe(true);
+		expect(Number.isNatural(0)).toBe(false);
+		expect(Number.isNatural(-1)).toBe(false);
+		expect(Number.isNatural(1.2)).toBe(false);
+		expect(Number.isNatural(NaN)).toBe(false);
+		expect(Number.isNatural(Infinity)).toBe(false);
+		expect(Number.isNatural(null)).toBe(false);
+		expect(Number.isNatural('foo')).toBe(false);
 	});
 
 	it('`isPositive`', () => {
-		expect((1).isPositive()).toBeTrue();
-		expect(1.2.isPositive()).toBeTrue();
-		expect(Infinity.isPositive()).toBeTrue();
-		expect(Number.NEGATIVE_INFINITY.isPositive()).toBeFalse();
-		expect((-1).isPositive()).toBeFalse();
-		expect((0).isPositive()).toBeFalse();
-		expect(NaN.isPositive()).toBeFalse();
+		expect((1).isPositive()).toBe(true);
+		expect(1.2.isPositive()).toBe(true);
+		expect(Infinity.isPositive()).toBe(true);
+		expect(Number.NEGATIVE_INFINITY.isPositive()).toBe(false);
+		expect((-1).isPositive()).toBe(false);
+		expect((0).isPositive()).toBe(false);
+		expect(NaN.isPositive()).toBe(false);
 	});
 
 	it('`Number.isPositive`', () => {
-		expect(Number.isPositive(1)).toBeTrue();
-		expect(Number.isPositive(1.2)).toBeTrue();
-		expect(Number.isPositive(Infinity)).toBeTrue();
-		expect(Number.isPositive(Number.NEGATIVE_INFINITY)).toBeFalse();
-		expect(Number.isPositive(-1)).toBeFalse();
-		expect(Number.isPositive(0)).toBeFalse();
-		expect(Number.isPositive(NaN)).toBeFalse();
-		expect(Number.isPositive(null)).toBeFalse();
-		expect(Number.isPositive('foo')).toBeFalse();
+		expect(Number.isPositive(1)).toBe(true);
+		expect(Number.isPositive(1.2)).toBe(true);
+		expect(Number.isPositive(Infinity)).toBe(true);
+		expect(Number.isPositive(Number.NEGATIVE_INFINITY)).toBe(false);
+		expect(Number.isPositive(-1)).toBe(false);
+		expect(Number.isPositive(0)).toBe(false);
+		expect(Number.isPositive(NaN)).toBe(false);
+		expect(Number.isPositive(null)).toBe(false);
+		expect(Number.isPositive('foo')).toBe(false);
 	});
 
 	it('`isNegative`', () => {
-		expect((-1).isNegative()).toBeTrue();
-		expect((-1.2).isNegative()).toBeTrue();
-		expect(Number.NEGATIVE_INFINITY.isNegative()).toBeTrue();
-		expect(Infinity.isNegative()).toBeFalse();
-		expect((1).isNegative()).toBeFalse();
-		expect((0).isNegative()).toBeFalse();
-		expect(NaN.isNegative()).toBeFalse();
+		expect((-1).isNegative()).toBe(true);
+		expect((-1.2).isNegative()).toBe(true);
+		expect(Number.NEGATIVE_INFINITY.isNegative()).toBe(true);
+		expect(Infinity.isNegative()).toBe(false);
+		expect((1).isNegative()).toBe(false);
+		expect((0).isNegative()).toBe(false);
+		expect(NaN.isNegative()).toBe(false);
 	});
 
 	it('`Number.isNegative`', () => {
-		expect(Number.isNegative(-1)).toBeTrue();
-		expect(Number.isNegative(-1.2)).toBeTrue();
-		expect(Number.isNegative(Number.NEGATIVE_INFINITY)).toBeTrue();
-		expect(Number.isNegative(Infinity)).toBeFalse();
-		expect(Number.isNegative(1)).toBeFalse();
-		expect(Number.isNegative(0)).toBeFalse();
-		expect(Number.isNegative(NaN)).toBeFalse();
-		expect(Number.isNegative(null)).toBeFalse();
-		expect(Number.isNegative('foo')).toBeFalse();
+		expect(Number.isNegative(-1)).toBe(true);
+		expect(Number.isNegative(-1.2)).toBe(true);
+		expect(Number.isNegative(Number.NEGATIVE_INFINITY)).toBe(true);
+		expect(Number.isNegative(Infinity)).toBe(false);
+		expect(Number.isNegative(1)).toBe(false);
+		expect(Number.isNegative(0)).toBe(false);
+		expect(Number.isNegative(NaN)).toBe(false);
+		expect(Number.isNegative(null)).toBe(false);
+		expect(Number.isNegative('foo')).toBe(false);
 	});
 
 	it('`isNonNegative`', () => {
-		expect((1).isNonNegative()).toBeTrue();
-		expect(1.2.isNonNegative()).toBeTrue();
-		expect((0).isNonNegative()).toBeTrue();
-		expect(Infinity.isNonNegative()).toBeTrue();
-		expect(Number.NEGATIVE_INFINITY.isNonNegative()).toBeFalse();
-		expect((-1).isNonNegative()).toBeFalse();
-		expect(NaN.isNonNegative()).toBeFalse();
+		expect((1).isNonNegative()).toBe(true);
+		expect(1.2.isNonNegative()).toBe(true);
+		expect((0).isNonNegative()).toBe(true);
+		expect(Infinity.isNonNegative()).toBe(true);
+		expect(Number.NEGATIVE_INFINITY.isNonNegative()).toBe(false);
+		expect((-1).isNonNegative()).toBe(false);
+		expect(NaN.isNonNegative()).toBe(false);
 	});
 
 	it('`Number.isNonNegative`', () => {
-		expect(Number.isNonNegative(1)).toBeTrue();
-		expect(Number.isNonNegative(1.2)).toBeTrue();
-		expect(Number.isNonNegative(0)).toBeTrue();
-		expect(Number.isNonNegative(Infinity)).toBeTrue();
-		expect(Number.isNonNegative(Number.NEGATIVE_INFINITY)).toBeFalse();
-		expect(Number.isNonNegative(-1)).toBeFalse();
-		expect(Number.isNonNegative(NaN)).toBeFalse();
-		expect(Number.isNonNegative(null)).toBeFalse();
-		expect(Number.isNonNegative('foo')).toBeFalse();
+		expect(Number.isNonNegative(1)).toBe(true);
+		expect(Number.isNonNegative(1.2)).toBe(true);
+		expect(Number.isNonNegative(0)).toBe(true);
+		expect(Number.isNonNegative(Infinity)).toBe(true);
+		expect(Number.isNonNegative(Number.NEGATIVE_INFINITY)).toBe(false);
+		expect(Number.isNonNegative(-1)).toBe(false);
+		expect(Number.isNonNegative(NaN)).toBe(false);
+		expect(Number.isNonNegative(null)).toBe(false);
+		expect(Number.isNonNegative('foo')).toBe(false);
 	});
 
 	it('`isBetweenZeroAndOne`', () => {
-		expect((0).isBetweenZeroAndOne()).toBeTrue();
-		expect(0.5.isBetweenZeroAndOne()).toBeTrue();
-		expect((1).isBetweenZeroAndOne()).toBeTrue();
-		expect((2).isBetweenZeroAndOne()).toBeFalse();
-		expect((-1).isBetweenZeroAndOne()).toBeFalse();
-		expect(Infinity.isBetweenZeroAndOne()).toBeFalse();
-		expect(NaN.isBetweenZeroAndOne()).toBeFalse();
+		expect((0).isBetweenZeroAndOne()).toBe(true);
+		expect(0.5.isBetweenZeroAndOne()).toBe(true);
+		expect((1).isBetweenZeroAndOne()).toBe(true);
+		expect((2).isBetweenZeroAndOne()).toBe(false);
+		expect((-1).isBetweenZeroAndOne()).toBe(false);
+		expect(Infinity.isBetweenZeroAndOne()).toBe(false);
+		expect(NaN.isBetweenZeroAndOne()).toBe(false);
 	});
 
 	it('`Number.isBetweenZeroAndOne`', () => {
-		expect(Number.isBetweenZeroAndOne(0)).toBeTrue();
-		expect(Number.isBetweenZeroAndOne(0.5)).toBeTrue();
-		expect(Number.isBetweenZeroAndOne(1)).toBeTrue();
-		expect(Number.isBetweenZeroAndOne(2)).toBeFalse();
-		expect(Number.isBetweenZeroAndOne(-1)).toBeFalse();
-		expect(Number.isBetweenZeroAndOne(Infinity)).toBeFalse();
-		expect(Number.isBetweenZeroAndOne(NaN)).toBeFalse();
-		expect(Number.isBetweenZeroAndOne(null)).toBeFalse();
-		expect(Number.isBetweenZeroAndOne('foo')).toBeFalse();
+		expect(Number.isBetweenZeroAndOne(0)).toBe(true);
+		expect(Number.isBetweenZeroAndOne(0.5)).toBe(true);
+		expect(Number.isBetweenZeroAndOne(1)).toBe(true);
+		expect(Number.isBetweenZeroAndOne(2)).toBe(false);
+		expect(Number.isBetweenZeroAndOne(-1)).toBe(false);
+		expect(Number.isBetweenZeroAndOne(Infinity)).toBe(false);
+		expect(Number.isBetweenZeroAndOne(NaN)).toBe(false);
+		expect(Number.isBetweenZeroAndOne(null)).toBe(false);
+		expect(Number.isBetweenZeroAndOne('foo')).toBe(false);
 	});
 
 	it('`isPositiveBetweenZeroAndOne`', () => {
-		expect(0.5.isPositiveBetweenZeroAndOne()).toBeTrue();
-		expect((1).isPositiveBetweenZeroAndOne()).toBeTrue();
-		expect((0).isPositiveBetweenZeroAndOne()).toBeFalse();
-		expect((2).isPositiveBetweenZeroAndOne()).toBeFalse();
-		expect((-1).isPositiveBetweenZeroAndOne()).toBeFalse();
-		expect(Infinity.isPositiveBetweenZeroAndOne()).toBeFalse();
-		expect(NaN.isPositiveBetweenZeroAndOne()).toBeFalse();
+		expect(0.5.isPositiveBetweenZeroAndOne()).toBe(true);
+		expect((1).isPositiveBetweenZeroAndOne()).toBe(true);
+		expect((0).isPositiveBetweenZeroAndOne()).toBe(false);
+		expect((2).isPositiveBetweenZeroAndOne()).toBe(false);
+		expect((-1).isPositiveBetweenZeroAndOne()).toBe(false);
+		expect(Infinity.isPositiveBetweenZeroAndOne()).toBe(false);
+		expect(NaN.isPositiveBetweenZeroAndOne()).toBe(false);
 	});
 
 	it('`Number.isPositiveBetweenZeroAndOne`', () => {
-		expect(Number.isPositiveBetweenZeroAndOne(0.5)).toBeTrue();
-		expect(Number.isPositiveBetweenZeroAndOne(1)).toBeTrue();
-		expect(Number.isPositiveBetweenZeroAndOne(0)).toBeFalse();
-		expect(Number.isPositiveBetweenZeroAndOne(2)).toBeFalse();
-		expect(Number.isPositiveBetweenZeroAndOne(-1)).toBeFalse();
-		expect(Number.isPositiveBetweenZeroAndOne(Infinity)).toBeFalse();
-		expect(Number.isPositiveBetweenZeroAndOne(NaN)).toBeFalse();
-		expect(Number.isPositiveBetweenZeroAndOne(null)).toBeFalse();
-		expect(Number.isPositiveBetweenZeroAndOne('foo')).toBeFalse();
+		expect(Number.isPositiveBetweenZeroAndOne(0.5)).toBe(true);
+		expect(Number.isPositiveBetweenZeroAndOne(1)).toBe(true);
+		expect(Number.isPositiveBetweenZeroAndOne(0)).toBe(false);
+		expect(Number.isPositiveBetweenZeroAndOne(2)).toBe(false);
+		expect(Number.isPositiveBetweenZeroAndOne(-1)).toBe(false);
+		expect(Number.isPositiveBetweenZeroAndOne(Infinity)).toBe(false);
+		expect(Number.isPositiveBetweenZeroAndOne(NaN)).toBe(false);
+		expect(Number.isPositiveBetweenZeroAndOne(null)).toBe(false);
+		expect(Number.isPositiveBetweenZeroAndOne('foo')).toBe(false);
 	});
 });

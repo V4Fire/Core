@@ -25,7 +25,7 @@ describe('core/async/modules/base `label`', () => {
 	it('label collision', (done) => {
 		const
 			$a = new Async(),
-			spy = jasmine.createSpy(),
+			spy = jest.fn(),
 			res = [];
 
 		$a.setTimeout(onResolve(res, 'first'), 10, {label: $$.foo, onClear: onReject(spy)});
@@ -41,7 +41,7 @@ describe('core/async/modules/base `label`', () => {
 	it('label collision with promises', (done) => {
 		const
 			$a = new Async(),
-			spy = jasmine.createSpy(),
+			spy = jest.fn(),
 			res = [];
 
 		$a.promise(Promise.resolve('first'), {label: $$.foo}).then(onResolve(res), onReject(spy));
@@ -57,7 +57,7 @@ describe('core/async/modules/base `label`', () => {
 	it('label collision with joining', (done) => {
 		const
 			$a = new Async(),
-			spy = jasmine.createSpy(),
+			spy = jest.fn(),
 			res = [];
 
 		$a.setTimeout(onResolve(res, 'first'), 10, {label: $$.foo, join: true, onMerge: onMerge(spy, 'first')});
@@ -90,7 +90,7 @@ describe('core/async/modules/base `label`', () => {
 	it('label collision with replacing', (done) => {
 		const
 			$a = new Async(),
-			spy = jasmine.createSpy(),
+			spy = jest.fn(),
 			res = [];
 
 		$a.setTimeout(onResolve(res, 'first'), 10, {label: $$.foo, join: 'replace', onClear: onReject(spy)});
@@ -106,7 +106,7 @@ describe('core/async/modules/base `label`', () => {
 	it('label collision with promises and replacing', (done) => {
 		const
 			$a = new Async(),
-			spy = jasmine.createSpy(),
+			spy = jest.fn(),
 			res = [];
 
 		$a.promise(Promise.resolve('first'), {label: $$.foo, join: 'replace'}).then(onResolve(res), onReject(spy));

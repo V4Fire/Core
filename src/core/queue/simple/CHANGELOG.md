@@ -9,6 +9,17 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.88.0 (2022-08-22)
+
+#### :rocket: New Feature
+
+* Implemented a new `clone` method
+* Implemented iterable behavior
+
+#### :bug: Bug Fix
+
+* Changed the internal queue structure to `core/linked-list`
+
 ## v3.67.0 (2021-12-01)
 
 #### :boom: Breaking Change

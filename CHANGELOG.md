@@ -11,6 +11,60 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.89.0 (2022-09-15)
+
+#### :rocket: New Feature
+
+* Now `push` and `unshift` methods support multiple arguments `core/linked-list`
+
+#### :boom: Breaking Change
+
+* By default, the `ES` flag is set to `ES2019` for development builds `config`
+
+## v3.88.0 (2022-08-22)
+
+#### :rocket: New Feature
+
+* Added a new module `core/linked-list`
+
+* `core/queue`:
+  * Added a new method to clone a queue
+  * Now any queue can be traversed with an iterator
+
+#### :bug: Bug Fix
+
+* Changed the internal queue structure to `core/linked-list` `core/queue/simple`
+
+## v3.87.1 (2022-08-15)
+
+#### :boom: Breaking Change
+
+* By default, the `ES` flag is set to `ES2021` for development builds `config`
+
+#### :bug: Bug Fix
+
+* `core/object/watch`:
+  * Fixed setting new properties of a watchable object by a deep path using the accessor-based engine
+  * Now watchable Map uses the `entries` iterator by default
+
+## v3.87.0 (2022-08-08)
+
+#### :rocket: New Feature
+
+* Added a new overload for the `intoIter` method to create an iterator from an array-like object
+
+## v3.86.4 (2022-07-05)
+
+#### :bug: Bug Fix
+
+* [Fixed a bug with filtering request headers](https://github.com/V4Fire/Core/issues/298) `core/request/error`
+
+## v3.86.3 (2022-06-10)
+
+#### :house: Internal
+
+* Updated dependencies: `typedoc@0.22.13`
+
 ## v3.86.2 (2022-05-18)
 
 #### :bug: Bug Fix

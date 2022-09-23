@@ -61,12 +61,12 @@ describe('core/cache/decorators/ttl', () => {
 
 	it("should remove `ttl` if the next invoking doesn't provide `ttl`", (done) => {
 		const cache = addTTL(new SimpleCache());
-		spyOn(cache, 'removeTTLFrom').and.callThrough();
+		jest.spyOn(cache, 'removeTTLFrom');
 
 		cache.set('foo', 1, {ttl: 10});
 		cache.set('foo', 2);
 
-		expect(cache.removeTTLFrom.calls.count()).toEqual(1);
+		expect(cache.removeTTLFrom).toHaveBeenCalledTimes(1);
 
 		setTimeout(() => {
 			expect(cache.get('foo')).toBe(2);

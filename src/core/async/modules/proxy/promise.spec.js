@@ -176,7 +176,7 @@ describe('core/async/modules/proxy `promise`', () => {
 			$a.unmutePromise(promise);
 			expect(i).toEqual(0);
 
-			await expectAsync(promise).toBeRejected();
+			await expect(promise).rejects.toBeTruthy();
 		});
 
 		it('muting a promise by a label', async () => {
@@ -209,7 +209,7 @@ describe('core/async/modules/proxy `promise`', () => {
 			$a.unmutePromise(label);
 			expect(i).toEqual(0);
 
-			await expectAsync(promise).toBeRejected();
+			await expect(promise).rejects.toBeTruthy();
 		});
 
 		it('muting a promise by a group', async () => {
@@ -242,7 +242,7 @@ describe('core/async/modules/proxy `promise`', () => {
 			$a.unmutePromise(group);
 			expect(i).toEqual(0);
 
-			await expectAsync(promise).toBeRejected();
+			await expect(promise).rejects.toBeTruthy();
 		});
 	});
 });

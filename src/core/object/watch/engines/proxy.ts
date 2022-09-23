@@ -227,7 +227,7 @@ export function watch<T extends object>(
 				isCustomObject = isArray || Object.isCustomObject(target);
 
 			if (isArray && !Reflect.has(target, Symbol.isConcatSpreadable)) {
-				target[Symbol.isConcatSpreadable] = true;
+				Object.defineSymbol(target, Symbol.isConcatSpreadable, true);
 			}
 
 			if (Object.isSymbol(key) || blackListStore.has(key)) {
@@ -306,18 +306,18 @@ export function watch<T extends object>(
 					return true;
 				}
 
-				for (let o = handlers.values(), el = o.next(); !el.done; el = o.next()) {
+				handlers.forEach((handler) => {
 					const
 						path = resolvedPath.concat(normalizedKey);
 
-					el.value(val, oldVal, {
+					handler(val, oldVal, {
 						obj: unwrappedObj,
 						root: resolvedRoot,
 						top,
 						fromProto,
 						path
 					});
-				}
+				});
 			}
 
 			return true;

@@ -135,7 +135,7 @@ describe('core/async/modules/timers', () => {
 		it(`\`${method}\` with labels`, (done) => {
 			const
 				$a = new Async(),
-				spy = jasmine.createSpy(),
+				spy = jest.fn(),
 				res = [];
 
 			$a[reg](onResolve(res, 'first'), ...args, {label: $$.foo, onClear: onReject(spy)});
@@ -161,7 +161,7 @@ describe('core/async/modules/timers', () => {
 		it(`\`${method}\` with labels and joining`, (done) => {
 			const
 				$a = new Async(),
-				spy = jasmine.createSpy(),
+				spy = jest.fn(),
 				res = [];
 
 			$a[reg](onResolve(res, 'first'), ...args, {label: $$.foo, join: true, onMerge: onMerge(spy, 'first')});
@@ -187,7 +187,7 @@ describe('core/async/modules/timers', () => {
 		it(`\`${method}\` with labels and replacing`, (done) => {
 			const
 				$a = new Async(),
-				spy = jasmine.createSpy(),
+				spy = jest.fn(),
 				res = [];
 
 			$a[reg](onResolve(res, 'first'), ...args, {label: $$.foo, join: 'replace', onClear: onReject(spy)});
@@ -261,7 +261,7 @@ describe('core/async/modules/timers', () => {
 	it('`requestIdleCallback`', (done) => {
 		const
 			$a = new Async(),
-			spy = jasmine.createSpy();
+			spy = jest.fn();
 
 		$a.requestIdleCallback((info) => spy(Object.isNumber(info.timeRemaining())));
 
@@ -273,11 +273,11 @@ describe('core/async/modules/timers', () => {
 
 	it('promise value of `idle`', async () => {
 		const $a = new Async();
-		expect(Object.isNumber((await $a.idle()).timeRemaining())).toBeTrue();
+		expect(Object.isNumber((await $a.idle()).timeRemaining())).toBe(true);
 	});
 
 	it('promise value of `wait`', async () => {
 		const $a = new Async();
-		expect(await $a.wait(() => 1)).toBeTrue();
+		expect(await $a.wait(() => 1)).toBe(true);
 	});
 });

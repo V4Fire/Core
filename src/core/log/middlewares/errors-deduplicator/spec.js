@@ -25,20 +25,22 @@ describe('middlewares/errors-deduplicator', () => {
 			const
 				event = createLogEvent(),
 				eventCopy = copyLogEvent(event),
-				nextCallbackSpy = jasmine.createSpy('next');
+				nextCallbackSpy = jest.fn().mockName('next');
 
 			middleware.exec(event, nextCallbackSpy);
-			expect(nextCallbackSpy).toHaveBeenCalledOnceWith(eventCopy);
+			expect(nextCallbackSpy).toHaveBeenLastCalledWith(eventCopy);
+			expect(nextCallbackSpy).toHaveBeenCalledTimes(1);
 		});
 
 		it('single error occurrence - the event should pass to the next middleware', () => {
 			const
 				event = createLogEvent(new Error('My awesome error')),
 				eventCopy = copyLogEvent(event),
-				nextCallbackSpy = jasmine.createSpy('next');
+				nextCallbackSpy = jest.fn().mockName('next');
 
 			middleware.exec(event, nextCallbackSpy);
-			expect(nextCallbackSpy).toHaveBeenCalledOnceWith(eventCopy);
+			expect(nextCallbackSpy).toHaveBeenLastCalledWith(eventCopy);
+			expect(nextCallbackSpy).toHaveBeenCalledTimes(1);
 		});
 
 		it('multiple error occurrences - only the first event should pass to the next middleware', () => {
@@ -47,13 +49,15 @@ describe('middlewares/errors-deduplicator', () => {
 				firstEvent = createLogEvent(error, 'first'),
 				firstEventCopy = copyLogEvent(firstEvent),
 				secondEvent = createLogEvent(error, 'second'),
-				firstNextCallbackSpy = jasmine.createSpy('firstNext'),
-				secondNextCallbackSpy = jasmine.createSpy('secondNext');
+				firstNextCallbackSpy = jest.fn().mockName('firstNext'),
+				secondNextCallbackSpy = jest.fn().mockName('secondNext');
 
 			middleware.exec(firstEvent, firstNextCallbackSpy);
 			middleware.exec(secondEvent, secondNextCallbackSpy);
 
-			expect(firstNextCallbackSpy).toHaveBeenCalledOnceWith(firstEventCopy);
+			expect(firstNextCallbackSpy).toHaveBeenLastCalledWith(firstEventCopy);
+			expect(firstNextCallbackSpy).toHaveBeenCalledTimes(1);
+
 			expect(secondNextCallbackSpy).not.toHaveBeenCalled();
 		});
 
@@ -63,14 +67,17 @@ describe('middlewares/errors-deduplicator', () => {
 				firstEventCopy = copyLogEvent(firstEvent),
 				secondEvent = createLogEvent(new Error('Error'), 'second'),
 				secondEventCopy = copyLogEvent(secondEvent),
-				firstNextCallbackSpy = jasmine.createSpy('firstNext'),
-				secondNextCallbackSpy = jasmine.createSpy('secondNext');
+				firstNextCallbackSpy = jest.fn().mockName('firstNext'),
+				secondNextCallbackSpy = jest.fn().mockName('secondNext');
 
 			middleware.exec(firstEvent, firstNextCallbackSpy);
 			middleware.exec(secondEvent, secondNextCallbackSpy);
 
-			expect(firstNextCallbackSpy).toHaveBeenCalledOnceWith(firstEventCopy);
-			expect(secondNextCallbackSpy).toHaveBeenCalledOnceWith(secondEventCopy);
+			expect(firstNextCallbackSpy).toHaveBeenLastCalledWith(firstEventCopy);
+			expect(firstNextCallbackSpy).toHaveBeenCalledTimes(1);
+
+			expect(secondNextCallbackSpy).toHaveBeenLastCalledWith(secondEventCopy);
+			expect(secondNextCallbackSpy).toHaveBeenCalledTimes(1);
 		});
 
 		function createLogEvent(error, context = 'test') {
@@ -104,11 +111,11 @@ describe('middlewares/errors-deduplicator', () => {
 
 	describe('factory', () => {
 		it('has "errorsDeduplicator" instance', () => {
-			expect('errorsDeduplicator' in middlewareFactory).toBeTrue();
+			expect('errorsDeduplicator' in middlewareFactory).toBe(true);
 		});
 
 		it('"errorsDeduplicator" is instance of ErrorsDeduplicatorMiddleware', () => {
-			expect(middlewareFactory.errorsDeduplicator() instanceof ErrorsDeduplicatorMiddleware).toBeTrue();
+			expect(middlewareFactory.errorsDeduplicator() instanceof ErrorsDeduplicatorMiddleware).toBe(true);
 		});
 	});
 });

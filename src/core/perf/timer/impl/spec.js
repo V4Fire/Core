@@ -12,7 +12,8 @@ describe('core/perf/timer/impl', () => {
 	let testEngine;
 
 	beforeEach(() => {
-		testEngine = jasmine.createSpyObj('timerTestEngine', ['sendDelta', 'getTimestampFromTimeOrigin']);
+		const timerTestEngine = {sendDelta: jest.fn(), getTimestampFromTimeOrigin: jest.fn()};
+		testEngine = timerTestEngine;
 	});
 
 	describe('timer method', () => {
@@ -84,29 +85,31 @@ describe('core/perf/timer/impl', () => {
 			it('sends a delta with full metrics name', () => {
 				const runner = new PerfTimersRunner(testEngine);
 				const timer = runner.createTimer('manual');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(0);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(0);
 				const timerId = timer.start('metrics');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.finish(timerId);
-				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('manual.metrics', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.metrics', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('sends additional data along with a delta', () => {
 				const runner = new PerfTimersRunner(testEngine);
 				const timer = runner.createTimer('manual');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(0);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(0);
 				const timerId = timer.start('metrics');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.finish(timerId, {name: 'secret'});
-				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('manual.metrics', 1, {name: 'secret'});
+				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.metrics', 1, {name: 'secret'});
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('does not send a delta if the metric does not match a filter predicate', () => {
 				const runner = new PerfTimersRunner(testEngine, {filter: (ns) => ns.startsWith('network')});
 				const timer = runner.createTimer('manual');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(0);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(0);
 				const timerId = timer.start('metrics');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.finish(timerId);
 				expect(testEngine.sendDelta).not.toHaveBeenCalled();
 			});
@@ -119,7 +122,7 @@ describe('core/perf/timer/impl', () => {
 			});
 
 			it('does not send a delta if passed timerId is not real timerId', () => {
-				spyOn(console, 'warn');
+				jest.spyOn(console, 'warn');
 				const runner = new PerfTimersRunner(testEngine);
 				const timer = runner.createTimer('manual');
 				timer.finish('my-own-timer-id');
@@ -128,28 +131,30 @@ describe('core/perf/timer/impl', () => {
 			});
 
 			it('does not send a delta after second call with the same timerId', () => {
-				spyOn(console, 'warn');
+				jest.spyOn(console, 'warn');
 				const runner = new PerfTimersRunner(testEngine);
 				const timer = runner.createTimer('manual');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(0);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(0);
 				const timerId = timer.start('metrics');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.finish(timerId);
 				expect(console.warn).not.toHaveBeenCalled();
 				timer.finish(timerId);
-				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('manual.metrics', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.metrics', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 				expect(console.warn).toHaveBeenCalled();
 			});
 
 			it('is not affected by scoped runner', () => {
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				const runner = new PerfTimersRunner(testEngine, {withCurrentTimeOrigin: true});
 				const timer = runner.createTimer('manual');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				const timerId = timer.start('metrics');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(2);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(2);
 				timer.finish(timerId);
-				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('manual.metrics', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.metrics', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 		});
 
@@ -157,25 +162,28 @@ describe('core/perf/timer/impl', () => {
 			it('sends a delta with full metrics name', () => {
 				const runner = new PerfTimersRunner(testEngine);
 				const timer = runner.createTimer('manual');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.markTimestamp('mark');
-				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('manual.mark', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.mark', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('sends additional data along with a delta', () => {
 				const runner = new PerfTimersRunner(testEngine);
 				const timer = runner.createTimer('manual');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.markTimestamp('mark', {title: 'none'});
-				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('manual.mark', 1, {title: 'none'});
+				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.mark', 1, {title: 'none'});
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('sends a delta if matches a filter predicate', () => {
 				const runner = new PerfTimersRunner(testEngine, {filter: (ns) => ns.startsWith('manual')});
 				const timer = runner.createTimer('manual');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.markTimestamp('mark');
-				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('manual.mark', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.mark', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('throws an exception if metrics name is not defined', () => {
@@ -193,27 +201,29 @@ describe('core/perf/timer/impl', () => {
 			it('does not send a delta if does not match a filter predicate', () => {
 				const runner = new PerfTimersRunner(testEngine, {filter: (ns) => ns.startsWith('network')});
 				const timer = runner.createTimer('manual');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.markTimestamp('mark');
 				expect(testEngine.sendDelta).not.toHaveBeenCalled();
 			});
 
 			it('is affected by scoped runner when is called right after creating of the runner', () => {
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				const runner = new PerfTimersRunner(testEngine, {withCurrentTimeOrigin: true});
 				const timer = runner.createTimer('manual');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.markTimestamp('mark');
-				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('manual.mark', 0, undefined);
+				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.mark', 0, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('is affected by scoped runner when is called in some time after creating of the runner', () => {
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				const runner = new PerfTimersRunner(testEngine, {withCurrentTimeOrigin: true});
 				const timer = runner.createTimer('manual');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(3);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(3);
 				timer.markTimestamp('mark');
-				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('manual.mark', 2, undefined);
+				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.mark', 2, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 		});
 
@@ -221,9 +231,10 @@ describe('core/perf/timer/impl', () => {
 			it('enriches the namespace for `markTimestamp` method', () => {
 				const runner = new PerfTimersRunner(testEngine);
 				const timer = runner.createTimer('network').namespace('auth');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.markTimestamp('attach-headers');
-				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('network.auth.attach-headers', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('network.auth.attach-headers', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('enriches the namespace for `markTimestamp` method several times in a row', () => {
@@ -234,9 +245,10 @@ describe('core/perf/timer/impl', () => {
 					.namespace('v1')
 					.namespace('api');
 
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.markTimestamp('attach-headers');
-				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('network.auth.v1.api.attach-headers', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('network.auth.v1.api.attach-headers', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('creates another timer instance which `markTimestamp` method does not affect the same method of the previous timer', () => {
@@ -244,13 +256,13 @@ describe('core/perf/timer/impl', () => {
 				const baseTimer = runner.createTimer('network');
 				const specificTimer = baseTimer.namespace('v1');
 
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				specificTimer.markTimestamp('attach-headers');
 
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(2);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(2);
 				baseTimer.markTimestamp('attach-headers');
 
-				expect(testEngine.sendDelta.calls.allArgs()).toEqual(
+				expect(testEngine.sendDelta.mock.calls).toEqual(
 					[
 						['network.v1.attach-headers', 1, undefined],
 						['network.attach-headers', 2, undefined]
@@ -261,11 +273,12 @@ describe('core/perf/timer/impl', () => {
 			it('enriches the namespace for `start`/`finish` methods', () => {
 				const runner = new PerfTimersRunner(testEngine);
 				const timer = runner.createTimer('network').namespace('auth');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(0);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(0);
 				const timerId = timer.start('login');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.finish(timerId);
-				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('network.auth.login', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('network.auth.login', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('enriches the namespace for `start`/`finish` methods several times in a row', () => {
@@ -276,11 +289,12 @@ describe('core/perf/timer/impl', () => {
 					.namespace('v1')
 					.namespace('api');
 
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(0);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(0);
 				const timerId = timer.start('login');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.finish(timerId);
-				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('network.auth.v1.api.login', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('network.auth.v1.api.login', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('creates another timer instance which `start`/`finish` methods do not affect the same methods of the previous timer', () => {
@@ -288,17 +302,17 @@ describe('core/perf/timer/impl', () => {
 				const baseTimer = runner.createTimer('network');
 				const specificTimer = baseTimer.namespace('auth');
 
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(0);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(0);
 				const specificTimerId = specificTimer.start('login');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				specificTimer.finish(specificTimerId);
 
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(2);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(2);
 				const baseTimerId = baseTimer.start('login');
-				testEngine.getTimestampFromTimeOrigin.and.returnValue(4);
+				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(4);
 				baseTimer.finish(baseTimerId);
 
-				expect(testEngine.sendDelta.calls.allArgs()).toEqual(
+				expect(testEngine.sendDelta.mock.calls).toEqual(
 					[
 						['network.auth.login', 1, undefined],
 						['network.login', 2, undefined]
@@ -332,36 +346,37 @@ describe('core/perf/timer/impl', () => {
 			const runner = new PerfTimersRunner(testEngine);
 			const timer = runner.createTimer('components');
 
-			testEngine.getTimestampFromTimeOrigin.and.returnValue(0);
+			testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(0);
 			const firstTimerId = timer.start('update');
 
-			testEngine.getTimestampFromTimeOrigin.and.returnValue(2);
+			testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(2);
 			const secondTimerId = timer.start('update');
 
-			testEngine.getTimestampFromTimeOrigin.and.returnValue(3);
+			testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(3);
 			timer.finish(firstTimerId);
 
-			testEngine.getTimestampFromTimeOrigin.and.returnValue(4);
+			testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(4);
 			timer.finish(secondTimerId);
 
-			expect(testEngine.sendDelta.calls.allArgs()).toEqual([['components.update', 3, undefined], ['components.update', 2, undefined]]);
+			expect(testEngine.sendDelta.mock.calls).toEqual([['components.update', 3, undefined], ['components.update', 2, undefined]]);
 		});
 
 		it('`finish` method does not finish already started metrics with the same name', () => {
 			const runner = new PerfTimersRunner(testEngine);
 			const timer = runner.createTimer('components');
-			testEngine.getTimestampFromTimeOrigin.and.returnValue(0);
+			testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(0);
 			timer.start('update');
 
-			testEngine.getTimestampFromTimeOrigin.and.returnValue(2);
+			testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(2);
 			timer.start('update');
 
-			testEngine.getTimestampFromTimeOrigin.and.returnValue(4);
+			testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(4);
 			const timerId = timer.start('update');
 
-			testEngine.getTimestampFromTimeOrigin.and.returnValue(6);
+			testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(6);
 			timer.finish(timerId);
-			expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('components.update', 2, undefined);
+			expect(testEngine.sendDelta).toHaveBeenLastCalledWith('components.update', 2, undefined);
+			expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 		});
 	});
 });

@@ -9,10 +9,15 @@
 export interface InnerQueue<T = unknown> {
 	readonly length: number;
 	readonly head?: CanUndef<T>;
+	[Symbol.iterator](): IterableIterator<T>;
+
 	push(task: T): number;
 	unshift(task: T): number;
+
 	pop(): CanUndef<T>;
 	shift(): CanUndef<T>;
+
+	clone?(): InnerQueue<T>;
 }
 
 export interface CreateInnerQueue<T extends InnerQueue<any> = InnerQueue> {
@@ -21,34 +26,34 @@ export interface CreateInnerQueue<T extends InnerQueue<any> = InnerQueue> {
 
 export interface QueueOptions<T extends InnerQueue<any> = InnerQueue> {
 	/**
-	 * Factory to create an inner queue to store elements
+	 * A factory to create an internal queue to store elements
 	 */
 	queueFactory?: CreateInnerQueue<T>;
 }
 
 /**
- * Abstract class for a queue data structure
+ * An abstract class for any queue data structure
  * @typeparam T - queue element
  */
 export default abstract class Queue<T> {
 	/**
-	 * Queue head
+	 * The first element in the queue
 	 */
 	abstract readonly head: CanUndef<T>;
 
 	/**
-	 * Queue length
+	 * Number of elements in the queue
 	 */
 	abstract readonly length: number;
 
 	/**
-	 * Adds an element to the queue
+	 * Adds a new element to the queue
 	 * @param el
 	 */
 	abstract push(el: T): unknown;
 
 	/**
-	 * Removes a head element from the queue and returns it
+	 * Removes the head element from the queue and returns it
 	 */
 	abstract pop(): CanUndef<T>;
 
@@ -72,4 +77,42 @@ export default abstract class Queue<T> {
 	 * Clears the queue
 	 */
 	abstract clear(): void;
+
+	/**
+	 * Creates a new queue based on the current one and returns it
+	 */
+	abstract clone(): Queue<T>;
+
+	/**
+	 * Returns an iterator over the queue elements
+	 */
+	[Symbol.iterator](): IterableIterator<T> {
+		return this.values();
+	}
+
+	/**
+	 * Returns an iterator over the queue elements
+	 */
+	values(): IterableIterator<T> {
+		const
+			clonedQueue = this.clone();
+
+		return {
+			[Symbol.iterator]() {
+				return this;
+			},
+
+			next(): IteratorResult<T> {
+				const
+					done = clonedQueue.length <= 0,
+					value = clonedQueue.pop();
+
+				if (done || value == null) {
+					return {done: true, value: undefined};
+				}
+
+				return {done, value};
+			}
+		};
+	}
 }

@@ -199,7 +199,7 @@ describe('core/lazy', () => {
 			render: () => ({})
 		};
 
-		expect(LazyRenderEngine.component('newAwesomeComponent', newAwesomeComponent)).toBeTrue();
+		expect(LazyRenderEngine.component('newAwesomeComponent', newAwesomeComponent)).toBe(true);
 		expect(LazyRenderEngine.component('newAwesomeComponent')).toBe(newAwesomeComponent);
 
 		expect(engine1.component('newAwesomeComponent')).toBe(newAwesomeComponent);

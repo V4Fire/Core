@@ -27,31 +27,30 @@ export interface QueueWorker<T = unknown, V = unknown> {
 
 export interface WorkerQueueOptions<T extends Tasks<any> = Tasks> {
 	/**
-	 * Factory to create an inner queue to store elements
+	 * A factory to create the internal queue to store elements
 	 */
 	tasksFactory?: CreateInnerQueue<T>;
 
 	/**
-	 * Maximum number of concurrent workers
+	 * The maximum number of concurrent workers
 	 */
 	concurrency?: number;
 
 	/**
-	 * How often to refresh task statuses
-	 * (in milliseconds)
+	 * How often to update task statuses (in milliseconds)
 	 */
 	refreshInterval?: number;
 }
 
 /**
- * Abstract class for a worker queue data structure
+ * An abstract class for a worker queue data structure
  *
- * @typeparam T - task element
- * @typeparam V - worker value
+ * @typeparam T - the task element
+ * @typeparam V - the worker value
  */
 export default abstract class WorkerQueue<T, V = unknown> extends AbstractQueue<T> {
 	/**
-	 * Type: queue of tasks
+	 * Type: a queue of tasks
 	 */
 	readonly Tasks!: Tasks;
 
@@ -68,8 +67,7 @@ export default abstract class WorkerQueue<T, V = unknown> extends AbstractQueue<
 	concurrency: number;
 
 	/**
-	 * How often to refresh task statuses
-	 * (in milliseconds)
+	 * How often to update task statuses (in milliseconds)
 	 */
 	refreshInterval: number;
 
@@ -79,18 +77,18 @@ export default abstract class WorkerQueue<T, V = unknown> extends AbstractQueue<
 	activeWorkers: number = 0;
 
 	/**
-	 * Worker constructor
+	 * The worker constructor
 	 */
 	protected worker: QueueWorker<T, V>;
 
 	/**
-	 * Queue of tasks
+	 * A queue of tasks
 	 */
 	protected tasks: this['Tasks'];
 
 	/**
 	 * @param worker
-	 * @param [opts]
+	 * @param [opts] - additional options
 	 */
 	protected constructor(worker: QueueWorker<T, V>, opts: WorkerQueueOptions = {}) {
 		super();
@@ -109,6 +107,34 @@ export default abstract class WorkerQueue<T, V = unknown> extends AbstractQueue<
 	/** @inheritDoc */
 	abstract override push(task: T): unknown;
 
+	/**
+	 * Returns an asynchronous iterator over the queue elements
+	 */
+	[Symbol.asyncIterator](): AsyncIterableIterator<T> {
+		const
+			clonedQueue = this.clone();
+
+		return {
+			[Symbol.asyncIterator]() {
+				return this;
+			},
+
+			next(): Promise<IteratorResult<T>> {
+				return new Promise((resolve) => {
+					const
+						done = clonedQueue.length <= 0,
+						value = clonedQueue.pop();
+
+					if (done || value == null) {
+						return resolve({done: true, value: undefined});
+					}
+
+					return resolve({done, value});
+				});
+			}
+		};
+	}
+
 	/** @inheritDoc */
 	pop(): CanUndef<T> {
 		const {head} = this;
@@ -125,7 +151,7 @@ export default abstract class WorkerQueue<T, V = unknown> extends AbstractQueue<
 	}
 
 	/**
-	 * Returns a new blank queue of tasks
+	 * Returns a new blank internal queue of tasks
 	 */
 	protected createTasks: CreateInnerQueue<this['Tasks']> = () => new SimpleQueue();
 
@@ -135,8 +161,7 @@ export default abstract class WorkerQueue<T, V = unknown> extends AbstractQueue<
 	protected abstract perform(): unknown;
 
 	/**
-	 * Executes a task chunk from the queue
-	 * (deferred version)
+	 * Executes a task chunk from the queue (deferred version)
 	 */
 	protected deferPerform(): Promise<unknown> {
 		const

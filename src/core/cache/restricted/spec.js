@@ -11,13 +11,13 @@ import RestrictedCache from 'core/cache/restricted';
 describe('core/cache/restricted', () => {
 	it('crud', () => {
 		const cache = new RestrictedCache();
-		expect(cache.has('foo')).toBeFalse();
+		expect(cache.has('foo')).toBe(false);
 		expect(cache.set('foo', 1)).toBe(1);
 		expect(cache.get('foo')).toBe(1);
-		expect(cache.has('foo')).toBeTrue();
+		expect(cache.has('foo')).toBe(true);
 		expect(cache.size).toBe(1);
 		expect(cache.remove('foo')).toBe(1);
-		expect(cache.has('foo')).toBeFalse();
+		expect(cache.has('foo')).toBe(false);
 	});
 
 	it('specifying capacity', () => {
@@ -28,15 +28,15 @@ describe('core/cache/restricted', () => {
 		cache.set('bar', 2);
 		cache.set('bla', 3);
 
-		expect(cache.has('foo')).toBeTrue();
-		expect(cache.has('bar')).toBeTrue();
-		expect(cache.has('bla')).toBeTrue();
+		expect(cache.has('foo')).toBe(true);
+		expect(cache.has('bar')).toBe(true);
+		expect(cache.has('bla')).toBe(true);
 
 		cache.set('baz', 4);
 
 		expect(cache.size).toBe(3);
-		expect(cache.has('foo')).toBeFalse();
-		expect(cache.has('baz')).toBeTrue();
+		expect(cache.has('foo')).toBe(false);
+		expect(cache.has('baz')).toBe(true);
 	});
 
 	it('default iterator', () => {
@@ -90,8 +90,8 @@ describe('core/cache/restricted', () => {
 		cache.set('foo', 1);
 		cache.set('bar', 2);
 
-		expect(cache.has('foo')).toBeTrue();
-		expect(cache.has('bar')).toBeTrue();
+		expect(cache.has('foo')).toBe(true);
+		expect(cache.has('bar')).toBe(true);
 
 		expect(cache.clear()).toEqual(new Map([['foo', 1], ['bar', 2]]));
 	});
@@ -102,8 +102,8 @@ describe('core/cache/restricted', () => {
 		cache.set('foo', 1);
 		cache.set('bar', 2);
 
-		expect(cache.has('foo')).toBeTrue();
-		expect(cache.has('bar')).toBeTrue();
+		expect(cache.has('foo')).toBe(true);
+		expect(cache.has('bar')).toBe(true);
 
 		expect(cache.clear((el) => el > 1)).toEqual(new Map([['bar', 2]]));
 	});
@@ -116,12 +116,12 @@ describe('core/cache/restricted', () => {
 		cache.setCapacity(2);
 		cache.set('bar', 2);
 
-		expect(cache.has('foo')).toBeTrue();
-		expect(cache.has('bar')).toBeTrue();
+		expect(cache.has('foo')).toBe(true);
+		expect(cache.has('bar')).toBe(true);
 
 		expect(cache.setCapacity(0)).toEqual(new Map([['foo', 1], ['bar', 2]]));
 
-		expect(cache.has('foo')).toBeFalse();
-		expect(cache.has('bar')).toBeFalse();
+		expect(cache.has('foo')).toBe(false);
+		expect(cache.has('bar')).toBe(false);
 	});
 });

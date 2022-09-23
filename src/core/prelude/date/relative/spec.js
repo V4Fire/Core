@@ -158,7 +158,8 @@ describe('core/prelude/date/relative', () => {
 
 		{
 			const
-				res = new Date(Date.now() - (2).weeks()).relativeTo(new Date());
+				dateNow = new Date(),
+				res = new Date(dateNow - (2).weeks()).relativeTo(dateNow);
 
 			expect(Object.reject(res, 'diff')).toEqual({
 				type: 'weeks',
@@ -170,28 +171,30 @@ describe('core/prelude/date/relative', () => {
 
 		{
 			const
+				dateNow = new Date(),
 				date = new Date().rewind({months: 2}),
-				res = date.relativeTo(new Date());
+				res = date.relativeTo(dateNow);
 
 			expect(Object.reject(res, 'diff')).toEqual({
 				type: 'months',
 				value: 2
 			});
 
-			expect(res.diff).toBeGreaterThanOrEqual(Date.now().valueOf() - date.valueOf() - 5);
+			expect(res.diff).toBeGreaterThanOrEqual(dateNow.valueOf() - date.valueOf() - 5);
 		}
 
 		{
 			const
+				dateNow = new Date(),
 				date = new Date().rewind({years: 2}),
-				res = date.relativeTo(new Date());
+				res = date.relativeTo(dateNow);
 
 			expect(Object.reject(res, 'diff')).toEqual({
 				type: 'years',
 				value: 2
 			});
 
-			expect(res.diff).toBeGreaterThanOrEqual(Date.now().valueOf() - date.valueOf() - 5);
+			expect(res.diff).toBeGreaterThanOrEqual(dateNow.valueOf() - date.valueOf() - 5);
 		}
 	});
 

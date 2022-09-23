@@ -95,7 +95,7 @@ export const iterators = {
 
 	[Symbol.iterator]: {
 		type: 'get',
-		value: (target: unknown[]): IterableIterator<unknown> => target.values()
+		value: (target: unknown[]): IterableIterator<unknown> => Object.isMap(target) ? target.entries() : target.values()
 	}
 };
 
