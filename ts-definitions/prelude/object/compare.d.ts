@@ -29,7 +29,7 @@ interface ObjectConstructor {
 	fastCompare<T>(a: any, b: T): a is T;
 
 	/**
-	 * Returns a string representation of the specified object by using a naive but fast `JSON.stringify/parse` strategy.
+	 * Returns a hash sum of the specified object by using a naive but fast `JSON.stringify` strategy.
 	 *
 	 * Mind, that this method uses non-stable version `JSON.stringify`, i.e.,
 	 * it can work incorrectly with object like `{a: 1, b: 2}` and `{b: 2, a: 1}`.
