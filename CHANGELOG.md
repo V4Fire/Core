@@ -17,6 +17,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Added result hashing for `Object.fastHash` `core/prelude`
 
+#### :bug: Bug Fix
+
+* Fixed an error when calling `String.capitalize` with an empty string
+
 ## v3.89.0 (2022-09-15)
 
 #### :rocket: New Feature

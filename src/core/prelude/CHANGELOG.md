@@ -15,6 +15,10 @@ Changelog
 
 * Added result hashing for `Object.fastHash`
 
+#### :bug: Bug Fix
+
+* Fixed an error when calling `String.capitalize` with an empty string
+
 ## v3.82.0 (2022-04-04)
 
 #### :rocket: New Feature
