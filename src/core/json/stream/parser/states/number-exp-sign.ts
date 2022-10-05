@@ -13,6 +13,7 @@ import type { Token } from 'core/json/stream/parser/interface';
 
 /**
  * Parses the buffer for signs `[-+]?*` and generates a token `numberChunk` with a sign
+ * @param this
  */
 export function* numberExpSign(this: Parser): Generator<Token> {
 	this.patterns.numberExpSign.lastIndex = this.index;

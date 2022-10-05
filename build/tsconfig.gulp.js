@@ -14,6 +14,8 @@
  * Also, this task generates URL-s for the `paths` options of the config.
  * Be sure that you run this task before trying to compile TS files.
  *
+ * @param {import('gulp')} gulp
+ *
  * @example
  * ```bash
  * npx gulp build:tsconfig

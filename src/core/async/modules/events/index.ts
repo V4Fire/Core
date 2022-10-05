@@ -440,7 +440,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Removes the passed event listener from the specified emitter
+	 *
 	 * @param event - event object
+	 * @throws {@link ReferenceError}
 	 */
 	eventListenerDestructor(event: Event): void {
 		const

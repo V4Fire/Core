@@ -816,6 +816,9 @@ export function set(
 	engine?: WatchEngine
 ): void;
 
+/**
+ * @inheritDoc
+ */
 export function set(
 	obj: object,
 	path: WatchPath,
@@ -896,6 +899,9 @@ export function unset(
 	engine?: WatchEngine
 ): void;
 
+/**
+ * @inheritDoc
+ */
 export function unset(
 	obj: object,
 	path: WatchPath,

@@ -163,7 +163,7 @@ export type ResolverResult = CanUndef<CanArray<string>>;
 
 /**
  * Options for a request
- * @typeparam D - response data type
+ * @typeParam D - response data type
  */
 export interface CreateRequestOptions<D = unknown> {
 	/**
@@ -325,7 +325,7 @@ export interface CreateRequestOptions<D = unknown> {
 	 * Strategy of caching for requests that support caching (by default, only GET requests can be cached):
 	 *
 	 * 1. `'forever'` - caches all requests and stores their values forever within the active session or
-	 *   until the cache expires (if `cacheTTL` is specified);
+	 * until the cache expires (if `cacheTTL` is specified);
 	 * 2. `'queue'` - caches all requests, but more frequent requests will push less frequent requests;
 	 * 3. `'never'` - never caches any requests;
 	 * 4. Or, you can pass a custom cache object.
@@ -541,7 +541,7 @@ export interface CreateRequestOptions<D = unknown> {
 
 /**
  * Options to retry bad requests
- * @typeparam D - response data type
+ * @typeParam D - response data type
  */
 export interface RetryOptions<D = unknown> {
 	/**

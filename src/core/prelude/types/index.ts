@@ -13,10 +13,10 @@ import extend from 'core/prelude/extend';
 import { deprecate } from 'core/functools';
 import { isNative, toString, nonPrimitiveTypes, READONLY, PROXY } from 'core/prelude/types/const';
 
-/** @see [[ObjectConstructor.cast]] */
+/** @see {@link ObjectConstructor.cast} */
 extend(Object, 'cast', (value) => value);
 
-/** @see [[ObjectConstructor.throw]] */
+/** @see {@link ObjectConstructor.throw} */
 extend(Object, 'throw', (err = 'This is a loopback function or method') => {
 	if (Object.isString(err)) {
 		throw new Error(err);
@@ -25,44 +25,44 @@ extend(Object, 'throw', (err = 'This is a loopback function or method') => {
 	throw err;
 });
 
-/** @see [[ObjectConstructor.isTruly]] */
+/** @see {@link ObjectConstructor.isTruly} */
 extend(Object, 'isTruly', (value) => Boolean(value));
 
-/** @see [[ObjectConstructor.isPrimitive]] */
+/** @see {@link ObjectConstructor.isPrimitive} */
 extend(Object, 'isPrimitive', (value) => !value || !nonPrimitiveTypes[typeof value]);
 
-/** @see [[ObjectConstructor.isUndef]] */
+/** @see {@link ObjectConstructor.isUndef} */
 extend(Object, 'isUndef', (value) => value === undefined);
 
-/** @see [[ObjectConstructor.isNull]] */
+/** @see {@link ObjectConstructor.isNull} */
 // eslint-disable-next-line eqeqeq
 extend(Object, 'isNull', (value) => value === null);
 
-/** @see [[ObjectConstructor.isNullable]] */
+/** @see {@link ObjectConstructor.isNullable} */
 extend(Object, 'isNullable', (value) => value == null);
 
-/** @see [[ObjectConstructor.isString]] */
+/** @see {@link ObjectConstructor.isString} */
 extend(Object, 'isString', (value) => typeof value === 'string');
 
-/** @see [[ObjectConstructor.isNumber]] */
+/** @see {@link ObjectConstructor.isNumber} */
 extend(Object, 'isNumber', (value) => typeof value === 'number');
 
-/** @see [[ObjectConstructor.isBoolean]] */
+/** @see {@link ObjectConstructor.isBoolean} */
 extend(Object, 'isBoolean', (value) => typeof value === 'boolean');
 
-/** @see [[ObjectConstructor.isSymbol]] */
+/** @see {@link ObjectConstructor.isSymbol} */
 extend(Object, 'isSymbol', (value) => typeof value === 'symbol');
 
-/** @see [[ObjectConstructor.isRegExp]] */
+/** @see {@link ObjectConstructor.isRegExp} */
 extend(Object, 'isRegExp', (value) => value instanceof RegExp);
 
-/** @see [[ObjectConstructor.isDate]] */
+/** @see {@link ObjectConstructor.isDate} */
 extend(Object, 'isDate', (value) => value instanceof Date);
 
-/** @see [[ObjectConstructor.isArray]] */
+/** @see {@link ObjectConstructor.isArray} */
 extend(Object, 'isArray', Array.isArray);
 
-/** @see [[ObjectConstructor.isArrayLike]] */
+/** @see {@link ObjectConstructor.isArrayLike} */
 extend(Object, 'isArrayLike', (value) => {
 	const
 		t = typeof value;
@@ -74,22 +74,22 @@ extend(Object, 'isArrayLike', (value) => {
 	return Array.isArray(value) || value.length > 0 && 0 in value || value.length === 0;
 });
 
-/** @see [[ObjectConstructor.isMap]] */
+/** @see {@link ObjectConstructor.isMap} */
 extend(Object, 'isMap', (value) => value instanceof Map);
 
-/** @see [[ObjectConstructor.isWeakMap]] */
+/** @see {@link ObjectConstructor.isWeakMap} */
 extend(Object, 'isWeakMap', (value) => value instanceof WeakMap);
 
-/** @see [[ObjectConstructor.isSet]] */
+/** @see {@link ObjectConstructor.isSet} */
 extend(Object, 'isSet', (value) => value instanceof Set);
 
-/** @see [[ObjectConstructor.isWeakSet]] */
+/** @see {@link ObjectConstructor.isWeakSet} */
 extend(Object, 'isWeakSet', (value) => value instanceof WeakSet);
 
-/** @see [[ObjectConstructor.isDictionary]] */
+/** @see {@link ObjectConstructor.isDictionary} */
 extend(Object, 'isDictionary', isPlainObject);
 
-/** @see [[ObjectConstructor.isPlainObject]] */
+/** @see {@link ObjectConstructor.isPlainObject} */
 extend(Object, 'isPlainObject', isPlainObject);
 
 function isPlainObject(value: unknown): boolean {
@@ -104,7 +104,7 @@ function isPlainObject(value: unknown): boolean {
 	return !constr || constr === Object;
 }
 
-/** @see [[ObjectConstructor.isCustomObject]] */
+/** @see {@link ObjectConstructor.isCustomObject} */
 extend(Object, 'isCustomObject', (value) => {
 	value = Object.unwrapProxy(value);
 
@@ -123,7 +123,7 @@ extend(Object, 'isCustomObject', (value) => {
 	return !constr || constr === Object || !isNative.test(constr.toString());
 });
 
-/** @see [[ObjectConstructor.isSimpleObject]] */
+/** @see {@link ObjectConstructor.isSimpleObject} */
 extend(Object, 'isSimpleObject', (value) => {
 	if (!value || typeof value !== 'object') {
 		return false;
@@ -132,19 +132,19 @@ extend(Object, 'isSimpleObject', (value) => {
 	return toString.call(value) === '[object Object]';
 });
 
-/** @see [[ObjectConstructor.isFunction]] */
+/** @see {@link ObjectConstructor.isFunction} */
 extend(Object, 'isFunction', (value) => typeof value === 'function');
 
-/** @see [[ObjectConstructor.isSimpleFunction]] */
+/** @see {@link ObjectConstructor.isSimpleFunction} */
 extend(Object, 'isSimpleFunction', (value) => typeof value === 'function');
 
-/** @see [[ObjectConstructor.isGenerator]] */
+/** @see {@link ObjectConstructor.isGenerator} */
 extend(Object, 'isGenerator', (value) => typeof value === 'function' && value.constructor.name === 'GeneratorFunction');
 
-/** @see [[ObjectConstructor.isAsyncGenerator]] */
+/** @see {@link ObjectConstructor.isAsyncGenerator} */
 extend(Object, 'isAsyncGenerator', (value) => typeof value === 'function' && value.constructor.name === 'AsyncGeneratorFunction');
 
-/** @see [[ObjectConstructor.isIterator]] */
+/** @see {@link ObjectConstructor.isIterator} */
 extend(Object, 'isIterator', (value) => {
 	if (!value || typeof value !== 'object') {
 		return false;
@@ -153,11 +153,11 @@ extend(Object, 'isIterator', (value) => {
 	return typeof value.next === 'function';
 });
 
-/** @see [[ObjectConstructor.isAsyncIterator]] */
+/** @see {@link ObjectConstructor.isAsyncIterator} */
 extend(Object, 'isAsyncIterator', (value) =>
 	Object.isIterator(value) && Object.isAsyncIterable(value));
 
-/** @see [[ObjectConstructor.isIterable]] */
+/** @see {@link ObjectConstructor.isIterable} */
 extend(Object, 'isIterable', (value) => {
 	if (value == null) {
 		return false;
@@ -168,7 +168,7 @@ extend(Object, 'isIterable', (value) => {
 	);
 });
 
-/** @see [[ObjectConstructor.isAsyncIterable]] */
+/** @see {@link ObjectConstructor.isAsyncIterable} */
 extend(Object, 'isAsyncIterable', (value) => {
 	if (value == null) {
 		return false;
@@ -179,7 +179,7 @@ extend(Object, 'isAsyncIterable', (value) => {
 	);
 });
 
-/** @see [[ObjectConstructor.isPromise]] */
+/** @see {@link ObjectConstructor.isPromise} */
 extend(Object, 'isPromise', (value) => {
 	if (value) {
 		return typeof value.then === 'function' && typeof value.catch === 'function';
@@ -188,7 +188,7 @@ extend(Object, 'isPromise', (value) => {
 	return false;
 });
 
-/** @see [[ObjectConstructor.isPromiseLike]] */
+/** @see {@link ObjectConstructor.isPromiseLike} */
 extend(Object, 'isPromiseLike', (value) => {
 	if (value) {
 		return typeof value.then === 'function';
@@ -197,10 +197,10 @@ extend(Object, 'isPromiseLike', (value) => {
 	return false;
 });
 
-/** @see [[ObjectConstructor.isProxy]] */
+/** @see {@link ObjectConstructor.isProxy} */
 extend(Object, 'isProxy', (value) => value?.[PROXY] != null);
 
-/** @see [[ObjectConstructor.unwrapProxy]] */
+/** @see {@link ObjectConstructor.unwrapProxy} */
 extend(Object, 'unwrapProxy', (value) => {
 	while (value?.[PROXY] && value[PROXY] !== value) {
 		value = value[PROXY];
@@ -231,7 +231,7 @@ Object.isFrozen = (value) =>
 
 /**
  * @deprecated
- * @see [[ObjectConstructor.isDictionary]]
+ * @see {@link ObjectConstructor.isDictionary}
  */
 extend(Object, 'isObject', deprecate({
 	name: 'isObject',

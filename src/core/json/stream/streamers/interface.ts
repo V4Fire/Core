@@ -55,6 +55,7 @@ export default abstract class Streamer<T = unknown> implements TokenProcessor<T>
 
 	/**
 	 * Processes the passed JSON token and yields the assembled value
+	 * @param chunk
 	 */
 	*processToken(chunk: Token): Generator<T> {
 		if (!this.isChecked && this.checkToken(chunk)) {

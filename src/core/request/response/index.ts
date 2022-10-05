@@ -63,7 +63,7 @@ export const
 
 /**
  * Class to work with server response data
- * @typeparam D - response data type
+ * @typeParam D - response data type
  */
 export default class Response<
 	D extends Nullable<string | JSONLikeValue | ArrayBuffer | Blob | Document | unknown
@@ -284,7 +284,9 @@ export default class Response<
 	/**
 	 * Returns an iterator by the response body.
 	 * Mind, when you parse response via iterator, you won't be able to use other parse methods, like `json` or `text`.
+	 *
 	 * @emits `streamUsed()`
+	 * @throws {@link Error}
 	 */
 	[Symbol.asyncIterator](): AsyncIterableIterator<RequestResponseChunk> {
 		if (this.bodyUsed) {
@@ -322,6 +324,8 @@ export default class Response<
 	 * A way to parse data is based on the response `Content-Type` header or a passed `responseType` constructor option.
 	 * Also, a sequence of decoders is applied to the parsed result if they are passed with a `decoders`
 	 * constructor option.
+	 *
+	 * @throws {@link Error}
 	 */
 	decode(): AbortablePromise<D | null> {
 		if (this[$$.decodedValue] != null) {
@@ -659,7 +663,8 @@ export default class Response<
 
 	/**
 	 * Reads the response body or throws an exception if reading is impossible
-	 * @emits `bodyUsed()`
+	 * @emits emitter#bodyUsed
+	 * @throws {Error}
 	 */
 	protected readBody(): AbortablePromise<ResponseTypeValue> {
 		if (this.streamUsed) {

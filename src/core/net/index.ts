@@ -31,7 +31,7 @@ let
 
 //#if runtime has core/kv-storage
 // eslint-disable-next-line prefer-const
-storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[NET]]'));
+storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('{@link NET}'));
 //#endif
 
 /**
@@ -41,7 +41,7 @@ storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace(
  *
  * @emits `online()`
  * @emits `offline(lastOnline: Date)`
- * @emits `status(value:` [[NetStatus]] `)`
+ * @emits `status(value:` {@link NetStatus} `)`
  */
 export function isOnline(
 	engine: NetEngine = netEngine

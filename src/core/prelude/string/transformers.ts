@@ -30,7 +30,7 @@ import {
 
 } from 'core/prelude/string/helpers';
 
-/** @see [[String.capitalize]] */
+/** @see {@link String.capitalize} */
 extend(String.prototype, 'capitalize', function capitalize(
 	this: string,
 	{lower, all, cache}: StringCapitalizeOptions = {}
@@ -69,10 +69,10 @@ extend(String.prototype, 'capitalize', function capitalize(
 	return res;
 });
 
-/** @see [[StringConstructor.capitalize]] */
+/** @see {@link StringConstructor.capitalize} */
 extend(String, 'capitalize', createStaticTransformFunction('capitalize'));
 
-/** @see [[String.camelize]] */
+/** @see {@link String.camelize} */
 extend(String.prototype, 'camelize', function camelize(
 	this: string,
 	upperOrOpts: boolean | StringCamelizeOptions
@@ -112,10 +112,10 @@ extend(String.prototype, 'camelize', function camelize(
 	return res;
 });
 
-/** @see [[StringConstructor.camelize]] */
+/** @see {@link StringConstructor.camelize} */
 extend(String, 'camelize', createStaticTransformFunction('camelize'));
 
-/** @see [[String.dasherize]] */
+/** @see {@link String.dasherize} */
 extend(String.prototype, 'dasherize', function dasherize(
 	this: string,
 	stableOrOpts?: boolean | StringDasherizeOptions
@@ -154,10 +154,10 @@ extend(String.prototype, 'dasherize', function dasherize(
 	return res;
 });
 
-/** @see [[StringConstructor.dasherize]] */
+/** @see {@link StringConstructor.dasherize} */
 extend(String, 'dasherize', createStaticTransformFunction('dasherize'));
 
-/** @see [[String.underscore]] */
+/** @see {@link String.underscore} */
 extend(String.prototype, 'underscore', function underscore(
 	this: string,
 	stableOrOpts?: boolean | StringUnderscoreOptions
@@ -196,5 +196,5 @@ extend(String.prototype, 'underscore', function underscore(
 	return res;
 });
 
-/** @see [[StringConstructor.underscore]] */
+/** @see {@link StringConstructor.underscore} */
 extend(String, 'underscore', createStaticTransformFunction('underscore'));

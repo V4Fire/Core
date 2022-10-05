@@ -10,7 +10,7 @@ import Node from 'core/linked-list/node';
 
 /**
  * Double-ended two-way linked list
- * @typeparam T - linked list node data
+ * @typeParam T - linked list node data
  */
 export default class List<T> {
 	/**

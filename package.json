@@ -95,13 +95,13 @@
     "through2": "4.0.2",
     "tsc-alias": "1.6.1",
     "tsconfig": "7.0.0",
-    "typedoc": "0.22.13",
+    "typedoc": "0.22.18",
     "typescript": "4.6.2",
     "upath": "2.0.1"
   },
   "devDependencies": {
     "@types/jest": "28.1.4",
-    "@v4fire/linters": "1.9.0",
+    "@v4fire/linters": "https://github.com/v4fire/linters#eslint-jsdoc",
     "abort-controller": "3.0.0",
     "express": "4.17.3",
     "husky": "7.0.4",

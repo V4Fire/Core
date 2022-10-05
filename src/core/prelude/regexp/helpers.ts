@@ -6,6 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * Creates a flags modifier
+ * @param method
+ */
 export function createFlagsModifier(method: string): Function {
 	return function flagsModifier(rgxp: RegExp | RegExpFlag, ...flags: RegExpFlag[]): Function | RegExp {
 		if (Object.isString(rgxp)) {

@@ -13,6 +13,7 @@ import type { Token } from 'core/json/stream/parser/interface';
 
 /**
  * Parses the buffer for a digit expression `[0-9]*` and generates a token `numberChunk` with a number value
+ * @param this
  */
 export function* numberExpDigit(this: Parser): Generator<Token> {
 	this.patterns.numberExpDigit.lastIndex = this.index;

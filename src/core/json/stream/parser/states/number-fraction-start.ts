@@ -14,6 +14,9 @@ import type { Token } from 'core/json/stream/parser/interface';
 /**
  * Parse the buffer for the first digit in a number fraction `[0-9]`
  * and generates a token `numberChunk` with a fraction value
+ *
+ * @param this
+ * @throws {@link SyntaxError}
  */
 export function* numberFractionStart(this: Parser): Generator<Token> {
 	this.patterns.numberFracStart.lastIndex = this.index;

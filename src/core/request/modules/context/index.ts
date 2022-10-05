@@ -34,7 +34,7 @@ import Super from 'core/request/modules/context/modules/middlewares';
 
 /**
  * Context of a request
- * @typeparam D - response data
+ * @typeParam D - response data
  */
 export default class RequestContext<D = unknown> extends Super<D> {
 	/**

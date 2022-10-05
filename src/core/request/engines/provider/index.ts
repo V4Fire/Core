@@ -42,7 +42,7 @@ export * from 'core/request/engines/provider/interface';
  *
  * @param src - provider constructor, an instance, or the global name
  * @param [methodsMapping] - how to map original provider methods on engine methods
- *   (by default will be used the scheme from the provider options)
+ * (by default will be used the scheme from the provider options)
  *
  * @example
  * ```js
@@ -214,6 +214,8 @@ export default function createProviderEngine(
  *
  * @param src - provider constructor, an instance, or the global name
  * @param [meta] - meta parameters of the provider
+ *
+ * @throws {@link ReferenceError}
  */
 function getProviderInstance(src: ExtraProviderConstructor, meta?: Meta): Provider {
 	if (Object.isString(src)) {

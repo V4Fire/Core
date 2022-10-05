@@ -10,10 +10,10 @@ import extend from 'core/prelude/extend';
 import type { ValMap } from 'core/prelude/object/clone/interface';
 
 const
-	objRef = '[[OBJ_REF:base]]',
+	objRef = '{@link OBJ_REF:base}',
 	valRef = '[[VAL_REF:';
 
-/** @see [[ObjectConstructor.fastClone]] */
+/** @see {@link ObjectConstructor.fastClone} */
 extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 	if (!Object.isTruly(obj)) {
 		if (opts !== undefined) {

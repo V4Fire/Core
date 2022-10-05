@@ -1,0 +1,17 @@
+[13:30:31] Using gulpfile ~/Documents/Work/v4fire-core/gulpfile.js
+[13:30:31] Starting 'build:doc:typedoc'...
+[13:30:43] Finished 'build:doc:typedoc' after 11 s
+$ typedoc
+[93mWarning: [0mFailed to convert type node with kind: IntrinsicKeyword and text intrinsic. Please report a bug.
+	/Users/bonkalol/Documents/Work/v4fire-core/node_modules/typescript/lib/lib.es5.d.ts:1606:34
+[93mWarning: [0mFailed to convert type node with kind: IntrinsicKeyword and text intrinsic. Please report a bug.
+	/Users/bonkalol/Documents/Work/v4fire-core/node_modules/typescript/lib/lib.es5.d.ts:1611:34
+[93mWarning: [0mFailed to convert type node with kind: IntrinsicKeyword and text intrinsic. Please report a bug.
+	/Users/bonkalol/Documents/Work/v4fire-core/node_modules/typescript/lib/lib.es5.d.ts:1616:35
+[93mWarning: [0mFailed to convert type node with kind: IntrinsicKeyword and text intrinsic. Please report a bug.
+	/Users/bonkalol/Documents/Work/v4fire-core/node_modules/typescript/lib/lib.es5.d.ts:1621:37
+[93mWarning: [0mIntersectProps, defined at src/core/log/base/interface.ts:9, is referenced by src/core/log/base/interface.Extended but not included in the documentation.
+[93mWarning: [0mFilterParams, defined at src/core/request/error/extractor.ts:16, is referenced by src/core/request/error/extractor.RequestErrorDetailsExtractor.headersFilterParams but not included in the documentation.
+[93mWarning: [0mAddEventListenerLikeFunctionMapper, defined at src/core/async/modules/wrappers/interface.ts:106, is referenced by src/core/async/modules/wrappers/interface.EventEmitterOverwritten.__type.addEventListener but not included in the documentation.
+[93mWarning: [0mCould not find file to include: /Users/bonkalol/Documents/Work/v4fire-core/src/core/request/context/README.md
+[96mInfo: [0mDocumentation generated at ./docs

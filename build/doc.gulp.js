@@ -11,6 +11,8 @@
 /**
  * Registers gulp tasks to generate HTML documentation based on the project
  *
+ * @param {import('gulp')} gulp
+ *
  * @example
  * ```bash
  * npx gulp build:docs
@@ -29,6 +31,7 @@ module.exports = function init(gulp) {
 
 	/**
 	 * Normalizes generated HTML files: attaches extra styles and js, removes some trash
+	 * @returns {void}
 	 */
 	gulp.task('build:doc:normalize', gulp.series([
 		() => gulp.src('./docs/**/*.+(html|js|json)')

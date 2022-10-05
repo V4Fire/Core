@@ -27,7 +27,7 @@ let gulpInitialized;
  * });
  * ```
  *
- * @param gulp - link to the gulp module
+ * @param {import('gulp')} gulp - link to the gulp module
  */
 exports.wrapGulp = function wrapGulp(gulp) {
 	const

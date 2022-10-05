@@ -42,7 +42,8 @@ export type WarnAlternative = string | WarnAlternativeOptions;
 export interface WarnOptions {
 	/**
 	 * Type of warn context
-	 * @type `'warning'`
+	 *
+	 * @type {'warning'}
 	 */
 	context?: WarnContext;
 
@@ -81,10 +82,10 @@ export interface WarnOptions {
 }
 
 export interface InlineWarnOptions extends WarnOptions {
-	/** @see [[WarnOptions.name]] */
+	/** @see {@link WarnOptions.name} */
 	name: string;
 
-	/** @see [[WarnOptions.type]] */
+	/** @see {@link WarnOptions.type} */
 	type: WarnExprType;
 }
 

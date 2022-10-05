@@ -9,20 +9,20 @@
 import extend from 'core/prelude/extend';
 import { createDateModifier, createStaticDateModifier } from 'core/prelude/date/helpers';
 
-/** @see [[Date.add]] */
+/** @see {@link Date.add} */
 extend(Date.prototype, 'add', createDateModifier((v, b) => b + v));
 
-/** @see [[DateConstructor.add]] */
+/** @see {@link DateConstructor.add} */
 extend(Date, 'add', createStaticDateModifier('add'));
 
-/** @see [[Date.set]] */
+/** @see {@link Date.set} */
 extend(Date.prototype, 'set', createDateModifier());
 
-/** @see [[DateConstructor.set]] */
+/** @see {@link DateConstructor.set} */
 extend(Date, 'set', createStaticDateModifier('set'));
 
-/** @see [[Date.rewind]] */
+/** @see {@link Date.rewind} */
 extend(Date.prototype, 'rewind', createDateModifier((v, b) => b - v));
 
-/** @see [[DateConstructor.rewind]] */
+/** @see {@link DateConstructor.rewind} */
 extend(Date, 'rewind', createStaticDateModifier('rewind'));

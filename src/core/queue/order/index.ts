@@ -18,7 +18,7 @@ export * from 'core/queue/order/interface';
 
 /**
  * Implementation of an ordered queue data structure based on a binary heap
- * @typeparam T - the queue element
+ * @typeParam T - the queue element
  */
 export default class OrderedQueue<T> extends Queue<T> {
 	/**

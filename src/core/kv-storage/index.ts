@@ -85,7 +85,7 @@ export const asyncSession = factory(asyncSessionStorage, true);
  * Alias for a has method of the synchronous local storage API
  *
  * @alias
- * @see [[local]]
+ * @see {@link local}
  */
 export const has = local.has.bind(local);
 
@@ -93,7 +93,7 @@ export const has = local.has.bind(local);
  * Alias for a get method of the synchronous local storage API
  *
  * @alias
- * @see [[local]]
+ * @see {@link local}
  */
 export const get = local.get.bind(local);
 
@@ -101,7 +101,7 @@ export const get = local.get.bind(local);
  * Alias for a set method of the synchronous local storage API
  *
  * @alias
- * @see [[local]]
+ * @see {@link local}
  */
 export const set = local.set.bind(local);
 
@@ -109,7 +109,7 @@ export const set = local.set.bind(local);
  * Alias for a remove method of the synchronous local storage API
  *
  * @alias
- * @see [[local]]
+ * @see {@link local}
  */
 export const remove = local.remove.bind(local);
 
@@ -117,7 +117,7 @@ export const remove = local.remove.bind(local);
  * Alias for a clear method of the synchronous local storage API
  *
  * @alias
- * @see [[local]]
+ * @see {@link local}
  */
 export const clear = local.clear.bind(local);
 
@@ -125,7 +125,7 @@ export const clear = local.clear.bind(local);
  * Alias for a namespace method of the synchronous local storage API
  *
  * @alias
- * @see [[local]]
+ * @see {@link local}
  *
  * @example
  * ```js
@@ -143,6 +143,9 @@ export const namespace = local.namespace.bind(local);
  * @param engine
  * @param async - if true, then the storage is implemented async interface
  *
+ * @throws {@link ReferenceError}
+ * @throws {@link TypeError}
+ *
  * @example
  * ```js
  * const storage = factory(window.localStorage);
@@ -152,6 +155,10 @@ export const namespace = local.namespace.bind(local);
  */
 export function factory(engine: StorageEngine, async: true): AsyncStorage;
 export function factory(engine: StorageEngine, async?: false): SyncStorage;
+
+/**
+ * @inheritDoc
+ */
 export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | SyncStorage {
 	let
 		has,

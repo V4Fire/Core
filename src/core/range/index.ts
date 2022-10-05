@@ -19,7 +19,7 @@ export * from 'core/range/interface';
  * A class to create a range with the specified type.
  * The class supports ranges of numbers, strings, and dates.
  *
- * @typeparam T - range type value
+ * @typeParam T - range type value
  */
 export default class Range<T extends RangeValue> {
 	/**
@@ -44,12 +44,12 @@ export default class Range<T extends RangeValue> {
 
 	/**
 	 * @param [start] - start position:
-	 *   * if it wrapped by an array, the bound won't be included to the range;
-	 *   * If passed as `null`, it means `-Infinite`;
+	 * - if it wrapped by an array, the bound won't be included to the range;
+	 * - If passed as `null`, it means `-Infinite`;
 	 *
 	 * @param [end] - end position:
-	 *   * if it wrapped by an array, the bound won't be included to the range;
-	 *   * If passed as `null`, it means `Infinite`;
+	 * - if it wrapped by an array, the bound won't be included to the range;
+	 * - If passed as `null`, it means `Infinite`;
 	 *
 	 * @example
 	 * ```js
@@ -592,6 +592,9 @@ export default class Range<T extends RangeValue> {
 	 * Mind, you can't transform infinite ranges to arrays, but you free to use iterators.
 	 *
 	 * @param [step] - step to iterate elements (for date ranges, it means milliseconds to shift)
+	 *
+	 * @throws {@link RangeError}
+	 *
 	 * @example
 	 * ```js
 	 * // [0, 3, 6, 9]

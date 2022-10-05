@@ -20,7 +20,7 @@ export * from 'core/queue/merge/interface';
 
 /**
  * Implementation of a queue data structure with support of task merging by a specified hash function
- * @typeparam T - the queue element
+ * @typeParam T - the queue element
  */
 export default class MergeQueue<T> extends AbstractQueue<T> {
 	/**

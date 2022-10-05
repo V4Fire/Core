@@ -27,7 +27,7 @@ export default function extend(obj: Function | object, name: string, method: Fun
 	}
 
 	const
-		dictKey = Symbol.for('[[V4_EXTEND_API]]');
+		dictKey = Symbol.for('{@link V4_EXTEND_API}');
 
 	if (!(dictKey in obj)) {
 		Object.defineProperty(obj, dictKey, {
@@ -39,7 +39,7 @@ export default function extend(obj: Function | object, name: string, method: Fun
 
 	//#if runtime has noGlobals
 
-	const key = Symbol.for(`[[V4_PROP_TRAP:${name}]]`);
+	const key = Symbol.for(`{@link V4_PROP_TRAP:${name}}`);
 	Object.defineProperty(obj, key, descriptor);
 
 	if (obj === Function.prototype || typeof obj !== 'function' && obj !== Object.prototype) {

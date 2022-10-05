@@ -32,6 +32,7 @@ export interface WrappedResource<T = unknown> {
 	destroy(): void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface OptionalWrappedResource<T> extends WrappedResource<Nullable<T>> {}
 
 export interface PoolOptions<T = unknown> {

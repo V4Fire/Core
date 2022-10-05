@@ -21,6 +21,8 @@ export * from 'core/data/middlewares/attach-status/interface';
  *
  * This middleware can be used as encoder: the value to wait will be taken from input data (`.wait`),
  * otherwise, it will be taken from `.meta.wait`.
+ *
+ * @param args
  */
 export async function wait(...args: unknown[]): Promise<unknown> {
 	let

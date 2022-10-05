@@ -286,7 +286,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * $a.suspendAll({group: 'bar:bla'});
 	 *
 	 * // We can provide own global group to namespace, it will be joined with the parent's global group
-	 * const blaStore = wrappedStorage.namespace('[[BLA]]', {group: 'bla'});
+	 * const blaStore = wrappedStorage.namespace('{@link BLA}', {group: 'bla'});
 	 *
 	 * blaStore.clear({group: 'foo'});
 	 *

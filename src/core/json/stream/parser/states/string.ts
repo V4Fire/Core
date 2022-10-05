@@ -26,6 +26,9 @@ import type { Token } from 'core/json/stream/parser/interface';
 /**
  * Parses the buffer for the end of a key or string and generates a sequence of tokens
  * `endKey`, `keyValue` for a key or `endString`, `stringValue` and `stringChunk` for a string
+ *
+ * @param this
+ * @throws {@link SyntaxError}
  */
 export function* string(this: Parser): Generator<Token> {
 	this.patterns.string.lastIndex = this.index;

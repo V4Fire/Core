@@ -94,7 +94,7 @@ export interface WatchOptions {
 	 *
 	 * ```typescript
 	 * // Before
-	 * type Cb = (mutations: [[unknown, unknown, WatchHandlerParams]]) => any;
+	 * type Cb = (mutations: {@link unknown, unknown, WatchHandlerParams}) => any;
 	 *
 	 * // After
 	 * type CbWithImmediate = (newValue: unknown, oldValue: unknown, info: WatchHandlerParams) => any;

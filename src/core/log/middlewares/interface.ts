@@ -16,8 +16,8 @@ export interface LogEvent {
 	readonly error?: Error;
 
 	/**
-	 *  @deprecated
-	 *  @see additionals
+	 * @deprecated
+	 * @see {@link LogEvent.additionals}
 	 */
 	readonly details: Dictionary;
 }

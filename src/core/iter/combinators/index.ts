@@ -30,6 +30,9 @@ export function sequence<T extends AsyncIterable<any>, A extends AnyIterable<any
 	...iterables: A[]
 ): AsyncIterableIterator<IterableType<T> | IterableType<A>>;
 
+/**
+ * @inheritDoc
+ */
 export function sequence(
 	...iterables: AnyIterable[]
 ): IterableIterator<unknown> | AsyncIterableIterator<unknown> {

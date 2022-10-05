@@ -347,6 +347,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 
 	/**
 	 * Returns the promise' value if it is fulfilled, otherwise throws an exception
+	 * @throws {@link Error}
 	 */
 	unwrap(): T {
 		if (this.state !== State.fulfilled) {

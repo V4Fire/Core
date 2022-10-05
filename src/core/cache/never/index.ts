@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars-experimental */
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -22,7 +20,7 @@ export * from 'core/cache/interface';
  * Loopback class for a cache data structure
  */
 export default class NeverCache<V = any, K = any> implements Cache<V, K> {
-	/** @see [[Cache.size]] */
+	/** @see {@link Cache.size} */
 	get size(): number {
 		return this.storage.size;
 	}
@@ -36,43 +34,43 @@ export default class NeverCache<V = any, K = any> implements Cache<V, K> {
 		return this.keys();
 	}
 
-	/** @see [[Cache.has]] */
-	has(key: K): boolean {
+	/** @inheritDoc */
+	has(_key: K): boolean {
 		return false;
 	}
 
-	/** @see [[Cache.get]] */
-	get(key: K): undefined {
+	/** @inheritDoc */
+	get(_key: K): undefined {
 		return undefined;
 	}
 
-	/** @see [[Cache.set]] */
+	/** @inheritDoc */
 	set(key: K, value: V): V {
 		return value;
 	}
 
-	/** @see [[Cache.remove]] */
-	remove(key: K): CanUndef<V> {
+	/** @inheritDoc */
+	remove(_key: K): CanUndef<V> {
 		return undefined;
 	}
 
-	/** @see [[Cache.keys]] */
+	/** @inheritDoc */
 	keys(): IterableIterator<K> {
 		return this.storage.keys();
 	}
 
-	/** @see [[Cache.values]] */
+	/** @inheritDoc */
 	values(): IterableIterator<V> {
 		return this.storage.values();
 	}
 
-	/** @see [[Cache.entries]] */
+	/** @inheritDoc */
 	entries(): IterableIterator<[K, V]> {
 		return this.storage.entries();
 	}
 
-	/** @see [[Cache.clear]] */
-	clear(filter?: ClearFilter<V, K>): Map<K, V> {
+	/** @inheritDoc */
+	clear(_filter?: ClearFilter<V, K>): Map<K, V> {
 		return new Map();
 	}
 }

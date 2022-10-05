@@ -10,13 +10,13 @@ import express from 'express';
 
 import { set, get } from 'core/env';
 
-import request, { globalOpts } from 'core/request';
-import Provider, { provider } from 'core/data';
+import request, { globalOpts, Middlewares, MiddlewareParams } from 'core/request';
+import Provider, { provider, DecodersMap, EncodersMap } from 'core/data';
 import createProviderEngine from 'core/request/engines/provider';
 
 @provider
 class ProviderEngineTestBaseProvider extends Provider {
-	static request = Provider.request({
+	static override request: Provider['request'] = Provider.request({
 		api: {
 			url: 'http://localhost:3000'
 		}
@@ -25,39 +25,39 @@ class ProviderEngineTestBaseProvider extends Provider {
 
 @provider
 class ProviderEngineTestDataProvider extends Provider {
-	static request = Provider.request({
+	static override request: Provider['request'] = Provider.request({
 		engine: createProviderEngine(ProviderEngineTestBaseProvider)
 	});
 
-	baseURL = '/data';
+	override baseURL: string = '/data';
 }
 
 @provider
 class ProviderEngineTestJSONProvider extends Provider {
-	static request = Provider.request({
+	static override request: Provider['request'] = Provider.request({
 		engine: createProviderEngine(ProviderEngineTestDataProvider, {
 			peek: 'get'
 		})
 	});
 
-	baseURL = 'json';
+	override baseURL: string = 'json';
 }
 
 @provider
 class ProviderEngineTestDecodersProvider extends Provider {
-	static request = Provider.request({
+	static override request: Provider['request'] = Provider.request({
 		engine: createProviderEngine(ProviderEngineTestJSONProvider)
 	});
 
-	static encoders = {
-		post(data) {
+	static override encoders: EncodersMap = {
+		post(data: {id: number}) {
 			data.id = 12345;
 			return data;
 		}
 	};
 
-	static decoders = {
-		post(data) {
+	static override decoders: DecodersMap = {
+		post(data: {message: string}) {
 			data.message = 'ok';
 			return data;
 		}
@@ -66,36 +66,37 @@ class ProviderEngineTestDecodersProvider extends Provider {
 
 @provider
 class ProviderEngineTestMiddlewareProvider extends Provider {
-	static request = Provider.request({
+	static override request: Provider['request'] = Provider.request({
 		engine: createProviderEngine(ProviderEngineTestDecodersProvider)
 	});
 
-	static decoders = {
-		post(data) {
+	static override decoders: DecodersMap = {
+		post(data: {error: boolean}) {
 			data.error = false;
 			return data;
 		}
 	};
 
-	static middlewares = {
-		fakeResponse({ctx}) {
-			ctx.params.body.value = ctx.params.body.value.join('-');
+	static override middlewares: Middlewares = {
+		fakeResponse({ctx}: MiddlewareParams) {
+			const body = <{value: any}>ctx.params.body;
+			body.value = body.value.join('-');
 		}
-	}
+	};
 }
 
 @provider
 class ProviderEngineTestBasePathProvider extends ProviderEngineTestDataProvider {
-	baseURL = '/data/:id';
+	override baseURL: string = '/data/:id';
 }
 
 @provider
 class ProviderEngineTestPathProvider extends Provider {
-	static request = Provider.request({
+	static override request: Provider['request'] = Provider.request({
 		engine: createProviderEngine(ProviderEngineTestBasePathProvider)
 	});
 
-	baseURL = '/:id';
+	override baseURL: string = '/:id';
 }
 
 describe('core/request/engine/provider', () => {
@@ -145,7 +146,7 @@ describe('core/request/engine/provider', () => {
 	});
 
 	it('response type is correct for XML', async () => {
-		expect((await dataProvider.get().data).querySelector('foo').textContent)
+		expect((await dataProvider.get<HTMLElement>().data)!.querySelector('foo')!.textContent)
 			.toBe('Hello world');
 	});
 

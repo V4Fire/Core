@@ -8,7 +8,7 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see [[ObjectConstructor.get]] */
+/** @see {@link ObjectConstructor.get} */
 extend(Object, 'get', (
 	obj: unknown,
 	path: ObjectPropertyPath | ObjectGetOptions,
@@ -71,7 +71,7 @@ extend(Object, 'get', (
 	return get;
 });
 
-/** @see [[ObjectConstructor.has]] */
+/** @see {@link ObjectConstructor.has} */
 extend(Object, 'has', (
 	obj: unknown,
 	path: ObjectPropertyPath | ObjectGetOptions,
@@ -141,7 +141,7 @@ const
 	// eslint-disable-next-line @typescript-eslint/unbound-method
 	{hasOwnProperty: nativeHasOwnProperty} = Object.prototype;
 
-/** @see [[ObjectConstructor.hasOwnProperty]] */
+/** @see {@link ObjectConstructor.hasOwnProperty} */
 extend(Object, 'hasOwnProperty', function hasOwnProperty(
 	this: unknown,
 	obj: unknown,
@@ -167,12 +167,12 @@ extend(Object, 'hasOwnProperty', function hasOwnProperty(
 	return (key) => Object.hasOwnProperty(obj, key);
 });
 
-/** @see [[ObjectConstructor.defineSymbol]] */
+/** @see {@link ObjectConstructor.defineSymbol} */
 extend(Object, 'defineSymbol', function defineSymbol<T>(obj: T, symbol: symbol, value: unknown): T {
 	return Object.defineProperty(obj, symbol, {value, configurable: true, enumerable: false, writable: true});
 });
 
-/** @see [[ObjectConstructor.set]] */
+/** @see {@link ObjectConstructor.set} */
 extend(Object, 'set', function set(
 	obj: unknown,
 	path: ObjectPropertyPath | ObjectGetOptions,
@@ -315,7 +315,7 @@ extend(Object, 'set', function set(
 	}
 });
 
-/** @see [[ObjectConstructor.delete]] */
+/** @see {@link ObjectConstructor.delete} */
 extend(Object, 'delete', (
 	obj: unknown,
 	path: ObjectPropertyPath | ObjectGetOptions,

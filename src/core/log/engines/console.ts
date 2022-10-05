@@ -32,6 +32,7 @@ export class ConsoleEngine implements LogEngine {
 		//#if runtime has core/log
 
 		if (Object.size(event.additionals) === 0 && event.error == null) {
+			// eslint-disable-next-line no-console
 			console.log(`%c${event.context}`, this.getStringifiedStyle(event.level));
 
 		} else {
@@ -46,6 +47,7 @@ export class ConsoleEngine implements LogEngine {
 				details.push(event.error);
 			}
 
+			// eslint-disable-next-line no-console
 			console.log(`%c${event.context}`, this.getStringifiedStyle(event.level), ...details);
 		}
 

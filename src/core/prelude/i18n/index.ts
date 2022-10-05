@@ -21,7 +21,7 @@ let
 
 //#if runtime has core/kv-storage
 // eslint-disable-next-line prefer-const
-storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[I18N]]'));
+storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('{@link I18N}'));
 //#endif
 
 if (IS_NODE) {

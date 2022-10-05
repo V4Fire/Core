@@ -15,7 +15,7 @@ export interface SyncStorageNamespace {
 	 * Returns true if a value by the specified key exists in the storage.
 	 * Notice, the method can take a list of additional parameters provided to the used storage' engine.
 	 *
-	 * @param key,
+	 * @param key
 	 * @param [args]
 	 */
 	has(key: string, ...args: unknown[]): boolean;

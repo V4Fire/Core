@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 import { canParse, isInvalidKey } from 'core/prelude/object/const';
 
-/** @see [[ObjectConstructor.trySerialize]] */
+/** @see {@link ObjectConstructor.trySerialize} */
 extend(Object, 'trySerialize', (value, replacer?: JSONCb) => {
 	if (Object.isFunction(value)) {
 		replacer = value;
@@ -46,7 +46,7 @@ extend(Object, 'trySerialize', (value, replacer?: JSONCb) => {
 	return encodedValue;
 });
 
-/** @see [[ObjectConstructor.parse]] */
+/** @see {@link ObjectConstructor.parse} */
 extend(Object, 'parse', (value, reviver?: JSONCb) => {
 	if (Object.isFunction(value)) {
 		reviver = value;

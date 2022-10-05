@@ -11,7 +11,7 @@ import { locale as defaultLocale } from 'core/prelude/i18n';
 import { formatCache, formatAliases, boolAliases, defaultFormats } from 'core/prelude/date/const';
 import { createStaticDateFormatter } from 'core/prelude/date/helpers';
 
-/** @see [[Date.short]] */
+/** @see {@link Date.short} */
 extend(Date.prototype, 'short', function short(
 	this: Date,
 	locale: CanUndef<CanArray<string>> = defaultLocale.value
@@ -19,10 +19,10 @@ extend(Date.prototype, 'short', function short(
 	return this.format('d:numeric;M:numeric;Y:numeric', locale);
 });
 
-/** @see [[DateConstructor.short]] */
+/** @see {@link DateConstructor.short} */
 extend(Date, 'short', createStaticDateFormatter('short'));
 
-/** @see [[Date.medium]] */
+/** @see {@link Date.medium} */
 extend(Date.prototype, 'medium', function medium(
 	this: Date,
 	locale: CanUndef<CanArray<string>> = defaultLocale.value
@@ -30,10 +30,10 @@ extend(Date.prototype, 'medium', function medium(
 	return this.format('d:numeric;M:long;Y:numeric', locale);
 });
 
-/** @see [[DateConstructor.medium]] */
+/** @see {@link DateConstructor.medium} */
 extend(Date, 'medium', createStaticDateFormatter('medium'));
 
-/** @see [[Date.long]] */
+/** @see {@link Date.long} */
 extend(Date.prototype, 'long', function long(
 	this: Date,
 	locale: CanUndef<CanArray<string>> = defaultLocale.value
@@ -41,10 +41,10 @@ extend(Date.prototype, 'long', function long(
 	return this.format('d:numeric;M:long;Y:numeric;h:2-digit;m:2-digit;s:2-digit', locale);
 });
 
-/** @see [[DateConstructor.long]] */
+/** @see {@link DateConstructor.long} */
 extend(Date, 'long', createStaticDateFormatter('long'));
 
-/** @see [[Date.format]] */
+/** @see {@link Date.format} */
 extend(Date.prototype, 'format', function format(
 	this: Date,
 	patternOrOpts: string | Intl.DateTimeFormatOptions,
@@ -113,7 +113,7 @@ extend(Date.prototype, 'format', function format(
 	return formatter.format(this);
 });
 
-/** @see [[DateConstructor.format]] */
+/** @see {@link DateConstructor.format} */
 extend(Date, 'format', (
 	date: Date | string | Intl.NumberFormatOptions,
 	patternOrOpts?: string | Intl.NumberFormatOptions,
@@ -128,7 +128,7 @@ extend(Date, 'format', (
 	return date.format(Object.cast(patternOrOpts), locale);
 });
 
-/** @see [[Date.toHTMLDateString]] */
+/** @see {@link Date.toHTMLDateString} */
 extend(Date.prototype, 'toHTMLDateString', function toHTMLDateString(
 	this: Date,
 	opts: DateHTMLDateStringOptions = {}
@@ -144,10 +144,10 @@ extend(Date.prototype, 'toHTMLDateString', function toHTMLDateString(
 	].join('-');
 });
 
-/** @see [[DateConstructor.toHTMLDateString]] */
+/** @see {@link DateConstructor.toHTMLDateString} */
 extend(Date, 'toHTMLDateString', createStaticDateFormatter('toHTMLDateString'));
 
-/** @see [[Date.toHTMLTimeString]] */
+/** @see {@link Date.toHTMLTimeString} */
 extend(Date.prototype, 'toHTMLTimeString', function toHTMLTimeString(
 	this: Date,
 	opts: DateHTMLTimeStringOptions = {}
@@ -176,13 +176,13 @@ extend(Date.prototype, 'toHTMLTimeString', function toHTMLTimeString(
 	return res.join(':');
 });
 
-/** @see [[DateConstructor.toHTMLTimeString]] */
+/** @see {@link DateConstructor.toHTMLTimeString} */
 extend(Date, 'toHTMLTimeString', createStaticDateFormatter('toHTMLTimeString'));
 
-/** @see [[Date.toHTMLString]] */
+/** @see {@link Date.toHTMLString} */
 extend(Date.prototype, 'toHTMLString', function toHTMLString(this: Date, opts: DateHTMLStringOptions): string {
 	return `${this.toHTMLDateString(opts)}T${this.toHTMLTimeString(opts)}`;
 });
 
-/** @see [[DateConstructor.toHTMLString]] */
+/** @see {@link DateConstructor.toHTMLString} */
 extend(Date, 'toHTMLString', createStaticDateFormatter('toHTMLString'));

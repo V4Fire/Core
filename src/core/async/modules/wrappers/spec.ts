@@ -27,7 +27,7 @@ describe('core/async/modules/wrappers', () => {
 
 	@provider
 	class ProviderExample extends Provider {
-		baseURL = 'http://localhost:3000/ok';
+		override baseURL: string = 'http://localhost:3000/ok';
 	}
 
 	describe('`wrapDataProvider`', () => {
@@ -67,9 +67,11 @@ describe('core/async/modules/wrappers', () => {
 				provider = new ProviderExample(),
 				wrappedProvider = $a.wrapDataProvider(provider);
 
-			jest.spyOn($a, 'request');
+			const
+				request = jest.spyOn($a, 'request');
+
 			wrappedProvider.get({id: 1});
-			expect($a.request.mock.lastCall[1]).toEqual({group: 'ProviderExample'});
+			expect(request.mock.lastCall[1]).toEqual({group: 'ProviderExample'});
 		});
 
 		it('should concatenate a global group and local group', async () => {
@@ -78,12 +80,14 @@ describe('core/async/modules/wrappers', () => {
 				provider = new ProviderExample(),
 				wrappedProvider = $a.wrapDataProvider(provider, {group: 'example'});
 
-			jest.spyOn($a, 'request');
+			const
+				request = jest.spyOn($a, 'request');
+
 			await wrappedProvider.get({id: 1});
-			expect($a.request.mock.lastCall[1]).toEqual({group: 'example'});
+			expect(request.mock.lastCall[1]).toEqual({group: 'example'});
 
 			await wrappedProvider.upd({id: 1}, {group: 'foo'});
-			expect($a.request.mock.lastCall[1]).toEqual({group: 'example:foo'});
+			expect(request.mock.lastCall[1]).toEqual({group: 'example:foo'});
 		});
 
 		it('should provide a group into a nested event emitter wrapper and replace the original emitter with a wrapper', () => {
@@ -92,12 +96,13 @@ describe('core/async/modules/wrappers', () => {
 				provider = new ProviderExample(),
 				fakeWrapper = {info: 'Is a wrapped event emitter'};
 
-			jest.spyOn($a, 'wrapEventEmitter').mockReturnValue(fakeWrapper);
+			const
+				wrapped = jest.spyOn($a, 'wrapEventEmitter').mockReturnValue(fakeWrapper);
 
 			const
 				wrappedProvider = $a.wrapDataProvider(provider, {group: 'example'});
 
-			expect($a.wrapEventEmitter.mock.lastCall).toEqual([provider.emitter, {group: 'example'}]);
+			expect(wrapped.mock.lastCall).toEqual([provider.emitter, {group: 'example'}]);
 			expect(wrappedProvider.emitter).toEqual(fakeWrapper);
 		});
 	});
@@ -112,7 +117,7 @@ describe('core/async/modules/wrappers', () => {
 				bar: 'bar'
 			};
 
-			const emitter = $a.wrapEventEmitter(fakeEventEmitter);
+			const emitter = $a.wrapEventEmitter(<any>fakeEventEmitter);
 
 			expect(emitter.foo).toEqual(fakeEventEmitter.foo);
 			expect(emitter.bar).toEqual(fakeEventEmitter.bar);
@@ -140,15 +145,17 @@ describe('core/async/modules/wrappers', () => {
 				$a = new Async(),
 				emitterWithGroup = $a.wrapEventEmitter({on: () => null}, {group: 'example'});
 
-			jest.spyOn($a, 'on');
+			const
+				on = jest.spyOn($a, 'on');
+
 			emitterWithGroup.on('foo', () => null, {
 				group: 'example2'
 			});
 
-			expect($a.on.mock.lastCall[3]).toEqual({group: 'example:example2'});
+			expect(on.mock.lastCall[3]).toEqual({group: 'example:example2'});
 
 			emitterWithGroup.on('bar', () => null);
-			expect($a.on.mock.lastCall[3]).toEqual({group: 'example'});
+			expect(on.mock.lastCall[3]).toEqual({group: 'example'});
 
 			const emitterWithoutGroup = $a.wrapEventEmitter({
 				on: () => null
@@ -158,10 +165,10 @@ describe('core/async/modules/wrappers', () => {
 				group: 'example3'
 			});
 
-			expect($a.on.mock.lastCall[3]).toEqual({group: 'example3'});
+			expect(on.mock.lastCall[3]).toEqual({group: 'example3'});
 
 			emitterWithoutGroup.on('bar', () => null);
-			expect($a.on.mock.lastCall[3]).toEqual({});
+			expect(on.mock.lastCall[3]).toEqual({});
 		});
 
 		it('normalizes of input parameters', () => {
@@ -169,15 +176,16 @@ describe('core/async/modules/wrappers', () => {
 				$a = new Async(),
 				emitter = $a.wrapEventEmitter({on: () => null});
 
-			jest.spyOn($a, 'on');
+			const
+				on = jest.spyOn($a, 'on');
 
 			// [] => [{}]
 			emitter.on('foo', () => null);
-			expect($a.on.mock.lastCall.slice(3)).toEqual([{}]);
+			expect(on.mock.lastCall.slice(3)).toEqual([{}]);
 
 			// [true] => [{}, true]
 			emitter.on('foo', () => null, true);
-			expect($a.on.mock.lastCall.slice(3)).toEqual([{}, true]);
+			expect(on.mock.lastCall.slice(3)).toEqual([{}, true]);
 
 			/*
 			 * [{foo: 'foo', group: 'group', label: 'label'}, null, 5]
@@ -185,7 +193,7 @@ describe('core/async/modules/wrappers', () => {
 			 * [{group: 'group', label: 'label'}, {foo: 'foo'}, null, 5]
 			 */
 			emitter.on('foo', () => null, {foo: 'foo', group: 'group', label: 'label'}, null, 5);
-			expect($a.on.mock.lastCall.slice(3)).toEqual([{group: 'group', label: 'label'}, {foo: 'foo'}, null, 5]);
+			expect(on.mock.lastCall.slice(3)).toEqual([{group: 'group', label: 'label'}, {foo: 'foo'}, null, 5]);
 		});
 
 		it('`off`, `once`, `promisifyOnce` should call async wrappers', () => {
@@ -223,9 +231,9 @@ describe('core/async/modules/wrappers', () => {
 				removeListener: () => originalMethods.removeListener = true
 			});
 
-			emitter.off(null);
-			emitter.removeEventListener('foo');
-			emitter.removeListener({}, () => null, 'bar', 1);
+			emitter.off();
+			emitter.removeEventListener();
+			emitter.removeListener();
 
 			expect(originalMethods).toEqual({
 				off: true,
@@ -288,7 +296,7 @@ describe('core/async/modules/wrappers', () => {
 
 		mainMethods.forEach(testMethod);
 
-		function testMethod(methodName) {
+		function testMethod(methodName: string) {
 			describe(`\`${methodName}\``, () => {
 				it('should call the original method and return its result', async () => {
 					const

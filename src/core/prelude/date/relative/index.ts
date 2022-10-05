@@ -8,20 +8,20 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see [[Date.relative]] */
+/** @see {@link Date.relative} */
 extend(Date.prototype, 'relative', function relative(this: Date): DateRelative {
 	return getRelative(this, new Date());
 });
 
-/** @see [[DateConstructor.relative]] */
+/** @see {@link DateConstructor.relative} */
 extend(Date, 'relative', (date: DateCreateValue) => Date.create(date).relative());
 
-/** @see [[Date.relativeTo]] */
+/** @see {@link Date.relativeTo} */
 extend(Date.prototype, 'relativeTo', function relativeTo(this: Date, date: DateCreateValue): DateRelative {
 	return getRelative(this, date);
 });
 
-/** @see [[DateConstructor.relativeTo]] */
+/** @see {@link DateConstructor.relativeTo} */
 extend(Date, 'relativeTo', function relativeTo(from: DateCreateValue, to: DateCreateValue): DateRelative | AnyFunction {
 	if (arguments.length === 1) {
 		const d = Date.create(from);

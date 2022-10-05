@@ -8,7 +8,7 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see [[Function.debounce]] */
+/** @see {@link Function.debounce} */
 extend(Function.prototype, 'debounce', function debounce(this: AnyFunction, delay: number = 250): AnyFunction {
 	const
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
@@ -32,7 +32,7 @@ extend(Function.prototype, 'debounce', function debounce(this: AnyFunction, dela
 	};
 });
 
-/** @see [[FunctionConstructor.debounce]] */
+/** @see {@link FunctionConstructor.debounce} */
 extend(Function, 'debounce', (fn: AnyFunction | number, delay?: number) => {
 	if (Object.isNumber(fn)) {
 		delay = fn;
@@ -42,7 +42,7 @@ extend(Function, 'debounce', (fn: AnyFunction | number, delay?: number) => {
 	return fn.debounce(delay);
 });
 
-/** @see [[Function.throttle]] */
+/** @see {@link Function.throttle} */
 extend(Function.prototype, 'throttle', function throttle(
 	this: AnyFunction,
 	delayOrOpts?: number | ThrottleOptions
@@ -91,7 +91,7 @@ extend(Function.prototype, 'throttle', function throttle(
 	};
 });
 
-/** @see [[FunctionConstructor.throttle]] */
+/** @see {@link FunctionConstructor.throttle} */
 extend(Function, 'throttle', (fn: AnyFunction | number, delayOrOpts?: number | ThrottleOptions) => {
 	if (!Object.isFunction(fn)) {
 		delayOrOpts = fn;

@@ -11,10 +11,10 @@ import extend from 'core/prelude/extend';
 import { isGlobal, escapeRgxp, testCache } from 'core/prelude/regexp/const';
 import { createFlagsModifier } from 'core/prelude/regexp/helpers';
 
-/** @see [[RegExpConstructor.escape]] */
+/** @see {@link RegExpConstructor.escape} */
 extend(RegExp, 'escape', (value: unknown) => String(value).replace(escapeRgxp, '\\$1'));
 
-/** @see [[RegExpConstructor.test]] */
+/** @see {@link RegExpConstructor.test} */
 extend(RegExp, 'test', (rgxp: RegExp | string, str?: string) => {
 	if (Object.isString(rgxp)) {
 		str = rgxp;
@@ -34,29 +34,29 @@ extend(RegExp, 'test', (rgxp: RegExp | string, str?: string) => {
 	return rgxp.test(str);
 });
 
-/** @see [[RegExp.addFlags]] */
+/** @see {@link RegExp.addFlags} */
 extend(RegExp.prototype, 'addFlags', function addFlags(this: RegExp, ...flags: RegExpFlag[]) {
 	const set = new Set([...flags, ...this.flags].flatMap((str) => str.split('')));
 	return new RegExp(this.source, [...set].join(''));
 });
 
-/** @see [[RegExpConstructor.addFlags]] */
+/** @see {@link RegExpConstructor.addFlags} */
 extend(RegExp, 'addFlags', createFlagsModifier('addFlags'));
 
-/** @see [[RegExp.removeFlags]] */
+/** @see {@link RegExp.removeFlags} */
 extend(RegExp.prototype, 'removeFlags', function addFlags(this: RegExp, ...flags: RegExpFlag[]) {
 	const set = new Set(flags.flatMap((str) => str.split('')));
 	return new RegExp(this.source, this.flags.split('').filter((flag) => !set.has(flag)).join(''));
 });
 
-/** @see [[RegExpConstructor.removeFlags]] */
+/** @see {@link RegExpConstructor.removeFlags} */
 extend(RegExp, 'removeFlags', createFlagsModifier('removeFlags'));
 
-/** @see [[RegExp.setFlags]] */
+/** @see {@link RegExp.setFlags} */
 extend(RegExp.prototype, 'setFlags', function addFlags(this: RegExp, ...flags: RegExpFlag[]) {
 	const set = new Set(flags.flatMap((str) => str.split('')));
 	return new RegExp(this.source, [...set].join(''));
 });
 
-/** @see [[RegExpConstructor.setFlags]] */
+/** @see {@link RegExpConstructor.setFlags} */
 extend(RegExp, 'setFlags', createFlagsModifier('setFlags'));

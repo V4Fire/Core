@@ -31,6 +31,8 @@
  * # Cleans the dist directory of a node.js standalone package
  * npx gulp clean:standalone
  * ```
+ *
+ * @param {import('gulp')} gulp
  */
 module.exports = function init(gulp) {
 	const

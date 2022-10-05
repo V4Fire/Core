@@ -278,6 +278,7 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 
 	/**
 	 * Skips the passed token from an output token stream
+	 * @param _
 	 */
 	// eslint-disable-next-line require-yield
 	protected*skip(_: FilterToken): Generator<FilterToken> {

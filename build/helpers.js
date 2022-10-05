@@ -28,6 +28,7 @@ exports.getProjectInfo = function getProjectInfo() {
 /**
  * Returns the project disclaimer
  * @param {boolean=} [withVersion]
+ * @returns {string}
  */
 exports.getHead = function getHead(withVersion) {
 	return fs
@@ -105,6 +106,8 @@ exports.redefineRequire = function redefineRequire() {
 
 /**
  * Babel plugin to insert code into the beginning of a file
+ * @param {string} code
+ * @returns {Function}
  */
 exports.prependCode = function prependCode(code) {
 	return function prependCode() {

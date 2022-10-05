@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 import { Option, Result } from 'core/prelude/structures';
 
-/** @see [[Function.option]] */
+/** @see {@link Function.option} */
 extend(Function.prototype, 'option', function option(this: AnyFunction): AnyFunction {
 	const wrapper = (...args) => {
 		const
@@ -34,7 +34,7 @@ extend(Function.prototype, 'option', function option(this: AnyFunction): AnyFunc
 	return wrapper;
 });
 
-/** @see [[ObjectConstructor.Option]] */
+/** @see {@link ObjectConstructor.Option} */
 extend(Object, 'Option', (value: unknown) => {
 	if (value == null) {
 		return Option.reject(null);
@@ -47,7 +47,7 @@ extend(Object, 'Option', (value: unknown) => {
 	return Option.resolve(value);
 });
 
-/** @see [[Function.result]] */
+/** @see {@link Function.result} */
 extend(Function.prototype, 'result', function result(this: AnyFunction): AnyFunction {
 	const wrapper = (...args) => {
 		const
@@ -68,7 +68,7 @@ extend(Function.prototype, 'result', function result(this: AnyFunction): AnyFunc
 	return wrapper;
 });
 
-/** @see [[ObjectConstructor.Result]] */
+/** @see {@link ObjectConstructor.Result} */
 extend(Object, 'Result', (value: unknown) => {
 	if (value instanceof Error) {
 		return Result.reject(value);

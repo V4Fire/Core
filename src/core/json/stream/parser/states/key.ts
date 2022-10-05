@@ -14,6 +14,9 @@ import type { Token, ParentParserState } from 'core/json/stream/parser/interface
 /**
  * Parses the buffer for an object key and generates a token `startKey`.
  * Or if the object ended generates `endObject` token.
+ *
+ * @param this
+ * @throws {@link SyntaxError}
  */
 export function* key(this: Parser): Generator<Token> {
 	this.patterns.key1.lastIndex = this.index;

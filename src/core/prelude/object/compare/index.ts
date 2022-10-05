@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 import { funcCache } from 'core/prelude/object/const';
 
-/** @see [[ObjectConstructor.fastCompare]] */
+/** @see {@link ObjectConstructor.fastCompare} */
 extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): boolean | AnyFunction {
 	if (arguments.length < 2) {
 		return (b) => Object.fastCompare(a, b);
@@ -126,7 +126,7 @@ extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): bool
 	return JSON.stringify(a, createSerializer(a, b, cache)) === JSON.stringify(b, createSerializer(a, b, cache));
 });
 
-/** @see [[ObjectConstructor.fastHash]] */
+/** @see {@link ObjectConstructor.fastHash} */
 extend(Object, 'fastHash', (obj) => {
 	const res = JSON.stringify(obj, createSerializer(obj, undefined, funcCache));
 	return Object.isTruly(res) ? res : 'null';
@@ -158,11 +158,11 @@ export function createSerializer(
 
 		if (init && isObj) {
 			if (value === a) {
-				return '[[OBJ_REF:a]]';
+				return '{@link OBJ_REF:a}';
 			}
 
 			if (value === b) {
-				return '[[OBJ_REF:b]]';
+				return '{@link OBJ_REF:b}';
 			}
 		}
 
@@ -171,7 +171,7 @@ export function createSerializer(
 		}
 
 		if (typeof value === 'function') {
-			const key = funcMap.get(value) ?? `[[FUNC_REF:${Math.random()}]]`;
+			const key = funcMap.get(value) ?? `{@link FUNC_REF:${Math.random()}}`;
 			funcMap.set(value, key);
 			return key;
 		}

@@ -96,7 +96,7 @@ module.exports = config.createConfig(
 
 		/**
 		 * Returns runtime parameters of the application
-		 * @returns {!Object}
+		 * @returns {!object}
 		 */
 		runtime() {
 			return {
@@ -127,6 +127,7 @@ module.exports = config.createConfig(
 		src: {
 			/**
 			 * The initialized version of the include function
+			 * @returns {Function}
 			 */
 			include() {
 				return require('../build/include')(this.roots);
@@ -143,8 +144,8 @@ module.exports = config.createConfig(
 			/**
 			 * Returns a relative path to the working directory
 			 *
-			 * @param path - path or a property from "src"
-			 * @param args - extra path-s to join
+			 * @param {string} path - path or a property from "src"
+			 * @param {...string} args - extra path-s to join
 			 * @returns {string}
 			 */
 			rel(path, ...args) {
@@ -153,6 +154,8 @@ module.exports = config.createConfig(
 
 			/**
 			 * Returns a path to the application node_modules directory
+			 *
+			 * @param {...string} args
 			 * @returns {string}
 			 */
 			lib(...args) {
@@ -161,6 +164,8 @@ module.exports = config.createConfig(
 
 			/**
 			 * Returns a path to the application source directory
+			 *
+			 * @param {...string} args
 			 * @returns {string}
 			 */
 			src(...args) {
@@ -169,6 +174,8 @@ module.exports = config.createConfig(
 
 			/**
 			 * Returns a path to the application asset directory
+			 *
+			 * @param {...string} args
 			 * @returns {string}
 			 */
 			assets(...args) {
@@ -177,6 +184,8 @@ module.exports = config.createConfig(
 
 			/**
 			 * Returns an absolute path to the application dist directory
+			 *
+			 * @param {...string} args
 			 * @returns {string}
 			 */
 			output(...args) {
@@ -194,6 +203,7 @@ module.exports = config.createConfig(
 			 * @cli client-output
 			 * @env CLIENT_OUTPUT
 			 *
+			 * @param {...string} args
 			 * @returns {string}
 			 */
 			clientOutput(...args) {
@@ -211,6 +221,7 @@ module.exports = config.createConfig(
 			 * @cli server-output
 			 * @env SERVER_OUTPUT
 			 *
+			 * @param {...string} args
 			 * @returns {string}
 			 */
 			serverOutput(...args) {
@@ -228,6 +239,7 @@ module.exports = config.createConfig(
 			 * @cli standalone-output
 			 * @env STANDALONE_OUTPUT
 			 *
+			 * @param {...string} args
 			 * @returns {string}
 			 */
 			standaloneOutput(...args) {
@@ -378,9 +390,10 @@ module.exports = config.createConfig(
 			/**
 			 * Returns a hash string of the build
 			 *
-			 * @param {Object=} [data] - extra data to hash
-			 * @param {string=} [alg] - hash algorithm
-			 * @param {number} [length] - hash length
+			 * @param {object} options
+			 * @param {object=} [options.data] - extra data to hash
+			 * @param {string=} [options.alg] - hash algorithm
+			 * @param {number} [options.length] - hash length
 			 * @returns {string}
 			 */
 			hash({data, alg = this.hashAlg, length = this.hashLength} = {}) {
@@ -408,7 +421,7 @@ module.exports = config.createConfig(
 
 		/**
 		 * Returns parameters for Babel
-		 * @returns {!Object}
+		 * @returns {!object}
 		 */
 		babel() {
 			return {
@@ -419,7 +432,7 @@ module.exports = config.createConfig(
 
 		/**
 		 * Returns parameters for TypeScript
-		 * @returns {!Object}
+		 * @returns {!object}
 		 */
 		typescript() {
 			const
@@ -437,7 +450,7 @@ module.exports = config.createConfig(
 
 		/**
 		 * Returns parameters for Snakeskin
-		 * @returns {!Object}
+		 * @returns {!object}
 		 */
 		snakeskin() {
 			return {
@@ -460,7 +473,7 @@ module.exports = config.createConfig(
 
 		/**
 		 * Returns parameters for Monic
-		 * @returns {{typescript: !Object, javascript: !Object}}
+		 * @returns {{typescript: !object, javascript: !object}}
 		 */
 		monic() {
 			const

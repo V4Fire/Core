@@ -8,6 +8,7 @@
 
 /**
  * Returns the specified value
+ * @param value
  */
 export function identity<T>(value: T): T {
 	return value;

@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 import { emptyArray } from 'core/prelude/array/const';
 
-/** @see [[Array.union]] */
+/** @see {@link Array.union} */
 extend(Array.prototype, 'union', function union(
 	this: unknown[],
 	...args: Array<Iterable<unknown> | unknown>
@@ -40,7 +40,7 @@ extend(Array.prototype, 'union', function union(
 	return [...new Set(makeIterator())];
 });
 
-/** @see [[ArrayConstructor.union]] */
+/** @see {@link ArrayConstructor.union} */
 extend(Array, 'union', (arr: unknown[], ...args: Array<Iterable<unknown> | unknown>) => {
 	if (args.length === 0) {
 		return (...args) => Array.union(arr, ...args);
@@ -49,7 +49,7 @@ extend(Array, 'union', (arr: unknown[], ...args: Array<Iterable<unknown> | unkno
 	return arr.union(...args);
 });
 
-/** @see [[ArrayConstructor.concat]] */
+/** @see {@link ArrayConstructor.concat} */
 extend(Array, 'concat', (arr: unknown[], ...args: Array<CanArray<unknown>>) => {
 	if (args.length === 0) {
 		return (...args) => Array.concat(arr, ...args);

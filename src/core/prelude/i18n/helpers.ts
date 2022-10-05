@@ -29,13 +29,13 @@ Object.forEach(langDict, (el) => {
 	});
 });
 
-/** @see [[i18n]] */
+/** @see {@link i18n} */
 extend(globalThis, 'i18n', globalI18n);
 
-/** @see [[t]] */
+/** @see {@link t} */
 extend(globalThis, 't', globalI18n);
 
-/** @see [[l]] */
+/** @see {@link l} */
 extend(globalThis, 'l', (strings: unknown | string[], ...exprs: unknown[]): string => {
 	if (strings == null) {
 		return '';

@@ -27,6 +27,10 @@ export function isControllablePromise<T extends PromiseLike<any>>(promise: T): p
  * @param obj
  */
 export function isControllablePromise(obj: unknown): obj is ControllablePromise<PromiseLike<unknown>>;
+
+/**
+ * @inheritDoc
+ */
 export function isControllablePromise(obj: unknown): boolean {
 	return Object.isPromiseLike(obj) && 'resolve' in obj;
 }
@@ -35,7 +39,7 @@ export function isControllablePromise(obj: unknown): boolean {
  * Creates a promise that can be resolved from the "outside"
  *
  * @param opts - additional options
- * @typeparam T - promise constructor
+ * @typeParam T - promise constructor
  *
  * @example
  * ```js
@@ -51,12 +55,15 @@ export function createControllablePromise<T extends ControllablePromiseConstruct
  * Creates a promise that can be resolved from the "outside"
  *
  * @param [opts] - additional options
- * @typeparam T - type of the resolved promise value
+ * @typeParam T - type of the resolved promise value
  */
 export function createControllablePromise<T = unknown>(
 	opts?: CreateControllablePromiseOptions<PromiseConstructor>
 ): ControllablePromise<Promise<T>>;
 
+/**
+ * @inheritDoc
+ */
 export function createControllablePromise(
 	opts: CreateControllablePromiseOptions<PromiseConstructor> = {}
 ): ControllablePromise {

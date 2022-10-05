@@ -82,8 +82,8 @@ export function getRawValueFromStore(key: PropertyKey, valStore: CanUndef<Map<un
 /**
  * Resolves the specified target by a value from the store and returns it
  *
- * @param store
  * @param target
+ * @param store
  */
 export function resolveTarget<T>(target: T, store: Store): ResolvedTarget<T> {
 	if (Object.isPrimitive(target) || Object.isFrozen(target)) {

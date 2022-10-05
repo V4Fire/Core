@@ -15,6 +15,9 @@ import type { Token } from 'core/json/stream/parser/interface';
 
 /**
  * Parses the buffer for a colon and sets the expected element to a parser expect value
+ *
+ * @param this
+ * @throws {@link SyntaxError}
  */
 export function* colon(this: Parser): Generator<Token> {
 	this.patterns.colon.lastIndex = this.index;

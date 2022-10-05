@@ -11,7 +11,7 @@ import extend from 'core/prelude/extend';
 import { deprecate } from 'core/functools';
 import { getSameAs } from 'core/prelude/object/helpers';
 
-/** @see [[ObjectConstructor.createDict]] */
+/** @see {@link ObjectConstructor.createDict} */
 extend(Object, 'createDict', (...objects) => {
 	if (objects.length > 0) {
 		return Object.assign(Object.create(null), ...objects);
@@ -20,7 +20,7 @@ extend(Object, 'createDict', (...objects) => {
 	return Object.create(null);
 });
 
-/** @see [[ObjectConstructor.convertEnumToDict]] */
+/** @see {@link ObjectConstructor.convertEnumToDict} */
 extend(Object, 'convertEnumToDict', (obj) => {
 	const
 		res = Object.createDict();
@@ -44,16 +44,21 @@ extend(Object, 'convertEnumToDict', (obj) => {
 	return res;
 });
 
-/** @see [[ObjectConstructor.createEnumLike]] */
+/** @see {@link ObjectConstructor.createEnumLike} */
 extend(Object, 'createEnumLike', createEnumLike);
 
 /**
  * @deprecated
- * @see [[ObjectConstructor.createEnumLike]]
+ * @see {@link ObjectConstructor.createEnumLike}
  */
 extend(Object, 'createMap', deprecate({renamedTo: 'createEnum'}, createEnumLike));
 
-/** @see [[ObjectConstructor.createEnumLike]] */
+/**
+ * Creates a enu like object
+ *
+ * @param obj
+ * @see {@link ObjectConstructor.createEnumLike}
+ */
 export function createEnumLike(obj: Nullable<object>): Dictionary {
 	const
 		map = Object.createDict();
@@ -86,7 +91,7 @@ export function createEnumLike(obj: Nullable<object>): Dictionary {
 	return map;
 }
 
-/** @see [[ObjectConstructor.fromArray]] */
+/** @see {@link ObjectConstructor.fromArray} */
 extend(Object, 'fromArray', (
 	arr: Nullable<unknown[]>,
 	opts?: ObjectFromArrayOptions
@@ -125,10 +130,10 @@ extend(Object, 'fromArray', (
 	return map;
 });
 
-/** @see [[ObjectConstructor.select]] */
+/** @see {@link ObjectConstructor.select} */
 extend(Object, 'select', selectReject(true));
 
-/** @see [[ObjectConstructor.reject]] */
+/** @see {@link ObjectConstructor.reject} */
 extend(Object, 'reject', selectReject(false));
 
 /**

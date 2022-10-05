@@ -11,6 +11,8 @@
 /**
  * Registers some helper gulp tasks
  *
+ * @param {import('gulp')} gulp
+ *
  * @example
  * ```bash
  * # The task sets NODE_ENV environment variable to "production"

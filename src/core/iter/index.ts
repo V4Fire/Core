@@ -77,6 +77,9 @@ export function intoIter<T extends Iterable<any>>(obj: T): IterableIterator<Iter
  */
 export function intoIter<T extends AsyncIterable<any>>(obj: T): AsyncIterableIterator<IterableType<T>>;
 
+/**
+ * @inheritDoc
+ */
 export function intoIter(obj: unknown): IterableIterator<unknown> | AsyncIterableIterator<unknown> {
 	if (obj == null) {
 		return [].values();

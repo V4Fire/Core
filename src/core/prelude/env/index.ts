@@ -21,7 +21,7 @@ let
 
 //#if runtime has core/kv-storage
 // eslint-disable-next-line prefer-const
-storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[ENV]]'));
+storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('{@link ENV}'));
 //#endif
 
 /**
@@ -71,16 +71,19 @@ export function remove(key: string): void {
 extend(globalThis, 'envs', () => {
 	if (Object.isPromise(storage)) {
 		return storage.then((storage) => {
+			// eslint-disable-next-line no-console
 			console.log(storage);
 			return storage;
 		});
 	}
 
+	// eslint-disable-next-line no-console
 	console.log(memoryStorage);
 	return memoryStorage;
 });
 
 extend(globalThis, 'getEnv', (key) => get(key).then((val) => {
+	// eslint-disable-next-line no-console
 	console.log(val);
 	return val;
 }));

@@ -40,6 +40,10 @@ export function toQueryString(data: unknown, encode?: boolean): string;
  * ```
  */
 export function toQueryString(data: unknown, opts: ToQueryStringOptions): string;
+
+/**
+ * @inheritDoc
+ */
 export function toQueryString(data: unknown, optsOrEncode?: ToQueryStringOptions | boolean): string {
 	if (!Object.isDictionary(data)) {
 		return Object.isString(data) ? data : '';
@@ -200,6 +204,9 @@ export function fromQueryString(
 	opts: {convert: false} & FromQueryStringOptions
 ): Dictionary<string | null>;
 
+/**
+ * @inheritDoc
+ */
 export function fromQueryString(
 	query: string,
 	optsOrDecode?: FromQueryStringOptions | boolean

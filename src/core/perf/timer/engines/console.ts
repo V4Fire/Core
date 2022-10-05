@@ -10,7 +10,10 @@ import { IS_NODE } from 'core/prelude/env';
 import type { PerfTimerEngine } from 'core/perf/timer/engines/interface';
 
 export const consoleEngine: PerfTimerEngine = {
-	/** @see [[PerfTimerEngine.sendDelta]] */
+	/**
+	 * @inheritDoc
+	 * @see {@link PerfTimerEngine.sendDelta}
+	 */
 	sendDelta(name: string, duration: number, additional?: Dictionary): void {
 		const
 			args: unknown[] = [`${name} took ${duration} ms`];
@@ -19,10 +22,14 @@ export const consoleEngine: PerfTimerEngine = {
 			args.push(additional);
 		}
 
+		// eslint-disable-next-line no-console
 		console.warn(...args);
 	},
 
-	/** @see [[PerfTimerEngine.getTimestampFromTimeOrigin]] */
+	/**
+	 * @inheritDoc
+	 * @see {@link PerfTimerEngine.getTimestampFromTimeOrigin}
+	 */
 	getTimestampFromTimeOrigin(): number {
 		let
 			perf = globalThis.performance;

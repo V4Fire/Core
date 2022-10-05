@@ -34,7 +34,7 @@ export let storage: CanUndef<Promise<AsyncStorage>>;
 
 //#if runtime has core/kv-storage
 // eslint-disable-next-line prefer-const
-storage = memoize(import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[REQUEST]]')));
+storage = memoize(import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('{@link REQUEST}')));
 //#endif
 
 export const

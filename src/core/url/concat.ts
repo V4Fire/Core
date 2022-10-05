@@ -62,8 +62,10 @@ export function concatURLs(...urls: Array<Nullable<string>>): string {
 }
 
 /**
+ * Concatenates the specified parts of URL-s with correctly arranging of slashes and returns a new string
+ *
  * @deprecated
- * @see [[concatURLs]]
+ * @see {@link concatURLs}
  * @param urls
  */
 export function concatUrls(...urls: Array<Nullable<string>>): string {

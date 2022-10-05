@@ -13,6 +13,7 @@ import type { Token } from 'core/json/stream/parser/interface';
 
 /**
  * Parses the buffer for an exponent symbol `[eE]?` and generates a token `numberChunk` with a symbol value
+ * @param this
  */
 export function* numberExponent(this: Parser): Generator<Token> {
 	this.patterns.numberExponent.lastIndex = this.index;

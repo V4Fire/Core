@@ -29,8 +29,11 @@ export function getDataTypeFromURI(uri: string): CanUndef<DataType> {
 }
 
 /**
+ * Converts data uri string to js object
+ *
+ * @param url
  * @deprecated
- * @see [[getDataTypeFromURI]]
+ * @see {@link getDataTypeFromURI}
  */
 export function getDataTypeFromURL(url: string): CanUndef<DataType> {
 	deprecate({type: 'function', name: 'getDataTypeFromURL', renamedTo: 'getDataTypeFromURI'});

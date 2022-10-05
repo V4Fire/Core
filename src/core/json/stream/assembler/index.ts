@@ -98,6 +98,7 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 
 	/**
 	 * Processes the passed JSON token and yields the assembled values
+	 * @param chunk
 	 */
 	*processToken(chunk: Token): Generator<T> {
 		this[chunk.name]?.(chunk.value);

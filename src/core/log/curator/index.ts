@@ -88,10 +88,7 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 		try {
 			pipelines[i].run(event);
 
-		} catch (e) {
-			// TODO: get rid of console
-			console.error(e);
-		}
+		} catch (e) {}
 	}
 
 	//#endif

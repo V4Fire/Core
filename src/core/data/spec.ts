@@ -10,12 +10,13 @@
 
 import express from 'express';
 import Provider, { provider, providers } from 'core/data';
+import type { DecodersMap, EncodersMap } from 'core/data/interface';
 
 describe('core/data', () => {
 	let server;
 
 	beforeEach(() => {
-		if (server) {
+		if (Object.isTruly(server)) {
 			server.close();
 		}
 
@@ -29,11 +30,11 @@ describe('core/data', () => {
 	it('simple provider', async () => {
 		@provider
 		class TestProvider extends Provider {
-			static request = Provider.request({api: {url: 'http://localhost:3000/'}});
+			static override request: Provider['request'] = Provider.request({api: {url: 'http://localhost:3000/'}});
 
-			baseGetURL = 'json/1';
+			override baseGetURL: string = 'json/1';
 
-			baseAddURL = 'json';
+			override baseAddURL: string = 'json';
 		}
 
 		const
@@ -52,12 +53,12 @@ describe('core/data', () => {
 	it('provider with overrides', async () => {
 		@provider
 		class TestOverrideProvider extends Provider {
-			static request = Provider.request({api: {url: 'http://localhost:3000/'}});
+			static override request: Provider['request'] = Provider.request({api: {url: 'http://localhost:3000/'}});
 		}
 
 		const
 			dp = new TestOverrideProvider(),
-			mdp = dp.name('bla').url('json');
+			mdp = dp.name(<any>'bla').url('json');
 
 		const spy = jest.fn();
 		mdp.emitter.on('bla', async (getData) => spy('bla', await getData()));
@@ -70,42 +71,41 @@ describe('core/data', () => {
 
 	it('namespaced provider with encoders/decoders', async () => {
 		@provider('foo')
-		// eslint-disable-next-line no-unused-vars
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		class TestNamespacedProvider extends Provider {
-			static encoders = {
+			static override encoders: EncodersMap = {
 				upd: [
-					(data) => {
-						data.value = data.value.join('-');
+					(data: {value: string | unknown[]}) => {
+						data.value = (<unknown[]>data.value).join('-');
 						return data;
 					}
 				]
 			};
 
-			static decoders = {
+			static override decoders: DecodersMap = {
 				get: [
-					(data) => {
+					(data: {id: string}) => {
 						data.id = String(data.id);
 						return data;
 					}
 				]
 			};
 
-			baseGetURL = 'http://localhost:3000/json/1';
+			override baseGetURL: string = 'http://localhost:3000/json/1';
 
-			updMethod = 'POST';
+			override updMethod: Provider['updMethod'] = 'POST';
 
-			baseUpdURL = 'http://localhost:3000/json';
+			override baseUpdURL: string = 'http://localhost:3000/json';
 		}
 
 		const
-			// eslint-disable-next-line new-cap
-			dp = new providers['foo.TestNamespacedProvider']();
+			dp = new providers['foo.TestNamespacedProvider']!();
 
 		expect(await dp.get().data)
 			.toEqual({id: '1', value: 'things'});
 
 		const spy = jest.fn();
-		dp.emitter.on('upd', async (getData) => spy('upd', await getData()));
+		dp.emitter.on?.('upd', async (getData) => spy('upd', await getData()));
 
 		expect(await dp.upd({id: 12345, value: ['abc', 'def', 'ghi']}).data)
 			.toEqual({message: 'Success'});
@@ -116,16 +116,16 @@ describe('core/data', () => {
 	it('`get` with extra providers', async () => {
 		@provider
 		class TestExtraProvider extends Provider {
-			baseGetURL = 'http://localhost:3000/json/1';
+			override baseGetURL: string = 'http://localhost:3000/json/1';
 		}
 
 		@provider
 		class TestProviderWithExtra extends Provider {
-			alias = 'foo';
+			override alias: string = 'foo';
 
-			baseGetURL = 'http://localhost:3000/json/1';
+			override baseGetURL: string = 'http://localhost:3000/json/1';
 
-			extraProviders = () => ({
+			override extraProviders = () => ({
 				TestExtraProvider: {
 					alias: 'bla'
 				},
@@ -133,7 +133,7 @@ describe('core/data', () => {
 				bar: {
 					provider: new TestExtraProvider()
 				}
-			})
+			});
 		}
 
 		const

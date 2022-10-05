@@ -13,6 +13,7 @@ import type { Token } from 'core/json/stream/parser/interface';
 
 /**
  * Parses the buffer for number fraction digits `[0-9]` and generates a token `numberChunk` with a fraction value
+ * @param this
  */
 export function* numberFractionDigit(this: Parser): Generator<Token> {
 	this.patterns.numberFracDigit.lastIndex = this.index;

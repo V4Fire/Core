@@ -30,8 +30,8 @@ export * from 'core/queue/worker/merge/interface';
 /**
  * Implementation of a worker queue data structure with support of task merging by a specified hash function
  *
- * @typeparam T - the task element
- * @typeparam V - the worker value
+ * @typeParam T - the task element
+ * @typeParam V - the worker value
  */
 export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> {
 	override readonly Tasks!: Tasks<string>;

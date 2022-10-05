@@ -32,6 +32,10 @@ export function bindMutationHooks<T extends object>(obj: T, opts: WrapOptions, h
  * @param handlers - set of callbacks that are invoked on every mutation hooks
  */
 export function bindMutationHooks<T extends object>(obj: T, handlers: WatchHandlersSet): T;
+
+/**
+ * @inheritDoc
+ */
 export function bindMutationHooks<T extends object>(
 	obj: T,
 	optsOrHandlers: WatchHandlersSet | WrapOptions,

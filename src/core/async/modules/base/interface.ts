@@ -47,8 +47,8 @@ export interface AsyncOptions {
 
 	/**
 	 * Strategy to join competitive tasks (with the same labels):
-	 *   1. `true` - all tasks are joined to the first;
-	 *   1. `'replace'` - all tasks are joined (replaced) to the last (only for promises).
+	 * 1. `true` - all tasks are joined to the first;
+	 * 1. `'replace'` - all tasks are joined (replaced) to the last (only for promises).
 	 */
 	join?: Join;
 }

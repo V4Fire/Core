@@ -15,7 +15,7 @@ import { sequence } from 'core/iter/combinators';
 import { pick, andPick, assemble, streamArray } from 'core/json/stream';
 
 import Provider, { provider } from 'core/data';
-import baseRequest, { globalOpts, RequestError } from 'core/request';
+import baseRequest, { globalOpts, MiddlewareParams, RequestError, RetryOptions } from 'core/request';
 import { defaultRequestOpts } from 'core/request/const';
 
 import Response from 'core/request/response';
@@ -28,7 +28,7 @@ import createProviderEngine from 'core/request/engines/provider';
 
 @provider
 class TestRequestChainProvider extends Provider {
-	static request = Provider.request({
+	static override request: Provider['request'] = Provider.request({
 		engine: createProviderEngine(Provider)
 	});
 }
@@ -66,7 +66,7 @@ describe('core/request', () => {
 	});
 
 	beforeEach(() => {
-		if (server) {
+		if (Object.isTruly(server)) {
 			server.close();
 		}
 
@@ -122,7 +122,7 @@ describe('core/request', () => {
 				expect(req.cache).toBe('memory');
 				expect(await req.data).toEqual({id: 1, value: 'things'});
 
-				return new Promise(((resolve) => {
+				return new Promise<void>(((resolve) => {
 					setTimeout(async () => {
 						{
 							const
@@ -243,12 +243,12 @@ describe('core/request', () => {
 					method: 'POST',
 
 					middlewares: {
-						addId({opts}) {
-							opts.body.id = 12345;
+						addId({opts}: MiddlewareParams) {
+							(<Dictionary>opts.body).id = 12345;
 						},
 
-						serializeValue({opts}) {
-							opts.body.value = opts.body.value.join('-');
+						serializeValue({opts}: MiddlewareParams) {
+							(<Dictionary>opts.body).value = (<{value: unknown[]}>opts.body).value.join('-');
 						}
 					},
 
@@ -269,7 +269,7 @@ describe('core/request', () => {
 					method: 'POST',
 
 					middlewares: {
-						fakeResponse({ctx}) {
+						fakeResponse({ctx}: MiddlewareParams) {
 							return () => ctx.wrapAsResponse({message: 'fake'});
 						}
 					},
@@ -548,7 +548,7 @@ describe('core/request', () => {
 
 			it('request promise is an async iterable object', async () => {
 				const
-					chunkLengths = [],
+					chunkLengths: number[] = [],
 					req = request('http://localhost:4000/favicon.ico');
 
 				let
@@ -571,7 +571,7 @@ describe('core/request', () => {
 
 			it('request response is an async iterable object', async () => {
 				const
-					chunkLengths = [],
+					chunkLengths: number[] = [],
 					req = await request('http://localhost:4000/favicon.ico');
 
 				let
@@ -597,7 +597,7 @@ describe('core/request', () => {
 					it('`progress`', async () => {
 						const
 							req = request('http://localhost:4000/json/1'),
-							events = [];
+							events: string[] = [];
 
 						req.emitter.on('progress', (e) => {
 							events.push(e.type);
@@ -612,7 +612,7 @@ describe('core/request', () => {
 					it('`readystatechange`', async () => {
 						const
 							req = request('http://localhost:4000/json/1'),
-							events = [];
+							events: string[] = [];
 
 						req.emitter.on('readystatechange', (e) => {
 							events.push(e.type);
@@ -653,7 +653,7 @@ describe('core/request', () => {
 					});
 
 					const
-						res = [];
+						res: string[] = [];
 
 					for await (const token of await req.stream) {
 						res.push(token);
@@ -668,7 +668,7 @@ describe('core/request', () => {
 				});
 			}
 
-			async function retryDelayTest(delay, delayMS) {
+			async function retryDelayTest(delay: RetryOptions['delay'], delayMS: number) {
 				const startTime = new Date().getTime();
 
 				const req = request('http://localhost:4000/retry', {
@@ -689,9 +689,9 @@ describe('core/request', () => {
 				requestDelays.forEach((time) => expect(time).toBeGreaterThanOrEqual(delayMS));
 			}
 
-			async function convertStreamToBase64(stream) {
+			async function convertStreamToBase64(stream: IterableIterator<any>) {
 				let
-					buffer = null,
+					buffer: Nullable<Uint8Array> = null,
 					pos = 0;
 
 				for await (const {data, loaded, total} of stream) {
@@ -703,7 +703,7 @@ describe('core/request', () => {
 					pos = loaded;
 				}
 
-				return Buffer.from(buffer).toString('base64');
+				return Buffer.from(buffer!).toString('base64');
 			}
 		});
 	});
@@ -803,7 +803,7 @@ function createServer() {
 
 	const
 		triesBeforeSuccess = 3,
-		requestTimes = [];
+		requestTimes: number[] = [];
 
 	let
 		tryNumber = 0,

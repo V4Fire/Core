@@ -76,7 +76,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * @deprecated
-	 * @see [[Async.ctx]]
+	 * @see {@link Async.ctx}
 	 */
 	protected readonly context: CTX;
 
@@ -100,8 +100,10 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
+	 * Link to `Async.namespaces`
+	 *
 	 * @deprecated
-	 * @see [[Async.namespaces]]
+	 * @see {@link Async.namespaces}
 	 */
 	protected get linkNames(): NamespacesDictionary {
 		deprecate({name: 'linkNames', type: 'accessor', renamedTo: 'namespaces'});
@@ -119,6 +121,7 @@ export default class Async<CTX extends object = Async<any>> {
 	/**
 	 * Clears all async tasks
 	 * @param [opts] - additional options for the operation
+	 * @throws {@link ReferenceError}
 	 */
 	clearAll(opts?: ClearOptions): this {
 		for (let o = this.usedNamespaces.values(), el = o.next(); !el.done; el = o.next()) {
@@ -229,8 +232,13 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
+	 * Returns a cache object by the specified name
+	 *
+	 * @param name
+	 * @param [promise] - if true, the namespace is marked as promisified
+	 *
 	 * @deprecated
-	 * @see [[Async.getCache]]
+	 * @see {@link Async.getCache}
 	 */
 	@deprecated({renamedTo: 'getCache'})
 	protected initCache(name: string, promise?: boolean): GlobalCache {
@@ -432,8 +440,12 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
+	 * Registers the specified async task
+	 *
+	 * @param task
+	 *
 	 * @deprecated
-	 * @see [[Async.registerTask]]
+	 * @see {@link Async.registerTask}
 	 */
 	@deprecated({renamedTo: 'registerTask'})
 	protected setAsync<R = unknown>(task: FullAsyncOptions): R | null {
@@ -571,8 +583,13 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
+	 * Cancels a task (or a group of tasks) from the specified namespace
+	 *
+	 * @param opts
+	 * @param [name]
+	 *
 	 * @deprecated
-	 * @see [[Async.cancelTask]]
+	 * @see {@link Async.cancelTask}
 	 */
 	@deprecated({renamedTo: 'cancelTask'})
 	protected clearAsync(opts: CanUndef<FullClearOptions | any>, name?: string): this {
@@ -706,8 +723,14 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
+	 * Marks a task (or a group of tasks) from the namespace by the specified label
+	 *
+	 * @param label
+	 * @param opts
+	 * @param [name]
+	 *
 	 * @deprecated
-	 * @see [[Async.markTask]]
+	 * @see {@link Async.markTask}
 	 */
 	@deprecated({renamedTo: 'markTask'})
 	protected markAsync(label: string, opts: CanUndef<ClearProxyOptions | any>, name?: string): this {

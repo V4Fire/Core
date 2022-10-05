@@ -110,7 +110,7 @@ export function createsAsyncSemaphore<T>(cb: () => T, ...flags: string[]): (flag
 
 /**
  * @deprecated
- * @see [[createsAsyncSemaphore]]
+ * @see {@link createsAsyncSemaphore}
  */
 export const onEverythingReady = deprecate(
 	{
@@ -124,7 +124,7 @@ export const onEverythingReady = deprecate(
 
 /**
  * @deprecated
- * @see [[resolveAfterEvents]]
+ * @see {@link resolveAfterEvents}
  */
 export const afterEvents = deprecate(
 	{
@@ -147,7 +147,7 @@ export const afterEvents = deprecate(
  * Creates a synchronous promise wrapper for the specified value
  *
  * @deprecated
- * @see [[SyncPromise]]
+ * @see {@link SyncPromise}
  * @param resolveValue
  * @param rejectValue
  */

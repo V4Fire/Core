@@ -13,6 +13,9 @@ import type { Token } from 'core/json/stream/parser/interface';
 
 /**
  * Parses the buffer, adds tokens to close a numeric chunk if needed, and finishes the parsing
+ *
+ * @param this
+ * @throws {@link SyntaxError}
  */
 export function* done(this: Parser): Generator<Token> {
 	this.patterns.ws.lastIndex = this.index;

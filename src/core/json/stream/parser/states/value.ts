@@ -23,6 +23,9 @@ import type { Token, ParentParserState } from 'core/json/stream/parser/interface
 
 /**
  * Parses the buffer for a value, generates a sequence of tokens, and sets the next expected value
+ *
+ * @param this
+ * @throws {@link SyntaxError}
  */
 export function* value(this: Parser): Generator<Token> {
 	this.patterns.value1.lastIndex = this.index;

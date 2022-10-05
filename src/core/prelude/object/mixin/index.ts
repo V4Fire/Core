@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 import { isContainer, canExtendProto, getType, getSameAs } from 'core/prelude/object/helpers';
 
-/** @see [[ObjectConstructor.mixin]] */
+/** @see {@link ObjectConstructor.mixin} */
 extend(Object, 'mixin', function mixin(
 	opts: ObjectMixinOptions | boolean,
 	target: unknown,

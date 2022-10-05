@@ -123,6 +123,9 @@ export function getOrCreateLabelValueByHandlers<T = unknown>(
 	def: unknown
 ): T;
 
+/**
+ * @inheritDoc
+ */
 export function getOrCreateLabelValueByHandlers<T = unknown>(
 	obj: object,
 	label: symbol | string,

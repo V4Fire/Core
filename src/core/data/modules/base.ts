@@ -137,7 +137,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	 * Returns an object with authentication parameters
 	 * @param params - additional parameters
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	getAuthParams(params?: Dictionary): Promise<Dictionary> {
 		return Promise.resolve({});
 	}
@@ -149,11 +149,11 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	 * Also, if the function returns a new string, the string will be appended to the request URL, or
 	 * if the function returns a string that wrapped with an array, the string fully override the original URL.
 	 *
-	 * @see [[RequestResolver]]
+	 * @see {@link RequestResolver}
 	 * @param url - request URL
 	 * @param params - request parameters
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	resolver<T = unknown>(url: string, params: MiddlewareParams<T>): ResolverResult {
 		return undefined;
 	}
@@ -482,8 +482,14 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	}
 
 	/**
-	 * @alias
-	 * @see [[Provider.upd]]
+	 * Updates data of the provider by a query.
+	 * This method is similar for a PUT request.
+	 *
+	 * @param [body]
+	 * @param [opts]
+	 *
+	 * @alias {@link Provider.upd}
+	 * @see {@link Provider.upd}
 	 */
 	update<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
 		return this.upd(body, opts);
@@ -506,8 +512,13 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	}
 
 	/**
-	 * @alias
-	 * @see [[Provider.del]]
+	 * Deletes data of the provider by a query. This method is similar for a DELETE request
+	 *
+	 * @param [body]
+	 * @param [opts]
+	 *
+	 * @alias {@link Provider.del}
+	 * @see {@link Provider.del}
 	 */
 	delete<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
 		return this.del(body, opts);
@@ -541,6 +552,9 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 	/**
 	 * Sets a readonly value by the specified key to the current provider
+	 *
+	 * @param key
+	 * @param val
 	 */
 	protected setReadonlyParam(key: string, val: unknown): void {
 		Object.defineProperty(this, key, {

@@ -40,6 +40,9 @@ export function unimplement<T extends Function>(fn: T): T extends ((...args: inf
 	WarnedFn<A, void> :
 	T;
 
+/**
+ * @inheritDoc
+ */
 export function unimplement<T extends Function>(
 	fnOrParams: WarnOptions | InlineWarnOptions | T,
 	fn?: T
@@ -61,8 +64,12 @@ export function unimplement<T extends Function>(
 /**
  * Decorator for `unimplement`
  *
+ * @param target
+ * @param key
+ * @param descriptor
+ *
  * @decorator
- * @see [[unimplement]]
+ * @see {@link unimplement}
  *
  * @example
  * ```js
@@ -80,7 +87,7 @@ export function unimplemented(target: object, key: string | symbol, descriptor: 
  * Decorator for `unimplement`.
  * This overload adds a feature to provide additional options.
  *
- * @see [[unimplement]]
+ * @see {@link unimplement}
  * @param [opts] - additional options
  *
  * @example
@@ -95,6 +102,9 @@ export function unimplemented(target: object, key: string | symbol, descriptor: 
  */
 export function unimplemented(opts?: WarnOptions): Function;
 
+/**
+ * @inheritDoc
+ */
 export function unimplemented(
 	opts?: WarnOptions | object,
 	key?: string | symbol,

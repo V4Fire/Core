@@ -41,6 +41,9 @@ export function warn<T extends Function>(fn: T): T extends ((...args: infer A) =
 	WarnedFn<A, R> :
 	T;
 
+/**
+ * @inheritDoc
+ */
 export function warn<T extends Function>(
 	fnOrParams: WarnOptions | InlineWarnOptions | T,
 	fn?: T
@@ -138,6 +141,7 @@ export function warn<T extends Function>(
 			throw new Error(str);
 
 		} else if (consoleCache[str] == null) {
+			// eslint-disable-next-line no-console
 			console.warn(str);
 			consoleCache[str] = true;
 		}
@@ -153,8 +157,12 @@ export function warn<T extends Function>(
 /**
  * Decorator for `warn`
  *
+ * @param target
+ * @param key
+ * @param descriptor
+ *
  * @decorator
- * @see [[warn]]
+ * @see {@link warn}
  *
  * @example
  * ```js
@@ -172,7 +180,7 @@ export function warned(target: object, key: string | symbol, descriptor: Propert
  * Decorator for `warn`.
  * This overload adds a feature to provide additional options.
  *
- * @see [[warn]]
+ * @see {@link warn}
  * @param [opts] - additional options
  *
  * @example
@@ -187,6 +195,9 @@ export function warned(target: object, key: string | symbol, descriptor: Propert
  */
 export function warned(opts?: WarnOptions): Function;
 
+/**
+ * @inheritDoc
+ */
 export function warned(
 	opts?: WarnOptions | object,
 	key?: string | symbol,

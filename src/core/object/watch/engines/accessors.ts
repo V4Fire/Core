@@ -83,6 +83,9 @@ export function watch<T extends object>(
 	top: object
 ): T;
 
+/**
+ * @inheritDoc
+ */
 export function watch<T extends object>(
 	obj: T,
 	path: CanUndef<unknown[]>,
@@ -260,6 +263,8 @@ export function watch<T extends object>(
  * @param path
  * @param value
  * @param handlers - set of registered handlers
+ *
+ * @throws {@link TypeError}
  */
 export function set(obj: object, path: WatchPath, value: unknown, handlers: WatchHandlersSet): void {
 	const

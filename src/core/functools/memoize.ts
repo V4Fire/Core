@@ -9,8 +9,14 @@
 /**
  * Decorator for `Function.prototype.once`
  *
+ * @param target
+ * @param key
+ * @param descriptor
+ *
  * @decorator
- * @see [[Function.once]]
+ * @see {@link Function.once}
+ *
+ * @throws {@link TypeError} if the descriptor value is not a function
  */
 export function once(target: object, key: string | symbol, descriptor: PropertyDescriptor): void {
 	const

@@ -23,6 +23,7 @@ let
 
 /**
  * Initializes the `ts-node` and `tsconfig-paths` packages
+ * @throws {@link ReferenceError}
  */
 module.exports = function initTsNode() {
 	if (isInitialized) {

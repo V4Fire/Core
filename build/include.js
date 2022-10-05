@@ -19,9 +19,11 @@ const
 
 /**
  * @typedef {{
- *   ctx?: string,
- *   return?: ('path'|'source'|'module'),
- *   source?: boolean
+ *
+ * ctx?: string,
+ * return?: ('path'|'source'|'module'),
+ * source?: boolean
+ *
  * }}
  */
 // eslint-disable-next-line no-unused-vars

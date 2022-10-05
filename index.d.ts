@@ -100,17 +100,27 @@ declare function stderr(err: any): void;
 
 /**
  * Global i18n function (can be used as a string tag or simple function)
+ *
+ * @param strings
+ * @param expr
  */
 declare function i18n(strings: any | string[], ...expr: any[]): string;
 
 /**
- * @alias
- * @see globalI18n
+ * Alias for {@link i18n}
+ *
+ * @param strings
+ * @param expr
+ *
+ * @alias {@link i18n}
+ * @see {@link i18n}
  */
 declare function t(strings: any | string[], ...expr: any[]): string;
 
 /**
  * Global i18n loopback (can be used as a string tag or simple function)
+ * @param strings
+ * @param expr
  */
 declare function l(strings: any | string[], ...expr: any[]): string;
 
@@ -193,8 +203,7 @@ type PromiseType<T> =
 /**
  * Wraps the specified function to return a value as Promise
  *
- * @typeparam T - any function
- *
+ * @typeParam T - any function
  * @example
  * ```typescript
  * type A = typeof () => null;
@@ -287,13 +296,13 @@ interface JSONCb {
 interface FastCloneOptions {
 	/**
 	 * Replacer function for `JSON.stringify`
-	 * @see [[JSON.stringify]]
+	 * @see {@link JSON.stringify}
 	 */
 	replacer?: JSONCb;
 
 	/**
 	 * Reviver function for `JSON.parse`
-	 * @see [[JSON.parse]]
+	 * @see {@link JSON.parse}
 	 */
 	reviver?: JSONCb;
 
@@ -496,43 +505,43 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectMixinOptions.concatArrays]]
+	 * @see {@link ObjectMixinOptions.concatArrays}
 	 */
 	concatArray?: boolean;
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectMixinOptions.concatArrays]]
+	 * @see {@link ObjectMixinOptions.concatArrays}
 	 */
 	concatFn?(a: unknown[], b: unknown[], key: K): unknown[];
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectMixinOptions.propsToCopy]]
+	 * @see {@link ObjectMixinOptions.propsToCopy}
 	 */
 	onlyNew?: boolean | -1;
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectMixinOptions.propsToCopy]]
+	 * @see {@link ObjectMixinOptions.propsToCopy}
 	 */
 	traits?: boolean | -1;
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectMixinOptions.skipUndefs]]
+	 * @see {@link ObjectMixinOptions.skipUndefs}
 	 */
 	withUndef?: boolean;
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectMixinOptions.withDescriptors]]
+	 * @see {@link ObjectMixinOptions.withDescriptors}
 	 */
 	withDescriptor?: boolean;
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectMixinOptions.withDescriptors]]
+	 * @see {@link ObjectMixinOptions.withDescriptors}
 	 */
 	withAccessors?: boolean;
 }
@@ -589,11 +598,11 @@ interface ObjectForEachOptions {
 
 	/**
 	 * Strategy to iterate object properties:
-	 *   1. `'own'` - the object iterates only own properties (by default)
-	 *   2. `'inherited'` - the object iterates only inherited properties
-	 *     (for-in with the negative `hasOwnProperty` check)
+	 * 1. `'own'` - the object iterates only own properties (by default)
+	 * 2. `'inherited'` - the object iterates only inherited properties
+	 * (for-in with the negative `hasOwnProperty` check)
 	 *
-	 *   3. `'all'` - the object iterates inherited properties too (for-in without the `hasOwnProperty` check)
+	 * 3. `'all'` - the object iterates inherited properties too (for-in without the `hasOwnProperty` check)
 	 *
 	 * @example
 	 * ```js
@@ -636,13 +645,13 @@ interface ObjectForEachOptions {
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectForEachOptions.passDescriptor]]
+	 * @see {@link ObjectForEachOptions.passDescriptor}
 	 */
 	withDescriptor?: boolean;
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectForEachOptions.propsToIterate]]
+	 * @see {@link ObjectForEachOptions.propsToIterate}
 	 */
 	notOwn?: boolean | -1;
 }
@@ -667,7 +676,7 @@ interface ObjectFromArrayOptions<T = boolean> {
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectFromArrayOptions.key]]
+	 * @see {@link ObjectFromArrayOptions.key}
 	 */
 	keyConverter?(i: number, el: unknown): PropertyKey;
 
@@ -681,7 +690,7 @@ interface ObjectFromArrayOptions<T = boolean> {
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectFromArrayOptions.value]]
+	 * @see {@link ObjectFromArrayOptions.value}
 	 */
 	valueConverter?(el: unknown, i: number): T;
 }
@@ -1252,7 +1261,7 @@ interface ObjectConstructor {
 
 	/**
 	 * @deprecated
-	 * @see ObjectConstructor.createEnumLike
+	 * @see {@link ObjectConstructor.createEnumLike}
 	 */
 	createMap<D extends object, K extends keyof D>(obj: Nullable<D>):
 		D extends Array<infer E> ? Dictionary<E | number> : D & {[I: string]: K};
@@ -2013,8 +2022,8 @@ interface ObjectConstructor {
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectConstructor.isPlainObject]]
-	 * @see [[ObjectConstructor.isDictionary]]
+	 * @see {@link ObjectConstructor.isPlainObject}
+	 * @see {@link ObjectConstructor.isDictionary}
 	 */
 	isObject(value: any): value is Dictionary;
 }
@@ -2949,7 +2958,7 @@ interface DateConstructor {
 	 * @param date1 - date to compare
 	 * @param date2 - another date to compare
 	 * @param [margin] - value of the maximum difference between two dates at which they are considered equal
-	 *   (in milliseconds)
+	 * (in milliseconds)
 	 */
 	is(date1: DateCreateValue, date2: DateCreateValue, margin?: number): boolean;
 
@@ -2957,7 +2966,7 @@ interface DateConstructor {
 	 * Returns a curried version of `Date.isAfter`
 	 *
 	 * @param margin - value of the maximum difference between two dates at which they are considered equal
-	 *   (in milliseconds)
+	 * (in milliseconds)
 	 *
 	 * @param date1 - date to compare
 	 */

@@ -44,7 +44,7 @@ export * from 'core/pool/interface';
 
 /**
  * Implementation of an object pool structure
- * @typeparam T - pool resource
+ * @typeParam T - pool resource
  */
 export default class Pool<T = unknown> {
 	/**
@@ -84,7 +84,7 @@ export default class Pool<T = unknown> {
 
 	/**
 	 * Event emitter to broadcast pool events
-	 * @see [[EventEmitter]]
+	 * @see {@link EventEmitter}
 	 */
 	protected emitter: EventEmitter = new EventEmitter();
 
@@ -175,7 +175,7 @@ export default class Pool<T = unknown> {
 
 		Object.assign(this, Object.reject(p, 'size'));
 
-		this.hashFn ??= (() => '[[DEFAULT]]');
+		this.hashFn ??= (() => '{@link DEFAULT}');
 		this.resourceFactory = resourceFactory;
 
 		const
@@ -422,6 +422,7 @@ export default class Pool<T = unknown> {
 	 * The method takes arguments that will be provided to a resource factory.
 	 *
 	 * @param [args]
+	 * @throws {@link Error}
 	 */
 	protected createResource(...args: unknown[]): Resource<T> {
 		const

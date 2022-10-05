@@ -115,7 +115,7 @@ export function createStaticDateModifier(method: string): AnyFunction {
 		if (Object.isPlainObject(date) || Object.isBoolean(units)) {
 			reset = Boolean(units);
 			units = <DateSetParams>date;
-			return (date) => Date[Symbol.for('[[V4_EXTEND_API]]')][method](date, units, reset);
+			return (date) => Date[Symbol.for('{@link V4_EXTEND_API}')][method](date, units, reset);
 		}
 
 		return date[method](units, reset);
@@ -138,7 +138,7 @@ export function createStaticDateComparator(method: string): AnyFunction {
 				date1 = date2;
 			}
 
-			return (date2, m) => Date[Symbol.for('[[V4_EXTEND_API]]')][method](date1, date2, margin ?? m);
+			return (date2, m) => Date[Symbol.for('{@link V4_EXTEND_API}')][method](date1, date2, margin ?? m);
 		}
 
 		return Date.create(date1)[method](date2, margin);
@@ -153,7 +153,7 @@ export function createStaticDateFormatter(method: string): AnyFunction {
 	return (date: Date | string | DateHTMLTimeStringOptions, opts?: string | DateHTMLTimeStringOptions) => {
 		if (Object.isString(date) || Object.isPlainObject(date)) {
 			opts = date;
-			return (date) => Date[Symbol.for('[[V4_EXTEND_API]]')][method](date, opts);
+			return (date) => Date[Symbol.for('{@link V4_EXTEND_API}')][method](date, opts);
 		}
 
 		return date[method](opts);

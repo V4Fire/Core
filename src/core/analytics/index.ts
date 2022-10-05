@@ -17,6 +17,7 @@ export * from 'core/analytics/interface';
 
 /**
  * Sends the specified analytic event
+ * @param args
  */
 export function send(...args: unknown[]): void {
 	engine(...args);

@@ -40,6 +40,9 @@ export function deprecate<T extends Function>(fn: T): T extends ((...args: infer
 	WarnedFn<A, R> :
 	T;
 
+/**
+ * @inheritDoc
+ */
 export function deprecate<T extends Function>(
 	fnOrParams: WarnOptions | InlineWarnOptions | T,
 	fn?: T
@@ -61,8 +64,12 @@ export function deprecate<T extends Function>(
 /**
  * Decorator for `deprecate`
  *
+ * @param target
+ * @param key
+ * @param descriptor
+ *
  * @decorator
- * @see [[deprecate]]
+ * @see {@link deprecate}
  */
 export function deprecated(target: object, key: string | symbol, descriptor: PropertyDescriptor): void;
 
@@ -70,11 +77,14 @@ export function deprecated(target: object, key: string | symbol, descriptor: Pro
  * Decorator for `deprecate`.
  * This overload adds a feature to provide additional options.
  *
- * @see [[deprecate]]
+ * @see {@link deprecate}
  * @param [opts] - additional options
  */
 export function deprecated(opts?: WarnOptions): Function;
 
+/**
+ * @inheritDoc
+ */
 export function deprecated(
 	opts?: WarnOptions | object,
 	key?: string | symbol,

@@ -8,7 +8,7 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see [[ObjectConstructor.size]] */
+/** @see {@link ObjectConstructor.size} */
 extend(Object, 'size', (obj: unknown) => {
 	if (!Object.isTruly(obj)) {
 		return 0;
@@ -34,6 +34,7 @@ extend(Object, 'size', (obj: unknown) => {
 		length = 0;
 
 	if (Object.isIterable(obj)) {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		for (const _ of obj) {
 			length++;
 		}

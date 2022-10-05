@@ -13,6 +13,7 @@ import type { Token } from 'core/json/stream/parser/interface';
 
 /**
  * Parses the buffer for a numeric fraction symbol `[\.eE]?` and generates a token `numberChunk` with a fraction symbol
+ * @param this
  */
 export function* numberFraction(this: Parser): Generator<Token> {
 	this.patterns.numberFraction.lastIndex = this.index;

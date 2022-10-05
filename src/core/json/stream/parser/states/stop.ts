@@ -14,6 +14,9 @@ import type { Token, ParentParserState } from 'core/json/stream/parser/interface
 /**
  * Parses the buffer for the end of the current structure (an object or array) and
  * generates tokens `endObject` or `endArray`
+ *
+ * @param this
+ * @throws {@link SyntaxError}
  */
 export function* stop(this: Parser): Generator<Token> {
 	this.patterns.comma.lastIndex = this.index;

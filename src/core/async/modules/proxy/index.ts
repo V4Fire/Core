@@ -8,7 +8,7 @@
 
 /**
  * [[include:core/async/modules/proxy/README.md]]
- * @packageDeclaration
+ * @packageDocumentation
  */
 
 import SyncPromise from 'core/promise/sync';
@@ -925,6 +925,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * @param destructor - name of the destructor method
 	 * @param worker
+	 *
+	 * @throws {@Link ReferenceError}
 	 */
 	workerDestructor(destructor: CanUndef<string>, worker: WorkerLikeP): void {
 		const

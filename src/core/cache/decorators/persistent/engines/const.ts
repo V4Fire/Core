@@ -7,5 +7,5 @@
  */
 
 export const
-	INDEX_STORAGE_NAME = '[[INDEX_STORAGE]]',
+	INDEX_STORAGE_NAME = '{@link INDEX_STORAGE}',
 	TTL_POSTFIX = '__ttl';

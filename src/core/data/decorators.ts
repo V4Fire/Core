@@ -39,6 +39,10 @@ export function provider(namespace: string): (target: Function) => void;
  * ```
  */
 export function provider(provider: Function): void;
+
+/**
+ * @inheritDoc
+ */
 export function provider(nmsOrFn: Function | string): CanVoid<Function> {
 	if (Object.isString(nmsOrFn)) {
 		return (target) => {

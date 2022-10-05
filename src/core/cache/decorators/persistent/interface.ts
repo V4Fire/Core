@@ -12,7 +12,7 @@ import type { eventEmitter } from 'core/cache/decorators/helpers/add-emitter';
 export type PersistentCache<V = unknown, K = string, T extends CacheWithEmitter<V, K> = CacheWithEmitter<V, K>> = {
 	[key in Exclude<(keyof CacheWithEmitter<V, K>), 'set' | 'size' | typeof eventEmitter>]: ReturnPromise<CacheWithEmitter<V, K>[key]>
 } & {
-	/** @see [[Cache.size]] */
+	/** @see {@link Cache.size} */
 	size: [T['size']];
 
 	/**
@@ -33,7 +33,7 @@ export type PersistentCache<V = unknown, K = string, T extends CacheWithEmitter<
 	 */
 	removePersistentTTLFrom(key: K): Promise<boolean>;
 
-	/** @see [[CacheWithEmitter[eventEmitterSymbol]]] */
+	/** @see {@link CacheWithEmitter[eventEmitterSymbol]} */
 	eventEmitter: T[typeof eventEmitter];
 };
 
@@ -56,7 +56,7 @@ export interface PersistentOptions {
 	 * 1. `'onInit'` - the whole stored data will be loaded during the cache initialization;
 	 * 2. `'onDemand'` - each stored item will be loaded from the cache only on the first touch, i.e. on-demand or lazily;
 	 * 3. `'onOfflineDemand'` - each stored item will be loaded from the cache only on the first touch and only if
-	 *  there is no internet connection (the strategy is useful to create net-first offline storages)
+	 * there is no internet connection (the strategy is useful to create net-first offline storages)
 	 *
 	 * @default `'onDemand'`
 	 */

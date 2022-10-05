@@ -18,8 +18,8 @@ export * from 'core/cache/simple';
 /**
  * Implementation for an in-memory data structure with support for limiting of values in the cache
  *
- * @typeparam V - value type
- * @typeparam K - key type (`string` by default)
+ * @typeParam V - value type
+ * @typeParam K - key type (`string` by default)
  */
 export default class RestrictedCache<V = unknown, K = string> extends SimpleCache<V, K> {
 	/**
@@ -97,6 +97,7 @@ export default class RestrictedCache<V = unknown, K = string> extends SimpleCach
 	 * The method returns a map of truncated elements that the cache can't fit anymore.
 	 *
 	 * @param value
+	 * @throws {@link TypeError}
 	 */
 	setCapacity(value: number): Map<K, V> {
 		if (!Number.isInteger(value) || value < 0) {
@@ -115,8 +116,8 @@ export default class RestrictedCache<V = unknown, K = string> extends SimpleCach
 					key = this.queue.values().next().value,
 					el = this.remove(key);
 
-				if (el) {
-					removed.set(key, el);
+				if (Object.isTruly(el)) {
+					removed.set(key, el!);
 				}
 			}
 		}
