@@ -21,6 +21,11 @@ export interface AbstractPersistentEngine<V = unknown> {
 
 export abstract class AbstractPersistentEngine<V = unknown> {
 	/**
+	 * Index with keys and TTL-s of stored values
+	 */
+	ttlIndex: Dictionary<number> = Object.createDict();
+
+	/**
 	 * API for async operations
 	 */
 	protected async: Async = new Async();

@@ -13,10 +13,6 @@ import { INDEX_STORAGE_NAME } from 'core/cache/decorators/persistent/engines/con
 import { UncheckablePersistentEngine } from 'core/cache/decorators/persistent/engines/interface';
 
 export default class ActivePersistentEngine<V> extends UncheckablePersistentEngine<V> {
-	/**
-	 * Index with keys and TTL-s of stored values
-	 */
-	protected ttlIndex: Dictionary<number> = Object.createDict();
 
 	override async initCache(cache: Cache<string, V>): Promise<void> {
 		if (await this.storage.has(INDEX_STORAGE_NAME)) {

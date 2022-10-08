@@ -6,6 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import type { AsyncStorageNamespace, SyncStorageNamespace } from 'core/kv-storage';
 import type { CacheWithEmitter } from 'core/cache/decorators/helpers/add-emitter/interface';
 import type { eventEmitter } from 'core/cache/decorators/helpers/add-emitter';
 
@@ -35,6 +36,8 @@ export type PersistentCache<K = string, V = unknown, T extends CacheWithEmitter<
 
 	/** @see [[CacheWithEmitter[eventEmitterSymbol]]] */
 	eventEmitter: T[typeof eventEmitter];
+
+	cloneTo(storage: SyncStorageNamespace | AsyncStorageNamespace): Promise<PersistentCache<K, V>>;
 };
 
 export interface PersistentTTLDecoratorOptions {
