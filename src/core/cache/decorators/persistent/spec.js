@@ -109,6 +109,7 @@ describe('core/cache/decorators/persistent', () => {
 
 			expect(await persistentCache2.get('foo')).toBe(1);
 			expect(await persistentCache2.get('bar')).toBe(undefined);
+			expect(await asyncSession.get(INDEX_STORAGE_NAME)).toEqual({foo: 100});
 
 			Date.now = () => 0;
 		});

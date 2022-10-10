@@ -17,7 +17,13 @@ import engines from 'core/cache/decorators/persistent/engines';
 import addEmitter from 'core/cache/decorators/helpers/add-emitter';
 
 import type { PersistentEngine, CheckablePersistentEngine } from 'core/cache/decorators/persistent/engines/interface';
-import type { PersistentOptions, PersistentCache, PersistentTTLDecoratorOptions } from 'core/cache/decorators/persistent/interface';
+import type {
+
+	PersistentOptions,
+	PersistentCache,
+	PersistentTTLDecoratorOptions
+
+} from 'core/cache/decorators/persistent/interface';
 
 export default class PersistentWrapper<T extends Cache<string, V>, V = unknown> {
 	/**
@@ -172,10 +178,11 @@ export default class PersistentWrapper<T extends Cache<string, V>, V = unknown> 
 					const
 						cache = new PersistentWrapper<Cache<string, V>, V>(this.cache.clone(), storage, {...this.opts});
 
-					Object.defineProperties(cache, {
-						fetchedItems: {
-							value: new Set(this.fetchedItems)
-						}
+					Object.defineProperty(cache, 'fetchedItems', {
+						value: new Set(this.fetchedItems),
+						enumerable: true,
+						configurable: true,
+						writable: true
 					});
 
 					for (const [key, value] of this.cache.entries()) {
@@ -211,7 +218,8 @@ export default class PersistentWrapper<T extends Cache<string, V>, V = unknown> 
 			result.forEach((_, key) => this.engine.remove(key));
 		});
 
-		subscribe('clone', this.wrappedCache, () => this.wrappedCache.clone());
+		subscribe('clone', this.wrappedCache, () =>
+			this.wrappedCache.clone());
 	}
 
 	/**
