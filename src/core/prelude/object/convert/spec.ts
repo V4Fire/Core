@@ -36,7 +36,7 @@ describe('core/prelude/object/convert', () => {
 
 		it('serializing of an object with the predefined `toJSON`', () => {
 			const set = new Set([1, 2, 3]);
-			set.toJSON = () => [...set];
+			set['toJSON'] = () => [...set];
 
 			expect(Object.trySerialize(set)).toBe('[1,2,3]');
 		});
@@ -74,7 +74,7 @@ describe('core/prelude/object/convert', () => {
 		it('serializing with an exception', () => {
 			const arr = [1, 2, 3];
 
-			arr.toJSON = () => {
+			arr['toJSON'] = () => {
 				throw new Error('Boom!');
 			};
 

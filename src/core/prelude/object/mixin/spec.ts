@@ -210,13 +210,13 @@ describe('core/prelude/object/mixin', () => {
 				return this._a;
 			},
 
-			set a(value) {
+			set a(value: number) {
 				this._a = value;
 			}
 		};
 
 		const
-			clone = Object.mixin({withDescriptors: 'onlyAccessors'}, undefined, base);
+			clone = Object.mixin<typeof base>({withDescriptors: 'onlyAccessors'}, undefined, base);
 
 		expect(clone).not.toBe(base);
 		expect(clone._a).toBe(1);
@@ -233,13 +233,13 @@ describe('core/prelude/object/mixin', () => {
 				return this._a;
 			},
 
-			set a(value) {
+			set a(value: number) {
 				this._a = value;
 			}
 		};
 
 		const
-			clone = Object.mixin({withAccessors: true}, undefined, base);
+			clone = Object.mixin<typeof base>({withAccessors: true}, undefined, base);
 
 		expect(clone).not.toBe(base);
 		expect(clone._a).toBe(1);

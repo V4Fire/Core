@@ -133,7 +133,7 @@ describe('core/prelude/object/property/set', () => {
 
 		expect(
 			Object.set(obj, 'a', 2, {
-				setter(obj, key, value) {
+				setter(obj: Dictionary, key: string, value: number) {
 					obj[key] = value * 2;
 				}
 			})

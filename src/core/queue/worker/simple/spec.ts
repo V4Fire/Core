@@ -6,35 +6,32 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import MergeQueue from 'core/queue/worker/merge';
+import WorkerQueue from 'core/queue/worker/simple';
 
-describe('core/queue/worker/merge', () => {
+describe('core/queue/worker/simple', () => {
 	it('should put and remove elements from the queue in the correct order', async () => {
 		const
-			res = [];
+			res: number[] = [];
 
-		const queue = new MergeQueue((task) => {
+		const queue = new WorkerQueue((task: {a: number}) => {
 			res.push(task.a);
 			return Promise.resolve();
 
 		}, {
 			concurrency: 2,
-			refreshInterval: 50,
-			hashFn: (task) => JSON.stringify(task)
+			refreshInterval: 50
 		});
 
 		expect(queue.push({a: 1}))
 			.toBeInstanceOf(Promise);
 
-		queue.push({a: 1});
-		queue.push({a: 2});
-		queue.push({a: 3});
+		await queue.push({a: 2});
+		await queue.push({a: 3});
 
 		expect(queue.length).toBe(1);
 		expect(queue.head).toEqual({a: 3});
 		expect(queue.pop()).toEqual({a: 3});
 
-		queue.push({a: 4});
 		await queue.push({a: 4}).then(() => {
 			expect(queue.length).toBe(0);
 			expect(res).toEqual([1, 2, 4]);
@@ -43,30 +40,27 @@ describe('core/queue/worker/merge', () => {
 
 	it('should implement the alternative API', async () => {
 		const
-			res = [];
+			res: number[] = [];
 
-		const queue = new MergeQueue((task) => {
+		const queue = new WorkerQueue((task: {a: number}) => {
 			res.push(task.a);
 			return Promise.resolve();
 
 		}, {
 			concurrency: 2,
-			refreshInterval: 50,
-			hashFn: (task) => JSON.stringify(task)
+			refreshInterval: 50
 		});
 
 		expect(queue.unshift({a: 1}))
 			.toBeInstanceOf(Promise);
 
-		queue.unshift({a: 1});
-		queue.unshift({a: 2});
-		queue.unshift({a: 3});
+		await queue.unshift({a: 2});
+		await queue.unshift({a: 3});
 
 		expect(queue.length).toBe(1);
 		expect(queue.head).toEqual({a: 3});
 		expect(queue.shift()).toEqual({a: 3});
 
-		queue.unshift({a: 4});
 		await queue.unshift({a: 4}).then(() => {
 			expect(queue.length).toBe(0);
 			expect(res).toEqual([1, 2, 4]);
@@ -75,17 +69,17 @@ describe('core/queue/worker/merge', () => {
 
 	it('should implement the iterable API', async () => {
 		const
-			res = [];
+			res: number[] = [];
 
-		const queue = new MergeQueue((task) => {
+		const queue = new WorkerQueue((task: {a: number}) => {
 			res.push(task.a);
 			return Promise.resolve();
 
 		}, {concurrency: 2});
 
-		queue.unshift({a: 1});
-		queue.unshift({a: 2});
-		queue.unshift({a: 3});
+		await queue.unshift({a: 1});
+		await queue.unshift({a: 2});
+		await queue.unshift({a: 3});
 
 		const iterate = async () => {
 			let
@@ -103,19 +97,18 @@ describe('core/queue/worker/merge', () => {
 		await expect(iterate()).resolves.toEqual([1, 2, 3]);
 	});
 
-	it('calling `clone` should clone the queue', () => {
-		const queue = new MergeQueue(Promise.resolve, {concurrency: 1});
+	it('calling `clone` should clone the queue', async () => {
+		const queue = new WorkerQueue(Promise.resolve, {concurrency: 1});
 
-		queue.unshift({a: 1});
-		queue.unshift({a: 2});
-		queue.unshift({a: 3});
+		await queue.unshift({a: 1});
+		await queue.unshift({a: 2});
+		await queue.unshift({a: 3});
 
 		const
 			clonedQueue = queue.clone();
 
 		expect(queue !== clonedQueue).toBe(true);
-		expect(queue.tasks !== clonedQueue.tasks).toBe(true);
-		expect(queue.tasksMap !== clonedQueue.tasksMap).toBe(true);
+		expect(queue['tasks'] !== clonedQueue['tasks']).toBe(true);
 
 		expect(queue.length).toBe(2);
 		expect(queue.shift()).toEqual({a: 2});
@@ -124,19 +117,19 @@ describe('core/queue/worker/merge', () => {
 		expect(clonedQueue.length).toBe(2);
 	});
 
-	it('calling `clear` should clear the queue', () => {
+	it('calling `clear` should clear the queue', async () => {
 		const
-			res = [];
+			res: number[] = [];
 
-		const queue = new MergeQueue((task) => {
+		const queue = new WorkerQueue((task: {a: number}) => {
 			res.push(task.a);
 			return Promise.resolve();
 
 		}, {concurrency: 1});
 
-		queue.unshift({a: 1});
-		queue.unshift({a: 2});
-		queue.unshift({a: 3});
+		await queue.unshift({a: 1});
+		await queue.unshift({a: 2});
+		await queue.unshift({a: 3});
 
 		expect(queue.length).toBe(2);
 

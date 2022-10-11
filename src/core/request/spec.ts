@@ -14,8 +14,8 @@ import { set, get } from 'core/env';
 import { sequence } from 'core/iter/combinators';
 import { pick, andPick, assemble, streamArray } from 'core/json/stream';
 
-import Provider, { provider } from 'core/data';
-import baseRequest, { globalOpts, RequestError } from 'core/request';
+import Provider, { MiddlewareParams, provider } from 'core/data';
+import baseRequest, { globalOpts, RequestEngine, RequestError } from 'core/request';
 import { defaultRequestOpts } from 'core/request/const';
 
 import Response from 'core/request/response';
@@ -25,10 +25,12 @@ import nodeEngine from 'core/request/engines/node';
 import fetchEngine from 'core/request/engines/fetch';
 import xhrEngine from 'core/request/engines/xhr';
 import createProviderEngine from 'core/request/engines/provider';
+import type { Server } from 'http';
+import type { Token } from 'core/json/stream/parser';
 
 @provider
 class TestRequestChainProvider extends Provider {
-	static request = Provider.request({
+	static override request: typeof Provider.request = Provider.request({
 		engine: createProviderEngine(Provider)
 	});
 }
@@ -36,6 +38,34 @@ class TestRequestChainProvider extends Provider {
 const
 	emptyBodyStatuses = [204, 304],
 	faviconBase64 = 'AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAnISL6JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL5JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL1JyEi9ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEihCchIpgnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEixCUgIRMmICEvJyEi5ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIrYnISKSJyEi9ichIlxQREUAHxobAichIo4nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISJeJyEiICchIuAnISJJJiAhbCYgITgmICEnJyEi4ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEiXichIiAnISLdJyEihichIuknISKkIRwdBCchIoUnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIl4nISIgJyEi4ichIu4nISL/JyEi8CYgIT8mICEhJyEi3CchIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISJeJyEiHychIuUnISL/JyEi/ychIv8nISKrIh0eBiYhInwnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEiXSYgITUnISLvJyEi/ychIv8nISL/JyEi9CYgIUcmICEbJyEi1ichIv8nISL/JyEi/ychIv8nISL/JyEi/ichImknISKjJyEi/ychIv8nISL/JyEi/ychIv8nISKzIRwdBiYhIX0nISL/JyEi/ychIv8nISL/JyEi/ychIvwnISK+JyEi9CchIv8nISL/JyEi/ychIv8nISL/JyEi9yYhIoonISKzJyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL6JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
+
+interface ResponseFavicon {
+	type: string;
+	size: number;
+}
+
+interface ResponseJson1 {
+	id: number;
+	value: string;
+}
+
+interface ResponseJson2 {
+	message: string;
+}
+
+interface ResponseJson {
+	message: string;
+}
+
+interface ResponseJsonUsers {
+	total: number;
+	data: Array<{name: string; age: number}>;
+}
+
+interface ResponseRetry {
+	tryNumber: number;
+	times: number;
+}
 
 describe('core/request', () => {
 	const engines = new Map([
@@ -47,13 +77,13 @@ describe('core/request', () => {
 	]);
 
 	let
-		request,
-		defaultEngine,
-		logOptions;
+		request: typeof baseRequest,
+		defaultEngine: RequestEngine,
+		logOptions: CanUndef<Dictionary>;
 
 	let
-		api,
-		server;
+		api: Nullable<string>,
+		server: CanUndef<Server>;
 
 	beforeAll(async () => {
 		api = globalOpts.api;
@@ -66,7 +96,7 @@ describe('core/request', () => {
 	});
 
 	beforeEach(() => {
-		if (server) {
+		if (server != null) {
 			server.close();
 		}
 
@@ -76,10 +106,10 @@ describe('core/request', () => {
 	afterAll(async () => {
 		globalOpts.api = api;
 
-		await server.close();
+		await server?.close();
 		defaultRequestOpts.engine = defaultEngine;
 
-		set('log', logOptions);
+		set('log', logOptions ?? {});
 	});
 
 	// eslint-disable-next-line max-lines-per-function
@@ -98,10 +128,10 @@ describe('core/request', () => {
 
 			it('blob `get`', async () => {
 				const
-					data = await request('http://localhost:4000/favicon.ico').data;
+					data = await request<ResponseFavicon>('http://localhost:4000/favicon.ico').data;
 
-				expect(data.type).toBe('image/x-icon');
-				expect(data.size).toBe(1150);
+				expect(data?.type).toBe('image/x-icon');
+				expect(data?.size).toBe(1150);
 			});
 
 			it('json `get`', async () => {
@@ -112,12 +142,12 @@ describe('core/request', () => {
 			it('json `get` with caching', async () => {
 				const
 					url = 'http://localhost:4000/json/1',
-					get = request({cacheStrategy: 'forever', cacheTTL: 10});
+					get = request<ResponseJson1>({cacheStrategy: 'forever', cacheTTL: 10});
 
-				await get(url).data;
+				await get<ResponseJson1>(url).data;
 
 				const
-					req = await get(url);
+					req = await get<ResponseJson1>(url);
 
 				expect(req.cache).toBe('memory');
 				expect(await req.data).toEqual({id: 1, value: 'things'});
@@ -126,7 +156,7 @@ describe('core/request', () => {
 					setTimeout(async () => {
 						{
 							const
-								req = await get(url);
+								req = await get<ResponseJson1>(url);
 
 							expect(req.cache).toBeUndefined();
 							expect(await req.data).toEqual({id: 1, value: 'things'});
@@ -135,34 +165,34 @@ describe('core/request', () => {
 
 						{
 							const
-								req = await get(url);
+								req = await get<ResponseJson1>(url);
 
 							expect(req.cache).toBeUndefined();
 							expect(await req.data).toEqual({id: 1, value: 'things'});
 						}
 
-						resolve();
+						resolve(null);
 					}, 15);
 				}));
 			});
 
 			it('text/xml `get`', async () => {
-				const data = await request('http://localhost:4000/xml/text').data;
-				expect(data.querySelector('foo').textContent).toBe('Hello world');
+				const data = await request<XMLDocument>('http://localhost:4000/xml/text').data;
+				expect(data?.querySelector('foo')?.textContent).toBe('Hello world');
 			});
 
 			it('application/xml `get`', async () => {
-				const data = await request('http://localhost:4000/xml/app').data;
-				expect(data.querySelector('foo').textContent).toBe('Hello world');
+				const data = await request<XMLDocument>('http://localhost:4000/xml/app').data;
+				expect(data?.querySelector('foo')?.textContent).toBe('Hello world');
 			});
 
 			it('xml `get` with a query', async () => {
-				const data = await request('http://localhost:4000/search', {query: {q: 'bla'}}).data;
-				expect(data.querySelector('results').children[0].textContent).toBe('one');
+				const data = await request<XMLDocument>('http://localhost:4000/search', {query: {q: 'bla'}}).data;
+				expect(data?.querySelector('results')?.children[0].textContent).toBe('one');
 			});
 
 			it('json `post`', async () => {
-				const req = await request('http://localhost:4000/json', {
+				const req = await request<ResponseJson>('http://localhost:4000/json', {
 					method: 'POST',
 					body: {
 						id: 12345,
@@ -185,7 +215,7 @@ describe('core/request', () => {
 					err;
 
 				try {
-					await request('http://localhost:4000/json', {
+					await request<ResponseJson>('http://localhost:4000/json', {
 						method: 'POST',
 						okStatuses: 200,
 						body: {
@@ -206,18 +236,28 @@ describe('core/request', () => {
 			});
 
 			it('json `post` with encoders/decoders', async () => {
-				const req = await request('http://localhost:4000/json', {
+				interface RequestBody {
+					id?: number;
+					value?: string | string[];
+				}
+
+				const req = await request<ResponseJson>('http://localhost:4000/json', {
 					method: 'POST',
 
 					encoder: [
 						(data) => {
-							data.id = 12345;
-							return Promise.resolve(data);
+							const req = <RequestBody>data;
+							req.id = 12345;
+							return Promise.resolve(req);
 						},
 
 						(data) => {
-							data.value = data.value.join('-');
-							return data;
+							const req = <RequestBody>data;
+							if (Object.isArray(req.value)) {
+								req.value = req.value.join('-');
+							}
+
+							return req;
 						}
 					],
 
@@ -239,16 +279,20 @@ describe('core/request', () => {
 			});
 
 			it('json `post` with middlewares', async () => {
-				const req = await request('http://localhost:4000/json', {
+				const req = await request<ResponseJson>('http://localhost:4000/json', {
 					method: 'POST',
 
 					middlewares: {
-						addId({opts}) {
-							opts.body.id = 12345;
+						addId({opts}: MiddlewareParams<ResponseJson>) {
+							if (Object.isDictionary(opts.body) && 'id' in opts.body) {
+								opts.body.id = 12345;
+							}
 						},
 
-						serializeValue({opts}) {
-							opts.body.value = opts.body.value.join('-');
+						serializeValue({opts}: MiddlewareParams<ResponseJson>) {
+							if (Object.isDictionary(opts.body) && 'value' in opts.body) {
+								opts.body.value = (<string[]>opts.body.value).join('-');
+							}
 						}
 					},
 
@@ -269,7 +313,7 @@ describe('core/request', () => {
 					method: 'POST',
 
 					middlewares: {
-						fakeResponse({ctx}) {
+						fakeResponse({ctx}: MiddlewareParams) {
 							return () => ctx.wrapAsResponse({message: 'fake'});
 						}
 					},
@@ -287,7 +331,7 @@ describe('core/request', () => {
 			});
 
 			it('json `put` with headers', async () => {
-				const req = await request('http://localhost:4000/json/2', {
+				const req = await request<ResponseJson2>('http://localhost:4000/json/2', {
 					method: 'PUT',
 					headers: {
 						Accept: 'application/json'
@@ -333,10 +377,10 @@ describe('core/request', () => {
 				let
 					resolvedUrl;
 
-				const engine = (params) => {
+				const engine = <RequestEngine><unknown>((params) => {
 					resolvedUrl = params.url;
 					return Promise.resolve(new Response(''));
-				};
+				});
 
 				await request('/then', {
 					api: {
@@ -463,14 +507,14 @@ describe('core/request', () => {
 			});
 
 			it('retrying of a request', async () => {
-				const req = request('http://localhost:4000/retry', {
+				const req = request<ResponseRetry>('http://localhost:4000/retry', {
 					retry: {
 						attempts: 5,
 						delay: () => 0
 					}
 				});
 
-				const body = await (await req).response.json();
+				const body = <Dictionary>await (await req).response.json();
 				expect(body.tryNumber).toBe(4);
 			});
 
@@ -483,14 +527,14 @@ describe('core/request', () => {
 			});
 
 			it('retrying with a speed up response', async () => {
-				const req = await request('http://localhost:4000/retry/speedup', {
+				const req = await request<ResponseRetry>('http://localhost:4000/retry/speedup', {
 					timeout: 300,
 					retry: 2
 				});
 
 				expect(req.response.ok).toBe(true);
 
-				const body = await req.response.json();
+				const body = <Dictionary>await req.response.json();
 				expect(body.tryNumber).toBe(2);
 			});
 
@@ -548,12 +592,12 @@ describe('core/request', () => {
 
 			it('request promise is an async iterable object', async () => {
 				const
-					chunkLengths = [],
-					req = request('http://localhost:4000/favicon.ico');
+					chunkLengths: number[] = [],
+					req = request<ResponseFavicon>('http://localhost:4000/favicon.ico');
 
 				let
 					loadedBefore = 0,
-					totalLength;
+					totalLength: CanUndef<number>;
 
 				for await (const {loaded, total} of req) {
 					if (totalLength == null) {
@@ -571,12 +615,12 @@ describe('core/request', () => {
 
 			it('request response is an async iterable object', async () => {
 				const
-					chunkLengths = [],
+					chunkLengths: number[] = [],
 					req = await request('http://localhost:4000/favicon.ico');
 
 				let
 					loadedBefore = 0,
-					totalLength;
+					totalLength: CanUndef<number>;
 
 				for await (const {loaded, total} of req) {
 					if (totalLength == null) {
@@ -596,8 +640,8 @@ describe('core/request', () => {
 				describe('listening XHR events', () => {
 					it('`progress`', async () => {
 						const
-							req = request('http://localhost:4000/json/1'),
-							events = [];
+							req = request<ResponseJson1>('http://localhost:4000/json/1'),
+							events: string[] = [];
 
 						req.emitter.on('progress', (e) => {
 							events.push(e.type);
@@ -612,7 +656,7 @@ describe('core/request', () => {
 					it('`readystatechange`', async () => {
 						const
 							req = request('http://localhost:4000/json/1'),
-							events = [];
+							events: string[] = [];
 
 						req.emitter.on('readystatechange', (e) => {
 							events.push(e.type);
@@ -645,15 +689,18 @@ describe('core/request', () => {
 				});
 
 				it('parsing JSON from a stream', async () => {
-					const req = request('http://localhost:4000/json/users', {
-						streamDecoder: (data) => sequence(
-							assemble(pick(data, 'total')),
-							streamArray(andPick(data, 'data'))
-						)
+					const req = request<ResponseJsonUsers>('http://localhost:4000/json/users', {
+						streamDecoder: (data) => {
+							const tokens = <AnyIterable<Token>>data;
+							return sequence(
+								assemble(pick(tokens, 'total')),
+								streamArray(andPick(tokens, 'data'))
+							);
+						}
 					});
 
 					const
-						res = [];
+						res: any[] = [];
 
 					for await (const token of await req.stream) {
 						res.push(token);
@@ -668,30 +715,40 @@ describe('core/request', () => {
 				});
 			}
 
-			async function retryDelayTest(delay, delayMS) {
+			async function retryDelayTest(delay: () => number | Promise<void>, delayMS: number) {
 				const startTime = new Date().getTime();
 
-				const req = request('http://localhost:4000/retry', {
+				const req = request<ResponseRetry>('http://localhost:4000/retry', {
 					retry: {
 						attempts: 5,
 						delay
 					}
 				});
 
+				interface ResponseJson {
+					times: number[];
+				}
+
+				const res = await (await req).response.json();
+
+				if (!Object.isDictionary(res) || !res.hasOwnProperty('times')) {
+						throw new Error('response must have filed: times');
+				}
+
 				const
-					body = await (await req).response.json(),
+					body = <ResponseJson><unknown>res,
 					firstRequest = body.times[0];
 
 				const requestDelays = body.times.slice(1)
-					.reduce((acc, time, i) => acc.concat(time - firstRequest - i * delayMS), []);
+					.reduce((acc: number[], time, i) => acc.concat(time - firstRequest - i * delayMS), []);
 
 				expect(firstRequest - startTime).toBeLessThan(delayMS);
 				requestDelays.forEach((time) => expect(time).toBeGreaterThanOrEqual(delayMS));
 			}
 
-			async function convertStreamToBase64(stream) {
+			async function convertStreamToBase64(stream: any) {
 				let
-					buffer = null,
+					buffer: Nullable<Uint8Array> = null,
 					pos = 0;
 
 				for await (const {data, loaded, total} of stream) {
@@ -703,13 +760,13 @@ describe('core/request', () => {
 					pos = loaded;
 				}
 
-				return Buffer.from(buffer).toString('base64');
+				return Buffer.from(buffer!).toString('base64');
 			}
 		});
 	});
 });
 
-function createServer() {
+function createServer(): Server {
 	const serverApp = express();
 	serverApp.use(express.json());
 
@@ -774,7 +831,7 @@ function createServer() {
 		const
 			{query} = req;
 
-		if (query.q != null && /^[A-Za-z0-9]*$/.test(query.q)) {
+		if (query.q != null && /^[A-Za-z0-9]*$/.test(query.q.toString())) {
 			res.type('application/xml');
 			res.status(200);
 			res.send('<results><result>one</result><result>two</result><result>three</result></results>');
@@ -803,7 +860,7 @@ function createServer() {
 
 	const
 		triesBeforeSuccess = 3,
-		requestTimes = [];
+		requestTimes: number[] = [];
 
 	let
 		tryNumber = 0,

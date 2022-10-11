@@ -66,8 +66,8 @@ describe('core/prelude/structures/sync-promise', () => {
 				new Promise((r) => setTimeout(() => r(SyncPromise.resolve(1)), 50))
 			);
 		})
-			.then((val) => new Promise((r) => setTimeout(() => r(SyncPromise.resolve(val + 2)), 50)))
-			.then((val) => val * 2);
+			.then((val: number) => new Promise((r) => setTimeout(() => r(SyncPromise.resolve(val + 2)), 50)))
+			.then((val: number) => val * 2);
 
 		expect(i).toBe(6);
 	});
@@ -81,8 +81,8 @@ describe('core/prelude/structures/sync-promise', () => {
 					new Promise((r) => setTimeout(() => r(SyncPromise.resolve(1)), 50))
 				);
 			})
-				.then((val) => new Promise((r) => setTimeout(() => r(SyncPromise.reject(val + 2)), 50)))
-				.catch((val) => Promise.reject(val * 2));
+				.then((val: number) => new Promise((r) => setTimeout(() => r(SyncPromise.reject(val + 2)), 50)))
+				.catch((val: number) => Promise.reject(val * 2));
 
 		} catch (err) {
 			i = err;
@@ -117,7 +117,7 @@ describe('core/prelude/structures/sync-promise', () => {
 
 		expect(
 			await new SyncPromise((resolve) => {
-				resolve(new Promise((r) => setTimeout(() => r(1)), 100));
+				resolve(new Promise((r) => setTimeout(() => r(1), 100)));
 				resolve(2);
 			})
 		).toBe(1);
@@ -136,7 +136,7 @@ describe('core/prelude/structures/sync-promise', () => {
 
 		try {
 			await new SyncPromise((resolve, reject) => {
-				reject(new Promise((r) => setTimeout(() => r(1)), 100));
+				reject(new Promise((r) => setTimeout(() => r(1), 100)));
 				reject(2);
 			});
 
@@ -167,7 +167,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		new SyncPromise((resolve, reject) => {
 			reject('boom');
 		})
-			.then((val) => val * 2, (err) => {
+			.then((val: number) => val * 2, (err) => {
 				expect(err).toBe('boom');
 				i += 2;
 			});
@@ -204,7 +204,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		new SyncPromise((resolve, reject) => {
 			reject('boom');
 		})
-			.then((val) => val * 2)
+			.then((val: number) => val * 2)
 			.catch((err) => {
 				expect(err).toBe('boom');
 				i += 2;

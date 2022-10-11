@@ -1,4 +1,8 @@
-/* eslint-disable no-empty-function, no-new-func */
+/* eslint-disable
+	no-empty-function,
+	no-new-func,
+	@typescript-eslint/no-empty-function,
+	@typescript-eslint/no-extraneous-class */
 
 /*!
  * V4Fire Core
@@ -61,9 +65,9 @@ describe('core/prelude/types', () => {
 		expect(Object.isNumber(NaN)).toBe(true);
 		expect(Object.isNumber(Object(0))).toBe(false);
 		expect(Object.isNumber(null)).toBe(false);
-
 		if (typeof BigInt !== 'undefined') {
-			expect(Object.isNumber(1n)).toBe(false);
+			// eslint-disable-next-line no-eval
+			expect(Object.isNumber(eval('1n'))).toBe(false);
 		}
 	});
 

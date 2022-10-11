@@ -11,7 +11,7 @@ import OrderQueue from 'core/queue/order';
 describe('core/queue/order', () => {
 	it('should put and remove elements from the queue in the correct order', () => {
 		const
-			queue = new OrderQueue((a, b) => a - b);
+			queue = new OrderQueue<number>((a, b) => a - b);
 
 		expect(queue.push(7)).toBe(1);
 		expect(queue.push(2)).toBe(2);
@@ -28,7 +28,7 @@ describe('core/queue/order', () => {
 
 	it('should return the queue length', () => {
 		const
-			queue = new OrderQueue((a, b) => a - b);
+			queue = new OrderQueue<number>((a, b) => a - b);
 
 		queue.push(7);
 		queue.push(2);
@@ -41,7 +41,7 @@ describe('core/queue/order', () => {
 
 	it('should implement the alternative API', () => {
 		const
-			queue = new OrderQueue((a, b) => b - a);
+			queue = new OrderQueue<number>((a, b) => b - a);
 
 		expect(queue.unshift(7)).toBe(1);
 		expect(queue.unshift(2)).toBe(2);
@@ -58,7 +58,7 @@ describe('core/queue/order', () => {
 
 	it('should implement the iterable API', () => {
 		const
-			queue = new OrderQueue((a, b) => a - b);
+			queue = new OrderQueue<number>((a, b) => a - b);
 
 		queue.push(5);
 		queue.push(1);
@@ -71,7 +71,7 @@ describe('core/queue/order', () => {
 
 	it('calling `clone` should clone the queue', () => {
 		const
-			queue = new OrderQueue((a, b) => a - b);
+			queue = new OrderQueue<number>((a, b) => a - b);
 
 		queue.push(3);
 
@@ -86,12 +86,12 @@ describe('core/queue/order', () => {
 		expect(clonedQueue.length).toBe(1);
 		expect(clonedQueue.pop()).toBe(3);
 
-		expect(queue.comparator === clonedQueue.comparator).toBe(true);
+		expect(queue['comparator'] === clonedQueue['comparator']).toBe(true);
 	});
 
 	it('calling `clear` should clear the queue', () => {
 		const
-			queue = new OrderQueue((a, b) => a - b);
+			queue = new OrderQueue<number>((a, b) => a - b);
 
 		queue.push(3);
 		queue.push(4);

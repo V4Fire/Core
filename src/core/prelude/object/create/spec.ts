@@ -72,13 +72,13 @@ describe('core/prelude/object/create', () => {
 			{
 				const dict = Object.select({a: 1, b: 2, c: 3}, ['a', 'b']);
 				expect(dict).toEqual({a: 1, b: 2});
-				expect(dict.__proto__).toBe(Object.prototype);
+				expect((<Dictionary>dict).__proto__).toBe(Object.prototype);
 			}
 
 			{
 				const dict = Object.select({a: 1, b: 2, c: 3, __proto__: null}, ['a', 'b']);
 				expect(dict).toEqual({a: 1, b: 2});
-				expect(dict.__proto__).toBeFalsy();
+				expect((<Dictionary>dict).__proto__).toBeFalsy();
 			}
 
 			{
@@ -122,7 +122,7 @@ describe('core/prelude/object/create', () => {
 			{
 				const dict = Object.reject({a: 1, b: 2, c: 3}, ['a', 'b']);
 				expect(dict).toEqual({c: 3});
-				expect(dict.__proto__).toBe(Object.prototype);
+				expect((<Dictionary>dict).__proto__).toBe(Object.prototype);
 			}
 
 			{

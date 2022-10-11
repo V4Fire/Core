@@ -159,7 +159,7 @@ describe('core/prelude/date/relative', () => {
 		{
 			const
 				dateNow = new Date(),
-				res = new Date(dateNow - (2).weeks()).relativeTo(dateNow);
+				res = new Date(dateNow.valueOf() - (2).weeks()).relativeTo(dateNow);
 
 			expect(Object.reject(res, 'diff')).toEqual({
 				type: 'weeks',

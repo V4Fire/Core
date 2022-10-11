@@ -27,8 +27,8 @@ describe('core/range', () => {
 
 	it('string range', () => {
 		expect(new Range('a', 'e').toArray()).toEqual(['a', 'b', 'c', 'd', 'e']);
-		expect(new Range('a', 'e'.codePointAt(0) - 2).toArray()).toEqual(['a', 'b', 'c']);
-		expect(new Range('a'.codePointAt(0) + 2, 'e').toArray()).toEqual(['c', 'd', 'e']);
+		expect(new Range('a', 'e'.codePointAt(0)! - 2).toArray()).toEqual(['a', 'b', 'c']);
+		expect(new Range('a'.codePointAt(0)! + 2, 'e').toArray()).toEqual(['c', 'd', 'e']);
 	});
 
 	it('string range without including of bounds', () => {
@@ -37,7 +37,7 @@ describe('core/range', () => {
 
 	it('string range (extended Unicode)', () => {
 		expect(new Range('😁', '😅').toArray()).toEqual(['😁', '😂', '😃', '😄', '😅']);
-		expect(new Range('😁', '😅'.codePointAt(0) - 2).toArray()).toEqual(['😁', '😂', '😃']);
+		expect(new Range('😁', '😅'.codePointAt(0)! - 2).toArray()).toEqual(['😁', '😂', '😃']);
 	});
 
 	it('string range (extended Unicode) without including of bounds', () => {
@@ -177,7 +177,7 @@ describe('core/range', () => {
 		expect(new Range(1).intersect(new Range([1], 3)).toArray())
 			.toEqual([2, 3]);
 
-		expect(new Range(1, 10000).intersect(new Range('a', 'z')).toArray())
+		expect(new Range(1, 10000).intersect(<Range<number>><unknown>new Range('a', 'z')).toArray())
 			.toEqual([]);
 	});
 
@@ -197,7 +197,7 @@ describe('core/range', () => {
 		expect(new Range(2).union(new Range(3, 2)).toString())
 			.toBe('2..');
 
-		expect(new Range(1, 10000).union(new Range('a', 'z')).toArray())
+		expect(new Range(1, 10000).union(<Range<number>><unknown>new Range('a', 'z')).toArray())
 			.toEqual([]);
 	});
 

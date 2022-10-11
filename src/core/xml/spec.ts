@@ -11,7 +11,7 @@ import { getDataTypeFromURI } from 'core/mime-type';
 import { IS_NODE } from 'core/env';
 
 describe('core/xml', () => {
-	it('`toDataURI`', () => {
+	it('`toDataURI`', async () => {
 		let
 			doc;
 
@@ -19,7 +19,7 @@ describe('core/xml', () => {
 			//#if node_js
 
 			const
-				{JSDOM} = require('jsdom'),
+				{JSDOM} = await import('jsdom'),
 				{document} = new JSDOM().window;
 
 			doc = document;

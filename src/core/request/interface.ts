@@ -97,7 +97,7 @@ export interface WrappedEncoder<I = unknown, O = unknown> {
 	(data: I): CanPromise<O>;
 }
 
-export type Encoders = Iterable<Encoder>;
+export type Encoders<I = unknown> = Iterable<Encoder<I>>;
 export type WrappedEncoders = Iterable<WrappedEncoder>;
 
 export interface Decoder<I = unknown, O = unknown> {
@@ -108,7 +108,7 @@ export interface WrappedDecoder<I = unknown, O = unknown> {
 	(data: I, response: Response): CanPromise<O>;
 }
 
-export type Decoders = Iterable<Decoder>;
+export type Decoders<I = unknown> = Iterable<Decoder<I>>;
 export type WrappedDecoders = Iterable<WrappedDecoder>;
 
 export interface StreamDecoder<I = unknown, O = unknown> {
@@ -159,7 +159,7 @@ export interface RequestResolver<D = unknown, ARGS extends any[] = unknown[]> {
 	(url: string, params: MiddlewareParams<D>, ...args: ARGS): ResolverResult;
 }
 
-export type ResolverResult = CanUndef<CanArray<string>>;
+export type ResolverResult = CanUndef<Array<string | number> | string>;
 
 /**
  * Options for a request
@@ -453,7 +453,7 @@ export interface CreateRequestOptions<D = unknown> {
 	 * and returns new data to respond. If you provide a sequence of functions,
 	 * the first function will pass a result to the next function from the sequence, etc.
 	 */
-	decoder?: Decoder | Decoders;
+	decoder?: Decoder<D> | Decoders<D>;
 
 	/**
 	 * A function (or a sequence of functions) takes the current request response data chunk

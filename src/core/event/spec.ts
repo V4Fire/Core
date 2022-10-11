@@ -18,7 +18,7 @@ describe('core/event', () => {
 		let
 			i = 0;
 
-		promise.then(() => {
+		void promise.then(() => {
 			expect(i).toBe(2);
 			done();
 		});

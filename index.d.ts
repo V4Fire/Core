@@ -2775,7 +2775,8 @@ interface Number {
 	ceil(precision?: number): number;
 }
 
-type RegExpFlag = '' | 'g' | 'i' | 'm' | 'u' | 'y' | 's';
+type RegExpSingleFlag = '' | 'g' | 'i' | 'm' | 'u' | 'y' | 's';
+type RegExpFlag = `${RegExpSingleFlag}${RegExpSingleFlag}${RegExpSingleFlag}${RegExpSingleFlag}${RegExpSingleFlag}`;
 
 interface RegExp {
 	/**
@@ -2831,7 +2832,7 @@ interface RegExpConstructor {
 	 * @param rgxp
 	 * @param flags
 	 */
-	addFlags(rgxp: RegExp, ...flags: RegExpFlag[]): RegExp;
+	addFlags<T>(rgxp: RegExp, ...flags: [RegExpFlag, ...RegExpFlag[]]): RegExp;
 
 	/**
 	 * Returns a curried version of `RegExp.addFlags`
@@ -2851,7 +2852,7 @@ interface RegExpConstructor {
 	 * @param rgxp
 	 * @param flags
 	 */
-	removeFlags(rgxp: RegExp, ...flags: RegExpFlag[]): RegExp;
+	removeFlags(rgxp: RegExp, ...flags: [RegExpFlag, ...RegExpFlag[]]): RegExp;
 
 	/**
 	 * Returns a curried version of `RegExp.removeFlags`
@@ -2871,7 +2872,7 @@ interface RegExpConstructor {
 	 * @param rgxp
 	 * @param flags
 	 */
-	setFlags(rgxp: RegExp, ...flags: RegExpFlag[]): RegExp;
+	setFlags(rgxp: RegExp, ...flags: [RegExpFlag, ...RegExpFlag[]]): RegExp;
 
 	/**
 	 * Returns a curried version of `RegExp.setFlags`
@@ -3032,6 +3033,20 @@ interface DateConstructor {
 	 *   (in milliseconds)
 	 */
 	isBetween(date: Date, left: DateCreateValue, right: DateCreateValue, margin?: number): boolean;
+
+	/**
+	 * Returns true if the date is less than the now date
+	 *
+	 * @param date - date that will be checked
+	 */
+	isPast(date: Date): boolean;
+
+	/**
+	 * Returns true if the date is greater than the now date
+	 *
+	 * @param date - date that will be checked
+	 */
+	isFuture(date: Date): boolean;
 
 	/**
 	 * Returns a new date based on the current so that it starts at the beginning of a day

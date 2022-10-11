@@ -59,14 +59,14 @@ describe('core/request/modules/stream-buffer', () => {
 
 	it('closing the stream should finish a registered asynchronous iterator', async () => {
 		const
-			streamBuffer = new StreamBuffer(),
+			streamBuffer = new StreamBuffer<string>(),
 			queue = globalChunks.slice(),
-			chunks = [];
+			chunks: string[] = [];
 
 		setTimeout(function cb() {
-			streamBuffer.add(queue.shift());
+			streamBuffer.add(queue.shift()!);
 
-			if (queue.length) {
+			if (queue.length > 0) {
 				setTimeout(cb, 50);
 
 			} else {

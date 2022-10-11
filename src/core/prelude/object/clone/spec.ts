@@ -48,7 +48,7 @@ describe('core/prelude/object/clone/fastClone', () => {
 	});
 
 	it('cloning of objects with cycle links', () => {
-		const obj = {a: 1};
+		const obj: Dictionary = {a: 1};
 		obj.obj = obj;
 
 		expect(Object.fastClone(obj)).not.toBe(obj);
@@ -96,7 +96,7 @@ describe('core/prelude/object/clone/fastClone', () => {
 	});
 
 	it('cloning of map objects', () => {
-		const obj = new Map([[1, 2], [2, {a: 1}]]);
+		const obj = new Map<number, number | Dictionary>([[1, 2], [2, {a: 1}]]);
 		expect(Object.fastClone(obj)).not.toBe(obj);
 		expect(Object.fastClone(obj)).toEqual(obj);
 	});

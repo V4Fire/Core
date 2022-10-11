@@ -48,7 +48,7 @@ describe('core/promise', () => {
 		});
 
 		it('providing a custom promise executor', async () => {
-			const promise = createControllablePromise({
+			const promise = createControllablePromise<number>({
 				executor: (resolve) => resolve(5)
 			});
 
