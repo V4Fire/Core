@@ -9,7 +9,7 @@
 import MergeQueue from 'core/queue/worker/merge';
 
 describe('core/queue/worker/merge', () => {
-	it('should put and remove elements from the queue in the correct order', async () => {
+	it('should put and remove elements from the queue in the correct order', () => {
 		const
 			res: number[] = [];
 
@@ -26,22 +26,22 @@ describe('core/queue/worker/merge', () => {
 		expect(queue.push({a: 1}))
 			.toBeInstanceOf(Promise);
 
-		await queue.push({a: 1});
-		await queue.push({a: 2});
-		await queue.push({a: 3});
+		queue.push({a: 1});
+		queue.push({a: 2});
+		queue.push({a: 3});
 
 		expect(queue.length).toBe(1);
 		expect(queue.head).toEqual({a: 3});
 		expect(queue.pop()).toEqual({a: 3});
 
-		await queue.push({a: 4});
-		await queue.push({a: 4}).then(() => {
+		queue.push({a: 4});
+		queue.push({a: 4}).then(() => {
 			expect(queue.length).toBe(0);
 			expect(res).toEqual([1, 2, 4]);
 		});
 	});
 
-	it('should implement the alternative API', async () => {
+	it('should implement the alternative API', () => {
 		const
 			res: number[] = [];
 
@@ -58,16 +58,16 @@ describe('core/queue/worker/merge', () => {
 		expect(queue.unshift({a: 1}))
 			.toBeInstanceOf(Promise);
 
-		await queue.unshift({a: 1});
-		await queue.unshift({a: 2});
-		await queue.unshift({a: 3});
+		queue.unshift({a: 1});
+		queue.unshift({a: 2});
+		queue.unshift({a: 3});
 
 		expect(queue.length).toBe(1);
 		expect(queue.head).toEqual({a: 3});
 		expect(queue.shift()).toEqual({a: 3});
 
-		await queue.unshift({a: 4});
-		await queue.unshift({a: 4}).then(() => {
+		queue.unshift({a: 4});
+		queue.unshift({a: 4}).then(() => {
 			expect(queue.length).toBe(0);
 			expect(res).toEqual([1, 2, 4]);
 		});
@@ -83,9 +83,9 @@ describe('core/queue/worker/merge', () => {
 
 		}, {concurrency: 2});
 
-		await queue.unshift({a: 1});
-		await queue.unshift({a: 2});
-		await queue.unshift({a: 3});
+		queue.unshift({a: 1});
+		queue.unshift({a: 2});
+		queue.unshift({a: 3});
 
 		const iterate = async () => {
 			let
@@ -103,12 +103,12 @@ describe('core/queue/worker/merge', () => {
 		await expect(iterate()).resolves.toEqual([1, 2, 3]);
 	});
 
-	it('calling `clone` should clone the queue', async () => {
+	it('calling `clone` should clone the queue', () => {
 		const queue = new MergeQueue(Promise.resolve, {concurrency: 1});
 
-		await queue.unshift({a: 1});
-		await queue.unshift({a: 2});
-		await queue.unshift({a: 3});
+		queue.unshift({a: 1});
+		queue.unshift({a: 2});
+		queue.unshift({a: 3});
 
 		const
 			clonedQueue = queue.clone();
@@ -124,7 +124,7 @@ describe('core/queue/worker/merge', () => {
 		expect(clonedQueue.length).toBe(2);
 	});
 
-	it('calling `clear` should clear the queue', async () => {
+	it('calling `clear` should clear the queue', () => {
 		const
 			res: number[] = [];
 
@@ -134,9 +134,9 @@ describe('core/queue/worker/merge', () => {
 
 		}, {concurrency: 1});
 
-		await queue.unshift({a: 1});
-		await queue.unshift({a: 2});
-		await queue.unshift({a: 3});
+		queue.unshift({a: 1});
+		queue.unshift({a: 2});
+		queue.unshift({a: 3});
 
 		expect(queue.length).toBe(2);
 

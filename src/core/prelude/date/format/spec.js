@@ -7,8 +7,7 @@
  */
 
 describe('core/prelude/date/format', () => {
-	const
-		date = Date.create('18.10.1989 10:10:10');
+	const date = Date.create('18.10.1989 10:10:10');
 
 	it('`short`', () => {
 		expect(date.short('en')).toBe('10/18/1989');
@@ -24,14 +23,6 @@ describe('core/prelude/date/format', () => {
 
 	it('`Date.medium`', () => {
 		expect(Date.medium('en')(date)).toBe('October 18, 1989');
-	});
-
-	it('`long`', () => {
-		expect(date.long('en')).toBe('October 18, 1989, 10:10:10 AM');
-	});
-
-	it('`Date.long`', () => {
-		expect(Date.long('en')(date)).toBe('October 18, 1989, 10:10:10 AM');
 	});
 
 	it('`format`', () => {

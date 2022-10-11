@@ -2460,7 +2460,7 @@ interface NumberConstructor {
 	 * Returns a curried version of `Number.pad`
 	 * @param opts - additional options
 	 */
-	pad(opts: NumberPadOptions): (value: string) => string;
+	pad(opts: NumberPadOptions): (value: number) => string;
 
 	/**
 	 * Returns a string from a number with adding extra zeros to the start, if necessary
@@ -2707,7 +2707,7 @@ interface Number {
 	 * @param targetLength - length of the resulting string once the current string has been padded
 	 * @param [opts] - additional options
 	 */
-	pad(targetLength?: number, opts?: NumberPadOptions): string;
+	pad(targetLength?: number | NumberPadOptions, opts?: NumberPadOptions): string;
 
 	/**
 	 * Returns a string representation of the number by the specified pattern.

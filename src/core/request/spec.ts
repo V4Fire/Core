@@ -284,7 +284,7 @@ describe('core/request', () => {
 
 					middlewares: {
 						addId({opts}: MiddlewareParams<ResponseJson>) {
-							if (Object.isDictionary(opts.body) && 'id' in opts.body) {
+							if (Object.isDictionary(opts.body)) {
 								opts.body.id = 12345;
 							}
 						},
