@@ -80,7 +80,7 @@ describe('core/cache/decorators/persistent', () => {
 			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({bar: Number.MAX_SAFE_INTEGER});
 		});
 
-		it.only('should clone the cache', async () => {
+		it('should clone the cache', async () => {
 			const opts = {
 				loadFromStorage: 'onInit'
 			};
