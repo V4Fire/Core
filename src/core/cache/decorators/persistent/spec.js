@@ -80,7 +80,7 @@ describe('core/cache/decorators/persistent', () => {
 			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({bar: Number.MAX_SAFE_INTEGER});
 		});
 
-		it('should clone the cache', async () => {
+		it.only('should clone the cache', async () => {
 			const opts = {
 				loadFromStorage: 'onInit'
 			};
@@ -91,24 +91,16 @@ describe('core/cache/decorators/persistent', () => {
 			await persistentCache.set('foo', 1, {persistentTTL: 100});
 			await persistentCache.set('bar', 1, {persistentTTL: 10});
 
+			Date.now = () => 50;
+
 			const
 				fakeClonedCache = persistentCache.clone(),
 				clonedCache = await persistentCache.cloneTo(asyncSession);
 
 			expect(fakeClonedCache).toBe(undefined);
 			expect(await clonedCache.get('foo')).toBe(1);
-			expect(await clonedCache.get('bar')).toBe(1);
+			expect(await clonedCache.get('bar')).toBe(undefined);
 
-			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({foo: 100, bar: 10});
-			expect(await asyncSession.get(INDEX_STORAGE_NAME)).toEqual({foo: 100, bar: 10});
-
-			Date.now = () => 50;
-
-			const
-				persistentCache2 = await addPersistent(new SimpleCache(), asyncSession, opts);
-
-			expect(await persistentCache2.get('foo')).toBe(1);
-			expect(await persistentCache2.get('bar')).toBe(undefined);
 			expect(await asyncSession.get(INDEX_STORAGE_NAME)).toEqual({foo: 100});
 
 			Date.now = () => 0;

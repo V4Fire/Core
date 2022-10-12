@@ -192,6 +192,9 @@ export default class PersistentWrapper<T extends Cache<string, V>, V = unknown> 
 
 						if (ttl > time) {
 							await cache.engine.set(key, value, ttl - time);
+
+						} else {
+							cache.cache.remove(key);
 						}
 					}
 
