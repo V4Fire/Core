@@ -33,7 +33,8 @@
     "test:eslint": "eslint config build src",
     "test:jest": "cross-env NODE_ENV=development && jest",
     "test:ci:jest": "cross-env NODE_ENV=development && jest --maxWorkers 4 --reporters github-actions",
-    "up": "npm i && gulp build:standalone && gulp build:doc"
+    "up": "npm i && gulp build:standalone && gulp build:doc",
+    "prepare": "npm run up"
   },
   "dependencies": {
     "@swc/core": "1.2.153",
