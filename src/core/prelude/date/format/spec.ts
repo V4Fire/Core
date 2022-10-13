@@ -26,11 +26,11 @@ describe('core/prelude/date/format', () => {
 	});
 
 	it('`long`', () => {
-		expect(date.long('en')).toBe('October 18, 1989, 10:10:10 AM');
+		expect(date.long('en')).toBe('October 18, 1989 at 10:10:10 AM');
 	});
 
 	it('`Date.long`', () => {
-		expect(Date.long('en')(date)).toBe('October 18, 1989, 10:10:10 AM');
+		expect(Date.long('en')(date)).toBe('October 18, 1989 at 10:10:10 AM');
 	});
 
 	it('`format`', () => {
