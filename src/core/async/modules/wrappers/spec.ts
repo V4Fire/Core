@@ -10,7 +10,7 @@
 
 import express from 'express';
 
-import Async from 'core/async';
+import Async, { EventEmitterLike } from 'core/async';
 import Provider, { provider } from 'core/data';
 import EventEmitter from 'events';
 
@@ -27,7 +27,7 @@ describe('core/async/modules/wrappers', () => {
 
 	@provider
 	class ProviderExample extends Provider {
-		baseURL = 'http://localhost:3000/ok';
+		override baseURL: string = 'http://localhost:3000/ok';
 	}
 
 	describe('`wrapDataProvider`', () => {
@@ -69,7 +69,7 @@ describe('core/async/modules/wrappers', () => {
 
 			jest.spyOn($a, 'request');
 			wrappedProvider.get({id: 1});
-			expect($a.request.mock.lastCall[1]).toEqual({group: 'ProviderExample'});
+			expect((<jest.Mock>$a.request).mock.lastCall[1]).toEqual({group: 'ProviderExample'});
 		});
 
 		it('should concatenate a global group and local group', async () => {
@@ -80,10 +80,10 @@ describe('core/async/modules/wrappers', () => {
 
 			jest.spyOn($a, 'request');
 			await wrappedProvider.get({id: 1});
-			expect($a.request.mock.lastCall[1]).toEqual({group: 'example'});
+			expect((<jest.Mock>$a.request).mock.lastCall[1]).toEqual({group: 'example'});
 
 			await wrappedProvider.upd({id: 1}, {group: 'foo'});
-			expect($a.request.mock.lastCall[1]).toEqual({group: 'example:foo'});
+			expect((<jest.Mock>$a.request).mock.lastCall[1]).toEqual({group: 'example:foo'});
 		});
 
 		it('should provide a group into a nested event emitter wrapper and replace the original emitter with a wrapper', () => {
@@ -97,7 +97,7 @@ describe('core/async/modules/wrappers', () => {
 			const
 				wrappedProvider = $a.wrapDataProvider(provider, {group: 'example'});
 
-			expect($a.wrapEventEmitter.mock.lastCall).toEqual([provider.emitter, {group: 'example'}]);
+			expect((<jest.Mock>$a.wrapEventEmitter).mock.lastCall).toEqual([provider.emitter, {group: 'example'}]);
 			expect(wrappedProvider.emitter).toEqual(fakeWrapper);
 		});
 	});
@@ -112,10 +112,10 @@ describe('core/async/modules/wrappers', () => {
 				bar: 'bar'
 			};
 
-			const emitter = $a.wrapEventEmitter(fakeEventEmitter);
+			const emitter = $a.wrapEventEmitter(<EventEmitterLike>fakeEventEmitter);
 
-			expect(emitter.foo).toEqual(fakeEventEmitter.foo);
-			expect(emitter.bar).toEqual(fakeEventEmitter.bar);
+			expect(emitter['foo']).toEqual(fakeEventEmitter.foo);
+			expect(emitter['bar']).toEqual(fakeEventEmitter.bar);
 		});
 
 		it('`addEventListener` and `addListener` should be aliases for `on`', () => {
@@ -145,10 +145,10 @@ describe('core/async/modules/wrappers', () => {
 				group: 'example2'
 			});
 
-			expect($a.on.mock.lastCall[3]).toEqual({group: 'example:example2'});
+			expect((<jest.Mock>$a.on).mock.lastCall[3]).toEqual({group: 'example:example2'});
 
 			emitterWithGroup.on('bar', () => null);
-			expect($a.on.mock.lastCall[3]).toEqual({group: 'example'});
+			expect((<jest.Mock>$a.on).mock.lastCall[3]).toEqual({group: 'example'});
 
 			const emitterWithoutGroup = $a.wrapEventEmitter({
 				on: () => null
@@ -158,10 +158,10 @@ describe('core/async/modules/wrappers', () => {
 				group: 'example3'
 			});
 
-			expect($a.on.mock.lastCall[3]).toEqual({group: 'example3'});
+			expect((<jest.Mock>$a.on).mock.lastCall[3]).toEqual({group: 'example3'});
 
 			emitterWithoutGroup.on('bar', () => null);
-			expect($a.on.mock.lastCall[3]).toEqual({});
+			expect((<jest.Mock>$a.on).mock.lastCall[3]).toEqual({});
 		});
 
 		it('normalizes of input parameters', () => {
@@ -173,11 +173,11 @@ describe('core/async/modules/wrappers', () => {
 
 			// [] => [{}]
 			emitter.on('foo', () => null);
-			expect($a.on.mock.lastCall.slice(3)).toEqual([{}]);
+			expect((<jest.Mock>$a.on).mock.lastCall.slice(3)).toEqual([{}]);
 
 			// [true] => [{}, true]
 			emitter.on('foo', () => null, true);
-			expect($a.on.mock.lastCall.slice(3)).toEqual([{}, true]);
+			expect((<jest.Mock>$a.on).mock.lastCall.slice(3)).toEqual([{}, true]);
 
 			/*
 			 * [{foo: 'foo', group: 'group', label: 'label'}, null, 5]
@@ -185,7 +185,7 @@ describe('core/async/modules/wrappers', () => {
 			 * [{group: 'group', label: 'label'}, {foo: 'foo'}, null, 5]
 			 */
 			emitter.on('foo', () => null, {foo: 'foo', group: 'group', label: 'label'}, null, 5);
-			expect($a.on.mock.lastCall.slice(3)).toEqual([{group: 'group', label: 'label'}, {foo: 'foo'}, null, 5]);
+			expect((<jest.Mock>$a.on).mock.lastCall.slice(3)).toEqual([{group: 'group', label: 'label'}, {foo: 'foo'}, null, 5]);
 		});
 
 		it('`off`, `once`, `promisifyOnce` should call async wrappers', () => {
@@ -223,9 +223,14 @@ describe('core/async/modules/wrappers', () => {
 				removeListener: () => originalMethods.removeListener = true
 			});
 
+			/* eslint-disable @typescript-eslint/ban-ts-comment */
+			// @ts-ignore
 			emitter.off(null);
+			// @ts-ignore
 			emitter.removeEventListener('foo');
+			// @ts-ignore
 			emitter.removeListener({}, () => null, 'bar', 1);
+			/* eslint-enable @typescript-eslint/ban-ts-comment */
 
 			expect(originalMethods).toEqual({
 				off: true,

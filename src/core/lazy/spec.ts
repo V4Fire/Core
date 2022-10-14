@@ -11,12 +11,12 @@ import makeLazy from 'core/lazy';
 describe('core/lazy', () => {
 	it('should create a structure based on the passed function', () => {
 		const
-			scan = [];
+			scan: string[] = [];
 
-		function createObj(a) {
+		function createObj(a: number) {
 			return {
 				a,
-				bla(...args) {
+				bla(...args: string[]) {
 					scan.push(...args);
 				}
 			};
@@ -40,18 +40,21 @@ describe('core/lazy', () => {
 
 	it('should create a structure based on the passed class', () => {
 		const
-			scan = [];
+			scan: string[] = [];
 
 		class User {
-			constructor(name, age) {
+			name: string;
+			age: number;
+
+			config: {attr?: string; errorHandler(): void} = {
+					errorHandler() {
+					scan.push('errorHandler');
+				}
+			};
+
+			constructor(name: string, age: number) {
 				this.name = name;
 				this.age = age;
-
-				this.config = {
-					errorHandler() {
-						scan.push('errorHandler');
-					}
-				};
 			}
 
 			sayName() {
@@ -83,18 +86,21 @@ describe('core/lazy', () => {
 
 	it('creating two instances of the one lazy structure based on a class', () => {
 		const
-			scan = [];
+			scan: string[] = [];
 
 		class User {
-			constructor(name, age) {
+			name: string;
+			age: number;
+
+			config: Dictionary = {
+				errorHandler() {
+					scan.push('errorHandler');
+				}
+			};
+
+			constructor(name: string, age: number) {
 				this.name = name;
 				this.age = age;
-
-				this.config = {
-					errorHandler() {
-						scan.push('errorHandler');
-					}
-				};
 			}
 
 			sayName() {
@@ -132,7 +138,12 @@ describe('core/lazy', () => {
 			cache = {};
 
 		class RenderEngine {
-			component(name, opts) {
+			config: {attr: Dictionary | string; errorHandler(): void} = {
+				attr: {},
+				errorHandler: Function
+			};
+
+			component(name: string, opts?: Dictionary) {
 				if (opts == null) {
 					return cache[name];
 				}
@@ -154,30 +165,30 @@ describe('core/lazy', () => {
 
 			{
 				get: {
-					'config.attrs'(contexts) {
-						return contexts.at(-1).config.attrs;
+					'config.attrs'(contexts: RenderEngine[]) {
+						return contexts.at(-1)?.config.attr;
 					}
 				},
 
 				set: {
-					'config.attrs'(contexts, value) {
+					'config.attrs'(contexts: RenderEngine[], value: unknown) {
 						contexts.forEach((ctx) => {
-							ctx.config.attrs = value;
+							ctx.config.attr = <string>value;
 						});
 					}
 				},
 
 				call: {
-					component(contexts, ...args) {
+					component(contexts: RenderEngine[], ...args: unknown[]) {
 						if (args.length > 1) {
 							contexts.forEach((ctx) => {
-								ctx.component(...args);
+								ctx.component(<string>args[0], <Dictionary>args[1]);
 							});
 
 							return true;
 						}
 
-						return contexts.at(-1).component(...args);
+						return contexts.at(-1)?.component(<string>args[0]);
 					}
 				}
 			}

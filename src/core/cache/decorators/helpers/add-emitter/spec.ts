@@ -14,7 +14,7 @@ import RestrictedCache from 'core/cache/restricted';
 describe('core/cache/decorators/helpers/add-emitter', () => {
 	describe('subscribe', () => {
 		it('emits events only to top', () => {
-			function CreateLevel(level) {
+			function CreateLevel(level: number) {
 				this.level = level;
 				this.remove = () => null;
 				this.set = () => null;
@@ -26,7 +26,7 @@ describe('core/cache/decorators/helpers/add-emitter', () => {
 				level2 = new CreateLevel(2),
 				level3 = new CreateLevel(3);
 
-			const memory = [];
+			const memory: string[] = [];
 
 			Object.setPrototypeOf(level2, level1);
 			Object.setPrototypeOf(level3, level2);
@@ -54,7 +54,7 @@ describe('core/cache/decorators/helpers/add-emitter', () => {
 				cache = new SimpleCache(),
 				{remove} = addEmitter(cache);
 
-			const memory = [];
+			const memory: any[] = [];
 
 			cache[eventEmitter].on('remove', (...args) => {
 				memory.push(args);
@@ -73,7 +73,7 @@ describe('core/cache/decorators/helpers/add-emitter', () => {
 			const cache = new RestrictedCache(1);
 			addEmitter(cache);
 
-			const memory = [];
+			const memory: any[] = [];
 
 			cache[eventEmitter].on('remove', (...args) => {
 				memory.push(args);
@@ -91,7 +91,7 @@ describe('core/cache/decorators/helpers/add-emitter', () => {
 				cache = new SimpleCache(),
 				{clear} = addEmitter(cache);
 
-			const memory = [];
+			const memory: any[] = [];
 
 			cache[eventEmitter].on('clear', (...args) => {
 				memory.push(args);
@@ -114,7 +114,7 @@ describe('core/cache/decorators/helpers/add-emitter', () => {
 			addEmitter(cache);
 
 			const
-				memory = [],
+				memory: any[] = [],
 				clearFunction = (el, key) => key === 'bar';
 
 			cache[eventEmitter].on('clear', (...args) => {
@@ -134,7 +134,7 @@ describe('core/cache/decorators/helpers/add-emitter', () => {
 				cache = new SimpleCache(),
 				{set} = addEmitter(cache);
 
-			const memory = [];
+			const memory: any[] = [];
 
 			cache[eventEmitter].on('set', (...args) => {
 				memory.push(args);

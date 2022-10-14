@@ -9,7 +9,7 @@
 import * as netModule from 'core/net';
 import { asyncLocal } from 'core/kv-storage';
 
-import addPersistent from 'core/cache/decorators/persistent';
+import addPersistent, { PersistentOptions } from 'core/cache/decorators/persistent';
 
 import SimpleCache from 'core/cache/simple';
 import RestrictedCache from 'core/cache/restricted';
@@ -28,7 +28,7 @@ describe('core/cache/decorators/persistent', () => {
 
 	describe('core functionality', () => {
 		it('providing the default `persistentTTL` option', async () => {
-			const opts = {
+			const opts: PersistentOptions = {
 				loadFromStorage: 'onInit',
 				persistentTTL: 100
 			};
@@ -45,7 +45,7 @@ describe('core/cache/decorators/persistent', () => {
 		});
 
 		it('collapsing operations with the same key', async () => {
-			const opts = {
+			const opts: PersistentOptions = {
 				loadFromStorage: 'onInit'
 			};
 
@@ -57,11 +57,11 @@ describe('core/cache/decorators/persistent', () => {
 			persistentCache.set('foo', 1);
 			await persistentCache.set('foo', 2);
 
-			expect(asyncLocal.set.mock.calls[0]).toEqual(['foo', 2]);
+			expect((<jest.Mock>asyncLocal.set).mock.calls[0]).toEqual(['foo', 2]);
 		});
 
 		it('should delete a value from the storage if a side effect has deleted it', async () => {
-			const opts = {
+			const opts: PersistentOptions = {
 				loadFromStorage: 'onInit'
 			};
 
@@ -81,7 +81,7 @@ describe('core/cache/decorators/persistent', () => {
 		});
 
 		it('`clear` caused by a side effect', async () => {
-			const opts = {
+			const opts: PersistentOptions = {
 				loadFromStorage: 'onInit'
 			};
 
@@ -101,7 +101,7 @@ describe('core/cache/decorators/persistent', () => {
 		});
 
 		it('`set` caused by a side effect', async () => {
-			const opts = {
+			const opts: PersistentOptions = {
 				loadFromStorage: 'onInit'
 			};
 
@@ -121,7 +121,7 @@ describe('core/cache/decorators/persistent', () => {
 		});
 
 		it('setting the default `ttl` caused by a side effect', async () => {
-			const opts = {
+			const opts: PersistentOptions = {
 				loadFromStorage: 'onInit',
 				persistentTTL: 100
 			};
@@ -140,12 +140,12 @@ describe('core/cache/decorators/persistent', () => {
 
 	describe('`onInit` loading from the storage', () => {
 		it('should init the cache during initialization', async () => {
-			const opts = {
+			const opts: PersistentOptions = {
 				loadFromStorage: 'onInit'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
+				persistentCache = await addPersistent(new SimpleCache<string>(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar');
 			await persistentCache.set('foo2', 'bar2');
@@ -160,12 +160,12 @@ describe('core/cache/decorators/persistent', () => {
 		});
 
 		it('should save the `persistentTTL` descriptor', async () => {
-			const opts = {
+			const opts: PersistentOptions = {
 				loadFromStorage: 'onInit'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
+				persistentCache = await addPersistent(new SimpleCache<string>(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar');
 			await persistentCache.set('foo2', 'bar2', {persistentTTL: 100});
@@ -177,12 +177,12 @@ describe('core/cache/decorators/persistent', () => {
 		});
 
 		it('should not save an item if it is already expired', async () => {
-			const opts = {
+			const opts: PersistentOptions = {
 				loadFromStorage: 'onInit'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
+				persistentCache = await addPersistent(new SimpleCache<string>(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar', {persistentTTL: -100});
 
@@ -201,12 +201,12 @@ describe('core/cache/decorators/persistent', () => {
 		});
 
 		it('removing the `persistentTTL` descriptor from a cache item', async () => {
-			const opts = {
+			const opts: PersistentOptions = {
 				loadFromStorage: 'onInit'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
+				persistentCache = await addPersistent(new SimpleCache<string>(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar', {persistentTTL: 100});
 
@@ -223,9 +223,9 @@ describe('core/cache/decorators/persistent', () => {
 			const fn = jest.fn();
 			const {onDemand} = engines;
 
-			engines.onDemand = function onDemand() {
+			engines.onDemand = Object.cast(function onDemand() {
 				fn();
-			};
+			});
 
 			await addPersistent(new SimpleCache(), asyncLocal);
 
@@ -236,12 +236,12 @@ describe('core/cache/decorators/persistent', () => {
 		});
 
 		it('must save an item at the first demand', async () => {
-			const opts = {
+			const opts: PersistentOptions = {
 				loadFromStorage: 'onDemand'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
+				persistentCache = await addPersistent(new SimpleCache<string>(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar');
 
@@ -257,12 +257,12 @@ describe('core/cache/decorators/persistent', () => {
 		});
 
 		it('should save the `persistentTTL` descriptor', async () => {
-			const opts = {
+			const opts: PersistentOptions = {
 				loadFromStorage: 'onDemand'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
+				persistentCache = await addPersistent(new SimpleCache<string>(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar');
 			await persistentCache.set('foo2', 'bar2', {persistentTTL: 100});
@@ -272,12 +272,12 @@ describe('core/cache/decorators/persistent', () => {
 		});
 
 		it('should not save an item if it is already expired', async () => {
-			const opts = {
+			const opts: PersistentOptions = {
 				loadFromStorage: 'onDemand'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
+				persistentCache = await addPersistent(new SimpleCache<string>(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar', {persistentTTL: -100});
 
@@ -294,12 +294,12 @@ describe('core/cache/decorators/persistent', () => {
 		});
 
 		it('removing the `persistentTTL` descriptor from a cache item', async () => {
-			const opts = {
+			const opts: PersistentOptions = {
 				loadFromStorage: 'onDemand'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
+				persistentCache = await addPersistent(new SimpleCache<string>(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar', {persistentTTL: 100});
 
@@ -313,12 +313,12 @@ describe('core/cache/decorators/persistent', () => {
 
 	describe('`onOfflineDemand` loading from the storage', () => {
 		it('must load a value from the storage cache only if there is no internet', async () => {
-			const opts = {
+			const opts: PersistentOptions = {
 				loadFromStorage: 'onOfflineDemand'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
+				persistentCache = await addPersistent(new SimpleCache<string>(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar');
 			await persistentCache.set('foo2', 'bar2');

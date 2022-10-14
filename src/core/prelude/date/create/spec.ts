@@ -49,11 +49,9 @@ describe('core/prelude/date/create', () => {
 		it('new date based on templates: xxxx[.-/]xx[.-/]xx | xx[.-/]xx[.-/]xxxx', () => {
 			const chunks = [
 				today.getFullYear(),
-				(today.getMonth() + 1).toString().padStart(2, 0),
-				today.getDate().toString().padStart(2, 0)
+				(today.getMonth() + 1).toString().padStart(2, '0'),
+				today.getDate().toString().padStart(2, '0')
 			];
-
-			console.warn(chunks);
 
 			expect(Date.create(chunks.join('.'))).toEqual(today);
 			expect(Date.create(chunks.slice().reverse().join('.'))).toEqual(today);

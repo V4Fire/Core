@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import middlewareFactory from 'core/log/middlewares';
+import middlewareFactory, { LogEvent } from 'core/log/middlewares';
 import { ErrorsDeduplicatorMiddleware } from 'core/log/middlewares/errors-deduplicator';
 
 let middleware;
@@ -80,32 +80,24 @@ describe('middlewares/errors-deduplicator', () => {
 			expect(secondNextCallbackSpy).toHaveBeenCalledTimes(1);
 		});
 
-		function createLogEvent(error, context = 'test') {
-			const logEvent = {
+		function createLogEvent(error?: Error, context: string = 'test'): LogEvent {
+			return {
 				context,
-				level: error ? 'error' : 'info',
-				additionals: {}
+				details: {},
+				level: error != null ? 'error' : 'info',
+				additionals: {},
+				error
 			};
-
-			if (error) {
-				logEvent.error = error;
-			}
-
-			return logEvent;
 		}
 
-		function copyLogEvent(srcLogEvent) {
-			const copy = {
+		function copyLogEvent(srcLogEvent: LogEvent): LogEvent {
+			return {
 				context: srcLogEvent.context,
+				details: srcLogEvent.details,
 				level: srcLogEvent.level,
-				additionals: srcLogEvent.additionals
+				additionals: srcLogEvent.additionals,
+				error: srcLogEvent.error
 			};
-
-			if (srcLogEvent.error) {
-				copy.error = srcLogEvent.error;
-			}
-
-			return copy;
 		}
 	});
 

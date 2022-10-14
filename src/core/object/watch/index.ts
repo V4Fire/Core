@@ -109,6 +109,36 @@ function watch<T extends object>(
 function watch<T extends object>(
 	obj: T,
 	path: WatchPath,
+	opts: WatchOptions & ({immediate: true}),
+	handler?: WatchHandler
+): Watcher<T>;
+
+/**
+ * Watches for changes of the specified object
+ *
+ * @param obj
+ * @param path - path to a property to watch
+ * @param opts - additional options
+ * @param [handler] - callback that is invoked on every mutation hook
+ */
+function watch<T extends object>(
+	obj: T,
+	path: WatchPath,
+	opts: WatchOptions & ({collapse: false; immediate: true}),
+	handler?: WatchHandler
+): Watcher<T>;
+
+/**
+ * Watches for changes of the specified object
+ *
+ * @param obj
+ * @param path - path to a property to watch
+ * @param opts - additional options
+ * @param [handler] - callback that is invoked on every mutation hook
+ */
+function watch<T extends object>(
+	obj: T,
+	path: WatchPath,
 	opts: WatchOptions,
 	handler?: MultipleWatchHandler
 ): Watcher<T>;

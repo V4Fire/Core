@@ -26,7 +26,7 @@ describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of a string', () => {
 		const
 			data = 'foo',
-			scan: Array<[string, null, Iterable<string>]> = [];
+			scan: Array<[string, number, string]> = [];
 
 		Object.forEach(data, (...args) => {
 			scan.push(args);
@@ -42,7 +42,7 @@ describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of a string with surrogate pairs', () => {
 		const
 			data = '😃😡',
-			scan = [];
+			scan: Array<[string, number, string]> = [];
 
 		Object.forEach(data, (...args) => {
 			scan.push(args);
@@ -105,7 +105,7 @@ describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of an object', () => {
 		const
 			data = {a: 1, b: 2, __proto__: {c: 3}},
-			scan: Array<[number, string, Dictionary]> = [];
+			scan: Array<[any, string, Dictionary]> = [];
 
 		Object.forEach(data, (...args) => {
 			scan.push(args);
@@ -120,10 +120,10 @@ describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of an object with descriptors', () => {
 		const
 			data = {a: 1, b: 2, __proto__: {c: 3}},
-			scan = [];
+			scan: Array<[Dictionary, string, typeof data]> = [];
 
 		Object.forEach(data, {passDescriptor: true}, (...args) => {
-			scan.push(args);
+			scan.push(Object.cast(args));
 		});
 
 		expect(scan).toEqual([
@@ -138,7 +138,7 @@ describe('core/prelude/object/iterators/forEach', () => {
 			scan = [];
 
 		Object.forEach(data, {withDescriptor: true}, (...args) => {
-			scan.push(args);
+			scan.push(Object.cast(args));
 		});
 
 		expect(scan).toEqual([
@@ -150,10 +150,10 @@ describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of an object with adding of inherited properties', () => {
 		const
 			data = {a: 1, b: 2, __proto__: {c: 3}},
-			scan = [];
+			scan: Array<[number, string, typeof data]> = [];
 
 		Object.forEach(data, {propsToIterate: 'all'}, (...args) => {
-			scan.push(args);
+			scan.push(Object.cast(args));
 		});
 
 		expect(scan).toEqual([
@@ -166,10 +166,10 @@ describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of an object with adding of inherited properties (legacy)', () => {
 		const
 			data = {a: 1, b: 2, __proto__: {c: 3}},
-			scan = [];
+			scan: Array<[number, string, typeof data]> = [];
 
 		Object.forEach(data, {notOwn: true}, (...args) => {
-			scan.push(args);
+			scan.push(Object.cast(args));
 		});
 
 		expect(scan).toEqual([
@@ -182,10 +182,10 @@ describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of an object with skipping of own properties', () => {
 		const
 			data = {a: 1, b: 2, __proto__: {c: 3}},
-			scan = [];
+			scan: Array<[number, string, typeof data]> = [];
 
 		Object.forEach(data, {propsToIterate: 'inherited'}, (...args) => {
-			scan.push(args);
+			scan.push(Object.cast(args));
 		});
 
 		expect(scan).toEqual([[3, 'c', data]]);
@@ -194,10 +194,10 @@ describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of an object with skipping of own properties (legacy)', () => {
 		const
 			data = {a: 1, b: 2, __proto__: {c: 3}},
-			scan = [];
+			scan: Array<[number, string, typeof data]> = [];
 
 		Object.forEach(data, {notOwn: -1}, (...args) => {
-			scan.push(args);
+			scan.push(Object.cast(args));
 		});
 
 		expect(scan).toEqual([[3, 'c', data]]);
@@ -206,7 +206,7 @@ describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of an object with non-enumerable properties', () => {
 		const
 			data = {a: 1},
-			scan = [];
+			scan: Array<[number, string, Dictionary]> = [];
 
 		Object.defineProperty(data, 'b', {value: 2});
 
@@ -224,10 +224,10 @@ describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of an iterator with object flags', () => {
 		const
 			data = Object.assign([1, 2, 3].values(), {a: 1}),
-			scan = [];
+			scan: Array<[number, string, typeof data]> = [];
 
 		Object.forEach(data, {propsToIterate: 'own'}, (...args) => {
-			scan.push(args);
+			scan.push(Object.cast(args));
 		});
 
 		expect(scan).toEqual([[1, 'a', expect.anything()]]);
@@ -237,10 +237,10 @@ describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of an iterator with object flags (legacy)', () => {
 		const
 			data = Object.assign([1, 2, 3].values(), {a: 1}),
-			scan = [];
+			scan: Array<[number, string, typeof data]> = [];
 
 		Object.forEach(data, {notOwn: false}, (...args) => {
-			scan.push(args);
+			scan.push(Object.cast(args));
 		});
 
 		expect(scan).toEqual([[1, 'a', expect.anything()]]);

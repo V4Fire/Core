@@ -10,7 +10,15 @@ import proxyReadonly from 'core/object/proxy-readonly';
 
 describe('core/object/proxy-readonly', () => {
 	it('readonly object', () => {
-		const original = {
+		interface User {
+			user: {
+				name?: string;
+				age: number;
+				skills: string[];
+			};
+		}
+
+		const original: User = {
 			user: {
 				name: 'Bob',
 				age: 56,
@@ -61,17 +69,17 @@ describe('core/object/proxy-readonly', () => {
 		const
 			readonly = proxyReadonly(original);
 
-		expect(() => readonly.get('user').name = 'Jack')
+		expect(() => readonly.get('user')!.name = 'Jack')
 			.toThrowError("'set' on proxy: trap returned falsish for property 'name'");
 
-		readonly.get('user').skills.add('boxing');
+		readonly.get('user')?.skills.add('boxing');
 
-		expect(readonly.get('user').name).toBe('Bob');
-		expect(original.get('user').name).toBe('Bob');
+		expect(readonly.get('user')?.name).toBe('Bob');
+		expect(original.get('user')?.name).toBe('Bob');
 
-		expect(readonly.get('user').skills).toBeInstanceOf(Set);
-		expect([...readonly.get('user').skills]).toEqual(['singing', 'dancing', 'programming']);
-		expect([...original.get('user').skills]).toEqual(['singing', 'dancing', 'programming']);
+		expect(readonly.get('user')?.skills).toBeInstanceOf(Set);
+		expect([...readonly.get('user')!.skills]).toEqual(['singing', 'dancing', 'programming']);
+		expect([...original.get('user')!.skills]).toEqual(['singing', 'dancing', 'programming']);
 	});
 
 	it('readonly object with WeakMap/WeakSet properties', () => {
@@ -97,17 +105,17 @@ describe('core/object/proxy-readonly', () => {
 		const
 			readonly = proxyReadonly(original);
 
-		expect(() => readonly.get(user).name = 'Jack')
+		expect(() => readonly.get(user)!.name = 'Jack')
 			.toThrowError("'set' on proxy: trap returned falsish for property 'name'");
 
-		readonly.get(user).skills.add(boxing);
+		readonly.get(user)?.skills.add(boxing);
 
-		expect(readonly.get(user).name).toBe('Bob');
-		expect(original.get(user).name).toBe('Bob');
+		expect(readonly.get(user)?.name).toBe('Bob');
+		expect(original.get(user)?.name).toBe('Bob');
 
-		expect(readonly.get(user).skills).toBeInstanceOf(WeakSet);
-		expect(readonly.get(user).skills.has(boxing)).toBe(false);
-		expect(original.get(user).skills.has(boxing)).toBe(false);
+		expect(readonly.get(user)?.skills).toBeInstanceOf(WeakSet);
+		expect(readonly.get(user)?.skills.has(boxing)).toBe(false);
+		expect(original.get(user)?.skills.has(boxing)).toBe(false);
 	});
 
 	it('readonly iterable object', () => {
@@ -127,32 +135,32 @@ describe('core/object/proxy-readonly', () => {
 		const
 			readonly = proxyReadonly(original);
 
-		for (const el of readonly.get('user').skills) {
+		for (const el of readonly.get('user')!.skills) {
 			expect(() => el.type = [...el.type].reverse().join(''))
 				.toThrowError("'set' on proxy: trap returned falsish for property 'type'");
 		}
 
-		expect([...readonly.get('user').skills]).toEqual([
+		expect([...readonly.get('user')!.skills]).toEqual([
 			{type: 'singing'},
 			{type: 'dancing'}
 		]);
 
-		expect([...original.get('user').skills]).toEqual([
+		expect([...original.get('user')!.skills]).toEqual([
 			{type: 'singing'},
 			{type: 'dancing'}
 		]);
 
-		for (const el of readonly.get('user').skillsSet) {
+		for (const el of readonly.get('user')!.skillsSet) {
 			expect(() => el.type = [...el.type].reverse().join(''))
 				.toThrowError("'set' on proxy: trap returned falsish for property 'type'");
 		}
 
-		expect([...readonly.get('user').skillsSet]).toEqual([
+		expect([...readonly.get('user')!.skillsSet]).toEqual([
 			{type: 'singing'},
 			{type: 'dancing'}
 		]);
 
-		expect([...original.get('user').skillsSet]).toEqual([
+		expect([...original.get('user')!.skillsSet]).toEqual([
 			{type: 'singing'},
 			{type: 'dancing'}
 		]);

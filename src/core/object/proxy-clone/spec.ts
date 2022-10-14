@@ -10,7 +10,7 @@ import proxyClone from 'core/object/proxy-clone';
 
 describe('core/object/proxy-clone', () => {
 	it('cloning an object', () => {
-		const original = {
+		const original: {user: {name?: string; age: number; skills: string[]}} = {
 			user: {
 				name: 'Bob',
 				age: 56,
@@ -39,7 +39,7 @@ describe('core/object/proxy-clone', () => {
 	});
 
 	it('getting `Object.keys` from the clone object', () => {
-		const original = {
+		const original: Dictionary<CanArray<number>> = {
 			a: 1,
 			b: [1, 2, 3]
 		};
@@ -52,8 +52,8 @@ describe('core/object/proxy-clone', () => {
 
 		expect(Object.keys(clone)).toEqual(['b', 'c']);
 
-		clone.b.push(4);
-		expect(Object.keys(clone.b)).toEqual(['0', '1', '2', '3']);
+		(<number[]>clone.b).push(4);
+		expect(Object.keys(Object.cast(clone.b))).toEqual(['0', '1', '2', '3']);
 	});
 
 	it('cloning an object with accessors', () => {
@@ -69,7 +69,7 @@ describe('core/object/proxy-clone', () => {
 					return this._age;
 				},
 
-				set age(value) {
+				set age(value: number) {
 					this._age = value * 2;
 				}
 			}
@@ -78,6 +78,8 @@ describe('core/object/proxy-clone', () => {
 		const
 			clone = proxyClone(original);
 
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
 		expect(() => clone.user.name = 'Jack')
 			.toThrowError("'set' on proxy: trap returned falsish for property 'name'");
 
@@ -86,6 +88,8 @@ describe('core/object/proxy-clone', () => {
 		expect(clone.user.age).toBe(10);
 		expect(original.user.age).toBe(56);
 
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
 		delete clone.user.name;
 
 		expect(clone.user.name).toBe(undefined);
@@ -95,7 +99,7 @@ describe('core/object/proxy-clone', () => {
 	});
 
 	it('cloning an object with descriptors', () => {
-		const original = {
+		const original: {user: {age?: number; name: string; newAge?: number}; bla?: number} = {
 			user: {
 				name: 'Bob'
 			}
@@ -175,7 +179,7 @@ describe('core/object/proxy-clone', () => {
 	});
 
 	it('cloning an array', () => {
-		const original = [
+		const original: Array<{name: string; age: number; skills?: string[]}> = [
 			{
 				name: 'Bob',
 				age: 56,
@@ -187,7 +191,7 @@ describe('core/object/proxy-clone', () => {
 			clone = proxyClone(original);
 
 		clone[0].name = 'Jack';
-		clone[0].skills.push('boxing');
+		clone[0].skills?.push('boxing');
 
 		clone.push({
 			name: 'Sam',
@@ -238,15 +242,15 @@ describe('core/object/proxy-clone', () => {
 		const
 			clone = proxyClone(original);
 
-		clone.get('user').name = 'Jack';
-		clone.get('user').skills.add('boxing');
+		clone.get('user')!.name = 'Jack';
+		clone.get('user')?.skills.add('boxing');
 
-		expect(clone.get('user').name).toBe('Jack');
-		expect(original.get('user').name).toBe('Bob');
+		expect(clone.get('user')?.name).toBe('Jack');
+		expect(original.get('user')?.name).toBe('Bob');
 
-		expect(clone.get('user').skills).toBeInstanceOf(Set);
-		expect([...clone.get('user').skills]).toEqual(['singing', 'dancing', 'programming', 'boxing']);
-		expect([...original.get('user').skills]).toEqual(['singing', 'dancing', 'programming']);
+		expect(clone.get('user')?.skills).toBeInstanceOf(Set);
+		expect([...clone.get('user')!.skills]).toEqual(['singing', 'dancing', 'programming', 'boxing']);
+		expect([...original.get('user')!.skills]).toEqual(['singing', 'dancing', 'programming']);
 	});
 
 	it('cloning an object with WeakMap/WeakSet properties', () => {
@@ -272,15 +276,15 @@ describe('core/object/proxy-clone', () => {
 		const
 			clone = proxyClone(original);
 
-		clone.get(user).name = 'Jack';
-		clone.get(user).skills.add(boxing);
+		clone.get(user)!.name = 'Jack';
+		clone.get(user)?.skills.add(boxing);
 
-		expect(clone.get(user).name).toBe('Jack');
-		expect(original.get(user).name).toBe('Bob');
+		expect(clone.get(user)?.name).toBe('Jack');
+		expect(original.get(user)?.name).toBe('Bob');
 
-		expect(clone.get(user).skills).toBeInstanceOf(WeakSet);
-		expect(clone.get(user).skills.has(boxing)).toBe(true);
-		expect(original.get(user).skills.has(boxing)).toBe(false);
+		expect(clone.get(user)?.skills).toBeInstanceOf(WeakSet);
+		expect(clone.get(user)?.skills.has(boxing)).toBe(true);
+		expect(original.get(user)?.skills.has(boxing)).toBe(false);
 	});
 
 	it('cloning an iterable object', () => {
@@ -300,30 +304,30 @@ describe('core/object/proxy-clone', () => {
 		const
 			clone = proxyClone(original);
 
-		for (const el of clone.get('user').skills) {
+		for (const el of clone.get('user')!.skills) {
 			el.type = [...el.type].reverse().join('');
 		}
 
-		expect([...clone.get('user').skills]).toEqual([
+		expect([...clone.get('user')!.skills]).toEqual([
 			{type: 'gnignis'},
 			{type: 'gnicnad'}
 		]);
 
-		expect([...original.get('user').skills]).toEqual([
+		expect([...original.get('user')!.skills]).toEqual([
 			{type: 'singing'},
 			{type: 'dancing'}
 		]);
 
-		for (const el of clone.get('user').skillsSet) {
+		for (const el of clone.get('user')!.skillsSet) {
 			el.type = [...el.type].reverse().join('');
 		}
 
-		expect([...clone.get('user').skillsSet]).toEqual([
+		expect([...clone.get('user')!.skillsSet]).toEqual([
 			{type: 'gnignis'},
 			{type: 'gnicnad'}
 		]);
 
-		expect([...original.get('user').skillsSet]).toEqual([
+		expect([...original.get('user')!.skillsSet]).toEqual([
 			{type: 'singing'},
 			{type: 'dancing'}
 		]);

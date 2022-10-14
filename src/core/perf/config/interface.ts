@@ -38,7 +38,7 @@ export interface PerfTimerConfig {
  * Settings to filter perf events by groups
  */
 export type PerfGroupFilters = {
-	[K in PerfGroup]?: PerfIncludeFilter | string[] | boolean;
+	[K in PerfGroup]?: PerfIncludeFilter | string[] | string | boolean;
 };
 
 /**

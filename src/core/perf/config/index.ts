@@ -75,9 +75,13 @@ export function mergeConfigs(baseConfig: PerfConfig, ...configs: Array<Partial<P
  * Preprocesses raw performance config filters and returns a collection of RegExp or Boolean values
  * @param filters - raw performance config filters
  */
-function createFilters(filters: CanUndef<PerfIncludeFilter | string[] | boolean>): RegExp[] | boolean {
+function createFilters(filters: CanUndef<PerfIncludeFilter | string[]| string | boolean>): RegExp[] | boolean {
 	if (filters == null || Object.isBoolean(filters)) {
 		return filters ?? true;
+	}
+
+	if (Object.isString(filters)) {
+		return [new RegExp(filters)];
 	}
 
 	if (Object.isArray(filters)) {

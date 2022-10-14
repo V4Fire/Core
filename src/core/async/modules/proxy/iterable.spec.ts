@@ -124,7 +124,7 @@ describe('core/async/modules/proxy `iterable`', () => {
 	});
 });
 
-function expectToBePending(promise) {
+function expectToBePending(promise: PromiseLike<any>) {
 	const want = {};
 
 	return SyncPromise.race([promise, SyncPromise.resolve(want)])

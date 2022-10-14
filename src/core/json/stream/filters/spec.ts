@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Parser from 'core/json/stream/parser';
+import Parser, { Token } from 'core/json/stream/parser';
 import { Filter, Pick } from 'core/json/stream/filters';
 
 describe('core/json/stream/filters', () => {
@@ -21,7 +21,7 @@ describe('core/json/stream/filters', () => {
 			}`;
 
 			const
-				tokens = [];
+				tokens: Token[] = [];
 
 			for await (const token of Parser.from([input], new Filter('a.b'))) {
 				tokens.push(token);
@@ -41,7 +41,7 @@ describe('core/json/stream/filters', () => {
 		it('filtering tokens by the specified RegExp', async () => {
 			const
 				input = '[{"a": 1}, [1], true, null]',
-				tokens = [];
+				tokens: Token[] = [];
 
 			for await (const token of Parser.from([input], new Filter(/^[02]\.?/))) {
 				tokens.push(token);
@@ -53,7 +53,7 @@ describe('core/json/stream/filters', () => {
 		it('filtering tokens by the specified function', async () => {
 			const
 				input = '[{"a": 1}, [1], true, {"a": 2}]',
-				tokens = [];
+				tokens: Token[] = [];
 
 			for await (const token of Parser.from([input], new Filter((stack) => stack.includes('a')))) {
 				tokens.push(token);
@@ -74,7 +74,7 @@ describe('core/json/stream/filters', () => {
 			}`;
 
 			const
-				tokens = [];
+				tokens: Token[] = [];
 
 			for await (const token of Parser.from([input], new Pick('a.b'))) {
 				tokens.push(Object.reject(token, 'filterComplete'));
@@ -86,7 +86,7 @@ describe('core/json/stream/filters', () => {
 		it('picking the first token matched with the specified RegExp', async () => {
 			const
 				input = '[{"a": 1}, [1], true, null]',
-				tokens = [];
+				tokens: Token[] = [];
 
 			for await (const token of Parser.from([input], new Pick(/^[02]\.?/))) {
 				tokens.push(Object.reject(token, 'filterComplete'));
@@ -98,7 +98,7 @@ describe('core/json/stream/filters', () => {
 		it('picking all tokens matched with the specified RegExp', async () => {
 			const
 				input = '[{"a": 1}, [1], true, null]',
-				tokens = [];
+				tokens: Token[] = [];
 
 			for await (const token of Parser.from([input], new Pick(/^[02]\.?/, {multiple: true}))) {
 				tokens.push(Object.reject(token, 'filterComplete'));
@@ -113,7 +113,7 @@ describe('core/json/stream/filters', () => {
 		it('picking the first token filtered by the specified function', async () => {
 			const
 				input = '[{"a": 1}, [1], true, {"a": 2}]',
-				tokens = [];
+				tokens: Token[] = [];
 
 			for await (const token of Parser.from([input], new Pick((stack) => stack.includes('a')))) {
 				tokens.push(Object.reject(token, 'filterComplete'));
@@ -126,7 +126,7 @@ describe('core/json/stream/filters', () => {
 		it('picking all tokens filtered by the specified function', async () => {
 			const
 				input = '[{"a": 1}, [1], true, {"a": 2}]',
-				tokens = [];
+				tokens: Token[] = [];
 
 			for await (const token of Parser.from([input], new Pick((stack) => stack.includes('a'), {multiple: true}))) {
 				tokens.push(Object.reject(token, 'filterComplete'));

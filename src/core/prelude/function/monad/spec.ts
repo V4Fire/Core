@@ -13,7 +13,7 @@ describe('core/prelude/function/monad', () => {
 
 		expect(await square(2)).toBe(4);
 		expect(await square(square(2))).toBe(16);
-		expect(await square(square.result()(2))).toBe(16);
+		expect(await square(await square.result()(2))).toBe(16);
 
 		expect(await square(null).catch((e) => e)).toBe(null);
 		expect(await square(undefined).catch((e) => e)).toBe(null);
@@ -53,7 +53,7 @@ describe('core/prelude/function/monad', () => {
 
 	it('`Object.Result`', async () => {
 		const
-			square = (n) => n * n,
+			square = (n: number) => n * n,
 			call = Object.Result((f, ...args) => f(...args)),
 			read = Object.Result((v) => v);
 

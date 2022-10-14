@@ -10,6 +10,8 @@
 
 import Pool from 'core/pool';
 
+type PoolsHookArgs = [number[], Pool<number[]>, ...unknown[]];
+
 describe('core/pool', () => {
 	describe('constructor', () => {
 		it('should create a pool with a zero size', () => {
@@ -224,9 +226,9 @@ describe('core/pool', () => {
 		});
 
 		it('attaching the `onTake` hook handler', () => {
-			const scan = [];
+			const scan: PoolsHookArgs[] = [];
 
-			const pool = new Pool(() => [], {
+			const pool = new Pool<number[]>(() => [], {
 				size: 1,
 				onTake: (...args) => {
 					scan.push(args);
@@ -250,9 +252,9 @@ describe('core/pool', () => {
 		});
 
 		it('attaching the `onFree` hook handler', () => {
-			const scan = [];
+			const scan: PoolsHookArgs[] = [];
 
-			const pool = new Pool(() => [], {
+			const pool = new Pool<number[]>(() => [], {
 				size: 1,
 				onFree: (...args) => {
 					scan.push(args);
@@ -328,9 +330,9 @@ describe('core/pool', () => {
 		});
 
 		it('attaching the `onTake` hook handler', () => {
-			const scan = [];
+			const scan: PoolsHookArgs[] = [];
 
-			const pool = new Pool((...values) => [...values], {
+			const pool = new Pool<number[]>((...values) => <number[]>[...values], {
 				onTake: (...args) => {
 					scan.push(args);
 				}
@@ -361,9 +363,9 @@ describe('core/pool', () => {
 		});
 
 		it('attaching the `onFree` hook handler', () => {
-			const scan = [];
+			const scan: PoolsHookArgs[] = [];
 
-			const pool = new Pool(() => [], {
+			const pool = new Pool<number[]>(() => [], {
 				onFree: (...args) => {
 					scan.push(args);
 				}
@@ -424,9 +426,9 @@ describe('core/pool', () => {
 		});
 
 		it('attaching the `onTake` hook handler', () => {
-			const scan = [];
+			const scan: PoolsHookArgs[] = [];
 
-			const pool = new Pool(() => [], {
+			const pool = new Pool<number[]>(() => [], {
 				size: 1,
 				onTake: (...args) => {
 					scan.push(args);
@@ -629,9 +631,9 @@ describe('core/pool', () => {
 		});
 
 		it('attaching the `onBorrow` hook handler', () => {
-			const scan = [];
+			const scan: PoolsHookArgs[] = [];
 
-			const pool = new Pool(() => [], {
+			const pool = new Pool<number[]>(() => [], {
 				size: 1,
 				onBorrow: (...args) => {
 					scan.push(args);
@@ -661,9 +663,9 @@ describe('core/pool', () => {
 		});
 
 		it('attaching the `onFree` hook handler', () => {
-			const scan = [];
+			const scan: PoolsHookArgs[] = [];
 
-			const pool = new Pool(() => [], {
+			const pool = new Pool<number[]>(() => [], {
 				size: 1,
 				onFree: (...args) => {
 					scan.push(args);
@@ -745,9 +747,9 @@ describe('core/pool', () => {
 		});
 
 		it('attaching the `onBorrow` hook handler', () => {
-			const scan = [];
+			const scan: PoolsHookArgs[] = [];
 
-			const pool = new Pool((...values) => [...values], {
+			const pool = new Pool<number[]>((...values) => <number[]>[...values], {
 				onBorrow: (...args) => {
 					scan.push(args);
 				}
@@ -778,9 +780,9 @@ describe('core/pool', () => {
 		});
 
 		it('attaching the `onFree` hook handler', () => {
-			const scan = [];
+			const scan: PoolsHookArgs[] = [];
 
-			const pool = new Pool(() => [], {
+			const pool = new Pool<number[]>(() => [], {
 				onFree: (...args) => {
 					scan.push(args);
 				}
@@ -840,9 +842,9 @@ describe('core/pool', () => {
 		});
 
 		it('attaching the `onBorrow` hook handler', () => {
-			const scan = [];
+			const scan: PoolsHookArgs[] = [];
 
-			const pool = new Pool(() => [], {
+			const pool = new Pool<number[]>(() => [], {
 				size: 1,
 				onBorrow: (...args) => {
 					scan.push(args);
@@ -873,7 +875,7 @@ describe('core/pool', () => {
 	describe('`clear`', () => {
 		it('should clear all available and unavailable resources', async () => {
 			const
-				scan = [];
+				scan: unknown[][] = [];
 
 			const pool = new Pool((...values) => [...values], (i) => [i], {
 				size: 3,
@@ -898,7 +900,7 @@ describe('core/pool', () => {
 			expect(pool.size).toBe(1);
 			expect(pool.available).toBe(0);
 
-			expect(scan.sort(([a], [b]) => a - b)).toEqual([
+			expect(scan.sort(([a], [b]) => <number>a - <number>b)).toEqual([
 				[0],
 				[1],
 				[2]
@@ -906,9 +908,9 @@ describe('core/pool', () => {
 		});
 
 		it('attaching the `onClear` hook handler', () => {
-			const scan = [];
+			const scan: Array<[Pool<number[]>, ...unknown[]]> = [];
 
-			const pool = new Pool(() => [], {
+			const pool = new Pool<number[]>(() => [], {
 				size: 3,
 				onClear: (...args) => {
 					scan.push(args);

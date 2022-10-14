@@ -8,14 +8,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Parser from 'core/json/stream/parser';
+import Parser, { Token } from 'core/json/stream/parser';
 
 describe('core/json/stream/parser', () => {
 	describe('parsing of primitive values', () => {
 		it('integer numbers', async () => {
 			{
 				const
-					tokens = [];
+					tokens: Token[] = [];
 
 				for await (const token of Parser.from('100500')) {
 					tokens.push(token);
@@ -36,7 +36,7 @@ describe('core/json/stream/parser', () => {
 
 			{
 				const
-					tokens = [];
+					tokens: Token[] = [];
 
 				for await (const token of Parser.from('-12')) {
 					tokens.push(token);
@@ -56,7 +56,7 @@ describe('core/json/stream/parser', () => {
 		it('numbers with a floating points', async () => {
 			{
 				const
-					tokens = [];
+					tokens: Token[] = [];
 
 				for await (const token of Parser.from('12.3')) {
 					tokens.push(token);
@@ -75,7 +75,7 @@ describe('core/json/stream/parser', () => {
 
 			{
 				const
-					tokens = [];
+					tokens: Token[] = [];
 
 				for await (const token of Parser.from('-12.300')) {
 					tokens.push(token);
@@ -99,7 +99,7 @@ describe('core/json/stream/parser', () => {
 		it('numbers in an exponential form', async () => {
 			{
 				const
-					tokens = [];
+					tokens: Token[] = [];
 
 				for await (const token of Parser.from('12e10')) {
 					tokens.push(token);
@@ -119,7 +119,7 @@ describe('core/json/stream/parser', () => {
 
 			{
 				const
-					tokens = [];
+					tokens: Token[] = [];
 
 				for await (const token of Parser.from('-1E2')) {
 					tokens.push(token);
@@ -138,7 +138,7 @@ describe('core/json/stream/parser', () => {
 
 			{
 				const
-					tokens = [];
+					tokens: Token[] = [];
 
 				for await (const token of Parser.from('-1.4e2')) {
 					tokens.push(token);
@@ -159,7 +159,7 @@ describe('core/json/stream/parser', () => {
 
 			{
 				const
-					tokens = [];
+					tokens: Token[] = [];
 
 				for await (const token of Parser.from('4.4e-2')) {
 					tokens.push(token);
@@ -180,7 +180,7 @@ describe('core/json/stream/parser', () => {
 
 			{
 				const
-					tokens = [];
+					tokens: Token[] = [];
 
 				for await (const token of Parser.from('-4.4e-2')) {
 					tokens.push(token);
@@ -204,7 +204,7 @@ describe('core/json/stream/parser', () => {
 		it('strings', async () => {
 			{
 				const
-					tokens = [];
+					tokens: Token[] = [];
 
 				for await (const token of Parser.from('"foo bar"')) {
 					tokens.push(token);
@@ -226,7 +226,7 @@ describe('core/json/stream/parser', () => {
 
 			{
 				const
-					tokens = [];
+					tokens: Token[] = [];
 
 				for await (const token of Parser.from(['"foo\t\tbar"'])) {
 					tokens.push(token);
@@ -292,7 +292,7 @@ describe('core/json/stream/parser', () => {
 		};
 
 		const
-			tokens = [];
+			tokens: Token[] = [];
 
 		for await (const token of Parser.from(createChunkIterator(input, 3))) {
 			tokens.push(token);
@@ -382,7 +382,7 @@ describe('core/json/stream/parser', () => {
 
 		const
 			iter = createChunkIterator(input, 10),
-			tokens = [];
+			tokens: Token[] = [];
 
 		for (const chunk of iter) {
 			for (const token of parser.processChunk(chunk)) {
@@ -443,7 +443,7 @@ describe('core/json/stream/parser', () => {
 	it('should throw an error if a JSON chunk is invalid', () => {
 		const
 			parser = new Parser(),
-			tokens = [];
+			tokens: Token[] = [];
 
 		const
 			input = '{"key1":1}garbage{"key3":2}',
@@ -463,7 +463,7 @@ describe('core/json/stream/parser', () => {
 	it("should throw an error if double quotes don't wrap a JSON object key", () => {
 		const
 			parser = new Parser(),
-			tokens = [];
+			tokens: Token[] = [];
 
 		const
 			input = '{key: 1}',
@@ -483,7 +483,7 @@ describe('core/json/stream/parser', () => {
 	it('should throw an error if single quotes wrap a JSON object key', () => {
 		const
 			parser = new Parser(),
-			tokens = [];
+			tokens: Token[] = [];
 
 		const
 			input = "{'key': 1}",
@@ -501,9 +501,9 @@ describe('core/json/stream/parser', () => {
 	});
 });
 
-function createChunkIterator(input, step = 1) {
+function createChunkIterator(input: Dictionary | string, step: number = 1) {
 	const
-		data = typeof input === 'string' ? input : JSON.stringify(input);
+		data = Object.isString(input) ? input : JSON.stringify(input);
 
 	let
 		index = 0;

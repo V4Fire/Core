@@ -63,6 +63,9 @@ describe('core/perf/timer', () => {
 				const timer = factory.getTimer('components');
 				const timerId = timer.start('button');
 				expect(timerId).toBeTruthy();
+
+				const timerId2 = timer.start('auth');
+				expect(timerId2).toBeFalsy();
 			});
 		});
 
@@ -130,8 +133,11 @@ describe('core/perf/timer', () => {
 			it('returns timers that work only if they match to the passed filters settings', () => {
 				const factory = getTimerFactory({engine: 'console', filters: {components: 'button$'}});
 				const timer = factory.getScopedTimer('components', 'main-page');
-				const timerId = timer.start('auth');
+				const timerId = timer.start('button');
 				expect(timerId).toBeTruthy();
+
+				const timerId2 = timer.start('auth');
+				expect(timerId2).toBeFalsy();
 			});
 		});
 	});
@@ -186,7 +192,7 @@ describe('core/perf/timer', () => {
 			const firstTimerId = firstTimer.start('parsing');
 			expect(firstTimerId).toBeTruthy();
 
-			const secondTimer = secondFactory.getTimer('manual', 'helpers');
+			const secondTimer = secondFactory.getTimer('manual');
 			const secondTimerId = secondTimer.start('parsing');
 			expect(secondTimerId).toBeTruthy();
 

@@ -182,7 +182,7 @@ describe('core/object/select', () => {
 		});
 
 		it('`where` as an array', () => {
-			const obj = new Map([
+			const obj = new Map<number | Dictionary, Dictionary>([
 				[1, {foo: 1, bla: 2}],
 				[{}, {baz: 3}]
 			]);

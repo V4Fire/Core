@@ -9,12 +9,14 @@
 import { intoIter } from 'core/iter';
 import { sequence } from 'core/iter/combinators';
 import { from, filter, pick, andPick, assemble, streamArray, streamObject } from 'core/json/stream';
+import type { Token } from 'core/json/stream/parser';
+import type { StreamedArray, StreamedObject } from 'core/json/stream/streamers';
 
 describe('core/json/stream', () => {
 	describe('`from`', () => {
 		it('should parse sync JSON stream to tokens', async () => {
 			const
-				tokens = [];
+				tokens: Token[] = [];
 
 			for await (const token of from(['[1, {"a": 1}, true]'])) {
 				tokens.push(token);
@@ -43,7 +45,7 @@ describe('core/json/stream', () => {
 
 		it('should parse async JSON stream to tokens', async () => {
 			const
-				tokens = [];
+				tokens: Token[] = [];
 
 			for await (const token of from(intoAsyncIter(['[1, {"a', '": 1},', 'true]']))) {
 				tokens.push(token);
@@ -74,7 +76,7 @@ describe('core/json/stream', () => {
 	describe('filters', () => {
 		it('should filter JSON tokens and preserves only that matched to a filter', async () => {
 			const
-				tokens = [];
+				tokens: Token[] = [];
 
 			for await (const token of filter(from(['{"a": 1, "b": 2, "data": [1, 2, 3]}']), /data/)) {
 				tokens.push(token);
@@ -106,7 +108,7 @@ describe('core/json/stream', () => {
 
 		it('should pick tokens from a stream by the specified selector', async () => {
 			const
-				tokens = [];
+				tokens: Token[] = [];
 
 			for await (const token of pick(from('{"a": 1, "b": 2, "data": [1, 2, 3]}'), /data/)) {
 				tokens.push(token);
@@ -147,7 +149,7 @@ describe('core/json/stream', () => {
 			);
 
 			const
-				res = [];
+				res: any[] = [];
 
 			for await (const val of seq) {
 				res.push(val);
@@ -183,7 +185,7 @@ describe('core/json/stream', () => {
 	describe('streamers', () => {
 		it('should stream array elements from JSON tokens', async () => {
 			const
-				elements = [];
+				elements: StreamedArray[] = [];
 
 			for await (const el of streamArray(from('[{"a": 1}, true, 0.1e12]'))) {
 				elements.push(el);
@@ -198,7 +200,7 @@ describe('core/json/stream', () => {
 
 		it('should stream object elements from JSON tokens', async () => {
 			const
-				elements = [];
+				elements: StreamedObject[] = [];
 
 			for await (const el of streamObject(from('{"a": 1, "b": [1, 2], "c": true, "d": {"a": 1}'))) {
 				elements.push(el);
@@ -214,7 +216,7 @@ describe('core/json/stream', () => {
 	});
 });
 
-async function* intoAsyncIter(source) {
+async function* intoAsyncIter(source: Iterable<any>) {
 	for (const val of source) {
 		await new Promise((resolve) => setTimeout(resolve, 10));
 		yield val;

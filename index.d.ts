@@ -972,6 +972,32 @@ interface ObjectConstructor {
 	): void;
 
 	/**
+	 * Iterates over the specified string
+	 *
+	 * @param obj - string
+	 * @param cb - callback function that is called on each symbol in string
+	 * @param [opts] - additional options
+	 */
+	forEach(
+		obj: string,
+		cb: (el: string, i: number, data: string) => any,
+		opts?: ObjectForEachOptions
+	): void;
+
+	/**
+	 * Iterates over the specified string
+	 *
+	 * @param obj - string
+	 * @param opts - additional options
+	 * @param cb - callback function that is called on each symbol in string
+	 */
+	forEach(
+		obj: string,
+		opts: ObjectForEachOptions,
+		cb: (el: string, key: number, data: string) => any
+	): void;
+
+	/**
 	 * Iterates over the specified iterable object
 	 *
 	 * @param obj - object to iterate
@@ -1700,7 +1726,7 @@ interface ObjectConstructor {
 	 * ```
 	 */
 	Result<A1, A extends any[], R>(value: (a1: A1, ...a: A) => R):
-		(a1: Maybe<A1> | Either<A1>, ...rest: A) => Either<R>;
+		(a1: A1 | Maybe<A1> | Either<A1>, ...rest: A) => Either<R>;
 
 	/**
 	 * Wraps the specified value into the Either structure
@@ -3985,7 +4011,7 @@ interface Function {
 	 * ```
 	 */
 	result<A1, A extends any[], R>(this: (a1: A1, ...rest: A) => R):
-		(a1: Parameters<this['option']>[0] | Maybe<A1> | Either<A1>, ...rest: A) => Either<R>;
+		(a1: A1 | Maybe<A1> | Either<A1>, ...rest: A) => Either<R>;
 
 	/**
 	 * Returns a curried equivalent of the function.

@@ -71,7 +71,7 @@ describe('core/perf/timer/impl', () => {
 			it('throws an exception if metrics name is not defined', () => {
 				const runner = new PerfTimersRunner(testEngine);
 				const timer = runner.createTimer('manual');
-				expect(() => timer.start(undefined)).toThrowError('The metrics name should be defined');
+				expect(() => timer.start(Object.cast(undefined))).toThrowError('The metrics name should be defined');
 			});
 
 			it('throws an exception if metrics name is empty', () => {
@@ -189,7 +189,7 @@ describe('core/perf/timer/impl', () => {
 			it('throws an exception if metrics name is not defined', () => {
 				const runner = new PerfTimersRunner(testEngine);
 				const timer = runner.createTimer('manual');
-				expect(() => timer.markTimestamp(undefined)).toThrowError();
+				expect(() => timer.markTimestamp(Object.cast(undefined))).toThrowError();
 			});
 
 			it('throws an exception if metrics name is empty', () => {
@@ -330,7 +330,7 @@ describe('core/perf/timer/impl', () => {
 			it('throws an exception if passed namespace is undefined', () => {
 				const runner = new PerfTimersRunner(testEngine);
 				const timer = runner.createTimer('network');
-				expect(() => timer.namespace(undefined)).toThrowError();
+				expect(() => timer.namespace(Object.cast(undefined))).toThrowError();
 			});
 
 			it('throws an exception if passed namespace is empty', () => {
