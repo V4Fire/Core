@@ -288,7 +288,7 @@ describe('core/async/modules/wrappers', () => {
 
 		mainMethods.forEach(testMethod);
 
-		function testMethod(methodName) {
+		function testMethod(methodName: string) {
 			describe(`\`${methodName}\``, () => {
 				it('should call the original method and return its result', async () => {
 					const

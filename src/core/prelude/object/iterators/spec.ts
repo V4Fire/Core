@@ -10,7 +10,7 @@ describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of an array', () => {
 		const
 			data = [1, 2, 3],
-			scan = [];
+			scan: Array<[number, number, number[]]> = [];
 
 		Object.forEach(data, (...args) => {
 			scan.push(args);
@@ -26,7 +26,7 @@ describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of a string', () => {
 		const
 			data = 'foo',
-			scan = [];
+			scan: Array<[string, null, Iterable<string>]> = [];
 
 		Object.forEach(data, (...args) => {
 			scan.push(args);
@@ -57,7 +57,7 @@ describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of a Map', () => {
 		const
 			data = new Map([[0, 1], [1, 2], [2, 3]]),
-			scan = [];
+			scan: Array<[number, number, Map<number, number>]> = [];
 
 		Object.forEach(data, (...args) => {
 			scan.push(args);
@@ -73,7 +73,7 @@ describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of a Set', () => {
 		const
 			data = new Set([1, 2, 3]),
-			scan = [];
+			scan: Array<[number, number, Set<number>]> = [];
 
 		Object.forEach(data, (...args) => {
 			scan.push(args);
@@ -89,7 +89,7 @@ describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of an iterator', () => {
 		const
 			data = [1, 2, 3].values(),
-			scan = [];
+			scan: Array<[number, null, Iterable<number>]> = [];
 
 		Object.forEach(data, (...args) => {
 			scan.push(args);
@@ -105,7 +105,7 @@ describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of an object', () => {
 		const
 			data = {a: 1, b: 2, __proto__: {c: 3}},
-			scan = [];
+			scan: Array<[number, string, Dictionary]> = [];
 
 		Object.forEach(data, (...args) => {
 			scan.push(args);

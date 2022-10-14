@@ -57,13 +57,13 @@ export function intoIter<T = unknown>(obj: ArrayLike<T>): IterableIterator<T>;
  * Creates an iterator from the passed generator function and returns it
  * @param obj
  */
-export function intoIter<T = unknown>(obj: GeneratorFunction): IterableIterator<T>;
+export function intoIter<T = unknown>(obj: () => Generator<T>): IterableIterator<T>;
 
 /**
  * Creates an iterator from the passed async generator function and returns it
  * @param obj
  */
-export function intoIter<T = unknown>(obj: AsyncGeneratorFunction): AsyncIterableIterator<T>;
+export function intoIter<T = unknown>(obj: () => AsyncGenerator<T>): AsyncIterableIterator<T>;
 
 /**
  * Creates a new iterator based on the specified iterable structure and returns it

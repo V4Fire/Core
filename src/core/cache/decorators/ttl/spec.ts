@@ -106,10 +106,11 @@ describe('core/cache/decorators/ttl', () => {
 	it('should delete a value from the storage if a side effect has deleted it', () => {
 		const
 			cache = addTTL(new RestrictedCache(1)),
-			memory = [];
+			memory: string[] = [];
 
 		cache.removeTTLFrom = (key) => {
 			memory.push(key);
+			return true;
 		};
 
 		cache.set('bar', 1, {ttl: 1000});
@@ -122,10 +123,11 @@ describe('core/cache/decorators/ttl', () => {
 		const
 			originalCache = new SimpleCache(),
 			cache = addTTL(originalCache),
-			memory = [];
+			memory: string[] = [];
 
 		cache.removeTTLFrom = (key) => {
 			memory.push(key);
+			return true;
 		};
 
 		cache.set('bar', 1, {ttl: 100});
@@ -140,10 +142,11 @@ describe('core/cache/decorators/ttl', () => {
 		const
 			originalCache = new SimpleCache(),
 			cache = addTTL(originalCache),
-			memory = [];
+			memory: string[] = [];
 
 		cache.removeTTLFrom = (key) => {
 			memory.push(key);
+			return true;
 		};
 
 		cache.set('bar', 1, {ttl: 100});

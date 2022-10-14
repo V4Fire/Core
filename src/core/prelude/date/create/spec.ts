@@ -17,7 +17,7 @@ describe('core/prelude/date/create', () => {
 			expect(Date.create().is(date, 10e3)).toBe(true);
 
 			for (let v = [null, undefined, ''], i = 0; i < v.length; i++) {
-				expect(Date.create(v[i]).is(date, 10e3)).toBe(true);
+				expect(Date.create(<undefined>v[i]).is(date, 10e3)).toBe(true);
 			}
 		});
 
@@ -52,6 +52,8 @@ describe('core/prelude/date/create', () => {
 				(today.getMonth() + 1).toString().padStart(2, 0),
 				today.getDate().toString().padStart(2, 0)
 			];
+
+			console.warn(chunks);
 
 			expect(Date.create(chunks.join('.'))).toEqual(today);
 			expect(Date.create(chunks.slice().reverse().join('.'))).toEqual(today);

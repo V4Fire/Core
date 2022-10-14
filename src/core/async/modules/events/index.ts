@@ -59,7 +59,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		events: CanArray<string>,
 		handler: ProxyCb<E, R, CTX>,
 		...args: unknown[]
-	): Nullable<EventId>;
+	): CanUndef<EventId>;
 
 	/**
 	 * Attaches an event listener from the specified event emitter.
@@ -78,7 +78,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		handler: ProxyCb<E, R, CTX>,
 		opts: AsyncOnOptions<CTX>,
 		...args: unknown[]
-	): Nullable<EventId>;
+	): CanUndef<EventId>;
 
 	on<E, R>(
 		emitter: EventEmitterLikeP,
@@ -86,7 +86,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		handler: ProxyCb<E, R, CTX>,
 		opts?: AsyncOnOptions<CTX> | unknown[],
 		...args: unknown[]
-	): Nullable<EventId> {
+	): CanUndef<EventId> {
 		let
 			p: AsyncOnOptions<CTX>;
 
@@ -197,7 +197,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			}
 		}
 
-		return events.length <= 1 ? links[0] ?? null : links;
+		return events.length <= 1 ? links[0] ?? undefined : links;
 	}
 
 	/**
@@ -215,7 +215,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		events: CanArray<string>,
 		handler: ProxyCb<E, R, CTX>,
 		...args: unknown[]
-	): Nullable<EventId>;
+	): CanUndef<EventId>;
 
 	/**
 	 * Attaches an event listener from the specified event emitter, but the event is listened only once.
@@ -234,7 +234,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		handler: ProxyCb<E, R, CTX>,
 		opts: AsyncOnceOptions<CTX>,
 		...args: unknown[]
-	): Nullable<EventId>;
+	): CanUndef<EventId>;
 
 	once<E, R>(
 		emitter: EventEmitterLikeP,
@@ -242,7 +242,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		handler: ProxyCb<E, R, CTX>,
 		opts?: AsyncOnceOptions<CTX> | unknown[],
 		...args: unknown[]
-	): Nullable<EventId> {
+	): CanUndef<EventId> {
 		let
 			p: AsyncOnceOptions<CTX>;
 

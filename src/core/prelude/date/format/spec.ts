@@ -25,6 +25,14 @@ describe('core/prelude/date/format', () => {
 		expect(Date.medium('en')(date)).toBe('October 18, 1989');
 	});
 
+	it('`long`', () => {
+		expect(date.long('en')).toBe('October 18, 1989, 10:10:10 AM');
+	});
+
+	it('`Date.long`', () => {
+		expect(Date.long('en')(date)).toBe('October 18, 1989, 10:10:10 AM');
+	});
+
 	it('`format`', () => {
 		expect(date.format('Y;M:2-digit', 'en')).toBe('10/1989');
 		expect(date.format({year: 'numeric'})).toBe('1989');

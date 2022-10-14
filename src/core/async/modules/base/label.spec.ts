@@ -13,8 +13,11 @@ const
 	$$ = symbolGenerator();
 
 describe('core/async/modules/base `label`', () => {
-	const onResolve = (res, label) => (v = label) => {
-		res.push(v);
+	const onResolve = (res: string[], label?: string) => (v = label) => {
+		if (v != null) {
+			res.push(v);
+		}
+
 		return label;
 	};
 
@@ -42,7 +45,7 @@ describe('core/async/modules/base `label`', () => {
 		const
 			$a = new Async(),
 			spy = jest.fn(),
-			res = [];
+			res: string[] = [];
 
 		$a.promise(Promise.resolve('first'), {label: $$.foo}).then(onResolve(res), onReject(spy));
 		$a.promise(Promise.resolve('second'), {label: $$.foo}).then(onResolve(res), onReject(spy));
@@ -73,7 +76,7 @@ describe('core/async/modules/base `label`', () => {
 	it('label collision with promises and joining', (done) => {
 		const
 			$a = new Async(),
-			res = [];
+			res: string[] = [];
 
 		$a.promise(Promise.resolve('first'), {label: $$.foo, join: true})
 			.then(onResolve(res));
@@ -91,7 +94,7 @@ describe('core/async/modules/base `label`', () => {
 		const
 			$a = new Async(),
 			spy = jest.fn(),
-			res = [];
+			res: string[] = [];
 
 		$a.setTimeout(onResolve(res, 'first'), 10, {label: $$.foo, join: 'replace', onClear: onReject(spy)});
 		$a.setTimeout(onResolve(res, 'second'), 10, {label: $$.foo, join: 'replace', onClear: onReject(spy)});
@@ -107,7 +110,7 @@ describe('core/async/modules/base `label`', () => {
 		const
 			$a = new Async(),
 			spy = jest.fn(),
-			res = [];
+			res: string[] = [];
 
 		$a.promise(Promise.resolve('first'), {label: $$.foo, join: 'replace'}).then(onResolve(res), onReject(spy));
 		$a.promise(Promise.resolve('second'), {label: $$.foo, join: 'replace'}).then(onResolve(res), onReject(spy));
@@ -121,7 +124,7 @@ describe('core/async/modules/base `label`', () => {
 	it('label collision with iterables and replacing', async () => {
 		const $a = new Async();
 
-		const result = [];
+		const result: number[] = [];
 
 		await Promise.all([
 			(async () => {
@@ -149,7 +152,7 @@ describe('core/async/modules/base `label`', () => {
 	it('label collision with iterables and join', async () => {
 		const $a = new Async();
 
-		const result = [];
+		const result: number[] = [];
 
 		await Promise.all([
 			(async () => {

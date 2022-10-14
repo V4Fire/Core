@@ -8,7 +8,7 @@
 
 import { asyncLocal } from 'core/kv-storage';
 
-import addPersistent from 'core/cache/decorators/persistent';
+import addPersistent, {PersistentOptions} from 'core/cache/decorators/persistent';
 import addTTL from 'core/cache/decorators/ttl';
 
 import RestrictedCache from 'core/cache/restricted';
@@ -19,7 +19,7 @@ describe('core/cache/decorators', () => {
 	it('complex test', async () => {
 		jest.spyOn(Date, 'now').mockReturnValue(0);
 
-		const opts = {
+		const opts: PersistentOptions = {
 			loadFromStorage: 'onInit'
 		};
 

@@ -13,7 +13,7 @@ describe('core/iter', () => {
 		it('passing `true` as a value', () => {
 			const
 				iter = intoIter(true),
-				res = [];
+				res: number[] = [];
 
 			let
 				i = 0;
@@ -33,7 +33,7 @@ describe('core/iter', () => {
 		it('passing `false` as a value', () => {
 			const
 				iter = intoIter(false),
-				res = [];
+				res: number[] = [];
 
 			let
 				i = 0;
@@ -94,13 +94,14 @@ describe('core/iter', () => {
 		});
 
 		it('passing an async generator as a value', async () => {
+			// eslint-disable-next-line @typescript-eslint/require-await
 			async function* gen() {
 				yield* [1, 2];
 			}
 
 			const
 				iter = intoIter(gen),
-				res = [];
+				res: number[] = [];
 
 			for await (const val of intoIter(gen)) {
 				res.push(val);
@@ -125,13 +126,14 @@ describe('core/iter', () => {
 		});
 
 		it('passing an async iterable as a value', async () => {
+			// eslint-disable-next-line @typescript-eslint/require-await
 			async function* gen() {
 				yield* [1, 2];
 			}
 
 			const
 				iter = intoIter(gen()),
-				res = [];
+				res: number[] = [];
 
 			for await (const val of intoIter(gen)) {
 				res.push(val);

@@ -29,7 +29,7 @@ describe('core/async/modules/timers', () => {
 		clear = clear || `clear-${method}`.camelize(false);
 
 		const
-			args = [];
+			args: number[] = [];
 
 		if (method === 'timeout' || method === 'interval') {
 			args.push(10);
@@ -220,7 +220,7 @@ describe('core/async/modules/timers', () => {
 		it(`\`${method}\``, (done) => {
 			const
 				$a = new Async(),
-				args = [];
+				args: Array<number | (() => boolean)> = [];
 
 			let
 				i = 0;

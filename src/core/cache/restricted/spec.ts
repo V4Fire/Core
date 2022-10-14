@@ -97,7 +97,7 @@ describe('core/cache/restricted', () => {
 	});
 
 	it('`clear` with a filter', () => {
-		const cache = new RestrictedCache();
+		const cache = new RestrictedCache<number, string>();
 
 		cache.set('foo', 1);
 		cache.set('bar', 2);

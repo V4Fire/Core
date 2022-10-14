@@ -74,7 +74,7 @@ describe('core/cache/simple', () => {
 	});
 
 	it('`clear` with a filter', () => {
-		const cache = new SimpleCache();
+		const cache = new SimpleCache<number, string>();
 
 		cache.set('foo', 1);
 		cache.set('bar', 2);

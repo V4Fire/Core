@@ -33,7 +33,7 @@ describe('core/iter/combinators', () => {
 			);
 
 			const
-				res = [];
+				res: any[] = [];
 
 			for await (const val of seq) {
 				res.push(val);

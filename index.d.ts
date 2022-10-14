@@ -3170,7 +3170,7 @@ interface DateConstructor {
 	 * @param opts
 	 * @param locale
 	 */
-	format(opts: Intl.NumberFormatOptions, locale?: CanArray<string>): (date: Date) => string;
+	format(opts: Intl.DateTimeFormatOptions, locale?: CanArray<string>): (date: Date) => string;
 
 	/**
 	 * Returns a string representation of the date by the specified pattern.
@@ -3259,7 +3259,7 @@ interface DateConstructor {
 	 * Returns a curried version of `Date.toHTMLTimeString`
 	 * @param opts - additional options
 	 */
-	toHTMLTimeString(opts: DateHTMLDateStringOptions): (date: Date) => string;
+	toHTMLTimeString(opts: DateHTMLTimeStringOptions): (date: Date) => string;
 
 	/**
 	 * Returns an HTML string representation of a timestamp from the date.
@@ -3985,7 +3985,7 @@ interface Function {
 	 * ```
 	 */
 	result<A1, A extends any[], R>(this: (a1: A1, ...rest: A) => R):
-		(a1: Maybe<A1> | Either<A1>, ...rest: A) => Either<R>;
+		(a1: Parameters<this['option']>[0] | Maybe<A1> | Either<A1>, ...rest: A) => Either<R>;
 
 	/**
 	 * Returns a curried equivalent of the function.

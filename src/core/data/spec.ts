@@ -9,13 +9,18 @@
 /* eslint-disable capitalized-comments,no-tabs */
 
 import express from 'express';
-import Provider, { provider, providers } from 'core/data';
+import Provider, { DecodersMap, EncodersMap, ModelMethod, provider, providers, RequestMethod } from 'core/data';
+import type { Server } from 'http';
+
+interface ResponseJson {
+	message: string;
+}
 
 describe('core/data', () => {
-	let server;
+	let server: CanUndef<Server>;
 
 	beforeEach(() => {
-		if (server) {
+		if (server != null) {
 			server.close();
 		}
 
@@ -23,17 +28,17 @@ describe('core/data', () => {
 	});
 
 	afterAll((done) => {
-		server.close(done);
+		server?.close(done);
 	});
 
 	it('simple provider', async () => {
 		@provider
 		class TestProvider extends Provider {
-			static request = Provider.request({api: {url: 'http://localhost:3000/'}});
+			static override request: typeof Provider.request = Provider.request<ResponseJson>({api: {url: 'http://localhost:3000/'}});
 
-			baseGetURL = 'json/1';
+			override baseGetURL: string = 'json/1';
 
-			baseAddURL = 'json';
+			override baseAddURL: string = 'json';
 		}
 
 		const
@@ -52,12 +57,12 @@ describe('core/data', () => {
 	it('provider with overrides', async () => {
 		@provider
 		class TestOverrideProvider extends Provider {
-			static request = Provider.request({api: {url: 'http://localhost:3000/'}});
+			static override request: typeof Provider.request = Provider.request({api: {url: 'http://localhost:3000/'}});
 		}
 
 		const
 			dp = new TestOverrideProvider(),
-			mdp = dp.name('bla').url('json');
+			mdp = dp.name(<ModelMethod>'bla').url('json');
 
 		const spy = jest.fn();
 		mdp.emitter.on('bla', async (getData) => spy('bla', await getData()));
@@ -70,42 +75,45 @@ describe('core/data', () => {
 
 	it('namespaced provider with encoders/decoders', async () => {
 		@provider('foo')
-		// eslint-disable-next-line no-unused-vars
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
 		class TestNamespacedProvider extends Provider {
-			static encoders = {
+			static override encoders: EncodersMap = {
 				upd: [
-					(data) => {
-						data.value = data.value.join('-');
+					(data: Dictionary) => {
+						if (Object.isArray(data.value)) {
+							data.value = data.value.join('-');
+						}
+
 						return data;
 					}
 				]
 			};
 
-			static decoders = {
+			static override decoders: DecodersMap = {
 				get: [
-					(data) => {
+					(data: Dictionary) => {
 						data.id = String(data.id);
 						return data;
 					}
 				]
 			};
 
-			baseGetURL = 'http://localhost:3000/json/1';
+			override baseGetURL: string = 'http://localhost:3000/json/1';
 
-			updMethod = 'POST';
+			override updMethod: RequestMethod = 'POST';
 
-			baseUpdURL = 'http://localhost:3000/json';
+			override baseUpdURL: string = 'http://localhost:3000/json';
 		}
 
 		const
 			// eslint-disable-next-line new-cap
-			dp = new providers['foo.TestNamespacedProvider']();
+			dp = new providers['foo.TestNamespacedProvider']!();
 
 		expect(await dp.get().data)
 			.toEqual({id: '1', value: 'things'});
 
 		const spy = jest.fn();
-		dp.emitter.on('upd', async (getData) => spy('upd', await getData()));
+		dp.emitter.on!('upd', async (getData) => spy('upd', await getData()));
 
 		expect(await dp.upd({id: 12345, value: ['abc', 'def', 'ghi']}).data)
 			.toEqual({message: 'Success'});
@@ -116,16 +124,16 @@ describe('core/data', () => {
 	it('`get` with extra providers', async () => {
 		@provider
 		class TestExtraProvider extends Provider {
-			baseGetURL = 'http://localhost:3000/json/1';
+			override baseGetURL: string = 'http://localhost:3000/json/1';
 		}
 
 		@provider
 		class TestProviderWithExtra extends Provider {
-			alias = 'foo';
+			override alias: string = 'foo';
 
-			baseGetURL = 'http://localhost:3000/json/1';
+			override baseGetURL: string = 'http://localhost:3000/json/1';
 
-			extraProviders = () => ({
+			override extraProviders = () => ({
 				TestExtraProvider: {
 					alias: 'bla'
 				},
@@ -133,7 +141,7 @@ describe('core/data', () => {
 				bar: {
 					provider: new TestExtraProvider()
 				}
-			})
+			});
 		}
 
 		const
@@ -147,7 +155,7 @@ describe('core/data', () => {
 	});
 });
 
-function createServer() {
+function createServer(): Server {
 	const serverApp = express();
 	serverApp.use(express.json());
 

@@ -9,7 +9,7 @@
 describe('core/prelude/function/monad', () => {
 	it('`option`', async () => {
 		const
-			square = ((n) => n * n).option();
+			square = ((n: number) => n * n).option();
 
 		expect(await square(2)).toBe(4);
 		expect(await square(square(2))).toBe(16);
@@ -38,7 +38,7 @@ describe('core/prelude/function/monad', () => {
 
 	it('`result`', async () => {
 		const
-			square = (n) => n * n,
+			square = (n: number) => n * n,
 			call = ((f, ...args) => f(...args)).result(),
 			read = ((v) => v).result();
 
