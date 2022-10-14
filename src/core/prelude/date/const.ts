@@ -6,8 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { createDict } from 'core/prelude/object/create';
+import { forEach } from 'core/prelude/object/iterators';
+
 export const
-	formatCache = Object.createDict<Intl.DateTimeFormat>();
+	formatCache = createDict<Intl.DateTimeFormat>();
 
 export const
 	dateChunkRgxp = /(\d{1,4}[-./]\d{1,2}[-./]\d{1,4})/,
@@ -22,7 +25,7 @@ export const
 	isDateStr = new RegExp(`^${dateChunkRgxp.source}${timeChunkRgxp.source}${zoneChunkRgxp.source}$`),
 	isFloatStr = /^\d+\.\d+$/;
 
-export const createAliases = Object.createDict({
+export const createAliases = createDict({
 	now: () => new Date(),
 	today: () => new Date().beginningOfDay(),
 
@@ -39,7 +42,7 @@ export const createAliases = Object.createDict({
 	}
 });
 
-export const formatAliases = Object.createDict({
+export const formatAliases = createDict({
 	e: 'era',
 	Y: 'year',
 	M: 'month',
@@ -51,7 +54,7 @@ export const formatAliases = Object.createDict({
 	z: 'timeZoneName'
 });
 
-Object.forEach(formatAliases, (val) => {
+forEach(formatAliases, (val) => {
 	formatAliases[val] = val;
 });
 
@@ -69,12 +72,12 @@ Object.forEach(formatAliases, (val) => {
 	formatAliases[`${formatAliases[key]}?`] = format;
 });
 
-export const boolAliases = Object.createDict({
+export const boolAliases = createDict({
 	'+': true,
 	'-': false
 });
 
-export const defaultFormats = Object.createDict(<Intl.DateTimeFormatOptions>{
+export const defaultFormats = createDict(<Intl.DateTimeFormatOptions>{
 	era: 'short',
 	year: 'numeric',
 	month: 'short',

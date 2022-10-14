@@ -9,65 +9,53 @@
 import extend from 'core/prelude/extend';
 import { createStaticDateComparator } from 'core/prelude/date/helpers';
 
+import { create } from 'core/prelude/date/create';
+
 /** @see [[Date.is]] */
-extend(Date.prototype, 'is', function is(this: Date, date: DateCreateValue, margin: number = 0): boolean {
-	return Math.abs(this.valueOf() - Date.create(date).valueOf()) <= margin;
+export const is = extend(Date.prototype, 'is', function is(this: Date, date: DateCreateValue, margin: number = 0): boolean {
+	return Math.abs(this.valueOf() - create(date).valueOf()) <= margin;
 });
 
-/** @see [[DateConstructor.is]] */
-extend(Date, 'is', createStaticDateComparator('is'));
-
 /** @see [[Date.isPast]] */
-extend(Date.prototype, 'isPast', function isPast(this: Date): boolean {
+export const isPast = extend(Date.prototype, 'isPast', function isPast(this: Date): boolean {
 	return this.valueOf() < Date.now();
 });
 
-/** @see [[DateConstructor.isPast]] */
-extend(Date, 'isPast', (date: Date) => date.isPast());
-
 /** @see [[Date.isFuture]] */
-extend(Date.prototype, 'isFuture', function isFuture(this: Date): boolean {
+export const isFuture = extend(Date.prototype, 'isFuture', function isFuture(this: Date): boolean {
 	return this.valueOf() > Date.now();
 });
 
-/** @see [[DateConstructor.isFuture]] */
-extend(Date, 'isFuture', (date: Date) => date.isFuture());
-
 /** @see [[Date.isAfter]] */
-extend(Date.prototype, 'isAfter', function isAfter(
+export const isAfter = extend(Date.prototype, 'isAfter', function isAfter(
 	this: Date,
 	date: DateCreateValue,
 	margin: number = 0
 ): boolean {
-	return this.valueOf() > Date.create(date).valueOf() - margin;
+	return this.valueOf() > create(date).valueOf() - margin;
 });
-
-/** @see [[DateConstructor.isAfter]] */
-extend(Date, 'isAfter', createStaticDateComparator('isAfter'));
 
 /** @see [[Date.isBefore]] */
-extend(Date.prototype, 'isBefore', function isBefore(
+export const isBefore = extend(Date.prototype, 'isBefore', function isBefore(
 	this: Date,
 	date: DateCreateValue,
 	margin: number = 0
 ): boolean {
-	return this.valueOf() < Date.create(date).valueOf() + margin;
+	return this.valueOf() < create(date).valueOf() + margin;
 });
 
-/** @see [[DateConstructor.isBefore]] */
-extend(Date, 'isBefore', createStaticDateComparator('isBefore'));
-
 /** @see [[Date.isBetween]] */
-extend(Date.prototype, 'isBetween', function isBetween(
+export const isBetween = extend(Date.prototype, 'isBetween', function isBetween(
 	this: Date,
 	left: DateCreateValue,
 	right: DateCreateValue,
 	margin: number = 0
 ): boolean {
 	const v = this.valueOf();
-	return v >= Date.create(left).valueOf() - margin && v <= Date.create(right).valueOf() + margin;
+	return v >= create(left).valueOf() - margin && v <= create(right).valueOf() + margin;
 });
 
+//#if standalone_runtime
 /** @see [[DateConstructor.isBetween]] */
 extend(Date, 'isBetween', function isBetween(
 	date: DateCreateValue,
@@ -89,3 +77,19 @@ extend(Date, 'isBetween', function isBetween(
 
 	return Date.create(date).isBetween(left!, right!, margin ?? 0);
 });
+
+/** @see [[DateConstructor.isBefore]] */
+extend(Date, 'isBefore', createStaticDateComparator('isBefore'));
+
+/** @see [[DateConstructor.isAfter]] */
+extend(Date, 'isAfter', createStaticDateComparator('isAfter'));
+
+/** @see [[DateConstructor.isFuture]] */
+extend(Date, 'isFuture', (date: Date) => date.isFuture());
+
+/** @see [[DateConstructor.isPast]] */
+extend(Date, 'isPast', (date: Date) => date.isPast());
+
+/** @see [[DateConstructor.is]] */
+extend(Date, 'is', createStaticDateComparator('is'));
+//#endif

@@ -19,10 +19,10 @@
   "typeAcquisition": {
     "exclude": ["node"]
   },
-  "exclude": [
-    "dist",
-    "config",
-    "node_modules",
-    "**/*.spec.ts"
+  "include": [
+    "src/**/*"
+  ],
+  "files": [
+    "index.d.ts"
   ]
 }

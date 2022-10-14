@@ -46,6 +46,7 @@ Icon
 # Build && test
 /dist
 /coverage
+/lib
 /.nyc_output
 
 .env

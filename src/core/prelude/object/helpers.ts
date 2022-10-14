@@ -6,6 +6,21 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import {
+
+	isTruly,
+	isDictionary,
+	isSet,
+	isMap,
+	isArray,
+	isCustomObject,
+	isWeakMap,
+	isWeakSet,
+	cast,
+	isArrayLike
+
+} from 'core/prelude/types';
+
 import type { GetTypeType } from 'core/prelude/object/interface';
 
 /**
@@ -13,15 +28,15 @@ import type { GetTypeType } from 'core/prelude/object/interface';
  * @param value
  */
 export function isContainer(value: unknown): boolean {
-	if (!Object.isTruly(value) || typeof value !== 'object') {
+	if (!isTruly(value) || typeof value !== 'object') {
 		return false;
 	}
 
-	if (Object.isArray(value) || Object.isDictionary(value) || Object.isMap(value) || Object.isSet(value)) {
+	if (isArray(value) || isDictionary(value) || isMap(value) || isSet(value)) {
 		return true;
 	}
 
-	return Object.isCustomObject(value!.constructor);
+	return isCustomObject(value!.constructor);
 }
 
 /**
@@ -29,15 +44,15 @@ export function isContainer(value: unknown): boolean {
  * @param value
  */
 export function canExtendProto(value: unknown): boolean {
-	if (!Object.isTruly(value) || typeof value !== 'object') {
+	if (!isTruly(value) || typeof value !== 'object') {
 		return false;
 	}
 
-	if (Object.isArray(value) || Object.isDictionary(value)) {
+	if (isArray(value) || isDictionary(value)) {
 		return true;
 	}
 
-	return Object.isCustomObject(value!.constructor);
+	return isCustomObject(value!.constructor);
 }
 
 /**
@@ -49,27 +64,27 @@ export function getType(value: unknown): GetTypeType {
 		return '';
 	}
 
-	if (Object.isArray(value)) {
+	if (isArray(value)) {
 		return 'array';
 	}
 
-	if (Object.isArrayLike(value)) {
+	if (isArrayLike(value)) {
 		return 'arrayLike';
 	}
 
-	if (Object.isMap(value)) {
+	if (isMap(value)) {
 		return 'map';
 	}
 
-	if (Object.isWeakMap(value)) {
+	if (isWeakMap(value)) {
 		return 'weakMap';
 	}
 
-	if (Object.isSet(value)) {
+	if (isSet(value)) {
 		return 'set';
 	}
 
-	if (Object.isWeakSet(value)) {
+	if (isWeakSet(value)) {
 		return 'weakSet';
 	}
 
@@ -85,22 +100,22 @@ export function getSameAs<T>(value: T): Nullable<T> {
 		res: unknown = null;
 
 	if (value != null && typeof value === 'object') {
-		if (Object.isArray(value)) {
+		if (isArray(value)) {
 			res = [];
 
-		} else if (Object.isDictionary(value)) {
+		} else if (isDictionary(value)) {
 			res = Object.getPrototypeOf(value) == null ? Object.create(null) : {};
 
-		} else if (Object.isMap(value)) {
+		} else if (isMap(value)) {
 			res = new Map();
 
-		} else if (Object.isSet(value)) {
+		} else if (isSet(value)) {
 			res = new Set();
 
-		} else if (Object.isCustomObject(Object.cast<object>(value).constructor)) {
+		} else if (isCustomObject(cast<object>(value).constructor)) {
 			res = {};
 		}
 	}
 
-	return Object.cast(res);
+	return cast(res);
 }

@@ -14,7 +14,6 @@ import {
 	camelizeCache,
 	dasherizeCache,
 	underscoreCache,
-
 	camelizeRgxp,
 	normalizeRgxp
 
@@ -30,8 +29,10 @@ import {
 
 } from 'core/prelude/string/helpers';
 
+import { isBoolean } from 'core/prelude/types';
+
 /** @see [[String.capitalize]] */
-extend(String.prototype, 'capitalize', function capitalize(
+export const capitalize = extend(String.prototype, 'capitalize', function capitalize(
 	this: string,
 	{lower, all, cache}: StringCapitalizeOptions = {}
 ): string {
@@ -69,18 +70,15 @@ extend(String.prototype, 'capitalize', function capitalize(
 	return res;
 });
 
-/** @see [[StringConstructor.capitalize]] */
-extend(String, 'capitalize', createStaticTransformFunction('capitalize'));
-
 /** @see [[String.camelize]] */
-extend(String.prototype, 'camelize', function camelize(
+export const camelize = extend(String.prototype, 'camelize', function camelize(
 	this: string,
 	upperOrOpts: boolean | StringCamelizeOptions
 ): string {
 	const
 		opts: StringCamelizeOptions = {};
 
-	if (Object.isBoolean(upperOrOpts)) {
+	if (isBoolean(upperOrOpts)) {
 		opts.upper = upperOrOpts;
 
 	} else {
@@ -112,18 +110,15 @@ extend(String.prototype, 'camelize', function camelize(
 	return res;
 });
 
-/** @see [[StringConstructor.camelize]] */
-extend(String, 'camelize', createStaticTransformFunction('camelize'));
-
 /** @see [[String.dasherize]] */
-extend(String.prototype, 'dasherize', function dasherize(
+export const dasherize = extend(String.prototype, 'dasherize', function dasherize(
 	this: string,
 	stableOrOpts?: boolean | StringDasherizeOptions
 ): string {
 	const
 		opts: StringDasherizeOptions = {};
 
-	if (Object.isBoolean(stableOrOpts)) {
+	if (isBoolean(stableOrOpts)) {
 		opts.stable = stableOrOpts;
 
 	} else {
@@ -154,18 +149,15 @@ extend(String.prototype, 'dasherize', function dasherize(
 	return res;
 });
 
-/** @see [[StringConstructor.dasherize]] */
-extend(String, 'dasherize', createStaticTransformFunction('dasherize'));
-
 /** @see [[String.underscore]] */
-extend(String.prototype, 'underscore', function underscore(
+export const underscore = extend(String.prototype, 'underscore', function underscore(
 	this: string,
 	stableOrOpts?: boolean | StringUnderscoreOptions
 ): string {
 	const
 		opts: StringUnderscoreOptions = {};
 
-	if (Object.isBoolean(stableOrOpts)) {
+	if (isBoolean(stableOrOpts)) {
 		opts.stable = stableOrOpts;
 
 	} else {
@@ -196,5 +188,16 @@ extend(String.prototype, 'underscore', function underscore(
 	return res;
 });
 
+//#if standalone_prelude
 /** @see [[StringConstructor.underscore]] */
 extend(String, 'underscore', createStaticTransformFunction('underscore'));
+
+/** @see [[StringConstructor.capitalize]] */
+extend(String, 'capitalize', createStaticTransformFunction('capitalize'));
+
+/** @see [[StringConstructor.dasherize]] */
+extend(String, 'dasherize', createStaticTransformFunction('dasherize'));
+
+/** @see [[StringConstructor.camelize]] */
+extend(String, 'camelize', createStaticTransformFunction('camelize'));
+//#endif

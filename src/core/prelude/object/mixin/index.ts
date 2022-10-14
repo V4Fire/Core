@@ -9,24 +9,36 @@
 import extend from 'core/prelude/extend';
 import { isContainer, canExtendProto, getType, getSameAs } from 'core/prelude/object/helpers';
 
+import {
+
+	isArray,
+	isTruly,
+	isFunction,
+	cast,
+	isBoolean
+
+} from 'core/prelude/types';
+import { get, set, hasOwnProperty } from 'core/prelude/object/property';
+import { forEach } from 'core/prelude/object/iterators';
+
 /** @see [[ObjectConstructor.mixin]] */
-extend(Object, 'mixin', function mixin(
+export const mixin = extend(Object, 'mixin', function mixin(
 	opts: ObjectMixinOptions | boolean,
 	target: unknown,
 	...objects: unknown[]
 ): unknown | AnyFunction {
 	if (arguments.length < 3) {
 		if (arguments.length === 2) {
-			return (...args) => Object.mixin(opts, target, ...args);
+			return (...args) => mixin(opts, target, ...args);
 		}
 
-		return (base, ...args) => Object.mixin(opts, base, ...args);
+		return (base, ...args) => mixin(opts, base, ...args);
 	}
 
 	const
 		p: ObjectMixinOptions = {};
 
-	if (Object.isBoolean(opts)) {
+	if (isBoolean(opts)) {
 		p.deep = opts;
 
 	} else {
@@ -35,10 +47,10 @@ extend(Object, 'mixin', function mixin(
 
 	const
 		skipUndefs = 'withUndef' in p ? !p.withUndef : p.skipUndefs !== false,
-		concatArrays = Object.isTruly(p.concatArrays) || p.concatArray === true,
+		concatArrays = isTruly(p.concatArrays) || p.concatArray === true,
 
 		// eslint-disable-next-line @typescript-eslint/unbound-method
-		concatFn = Object.isFunction(p.concatArrays) ? p.concatArrays : p.concatFn;
+		concatFn = isFunction(p.concatArrays) ? p.concatArrays : p.concatFn;
 
 	const
 		onlyAccessors = p.withDescriptors === 'onlyAccessors' || p.withAccessors === true,
@@ -103,7 +115,7 @@ extend(Object, 'mixin', function mixin(
 		}
 
 	} else {
-		resolvedTarget = Object.cast(target);
+		resolvedTarget = cast(target);
 	}
 
 	const
@@ -118,7 +130,7 @@ extend(Object, 'mixin', function mixin(
 		!concatArrays &&
 		!onlyAccessors &&
 		!withDescriptors &&
-		!Object.isTruly(onlyNew) &&
+		!isTruly(onlyNew) &&
 
 		!p.withProto &&
 		!p.withNonEnumerables &&
@@ -136,7 +148,7 @@ extend(Object, 'mixin', function mixin(
 		case 'weakMap':
 		case 'map':
 			setter = (data, key, val) => {
-				if (Object.isTruly(onlyNew) && data.has(key) !== (onlyNew === -1)) {
+				if (isTruly(onlyNew) && data.has(key) !== (onlyNew === -1)) {
 					return;
 				}
 
@@ -148,7 +160,7 @@ extend(Object, 'mixin', function mixin(
 		case 'weakSet':
 		case 'set':
 			setter = (data, key, val) => {
-				if (Object.isTruly(onlyNew) && data.has(val) !== (onlyNew === -1)) {
+				if (isTruly(onlyNew) && data.has(val) !== (onlyNew === -1)) {
 					return;
 				}
 
@@ -159,7 +171,7 @@ extend(Object, 'mixin', function mixin(
 
 		default:
 			setter = (data, key, val) => {
-				if (Object.isTruly(onlyNew) && key in data !== (onlyNew === -1)) {
+				if (isTruly(onlyNew) && key in data !== (onlyNew === -1)) {
 					return;
 				}
 
@@ -171,7 +183,7 @@ extend(Object, 'mixin', function mixin(
 
 	for (let i = 0; i < objects.length; i++) {
 		const
-			extender = Object.cast<Nullable<object>>(objects[i]);
+			extender = cast<Nullable<object>>(objects[i]);
 
 		if (extender == null) {
 			continue;
@@ -191,17 +203,17 @@ extend(Object, 'mixin', function mixin(
 			} else {
 				forEachParams.passDescriptor = withDescriptors || onlyAccessors;
 				forEachParams.withNonEnumerables = p.withNonEnumerables;
-				forEachParams.propsToIterate = Object.isTruly(p.deep) ? 'all' : 'own';
+				forEachParams.propsToIterate = isTruly(p.deep) ? 'all' : 'own';
 			}
 		}
 
-		Object.forEach(extender, forEachParams, (el, key: PropertyKey) => {
-			if (p.filter && !Object.isTruly(p.filter(el, key, extender))) {
+		forEach(extender, forEachParams, (el, key: PropertyKey) => {
+			if (p.filter && !isTruly(p.filter(el, key, extender))) {
 				return;
 			}
 
 			const propDesc = withDescriptors || onlyAccessors ?
-				Object.cast<PropertyDescriptor>(el) :
+				cast<PropertyDescriptor>(el) :
 				null;
 
 			const needExtendDescriptor = targetIsSimpleObj && extenderIsSimpleObj && (
@@ -210,7 +222,7 @@ extend(Object, 'mixin', function mixin(
 			);
 
 			if (needExtendDescriptor && propDesc != null) {
-				if (Object.isTruly(onlyNew) && key in resolvedTarget !== (onlyNew === -1)) {
+				if (isTruly(onlyNew) && key in resolvedTarget !== (onlyNew === -1)) {
 					return;
 				}
 
@@ -236,7 +248,7 @@ extend(Object, 'mixin', function mixin(
 			}
 
 			let
-				oldVal = Object.get(resolvedTarget, [key]);
+				oldVal = get(resolvedTarget, [key]);
 
 			const
 				newVal = extenderIsSimpleObj ? extender[key] : el;
@@ -246,10 +258,10 @@ extend(Object, 'mixin', function mixin(
 			}
 
 			let
-				canDeepExtend = Object.isTruly(newVal);
+				canDeepExtend = isTruly(newVal);
 
 			if (canDeepExtend && p.extendFilter != null) {
-				canDeepExtend = Object.isTruly(p.extendFilter(newVal, key, resolvedTarget));
+				canDeepExtend = isTruly(p.extendFilter(newVal, key, resolvedTarget));
 			}
 
 			let
@@ -257,7 +269,7 @@ extend(Object, 'mixin', function mixin(
 				struct;
 
 			if (canDeepExtend) {
-				newValIsArray = Object.isArray(newVal);
+				newValIsArray = isArray(newVal);
 				struct = newValIsArray ? [] : getSameAs(newVal);
 				canDeepExtend = struct != null;
 			}
@@ -269,17 +281,17 @@ extend(Object, 'mixin', function mixin(
 					canExtendProto(oldVal);
 
 				let
-					oldValIsArray = Object.isArray(oldVal);
+					oldValIsArray = isArray(oldVal);
 
-				if (canExtendOldValProto && !Object.hasOwnProperty(resolvedTarget, key)) {
+				if (canExtendOldValProto && !hasOwnProperty(resolvedTarget, key)) {
 					if (oldValIsArray) {
-						oldVal = Array.from(Object.cast(oldVal));
+						oldVal = Array.from(cast(oldVal));
 
 					} else {
-						oldVal = Object.create(Object.cast(oldVal));
+						oldVal = Object.create(cast(oldVal));
 					}
 
-					Object.set(resolvedTarget, [key], oldVal);
+					set(resolvedTarget, [key], oldVal);
 				}
 
 				let
@@ -292,7 +304,7 @@ extend(Object, 'mixin', function mixin(
 
 					if (!oldValIsArray && canExtendOldValProto && concatArrays) {
 						construct = Object.getPrototypeOf(oldVal);
-						oldValIsArray = construct != null && Object.isArray(construct);
+						oldValIsArray = construct != null && isArray(construct);
 						isProto = oldValIsArray;
 					}
 
@@ -301,7 +313,7 @@ extend(Object, 'mixin', function mixin(
 							const
 								old = isProto ? construct : oldVal;
 
-							const mergedArr = Object.isFunction(concatFn) ?
+							const mergedArr = isFunction(concatFn) ?
 								concatFn(old, newVal, key) :
 								old.concat(newVal);
 
@@ -329,7 +341,7 @@ extend(Object, 'mixin', function mixin(
 				}
 
 				const
-					mergedVal = Object.mixin(p, clone, newVal);
+					mergedVal = mixin(p, clone, newVal);
 
 				if (needExtendDescriptor && propDesc != null) {
 					Object.defineProperty(resolvedTarget, key, {
@@ -338,7 +350,7 @@ extend(Object, 'mixin', function mixin(
 					});
 
 				} else {
-					Object.set(resolvedTarget, [key], mergedVal);
+					set(resolvedTarget, [key], mergedVal);
 				}
 
 			} else {

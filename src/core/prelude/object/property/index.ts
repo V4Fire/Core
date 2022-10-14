@@ -8,8 +8,24 @@
 
 import extend from 'core/prelude/extend';
 
+import {
+
+	isPlainObject,
+	isString,
+	isPromiseLike,
+	isArray,
+	isDictionary,
+	isMap,
+	isWeakMap,
+	isSet,
+	isWeakSet,
+	cast,
+	isSymbol
+
+} from 'core/prelude/types';
+
 /** @see [[ObjectConstructor.get]] */
-extend(Object, 'get', (
+export const get = extend<typeof Object.get>(Object, 'get', (
 	obj: unknown,
 	path: ObjectPropertyPath | ObjectGetOptions,
 	opts?: ObjectGetOptions
@@ -19,15 +35,15 @@ extend(Object, 'get', (
 			curriedPath = obj,
 			curriedOpts = path;
 
-		return (obj) => Object.get(obj, Object.cast(curriedPath), Object.cast(curriedOpts));
+		return (obj) => get(obj, cast(curriedPath), cast(curriedOpts));
 	}
 
 	const
-		p = {separator: '.', ...Object.isPlainObject(path) ? path : opts};
+		p = {separator: '.', ...isPlainObject(path) ? path : opts};
 
-	const get = (path) => {
+	const getFunc = (path) => {
 		const
-			chunks = Object.isString(path) ? path.split(p.separator) : path;
+			chunks = isString(path) ? path.split(p.separator) : path;
 
 		let
 			res = obj;
@@ -40,39 +56,39 @@ extend(Object, 'get', (
 			const
 				key = chunks[i];
 
-			if (Object.isPromiseLike(res) && !(key in res)) {
+			if (isPromiseLike(res) && !(key in res)) {
 				res = res.then((val) => {
 					if (val == null) {
 						return;
 					}
 
-					if (Object.isMap(val) || Object.isWeakMap(val)) {
+					if (isMap(val) || isWeakMap(val)) {
 						return val.get(key);
 					}
 
-					return (Object.cast<Dictionary>(val))[key];
+					return (cast<Dictionary>(val))[key];
 				});
 
-			} else if (Object.isMap(res) || Object.isWeakMap(res)) {
+			} else if (isMap(res) || isWeakMap(res)) {
 				res = res.get(key);
 
 			} else {
-				res = Object.cast<Dictionary>(res)[key];
+				res = cast<Dictionary>(res)[key];
 			}
 		}
 
 		return res;
 	};
 
-	if (Object.isArray(path) || Object.isString(path)) {
-		return get(path);
+	if (isArray(path) || isString(path)) {
+		return getFunc(path);
 	}
 
-	return get;
+	return getFunc;
 });
 
 /** @see [[ObjectConstructor.has]] */
-extend(Object, 'has', (
+export const has = extend<typeof Object.has>(Object, 'has', (
 	obj: unknown,
 	path: ObjectPropertyPath | ObjectGetOptions,
 	opts?: ObjectGetOptions
@@ -82,15 +98,15 @@ extend(Object, 'has', (
 			curriedPath = obj,
 			curriedOpts = path;
 
-		return (obj) => Object.has(obj, Object.cast(curriedPath), Object.cast(curriedOpts));
+		return (obj) => has(obj, cast(curriedPath), cast(curriedOpts));
 	}
 
 	const
-		p = {separator: '.', ...Object.isPlainObject(path) ? path : opts};
+		p = {separator: '.', ...isPlainObject(path) ? path : opts};
 
-	const has = (path) => {
+	const hasFunc = (path) => {
 		const
-			chunks = Object.isString(path) ? path.split(p.separator) : path;
+			chunks = isString(path) ? path.split(p.separator) : path;
 
 		let
 			res = obj,
@@ -104,11 +120,11 @@ extend(Object, 'has', (
 			const
 				key = chunks[i];
 
-			if (Object.isMap(res) || Object.isWeakMap(res)) {
+			if (isMap(res) || isWeakMap(res)) {
 				res = res.get(key);
 
 			} else {
-				res = Object.cast<Dictionary>(res)[key];
+				res = cast<Dictionary>(res)[key];
 			}
 		}
 
@@ -119,7 +135,7 @@ extend(Object, 'has', (
 			return false;
 		}
 
-		if (Object.isMap(res) || Object.isSet(res) || Object.isWeakMap(res) || Object.isWeakSet(res)) {
+		if (isMap(res) || isSet(res) || isWeakMap(res) || isWeakSet(res)) {
 			return res.has(key);
 		}
 
@@ -127,11 +143,11 @@ extend(Object, 'has', (
 			return key in res;
 		}
 
-		return Object.cast<Dictionary>(res)[key] !== undefined;
+		return cast<Dictionary>(res)[key] !== undefined;
 	};
 
-	if (Object.isArray(path) || Object.isString(path)) {
-		return has(path);
+	if (isArray(path) || isString(path)) {
+		return hasFunc(path);
 	}
 
 	return has;
@@ -142,7 +158,7 @@ const
 	{hasOwnProperty: nativeHasOwnProperty} = Object.prototype;
 
 /** @see [[ObjectConstructor.hasOwnProperty]] */
-extend(Object, 'hasOwnProperty', function hasOwnProperty(
+export const hasOwnProperty = extend<typeof Object.hasOwnProperty>(Object, 'hasOwnProperty', function hasOwnProperty(
 	this: unknown,
 	obj: unknown,
 	key?: string | symbol
@@ -159,21 +175,21 @@ extend(Object, 'hasOwnProperty', function hasOwnProperty(
 		return nativeHasOwnProperty.call(obj, key);
 	}
 
-	if (Object.isString(obj) || Object.isSymbol(obj)) {
+	if (isString(obj) || isSymbol(obj)) {
 		key = obj;
-		return (obj) => Object.hasOwnProperty(obj, key!);
+		return (obj) => hasOwnProperty(obj, key);
 	}
 
-	return (key) => Object.hasOwnProperty(obj, key);
+	return (key) => hasOwnProperty(obj, key);
 });
 
 /** @see [[ObjectConstructor.defineSymbol]] */
-extend(Object, 'defineSymbol', function defineSymbol<T>(obj: T, symbol: symbol, value: unknown): T {
+export const defineSymbol = extend<typeof Object.defineSymbol>(Object, 'defineSymbol', function defineSymbol<T>(obj: T, symbol: symbol, value: unknown): T {
 	return Object.defineProperty(obj, symbol, {value, configurable: true, enumerable: false, writable: true});
 });
 
 /** @see [[ObjectConstructor.set]] */
-extend(Object, 'set', function set(
+export const set = extend<typeof Object.set>(Object, 'set', function set(
 	obj: unknown,
 	path: ObjectPropertyPath | ObjectGetOptions,
 	value: unknown,
@@ -186,7 +202,7 @@ extend(Object, 'set', function set(
 
 		return function wrapper(obj: unknown, newValue: unknown): unknown {
 			const val = arguments.length > 1 ? newValue : value;
-			Object.set(obj, Object.cast(curriedPath), val, Object.cast(curriedOpts));
+			set(obj, cast(curriedPath), val, cast(curriedOpts));
 			return obj;
 		};
 	}
@@ -194,29 +210,29 @@ extend(Object, 'set', function set(
 	const p: ObjectSetOptions = {
 		separator: '.',
 		concat: false,
-		...Object.isPlainObject(path) ? path : opts
+		...isPlainObject(path) ? path : opts
 	};
 
-	if (Object.isArray(path) || Object.isString(path)) {
+	if (isArray(path) || isString(path)) {
 		if (arguments.length < 2) {
 			return (value) => {
-				set(path, value);
+				setFunc(path, value);
 				return obj;
 			};
 		}
 
-		return set(path, value);
+		return setFunc(path, value);
 	}
 
 	return (path, ...args) => {
-		set(path, ...args);
+		setFunc(path, ...args);
 		return obj;
 	};
 
-	function set(path: ObjectPropertyPath, newValue?: unknown): unknown {
+	function setFunc(path: ObjectPropertyPath, newValue?: unknown): unknown {
 		const
 			finalValue = arguments.length > 1 ? newValue : value,
-			chunks = Object.isString(path) ? path.split(p.separator!) : path;
+			chunks = isString(path) ? path.split(p.separator!) : path;
 
 		let
 			ref = obj,
@@ -235,14 +251,14 @@ extend(Object, 'set', function set(
 				nextChunkIsObj = isNaN(Number(chunks[i + 1]));
 
 			let
-				isWeakMap;
+				isRefWeakMap;
 
-			if (Object.isMap(ref) || (isWeakMap = Object.isWeakMap(ref))) {
+			if (isMap(ref) || (isRefWeakMap = isWeakMap(ref))) {
 				let
 					val = ref.get(key);
 
 				if (val == null || typeof val !== 'object') {
-					if (isWeakMap === true && (key == null || typeof key !== 'object')) {
+					if (isRefWeakMap === true && (key == null || typeof key !== 'object')) {
 						return undefined;
 					}
 
@@ -260,7 +276,7 @@ extend(Object, 'set', function set(
 
 			} else {
 				const
-					box = Object.cast<object>(ref);
+					box = cast<object>(ref);
 
 				let
 					val = box[key];
@@ -281,10 +297,10 @@ extend(Object, 'set', function set(
 		}
 
 		let
-			isWeakMap;
+			isRefWeakMap;
 
-		if (Object.isMap(ref) || (isWeakMap = Object.isWeakMap(ref))) {
-			if (isWeakMap === true && (cursor == null || typeof cursor !== 'object')) {
+		if (isMap(ref) || (isRefWeakMap = isWeakMap(ref))) {
+			if (isRefWeakMap === true && (cursor == null || typeof cursor !== 'object')) {
 				return undefined;
 			}
 
@@ -302,7 +318,7 @@ extend(Object, 'set', function set(
 		}
 
 		const
-			box = Object.cast<object>(ref),
+			box = cast<object>(ref),
 			val = cursor in box && p.concat ? Array.concat([], box[cursor], finalValue) : finalValue;
 
 		if (p.setter != null) {
@@ -316,7 +332,7 @@ extend(Object, 'set', function set(
 });
 
 /** @see [[ObjectConstructor.delete]] */
-extend(Object, 'delete', (
+export const deleteObj = extend<typeof Object.delete>(Object, 'delete', (
 	obj: unknown,
 	path: ObjectPropertyPath | ObjectGetOptions,
 	opts?: ObjectGetOptions
@@ -326,15 +342,15 @@ extend(Object, 'delete', (
 			curriedPath = obj,
 			curriedOpts = path;
 
-		return (obj) => Object.delete(obj, Object.cast(curriedPath), Object.cast(curriedOpts));
+		return (obj) => deleteObj(obj, cast(curriedPath), cast(curriedOpts));
 	}
 
 	const
-		p = {separator: '.', ...Object.isPlainObject(path) ? path : opts};
+		p = {separator: '.', ...isPlainObject(path) ? path : opts};
 
 	const del = (path) => {
 		const
-			chunks = Object.isString(path) ? path.split(p.separator) : path;
+			chunks = isString(path) ? path.split(p.separator) : path;
 
 		let
 			res = obj,
@@ -348,11 +364,11 @@ extend(Object, 'delete', (
 			const
 				key = chunks[i];
 
-			if (Object.isMap(res) || Object.isWeakMap(res)) {
+			if (isMap(res) || isWeakMap(res)) {
 				res = res.get(key);
 
 			} else {
-				res = Object.cast<Dictionary>(res)[key];
+				res = cast<Dictionary>(res)[key];
 			}
 		}
 
@@ -363,12 +379,12 @@ extend(Object, 'delete', (
 			return false;
 		}
 
-		if (Object.isMap(res) || Object.isSet(res) || Object.isWeakMap(res) || Object.isWeakSet(res)) {
+		if (isMap(res) || isSet(res) || isWeakMap(res) || isWeakSet(res)) {
 			return res.delete(key);
 		}
 
 		const
-			box = Object.cast<object>(res);
+			box = cast<object>(res);
 
 		if (typeof res === 'object' ? key in box : box[key] !== undefined) {
 			return delete box[key];
@@ -377,7 +393,7 @@ extend(Object, 'delete', (
 		return false;
 	};
 
-	if (Object.isArray(path) || Object.isString(path)) {
+	if (isArray(path) || isString(path)) {
 		return del(path);
 	}
 
@@ -385,5 +401,5 @@ extend(Object, 'delete', (
 });
 
 function needCurriedOverload(obj: unknown, path: unknown): boolean {
-	return (Object.isString(obj) || Object.isArray(obj)) && (path == null || Object.isDictionary(path));
+	return (isString(obj) || isArray(obj)) && (path == null || isDictionary(path));
 }

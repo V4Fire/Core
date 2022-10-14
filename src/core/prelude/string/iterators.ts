@@ -10,7 +10,7 @@ import extend from 'core/prelude/extend';
 import { unicode } from 'core/prelude/string/const';
 
 /** @see [[String.letters]] */
-extend(String.prototype, 'letters', function* letters(this: string): IterableIterator<string> {
+export const letters = extend<typeof String.letters>(String.prototype, 'letters', function* letters(this: string): IterableIterator<string> {
 	let
 		baseStr: Nullable<string> = null,
 		prevChar: Nullable<string> = null;
@@ -67,5 +67,7 @@ extend(String.prototype, 'letters', function* letters(this: string): IterableIte
 	}
 });
 
+//#if standalone_prelude
 /** @see [[StringConstructor.letters]] */
 extend(String, 'letters', (str: string) => str.letters());
+//#endif

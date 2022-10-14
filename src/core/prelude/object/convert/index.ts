@@ -9,21 +9,33 @@
 import extend from 'core/prelude/extend';
 import { canParse, isInvalidKey } from 'core/prelude/object/const';
 
+import {
+
+	isString,
+	isArray,
+	isDictionary,
+	isFunction,
+	isNumber
+
+} from 'core/prelude/types';
+
+import { get } from 'core/prelude/object/property';
+
 /** @see [[ObjectConstructor.trySerialize]] */
-extend(Object, 'trySerialize', (value, replacer?: JSONCb) => {
-	if (Object.isFunction(value)) {
+export const trySerialize = extend(Object, 'trySerialize', (value, replacer?: JSONCb) => {
+	if (isFunction(value)) {
 		replacer = value;
-		return (value) => Object.trySerialize(value, replacer);
+		return (value) => trySerialize(value, replacer);
 	}
 
 	let
 		encodedValue;
 
 	const canSerializeToJSON =
-		Object.isString(value) ||
-		Object.isArray(value) ||
-		Object.isDictionary(value) ||
-		Object.isFunction(Object.get(value, 'toJSON'));
+		isString(value) ||
+		isArray(value) ||
+		isDictionary(value) ||
+		isFunction(get(value, 'toJSON'));
 
 	if (canSerializeToJSON) {
 		try {
@@ -37,8 +49,8 @@ extend(Object, 'trySerialize', (value, replacer?: JSONCb) => {
 		encodedValue = value;
 
 		try {
-			if (Object.isFunction(replacer)) {
-				return Object.trySerialize(replacer('', encodedValue), replacer);
+			if (isFunction(replacer)) {
+				return trySerialize(replacer('', encodedValue), replacer);
 			}
 		} catch {}
 	}
@@ -47,13 +59,13 @@ extend(Object, 'trySerialize', (value, replacer?: JSONCb) => {
 });
 
 /** @see [[ObjectConstructor.parse]] */
-extend(Object, 'parse', (value, reviver?: JSONCb) => {
-	if (Object.isFunction(value)) {
+export const parse = extend<typeof Object.parse>(Object, 'parse', (value, reviver?: JSONCb) => {
+	if (isFunction(value)) {
 		reviver = value;
-		return (value) => Object.parse(value, wrapReviver(reviver));
+		return (value) => parse(value, wrapReviver(reviver));
 	}
 
-	if (Object.isString(value)) {
+	if (isString(value)) {
 		if (value === 'undefined') {
 			return;
 		}
@@ -63,7 +75,7 @@ extend(Object, 'parse', (value, reviver?: JSONCb) => {
 				const
 					parsedVal = JSON.parse(value, wrapReviver(reviver));
 
-				if (Object.isNumber(parsedVal)) {
+				if (isNumber(parsedVal)) {
 					return parsedVal.isSafe() ? parsedVal : value;
 				}
 
@@ -71,7 +83,7 @@ extend(Object, 'parse', (value, reviver?: JSONCb) => {
 			} catch {}
 		}
 
-		if (Object.isFunction(reviver)) {
+		if (isFunction(reviver)) {
 			return reviver('', value);
 		}
 	}
@@ -84,7 +96,7 @@ extend(Object, 'parse', (value, reviver?: JSONCb) => {
 				return;
 			}
 
-			if (Object.isFunction(fn)) {
+			if (isFunction(fn)) {
 				value = fn(key, value);
 			}
 

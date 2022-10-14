@@ -8,8 +8,10 @@
 
 import extend from 'core/prelude/extend';
 
+import { isNumber } from 'core/prelude/types';
+
 /** @see [[Function.debounce]] */
-extend(Function.prototype, 'debounce', function debounce(this: AnyFunction, delay: number = 250): AnyFunction {
+export const debounce = extend(Function.prototype, 'debounce', function debounce(this: AnyFunction, delay: number = 250): AnyFunction {
 	const
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		fn = this;
@@ -32,25 +34,15 @@ extend(Function.prototype, 'debounce', function debounce(this: AnyFunction, dela
 	};
 });
 
-/** @see [[FunctionConstructor.debounce]] */
-extend(Function, 'debounce', (fn: AnyFunction | number, delay?: number) => {
-	if (Object.isNumber(fn)) {
-		delay = fn;
-		return (fn) => Function.debounce(fn, delay);
-	}
-
-	return fn.debounce(delay);
-});
-
 /** @see [[Function.throttle]] */
-extend(Function.prototype, 'throttle', function throttle(
+export const throttle = extend(Function.prototype, 'throttle', function throttle(
 	this: AnyFunction,
 	delayOrOpts?: number | ThrottleOptions
 ): AnyFunction {
 	let
 		opts: ThrottleOptions = {};
 
-	if (Object.isNumber(delayOrOpts)) {
+	if (isNumber(delayOrOpts)) {
 		opts.delay = delayOrOpts;
 
 	} else {
@@ -91,6 +83,7 @@ extend(Function.prototype, 'throttle', function throttle(
 	};
 });
 
+//#if standalone_prelude
 /** @see [[FunctionConstructor.throttle]] */
 extend(Function, 'throttle', (fn: AnyFunction | number, delayOrOpts?: number | ThrottleOptions) => {
 	if (!Object.isFunction(fn)) {
@@ -100,3 +93,14 @@ extend(Function, 'throttle', (fn: AnyFunction | number, delayOrOpts?: number | T
 
 	return fn.throttle(Object.cast(delayOrOpts));
 });
+
+/** @see [[FunctionConstructor.debounce]] */
+extend(Function, 'debounce', (fn: AnyFunction | number, delay?: number) => {
+	if (Object.isNumber(fn)) {
+		delay = fn;
+		return (fn) => Function.debounce(fn, delay);
+	}
+
+	return fn.debounce(delay);
+});
+//#endif

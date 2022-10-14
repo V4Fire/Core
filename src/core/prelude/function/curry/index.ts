@@ -9,15 +9,8 @@
 import extend from 'core/prelude/extend';
 import { __ } from 'core/prelude/function/const';
 
-/** @see [[FunctionConstructor.__]] */
-extend(Function, '__', {
-	get(): typeof __ {
-		return __;
-	}
-});
-
 /** @see [[Function.curry]] */
-extend(Function.prototype, 'curry', function curry(this: AnyFunction): AnyFunction {
+export const curry = extend(Function.prototype, 'curry', function curry(this: AnyFunction): AnyFunction {
 	const
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		fn = this;
@@ -78,5 +71,14 @@ extend(Function.prototype, 'curry', function curry(this: AnyFunction): AnyFuncti
 	}
 });
 
+//#if standalone_prelude
 /** @see [[FunctionConstructor.curry]] */
 extend(Function, 'curry', (fn: AnyFunction) => fn.curry());
+
+/** @see [[FunctionConstructor.__]] */
+extend(Function, '__', {
+	get(): typeof __ {
+		return __;
+	}
+});
+//#endif

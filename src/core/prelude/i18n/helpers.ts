@@ -11,19 +11,23 @@ import extend from 'core/prelude/extend';
 import * as langDict from 'lang';
 import { locale } from 'core/prelude/i18n/const';
 
+import { forEach } from 'core/prelude/object/iterators';
+import { createDict } from 'core/prelude/object/create';
+import { isArray, isTruly } from 'core/prelude/types';
+
 const
 	ws = /[\r\n]+/g;
 
 // Normalize translates
-Object.forEach(langDict, (el) => {
+forEach(langDict, (el) => {
 	if (typeof el !== 'object') {
 		return el;
 	}
 
 	const
-		map = Object.createDict();
+		map = createDict();
 
-	Object.forEach(el, (el, key) => {
+	forEach(el, (el, key) => {
 		map[String(key).replace(ws, ' ')] = String(el).replace(ws, ' ');
 		return map;
 	});
@@ -41,7 +45,7 @@ extend(globalThis, 'l', (strings: unknown | string[], ...exprs: unknown[]): stri
 		return '';
 	}
 
-	if (Object.isArray(strings)) {
+	if (isArray(strings)) {
 		if (strings.length === 1) {
 			return String(strings[0]);
 		}
@@ -64,7 +68,7 @@ function globalI18n(strings: unknown | string[], ...exprs: unknown[]): string {
 		return '';
 	}
 
-	if (!Object.isArray(strings)) {
+	if (!isArray(strings)) {
 		return localI18n(strings);
 	}
 
@@ -88,7 +92,7 @@ function localI18n(val: unknown, customLocale?: string): string {
 		str = String(val),
 		localeName = customLocale == null ? locale.value : customLocale;
 
-	if (Object.isTruly(localeName) && localeName != null) {
+	if (isTruly(localeName) && localeName != null) {
 		const w = langDict[localeName]?.[str];
 		return w != null ? String(w) : str;
 	}

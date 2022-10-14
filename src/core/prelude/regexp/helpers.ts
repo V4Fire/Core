@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export function createFlagsModifier(method: string): Function {
+export function createFlagsModifier(method: string):AnyFunction {
 	return function flagsModifier(rgxp: RegExp | RegExpFlag, ...flags: RegExpFlag[]): Function | RegExp {
 		if (Object.isString(rgxp)) {
 			const flag = rgxp;

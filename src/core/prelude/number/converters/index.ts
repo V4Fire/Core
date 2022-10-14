@@ -12,77 +12,79 @@ import extend from 'core/prelude/extend';
 import { createMsFunction, createStaticMsFunction, createStringTypeGetter } from 'core/prelude/number/helpers';
 
 const
-	second = 1e3,
-	minute = 60 * second,
-	hour = 60 * minute,
-	day = 24 * hour,
-	week = 7 * day;
+	secondInMs = 1e3,
+	minuteInMs = 60 * secondInMs,
+	hourInMs = 60 * minuteInMs,
+	dayInMs = 24 * hourInMs,
+	weekInMs = 7 * dayInMs;
 
 /** @see [[Number.second]] */
-extend(Number.prototype, 'second', createMsFunction(second));
+export const second: PropertyDescriptor = extend(Number.prototype, 'second', createMsFunction(secondInMs));
 
 /** @see [[Number.seconds]] */
-extend(Number.prototype, 'seconds', Number.prototype.second);
-
-/** @see [[NumberConstructor.second]] */
-extend(Number, 'seconds', createStaticMsFunction(second));
+export const seconds = extend(Number.prototype, 'seconds', second);
 
 /** @see [[Number.minute]] */
-extend(Number.prototype, 'minute', createMsFunction(minute));
+export const minute: PropertyDescriptor = extend(Number.prototype, 'minute', createMsFunction(minuteInMs));
 
 /** @see [[Number.minutes]] */
-extend(Number.prototype, 'minutes', Number.prototype.minute);
-
-/** @see [[NumberConstructor.minutes]] */
-extend(Number, 'minutes', createStaticMsFunction(minute));
+export const minutes = extend(Number.prototype, 'minutes', minute);
 
 /** @see [[Number.hour]] */
-extend(Number.prototype, 'hour', createMsFunction(hour));
+export const hour: PropertyDescriptor = extend(Number.prototype, 'hour', createMsFunction(hourInMs));
 
 /** @see [[Number.hours]] */
-extend(Number.prototype, 'hours', Number.prototype.hour);
-
-/** @see [[NumberConstructor.hours]] */
-extend(Number, 'hours', createStaticMsFunction(hour));
+export const hours = extend(Number.prototype, 'hours', hour);
 
 /** @see [[Number.day]] */
-extend(Number.prototype, 'day', createMsFunction(day));
+export const day: PropertyDescriptor = extend(Number.prototype, 'day', createMsFunction(dayInMs));
 
 /** @see [[Number.days]] */
-extend(Number.prototype, 'days', Number.prototype.day);
-
-/** @see [[NumberConstructor.days]] */
-extend(Number, 'days', createStaticMsFunction(day));
+export const days = extend(Number.prototype, 'days', day);
 
 /** @see [[Number.week]] */
-extend(Number.prototype, 'week', createMsFunction(week));
+export const week: PropertyDescriptor = extend(Number.prototype, 'week', createMsFunction(weekInMs));
 
 /** @see [[Number.weeks]] */
-extend(Number.prototype, 'weeks', Number.prototype.week);
-
-/** @see [[NumberConstructor.weeks]] */
-extend(Number, 'weeks', createStaticMsFunction(week));
+export const weeks = extend(Number.prototype, 'weeks', week);
 
 /** @see [[Number.em]] */
-extend(Number.prototype, 'em', createStringTypeGetter('em'));
+export const em = extend(Number.prototype, 'em', createStringTypeGetter('em'));
 
 /** @see [[Number.rem]] */
-extend(Number.prototype, 'rem', createStringTypeGetter('rem'));
+export const rem = extend(Number.prototype, 'rem', createStringTypeGetter('rem'));
 
 /** @see [[Number.px]] */
-extend(Number.prototype, 'px', createStringTypeGetter('px'));
+export const px = extend(Number.prototype, 'px', createStringTypeGetter('px'));
 
 /** @see [[Number.per]] */
-extend(Number.prototype, 'per', createStringTypeGetter('per'));
+export const per = extend(Number.prototype, 'per', createStringTypeGetter('per'));
 
 /** @see [[Number.vh]] */
-extend(Number.prototype, 'vh', createStringTypeGetter('vh'));
+export const vh = extend(Number.prototype, 'vh', createStringTypeGetter('vh'));
 
 /** @see [[Number.vw]] */
-extend(Number.prototype, 'vw', createStringTypeGetter('vw'));
+export const vw = extend(Number.prototype, 'vw', createStringTypeGetter('vw'));
 
 /** @see [[Number.vmin]] */
-extend(Number.prototype, 'vmin', createStringTypeGetter('vmin'));
+export const vmin = extend(Number.prototype, 'vmin', createStringTypeGetter('vmin'));
 
 /** @see [[Number.vmax]] */
-extend(Number.prototype, 'vmax', createStringTypeGetter('vmax'));
+export const vmax = extend(Number.prototype, 'vmax', createStringTypeGetter('vmax'));
+
+//#if standalone_prelude
+/** @see [[NumberConstructor.weeks]] */
+extend(Number, 'weeks', createStaticMsFunction(weekInMs));
+
+/** @see [[NumberConstructor.days]] */
+extend(Number, 'days', createStaticMsFunction(dayInMs));
+
+/** @see [[NumberConstructor.hours]] */
+extend(Number, 'hours', createStaticMsFunction(hourInMs));
+
+/** @see [[NumberConstructor.second]] */
+extend(Number, 'seconds', createStaticMsFunction(secondInMs));
+
+/** @see [[NumberConstructor.minutes]] */
+extend(Number, 'minutes', createStaticMsFunction(minuteInMs));
+//#endif

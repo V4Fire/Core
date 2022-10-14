@@ -8,17 +8,31 @@
 
 import extend from 'core/prelude/extend';
 
+import {
+
+	isTruly,
+	isArray,
+	isString,
+	isFunction,
+	isNumber,
+	isMap,
+	isSet,
+	isIterable,
+	isDictionary
+
+} from 'core/prelude/types';
+
 /** @see [[ObjectConstructor.size]] */
-extend(Object, 'size', (obj: unknown) => {
-	if (!Object.isTruly(obj)) {
+export const size: typeof Object.size = extend(Object, 'size', (obj: unknown) => {
+	if (!isTruly(obj)) {
 		return 0;
 	}
 
-	if (Object.isArray(obj) || Object.isString(obj) || Object.isFunction(obj)) {
+	if (isArray(obj) || isString(obj) || isFunction(obj)) {
 		return obj.length;
 	}
 
-	if (Object.isNumber(obj)) {
+	if (isNumber(obj)) {
 		return isNaN(obj) ? 0 : obj;
 	}
 
@@ -26,14 +40,14 @@ extend(Object, 'size', (obj: unknown) => {
 		return 0;
 	}
 
-	if (Object.isMap(obj) || Object.isSet(obj)) {
+	if (isMap(obj) || isSet(obj)) {
 		return obj.size;
 	}
 
 	let
 		length = 0;
 
-	if (Object.isIterable(obj)) {
+	if (isIterable(obj)) {
 		for (const _ of obj) {
 			length++;
 		}
@@ -41,7 +55,7 @@ extend(Object, 'size', (obj: unknown) => {
 		return length;
 	}
 
-	if (Object.isDictionary(obj)) {
+	if (isDictionary(obj)) {
 		return Object.keys(obj).length;
 	}
 

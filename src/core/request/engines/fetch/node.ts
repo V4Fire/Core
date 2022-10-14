@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import nodeFetch from 'node-fetch';
 
 const node: typeof fetch = async (input, init?) => {
