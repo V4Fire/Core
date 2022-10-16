@@ -9,7 +9,7 @@
 import Parser from 'core/json/stream/parser';
 
 import { Pick } from 'core/json/stream/filters';
-import { ArrayStreamer, ObjectStreamer } from 'core/json/stream/streamers';
+import { ArrayStreamer, ObjectStreamer, StreamedArray, StreamedObject } from 'core/json/stream/streamers';
 
 describe('core/json/stream/streamers', () => {
 	describe('`ArrayStreamer`', () => {
@@ -23,7 +23,7 @@ describe('core/json/stream/streamers', () => {
 			}`;
 
 			const
-				tokens = [];
+				tokens: StreamedArray[] = [];
 
 			for await (const token of Parser.from([data], new Pick('a.b'), new ArrayStreamer())) {
 				tokens.push(token);
@@ -39,7 +39,7 @@ describe('core/json/stream/streamers', () => {
 
 		it('should stream nothing if the source array is empty', async () => {
 			const
-				tokens = [];
+				tokens: StreamedArray[] = [];
 
 			for await (const token of Parser.from(['[]'], new ArrayStreamer())) {
 				tokens.push(token);
@@ -53,7 +53,7 @@ describe('core/json/stream/streamers', () => {
 				err;
 
 			const
-				tokens = [];
+				tokens: StreamedArray[] = [];
 
 			try {
 				for await (const token of Parser.from(['{"a": 1}'], new ArrayStreamer())) {
@@ -80,7 +80,7 @@ describe('core/json/stream/streamers', () => {
 			}`;
 
 			const
-				tokens = [];
+				tokens: StreamedObject[] = [];
 
 			for await (const token of Parser.from([data], new ObjectStreamer())) {
 				tokens.push(token);
@@ -94,7 +94,7 @@ describe('core/json/stream/streamers', () => {
 
 		it('should stream nothing if the source object is empty', async () => {
 			const
-				tokens = [];
+				tokens: StreamedObject[] = [];
 
 			for await (const token of Parser.from(['{}'], new ObjectStreamer())) {
 				tokens.push(token);
@@ -108,7 +108,7 @@ describe('core/json/stream/streamers', () => {
 				err;
 
 			const
-				tokens = [];
+				tokens: StreamedObject[] = [];
 
 			try {
 				for await (const token of Parser.from(['[1,2]'], new ObjectStreamer())) {

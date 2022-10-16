@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import addEmitter, { eventEmitter } from 'core/cache/decorators/helpers/add-emitter';
+import addEmitter, { CacheWithEmitter, eventEmitter } from 'core/cache/decorators/helpers/add-emitter';
 
 import SimpleCache from 'core/cache/simple';
 import RestrictedCache from 'core/cache/restricted';
@@ -132,15 +132,16 @@ describe('core/cache/decorators/helpers/add-emitter', () => {
 		it('sets a new value', () => {
 			const
 				cache = new SimpleCache(),
-				{set} = addEmitter(cache);
+				{set} = addEmitter(cache),
+				cacheEmitter = <CacheWithEmitter><unknown>cache;
 
 			const memory: any[] = [];
 
-			cache[eventEmitter].on('set', (...args) => {
+			cacheEmitter[eventEmitter].on('set', (...args) => {
 				memory.push(args);
 			});
 
-			cache.set('foo', 1, {ttl: 100, cacheTTL: 200});
+			cacheEmitter.set('foo', 1, {ttl: 100, cacheTTL: 200});
 			expect(memory[0]).toEqual([cache, {args: ['foo', 1, {ttl: 100, cacheTTL: 200}], result: 1}]);
 
 			set('bar', 2);
