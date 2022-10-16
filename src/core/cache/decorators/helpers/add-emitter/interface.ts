@@ -27,7 +27,7 @@ export interface MutationHandler<M extends AnyFunction = AnyFunction> {
 
 export interface CacheWithEmitter<V = unknown, K = string, T extends Cache<V, K> = Cache<V, K>> extends Cache<V, K> {
 	/** @override */
-	set(key: K, value: V, opts?: Parameters<T['set']>[2]): V;
+	set(key: K, value: V, opts?: Parameters<T['set']>[2] | {}): V;
 
 	/**
 	 * Event emitter to produce mutation events

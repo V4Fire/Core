@@ -7,7 +7,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import watch, { mute, unmute, unwatchable, set, unset, isProxy } from 'core/object/watch';
+import watch, { mute, unmute, unwatchable, set, unset, isProxy, WatchOptions } from 'core/object/watch';
 
 import * as proxyEngine from 'core/object/watch/engines/proxy';
 import * as accEngine from 'core/object/watch/engines/accessors';
@@ -87,7 +87,7 @@ describe('core/object/watch', () => {
 
 			it('deep watching for an object', () => {
 				const
-					obj = {a: {b: [], c: {e: 1}}},
+					obj = {a: {b: <number[]>[], c: {e: 1}}},
 					spy = jest.fn();
 
 				const {proxy} = watch(obj, {immediate: true, deep: true, engine}, (value, oldValue) => {
@@ -107,7 +107,7 @@ describe('core/object/watch', () => {
 
 			it('deep watching for an object by a complex path', () => {
 				const
-					obj = {a: {b: []}, c: {e: 1}};
+					obj = {a: {b: <number[]>[]}, c: {e: 1}};
 
 				{
 					const
@@ -142,11 +142,12 @@ describe('core/object/watch', () => {
 
 			it('deep watching for an object by a complex path with collapsing', async () => {
 				const
-					obj = {a: {b: []}};
+					obj = {a: {b: <number[]>[]}};
 
 				const
 					spy = jest.fn();
 
+				// WHAT A FUCK
 				const {proxy} = watch(obj, 'a.b', {engine}, (value, oldValue, info) => {
 					spy(value, oldValue, info.path, info.originalPath);
 				});
@@ -160,7 +161,7 @@ describe('core/object/watch', () => {
 
 			it('deep watching for an object by a complex path without collapsing', async () => {
 				const
-					obj = {a: {b: []}};
+					obj = {a: {b: <number[]>[]}};
 
 				const
 					spy = jest.fn();
@@ -181,7 +182,7 @@ describe('core/object/watch', () => {
 
 			it('deep watching for an array by a complex path without collapsing', async () => {
 				const
-					obj = {a: {b: []}};
+					obj = {a: {b: <Array<number | Dictionary<number>>>[]}};
 
 				const
 					spy = jest.fn();
@@ -201,7 +202,7 @@ describe('core/object/watch', () => {
 				expect(spy).toHaveBeenCalledWith({e: 2}, 1, ['a', 'b', '0'], ['a', 'b', 0]);
 
 				if (engineName === 'proxy') {
-					proxy.a.b[0].e++;
+					proxy.a.b[0]['e']++;
 
 					await new Promise((r) => setTimeout(r, 15));
 					expect(spy).toHaveBeenCalledWith(3, 2, ['a', 'b', '0'], ['a', 'b', 0, 'e']);
@@ -210,7 +211,7 @@ describe('core/object/watch', () => {
 
 			it('isolated watchers', () => {
 				const
-					obj = {a: {b: [], c: {e: 1}}},
+					obj = {a: {b: <number[]>[], c: {e: 1}}},
 					spy1 = jest.fn().mockName('spy1'),
 					spy2 = jest.fn().mockName('spy2');
 
@@ -233,7 +234,7 @@ describe('core/object/watch', () => {
 
 			it('shared watchers', () => {
 				const
-					obj = {a: {b: [], c: {e: 1}}},
+					obj = {a: {b: <number[]>[], c: {e: 1}}},
 					spy1 = jest.fn().mockName('spy1'),
 					spy2 = jest.fn().mockName('spy2');
 
@@ -256,7 +257,7 @@ describe('core/object/watch', () => {
 
 			it('deep watching for an object with prototypes', () => {
 				const
-					obj = {a: {b: [], __proto__: {c: {e: 1}}}},
+					obj: {a: {b: number[]; c?: {e: number}; __proto__: unknown}} = {a: {b: <number[]>[], __proto__: {c: {e: 1}}}},
 					protoSpy = jest.fn().mockName('with the prototype'),
 					nonProtoSpy = jest.fn().mockName('without the prototype');
 
@@ -272,14 +273,14 @@ describe('core/object/watch', () => {
 				expect(protoSpy).toHaveBeenCalledWith([1, 2, 3], [], false);
 				expect(nonProtoSpy).toHaveBeenCalledWith([1, 2, 3], [], false);
 
-				nonProtoProxy.a.c.e = 4;
+				nonProtoProxy.a.c!.e = 4;
 				expect(protoSpy).toHaveBeenCalledWith(4, 1, true);
 				expect(nonProtoSpy).toHaveBeenCalledTimes(1);
 			});
 
 			it('deep watching with collapsing', (done) => {
 				const
-					obj = {a: {b: [], c: {e: 1}}, c: []},
+					obj = {a: {b: <number[]>[], c: {e: 1}}, c: <number[]>[]},
 					spy = jest.fn();
 
 				const opts = {
@@ -314,10 +315,10 @@ describe('core/object/watch', () => {
 
 			it('deep watching with collapsing and the `immediate` option', () => {
 				const
-					obj = {a: {b: [], c: {e: 1}}, c: []},
+					obj = {a: {b: <number[]>[], c: {e: 1}}, c: <number[]>[]},
 					spy = jest.fn();
 
-				const opts = {
+				const opts: WatchOptions & ({immediate: true}) = {
 					immediate: true,
 					deep: true,
 					collapse: true,
@@ -367,7 +368,7 @@ describe('core/object/watch', () => {
 					spy = jest.fn().mockName('global'),
 					localSpy = jest.fn().mockName('local');
 
-				const opts = {
+				const opts: WatchOptions & ({immediate: true}) = {
 					immediate: true,
 					deep: true,
 					prefixes: ['_', '$'],
@@ -433,7 +434,7 @@ describe('core/object/watch', () => {
 						fooStore: ['b.$foo']
 					},
 
-					new Map([
+					new Map<CanArray<string>, CanArray<string[]>>([
 						['a', ['_a']],
 						[['b', 'foo'], [['b', 'fooStore']]],
 						['fooStore', ['b.$foo']]
@@ -446,7 +447,7 @@ describe('core/object/watch', () => {
 						spy = jest.fn().mockName('global'),
 						localSpy = jest.fn().mockName('local');
 
-					const opts = {
+					const opts: WatchOptions & ({immediate: true}) = {
 						immediate: true,
 						deep: true,
 						dependencies: deps[i],
@@ -488,7 +489,7 @@ describe('core/object/watch', () => {
 				const
 					spy = jest.fn().mockName('global');
 
-				const opts = {
+				const opts: WatchOptions & ({immediate: true}) = {
 					immediate: true,
 					dependencies: ['_a'],
 					engine
@@ -507,7 +508,7 @@ describe('core/object/watch', () => {
 
 			it('watching for an array', () => {
 				const
-					arr = [],
+					arr: number[] = [],
 					spy = jest.fn();
 
 				const {proxy} = watch(arr, {immediate: true, engine}, (value, oldValue, info) => {
@@ -564,8 +565,8 @@ describe('core/object/watch', () => {
 
 			it('array concatenation with proxy', () => {
 				const
-					arrOne = [1, 2, 3],
-					arrTwo = ['foo', 'bar'];
+					arrOne: Array<number | string> = [1, 2, 3],
+					arrTwo: Array<number | string> = ['foo', 'bar'];
 
 				const
 					{proxy: proxyOne} = watch(arrOne, {immediate: true, engine}),
@@ -603,7 +604,7 @@ describe('core/object/watch', () => {
 
 			it('watching for a set', () => {
 				const
-					set = new Set([]),
+					set = new Set<number>([]),
 					spy = jest.fn();
 
 				const {proxy} = watch(set, {immediate: true, engine}, (value, oldValue, info) => {
@@ -654,7 +655,7 @@ describe('core/object/watch', () => {
 
 			it('watching for a weak set', () => {
 				const
-					set = new WeakSet([]),
+					set = new WeakSet<Dictionary | unknown[]>([]),
 					spy = jest.fn();
 
 				const {proxy} = watch(set, {immediate: true, engine}, (value, oldValue, info) => {
@@ -764,8 +765,8 @@ describe('core/object/watch', () => {
 
 			it('tying a watcher to another object', () => {
 				const
-					another = {},
 					obj = {a: 1, b: 2},
+					another: Partial<typeof obj> = {},
 					spy = jest.fn();
 
 				watch(obj, {immediate: true, tiedWith: another, engine}, (value, oldValue) => {
@@ -839,7 +840,7 @@ describe('core/object/watch', () => {
 
 			it('marking a part of the watched object as unwatchable', () => {
 				const
-					obj = {a: 1, b: unwatchable({c: 2, d: {e: 3}}, engine)},
+					obj = {a: 1, b: unwatchable({c: 2, d: {e: 3}})},
 					spy = jest.fn();
 
 				const {proxy, set} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
@@ -876,7 +877,7 @@ describe('core/object/watch', () => {
 			it('setting of new properties', () => {
 				{
 					const
-						obj = {},
+						obj: {a?: number} = {},
 						spy = jest.fn();
 
 					const {proxy, set} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
@@ -892,7 +893,7 @@ describe('core/object/watch', () => {
 
 				{
 					const
-						obj = {},
+						obj: {a?: number} = {},
 						spy = jest.fn();
 
 					const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
@@ -910,7 +911,7 @@ describe('core/object/watch', () => {
 			it('deep setting of new properties', () => {
 				{
 					const
-						obj = {},
+						obj: {a?: {b?: number}} = {},
 						spy = jest.fn();
 
 					const {proxy, set} = watch(obj, {immediate: true, engine, deep: true}, (value, oldValue, info) => {
@@ -922,7 +923,7 @@ describe('core/object/watch', () => {
 					expect(proxy.a?.b).toBe(1);
 					expect(obj.a?.b).toBe(1);
 
-					proxy.a.b = 2;
+					proxy.a!.b = 2;
 					expect(spy).toHaveBeenCalledWith(2, 1, ['a', 'b']);
 					expect(proxy.a?.b).toBe(2);
 					expect(obj.a?.b).toBe(2);
@@ -930,7 +931,7 @@ describe('core/object/watch', () => {
 
 				{
 					const
-						obj = {},
+						obj: {a?: {b?: number}} = {},
 						spy = jest.fn();
 
 					const {proxy} = watch(obj, {immediate: true, engine, deep: true}, (value, oldValue, info) => {
@@ -942,7 +943,7 @@ describe('core/object/watch', () => {
 					expect(proxy.a?.b).toBe(1);
 					expect(obj.a?.b).toBe(1);
 
-					proxy.a.b = 2;
+					proxy.a!.b = 2;
 					expect(spy).toHaveBeenCalledWith(2, 1, ['a', 'b']);
 					expect(proxy.a?.b).toBe(2);
 					expect(obj.a?.b).toBe(2);
@@ -952,7 +953,7 @@ describe('core/object/watch', () => {
 			it('deleting of properties', () => {
 				{
 					const
-						obj = {a: 1},
+						obj: {a?: number} = {a: 1},
 						spy = jest.fn();
 
 					const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
@@ -1013,20 +1014,20 @@ describe('core/object/watch', () => {
 
 			it('modifying prototype values', () => {
 				const
-					obj = {a: {a: 1}, __proto__: {b: {b: 1}}},
+					obj: {a: {a: number}; b?: {b?: number}; __proto__: unknown} = {a: {a: 1}, __proto__: {b: {b: 1}}},
 					spy = jest.fn();
 
 				const {proxy} = watch(obj, {deep: true, immediate: true, withProto: true, engine}, (value, oldValue, info) => {
 					spy(value, oldValue, info.path);
 				});
 
-				proxy.b.b++;
+				proxy.b!.b!++;
 				expect(spy).toHaveBeenCalledWith(2, 1, ['b', 'b']);
 
 				proxy.a.a++;
 				expect(spy).toHaveBeenCalledWith(2, 1, ['a', 'a']);
 
-				expect(proxy.b.b).toBe(2);
+				expect(proxy.b?.b).toBe(2);
 				expect(proxy.a.a).toBe(2);
 			});
 
@@ -1039,7 +1040,7 @@ describe('core/object/watch', () => {
 			if (engineName === 'proxy') {
 				it("shouldn't wrap readonly non-configurable properties", () => {
 					const
-						obj = {},
+						obj: {foo?: Dictionary} = {},
 						nested = {a: 1};
 
 					Object.defineProperty(obj, 'foo', {

@@ -16,6 +16,7 @@ import type Cache from 'core/cache/interface';
 
 import PersistentWrapper from 'core/cache/decorators/persistent/wrapper';
 import type { PersistentCache, PersistentOptions } from 'core/cache/decorators/persistent/interface';
+import type { CacheWithEmitter } from 'core/cache/decorators/helpers/add-emitter';
 
 export * from 'core/cache/decorators/persistent/interface';
 
@@ -49,10 +50,11 @@ export * from 'core/cache/decorators/persistent/interface';
  *   copyOfCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
  * ```
  */
-const addPersistent = <V>(
-	cache: Cache<V, string>,
+const addPersistent = <V, K extends string = string, T extends Cache<V, K> = Cache<V, K>>(
+	cache: T,
 	storage: SyncStorageNamespace | AsyncStorageNamespace,
 	opts?: PersistentOptions
-): Promise<PersistentCache<V>> => new PersistentWrapper<Cache<V, string>, V>(cache, storage, opts).getInstance();
+): Promise<PersistentCache<V, K, CacheWithEmitter<V, K, T>>> =>
+	new PersistentWrapper<T, V>(cache, storage, opts).getInstance();
 
 export default addPersistent;

@@ -8,7 +8,7 @@
 
 import { asyncLocal } from 'core/kv-storage';
 
-import addPersistent, {PersistentOptions} from 'core/cache/decorators/persistent';
+import addPersistent, { PersistentOptions } from 'core/cache/decorators/persistent';
 import addTTL from 'core/cache/decorators/ttl';
 
 import RestrictedCache from 'core/cache/restricted';

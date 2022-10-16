@@ -45,7 +45,12 @@ describe('core/json', () => {
 	});
 });
 
-function testConvertIfDateCasesByDateParts(templateParts, dateParts, delimiter, expectedDate) {
+function testConvertIfDateCasesByDateParts(
+	templateParts: string[],
+	dateParts: Array<string | number>,
+	delimiter: string,
+	expectedDate: Date | string
+) {
 	const
 		dateTemplate = templateParts.join(delimiter),
 		dateString = dateParts.join(delimiter);
