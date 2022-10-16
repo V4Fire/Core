@@ -8,17 +8,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import RequestError, { RequestErrorDetailsExtractor } from 'core/request/error';
+import RequestError, { Details, RequestErrorDetailsExtractor } from 'core/request/error';
 import V4Headers from 'core/request/headers';
 
 describe('core/request/error', () => {
 	let err;
 
 	beforeEach(() => {
-		// TODO
-		err = new RequestError(RequestError.Timeout, {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
+		err = new RequestError(RequestError.Timeout, <Details><unknown>{
 			request: {
 				url: 'url/url',
 
@@ -35,8 +32,6 @@ describe('core/request/error', () => {
 					foo: 'bla'
 				})
 			},
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			response: {
 				status: 404,
 				body: 'not found',

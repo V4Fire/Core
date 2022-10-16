@@ -2858,7 +2858,7 @@ interface RegExpConstructor {
 	 * @param rgxp
 	 * @param flags
 	 */
-	addFlags<T>(rgxp: RegExp, ...flags: [RegExpFlag, ...RegExpFlag[]]): RegExp;
+	addFlags(rgxp: RegExp, ...flags: [RegExpFlag, ...RegExpFlag[]]): RegExp;
 
 	/**
 	 * Returns a curried version of `RegExp.addFlags`
