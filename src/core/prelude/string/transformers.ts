@@ -53,7 +53,7 @@ export const capitalize = extend(String.prototype, 'capitalize', function capita
 			chunks = str.split(' ');
 
 		for (let i = 0; i < chunks.length; i++) {
-			chunks[i] = chunks[i].capitalize({lower});
+			chunks[i] = capitalize.call(chunks[i], {lower});
 		}
 
 		res = chunks.join(' ');
@@ -188,7 +188,7 @@ export const underscore = extend(String.prototype, 'underscore', function unders
 	return res;
 });
 
-//#if standalone_prelude
+//#if standalone/prelude
 /** @see [[StringConstructor.underscore]] */
 extend(String, 'underscore', createStaticTransformFunction('underscore'));
 

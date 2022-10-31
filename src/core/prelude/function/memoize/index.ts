@@ -29,7 +29,7 @@ export const once = extend(Function.prototype, 'once', function once(this: AnyFu
 	};
 });
 
-//#if standalone_prelude
+//#if standalone/prelude
 /** @see [[FunctionConstructor.once]] */
 extend(Function, 'once', (fn: AnyFunction) => fn.once());
 //#endif

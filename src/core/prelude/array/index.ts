@@ -48,15 +48,6 @@ export const union = extend<typeof Array.union>(Array.prototype, 'union', functi
 	return [...new Set(makeIterator())];
 });
 
-/** @see [[ArrayConstructor.union]] */
-extend(Array, 'union', (arr: unknown[], ...args: Array<Iterable<unknown> | unknown>) => {
-	if (args.length === 0) {
-		return (...args) => arr.union(arr, ...args);
-	}
-
-	return arr.union(...args);
-});
-
 /** @see [[ArrayConstructor.concat]] */
 export const concat = extend<typeof Array.concat>(Array, 'concat', (arr: unknown[], ...args: Array<CanArray<unknown>>) => {
 	if (args.length === 0) {
@@ -109,3 +100,14 @@ export const concat = extend<typeof Array.concat>(Array, 'concat', (arr: unknown
 		}
 	}
 });
+
+// #if standalone/prelude
+/** @see [[ArrayConstructor.union]] */
+extend(Array, 'union', (arr: unknown[], ...args: Array<Iterable<unknown> | unknown>) => {
+	if (args.length === 0) {
+		return (...args) => arr.union(arr, ...args);
+	}
+
+	return arr.union(...args);
+});
+		//#endif

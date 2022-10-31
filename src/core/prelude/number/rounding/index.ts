@@ -18,7 +18,7 @@ export const round = extend(Number.prototype, 'round', createRoundingFunction(Ma
 /** @see [[Number.ceil]] */
 export const ceil = extend(Number.prototype, 'ceil', createRoundingFunction(Math.ceil));
 
-//#if standalone_prelude
+//#if standalone/prelude
 /** @see [[NumberConstructor.round]] */
 extend(Number, 'round', createStaticRoundingFunction('round'));
 

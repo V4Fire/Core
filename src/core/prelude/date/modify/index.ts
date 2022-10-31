@@ -18,7 +18,7 @@ export const set = extend(Date.prototype, 'set', createDateModifier());
 /** @see [[Date.rewind]] */
 export const rewind = extend(Date.prototype, 'rewind', createDateModifier((v, b) => b - v));
 
-//#if standalone_prelude
+//#if standalone/prelude
 /** @see [[DateConstructor.rewind]] */
 extend(Date, 'rewind', createStaticDateModifier('rewind'));
 

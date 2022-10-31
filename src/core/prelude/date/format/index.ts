@@ -14,7 +14,7 @@ import { createStaticDateFormatter } from 'core/prelude/date/helpers';
 import { isPlainObject, isFunction } from 'core/prelude/types';
 
 /** @see [[Date.format]] */
-export const format = extend<typeof Date.format>(Date.prototype, 'format', function format(
+export const format = extend<Date['format']>(Date.prototype, 'format', function format(
 	this: Date,
 	patternOrOpts: string | Intl.DateTimeFormatOptions,
 	locale: CanUndef<CanArray<string>> = defaultLocale.value
@@ -83,31 +83,31 @@ export const format = extend<typeof Date.format>(Date.prototype, 'format', funct
 });
 
 /** @see [[Date.short]] */
-export const short = extend(Date.prototype, 'short', function short(
+export const short = extend<typeof Date.short>(Date.prototype, 'short', function short(
 	this: Date,
 	locale: CanUndef<CanArray<string>> = defaultLocale.value
 ): string {
-	return format(this, 'd:numeric;M:numeric;Y:numeric', locale);
+	return format.call(this, 'd:numeric;M:numeric;Y:numeric', locale);
 });
 
 /** @see [[Date.medium]] */
-export const medium = extend(Date.prototype, 'medium', function medium(
+export const medium = extend<typeof Date.medium>(Date.prototype, 'medium', function medium(
 	this: Date,
 	locale: CanUndef<CanArray<string>> = defaultLocale.value
 ): string {
-	return format(this, 'd:numeric;M:long;Y:numeric', locale);
+	return format.call(this, 'd:numeric;M:long;Y:numeric', locale);
 });
 
 /** @see [[Date.long]] */
-export const long = extend(Date.prototype, 'long', function long(
+export const long = extend<typeof Date.long>(Date.prototype, 'long', function long(
 	this: Date,
 	locale: CanUndef<CanArray<string>> = defaultLocale.value
 ): string {
-	return format(this, 'd:numeric;M:long;Y:numeric;h:2-digit;m:2-digit;s:2-digit', locale);
+	return format.call(this, 'd:numeric;M:long;Y:numeric;h:2-digit;m:2-digit;s:2-digit', locale);
 });
 
 /** @see [[Date.toHTMLTimeString]] */
-export const toHTMLTimeString = extend(Date.prototype, 'toHTMLTimeString', function toHTMLTimeString(
+export const toHTMLTimeString = extend<typeof Date.toHTMLTimeString>(Date.prototype, 'toHTMLTimeString', function toHTMLTimeString(
 	this: Date,
 	opts: DateHTMLTimeStringOptions = {}
 ): string {
@@ -135,13 +135,8 @@ export const toHTMLTimeString = extend(Date.prototype, 'toHTMLTimeString', funct
 	return res.join(':');
 });
 
-/** @see [[Date.toHTMLString]] */
-export const toHTMLString = extend(Date.prototype, 'toHTMLString', function toHTMLString(this: Date, opts: DateHTMLStringOptions): string {
-	return `${this.toHTMLDateString(opts)}T${this.toHTMLTimeString(opts)}`;
-});
-
 /** @see [[Date.toHTMLDateString]] */
-export const toHTMLDateString = extend(Date.prototype, 'toHTMLDateString', function toHTMLDateString(
+export const toHTMLDateString = extend<typeof Date.toHTMLDateString>(Date.prototype, 'toHTMLDateString', function toHTMLDateString(
 	this: Date,
 	opts: DateHTMLDateStringOptions = {}
 ): string {
@@ -156,7 +151,12 @@ export const toHTMLDateString = extend(Date.prototype, 'toHTMLDateString', funct
 	].join('-');
 });
 
-//#if standalone_prelude
+/** @see [[Date.toHTMLString]] */
+export const toHTMLString = extend(Date.prototype, 'toHTMLString', function toHTMLString(this: Date, opts: DateHTMLStringOptions): string {
+	return `${toHTMLDateString(this, opts)}T${toHTMLTimeString(this, opts)}`;
+});
+
+//#if standalone/prelude
 /** @see [[DateConstructor.format]] */
 extend(Date, 'format', (
 	date: Date | string | Intl.NumberFormatOptions,
@@ -166,7 +166,7 @@ extend(Date, 'format', (
 	if (Object.isString(date) || Object.isPlainObject(date)) {
 		locale = Object.cast(patternOrOpts);
 		patternOrOpts = date;
-		return (date) => format(date, Object.cast(patternOrOpts), locale);
+		return (date) => format.call(date, Object.cast(patternOrOpts), locale);
 	}
 
 	return date.format(Object.cast(patternOrOpts), locale);

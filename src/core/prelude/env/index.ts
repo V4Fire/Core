@@ -11,10 +11,13 @@ import type { AsyncStorageNamespace } from 'core/kv-storage';
 
 import { emitter } from 'core/prelude/env/const';
 
+import { createDict } from 'core/prelude/object/create';
+import { isPromise } from 'core/prelude/types';
+
 export * from 'core/prelude/env/const';
 
 const
-	memoryStorage = Object.createDict<Dictionary>();
+	memoryStorage = createDict<Dictionary>();
 
 let
 	storage: CanUndef<Promise<AsyncStorageNamespace>>;
@@ -29,7 +32,7 @@ storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace(
  * @param key
  */
 export async function get(key: string): Promise<CanUndef<Dictionary>> {
-	if (Object.isPromise(storage)) {
+	if (isPromise(storage)) {
 		return (await storage).get<Dictionary>(key);
 	}
 
@@ -43,7 +46,7 @@ export async function get(key: string): Promise<CanUndef<Dictionary>> {
  * @param value
  */
 export function set(key: string, value: Dictionary): void {
-	if (Object.isPromise(storage)) {
+	if (isPromise(storage)) {
 		storage.then((storage) => storage.set(key, value)).catch(stderr);
 
 	} else {
@@ -58,7 +61,7 @@ export function set(key: string, value: Dictionary): void {
  * @param key
  */
 export function remove(key: string): void {
-	if (Object.isPromise(storage)) {
+	if (isPromise(storage)) {
 		storage.then((storage) => storage.remove(key)).catch(stderr);
 
 	} else {
@@ -69,7 +72,7 @@ export function remove(key: string): void {
 }
 
 extend(globalThis, 'envs', () => {
-	if (Object.isPromise(storage)) {
+	if (isPromise(storage)) {
 		return storage.then((storage) => {
 			console.log(storage);
 			return storage;

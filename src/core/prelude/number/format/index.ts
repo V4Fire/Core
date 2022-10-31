@@ -174,7 +174,7 @@ export const format = extend(Number.prototype, 'format', function format(
 	return res;
 });
 
-//#if standalone_prelude
+//#if standalone/prelude
 /** @see [[NumberConstructor.format]] */
 extend(Number, 'format', (
 	value: number | string | Intl.NumberFormatOptions,

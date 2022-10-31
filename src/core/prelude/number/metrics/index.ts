@@ -63,7 +63,7 @@ export const isPositiveBetweenZeroAndOne = extend(Number.prototype, 'isPositiveB
 	return this > 0 && this <= 1;
 });
 
-//#if standalone_prelude
+//#if standalone/prelude
 /** @see [[NumberConstructor.isPositiveBetweenZeroAndOne]] */
 extend(Number, 'isPositiveBetweenZeroAndOne', (value) => Object.isNumber(value) && value.isPositiveBetweenZeroAndOne());
 

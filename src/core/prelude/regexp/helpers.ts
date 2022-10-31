@@ -6,9 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export function createFlagsModifier(method: string):AnyFunction {
+import { isString } from 'core/prelude/types';
+
+export function createFlagsModifier(method: string): AnyFunction {
 	return function flagsModifier(rgxp: RegExp | RegExpFlag, ...flags: RegExpFlag[]): Function | RegExp {
-		if (Object.isString(rgxp)) {
+		if (isString(rgxp)) {
 			const flag = rgxp;
 			return (rgxp) => rgxp[method](flag);
 		}

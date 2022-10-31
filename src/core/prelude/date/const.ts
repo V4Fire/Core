@@ -9,6 +9,9 @@
 import { createDict } from 'core/prelude/object/create';
 import { forEach } from 'core/prelude/object/iterators';
 
+import { format } from 'core/prelude/date/format';
+import { beginningOfDay } from 'core/prelude/date/create';
+
 export const
 	formatCache = createDict<Intl.DateTimeFormat>();
 
@@ -27,18 +30,18 @@ export const
 
 export const createAliases = createDict({
 	now: () => new Date(),
-	today: () => new Date().beginningOfDay(),
+	today: () => beginningOfDay.call(new Date()),
 
 	yesterday: () => {
 		const v = new Date();
 		v.setDate(v.getDate() - 1);
-		return v.beginningOfDay();
+		return beginningOfDay.call(v);
 	},
 
 	tomorrow: () => {
 		const v = new Date();
 		v.setDate(v.getDate() + 1);
-		return v.beginningOfDay();
+		return beginningOfDay.call(v);
 	}
 });
 
@@ -59,17 +62,17 @@ forEach(formatAliases, (val) => {
 });
 
 ['Y', 'M', 'w', 'd', 'h', 'm', 's'].forEach((key) => {
-	const format = (date) => {
+	const formatFunc = (date) => {
 		const
 			now = new Date();
 
-		if (date.format(key) !== now.format(key)) {
+		if (format.call(date, key) !== format.call(now, key)) {
 			return formatAliases[key];
 		}
 	};
 
-	formatAliases[`${key}?`] = format;
-	formatAliases[`${formatAliases[key]}?`] = format;
+	formatAliases[`${key}?`] = formatFunc;
+	formatAliases[`${formatAliases[key]}?`] = formatFunc;
 });
 
 export const boolAliases = createDict({

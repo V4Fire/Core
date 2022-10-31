@@ -9,6 +9,8 @@
 import extend from 'core/prelude/extend';
 import { Option as OptionStructure, Result as OptionResult } from 'core/prelude/structures';
 
+import { isFunction } from 'core/prelude/types';
+
 /** @see [[Function.option]] */
 export const option = extend(Function.prototype, 'option', function option(this: AnyFunction): AnyFunction {
 	const wrapper = (...args) => {
@@ -40,7 +42,7 @@ export const Option = extend(Object, 'Option', (value: unknown) => {
 		return OptionStructure.reject(null);
 	}
 
-	if (Object.isFunction(value)) {
+	if (isFunction(value)) {
 		return value.option();
 	}
 
@@ -74,7 +76,7 @@ export const Result = extend(Object, 'Result', (value: unknown) => {
 		return OptionResult.reject(value);
 	}
 
-	if (Object.isFunction(value)) {
+	if (isFunction(value)) {
 		return value.result();
 	}
 

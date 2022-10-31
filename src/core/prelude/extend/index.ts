@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { cast } from 'core/prelude/types';
+
 /**
  * Extends an object or function by the specified method
  *
@@ -66,12 +68,11 @@ export default function extend<
 	Object.defineProperty(obj, name, descriptor);
 
 	//#endunless
-	// @ts-ignore fake types for func wrapper
-	return <T>function extendedFunc(...args: any) {
+	return cast<T>(function extendedFunc(...args: any) {
 		if (typeof method === 'function') {
 			return method.call(obj, args);
 		}
 
 		return method;
-	};
+	});
 }

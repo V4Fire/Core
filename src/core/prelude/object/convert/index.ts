@@ -19,6 +19,8 @@ import {
 
 } from 'core/prelude/types';
 
+import { test } from 'core/prelude/regexp';
+
 import { get } from 'core/prelude/object/property';
 
 /** @see [[ObjectConstructor.trySerialize]] */
@@ -70,7 +72,7 @@ export const parse = extend<typeof Object.parse>(Object, 'parse', (value, revive
 			return;
 		}
 
-		if (canParse.test(value)) {
+		if (test(canParse, value)) {
 			try {
 				const
 					parsedVal = JSON.parse(value, wrapReviver(reviver));
@@ -92,7 +94,7 @@ export const parse = extend<typeof Object.parse>(Object, 'parse', (value, revive
 
 	function wrapReviver(fn: Nullable<JSONCb>) {
 		return (key, value) => {
-			if (isInvalidKey.test(key)) {
+			if (test(isInvalidKey, key)) {
 				return;
 			}
 

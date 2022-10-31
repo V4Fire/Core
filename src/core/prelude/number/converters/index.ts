@@ -72,7 +72,7 @@ export const vmin = extend(Number.prototype, 'vmin', createStringTypeGetter('vmi
 /** @see [[Number.vmax]] */
 export const vmax = extend(Number.prototype, 'vmax', createStringTypeGetter('vmax'));
 
-//#if standalone_prelude
+//#if standalone/prelude
 /** @see [[NumberConstructor.weeks]] */
 extend(Number, 'weeks', createStaticMsFunction(weekInMs));
 

@@ -67,7 +67,7 @@ export const letters = extend<typeof String.letters>(String.prototype, 'letters'
 	}
 });
 
-//#if standalone_prelude
+//#if standalone/prelude
 /** @see [[StringConstructor.letters]] */
 extend(String, 'letters', (str: string) => str.letters());
 //#endif

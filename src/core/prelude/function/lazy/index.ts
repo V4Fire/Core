@@ -83,7 +83,7 @@ export const throttle = extend(Function.prototype, 'throttle', function throttle
 	};
 });
 
-//#if standalone_prelude
+//#if standalone/prelude
 /** @see [[FunctionConstructor.throttle]] */
 extend(Function, 'throttle', (fn: AnyFunction | number, delayOrOpts?: number | ThrottleOptions) => {
 	if (!Object.isFunction(fn)) {

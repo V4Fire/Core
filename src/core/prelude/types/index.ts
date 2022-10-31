@@ -229,7 +229,7 @@ export const isSealed = (value: Object | null): boolean =>
 export const isFrozen = (value: Object | null): boolean =>
 	value == null || originalIsFrozen(value) || value[READONLY] === true;
 
-//#if standalone_prelude
+//#if standalone/prelude
 Object.isExtensible = isExtensible;
 Object.isSealed = isSealed;
 Object.isFrozen = isFrozen;

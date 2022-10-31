@@ -71,7 +71,7 @@ export const curry = extend(Function.prototype, 'curry', function curry(this: An
 	}
 });
 
-//#if standalone_prelude
+//#if standalone/prelude
 /** @see [[FunctionConstructor.curry]] */
 extend(Function, 'curry', (fn: AnyFunction) => fn.curry());
 

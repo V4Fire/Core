@@ -64,7 +64,7 @@ export function getRelative(from: DateCreateValue, to: DateCreateValue): DateRel
 	};
 }
 
-//#if standalone_prelude
+//#if standalone/prelude
 /** @see [[DateConstructor.relativeTo]] */
 extend(Date, 'relativeTo', function relativeTo(from: DateCreateValue, to: DateCreateValue): DateRelative | AnyFunction {
 	if (arguments.length === 1) {

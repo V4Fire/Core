@@ -40,7 +40,7 @@ export const compose = extend(Function.prototype, 'compose', function compose(
 	};
 });
 
-//#if standalone_prelude
+//#if standalone/prelude
 /** @see [[FunctionConstructor.compose]] */
 extend(Function, 'compose', (...fns: Array<Nullable<AnyFunction>>) => function wrapper(this: unknown, ...args: unknown[]): unknown {
 	if (fns.length === 0) {
@@ -77,4 +77,4 @@ extend(Function, 'compose', (...fns: Array<Nullable<AnyFunction>>) => function w
 
 	return res;
 });
-//#endif standalone_prelude
+//#endif
