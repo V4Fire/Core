@@ -22,9 +22,19 @@ type CanPromiseLike<T> = T | PromiseLike<T>;
 type CanArray<T> = T | T[];
 
 /**
+ * Marks the passed value that it can be placed with an iterable
+ */
+type CanIter<T> = T | Iterable<T>;
+
+/**
  * Marks the passed value that it can be undefined
  */
 type CanUndef<T> = T | undefined;
+
+/**
+ * Marks the passed value that it can be null
+ */
+type CanNull<T> = T | null;
 
 /**
  * Marks the passed value that it can be null or undefined
