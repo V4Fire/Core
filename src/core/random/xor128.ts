@@ -41,8 +41,10 @@ export class Xor128 implements IterableIterator<number> {
 			value: this.w
 		};
 	}
+}
 
-	random(): number {
-		return (this.next().value >>> 0) / ((1 << 30) * 4);
-	}
+const generator = new Xor128(19881989);
+
+export default function random(): number {
+	return (generator.next().value >>> 0) / ((1 << 30) * 4);
 }
