@@ -351,7 +351,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	}
 
 	/** @override */
-	readonly [Symbol.toStringTag]: 'Promise';
+	readonly [Symbol.toStringTag]: 'Promise' = 'Promise';
 
 	/**
 	 * True if the current promise is pending

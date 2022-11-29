@@ -289,7 +289,7 @@ function request<D = unknown>(
 
 				resultPromise = AbortablePromise.resolveAndCall(getFromCache, requestPromise)
 					.then(ctx.wrapAsResponse.bind(ctx))
-					.then((res) => Object.assign(res, {cache}));
+					.then((res: object) => Object.assign(res, {cache}));
 
 			} else {
 				const reqOpts = {
