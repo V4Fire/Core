@@ -99,20 +99,15 @@ declare function Any(obj: any): any;
 declare function stderr(err: any): void;
 
 /**
- * Global i18n function (can be used as a string tag or simple function)
+ * Global i18n function
  */
-declare function i18n(strings: any | string[], ...expr: any[]): string;
+declare function i18n(keysetName: string, customLocale?: string): (key: string, params?: Dictionary) => string;
 
 /**
  * @alias
  * @see globalI18n
  */
-declare function t(strings: any | string[], ...expr: any[]): string;
-
-/**
- * Global i18n loopback (can be used as a string tag or simple function)
- */
-declare function l(strings: any | string[], ...expr: any[]): string;
+declare function t(keysetName: string, customLocale?: string): (key: string, params?: Dictionary) => string;
 
 declare function setImmediate(fn: AnyFunction): number;
 declare function clearImmediate(id: number): void;

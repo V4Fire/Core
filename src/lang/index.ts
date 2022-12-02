@@ -11,4 +11,20 @@
  * @packageDocumentation
  */
 
-export default {};
+import type { LangsDict } from 'lang/interface';
+
+export * from 'lang/interface';
+
+/**
+ * Format:
+ * {
+ *   [lang]: {
+ *     [keysetName]: {
+ *       [key]: value
+ *     }
+ *   }
+ * }
+ */
+const langDict: LangsDict = {};
+
+export default langDict;

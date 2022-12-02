@@ -12,9 +12,11 @@ import { IS_NODE } from 'core/env';
 import type { AsyncStorageNamespace } from 'core/kv-storage';
 
 import { emitter, locale } from 'core/prelude/i18n/const';
+import type { Language } from 'lang';
 
 export * from 'core/prelude/i18n/const';
 export * from 'core/prelude/i18n/interface';
+export * from 'core/prelude/i18n/defaultLang';
 
 let
 	storage: CanUndef<Promise<AsyncStorageNamespace>>;
@@ -32,7 +34,7 @@ if (IS_NODE) {
 		try {
 			const
 				s = await storage,
-				l = await s.get<string>('locale');
+				l = await s.get<Language>('locale');
 
 			if (l != null) {
 				setLocale(l, await s.get<boolean>('isLocaleDef'));
@@ -54,7 +56,7 @@ if (IS_NODE) {
  * @param [def] - if true, then the language is marked as default
  * @emits `setLocale(value: string, oldValue?: string)`
  */
-export function setLocale(value: string | undefined, def?: boolean): string | undefined {
+export function setLocale(value: Language | undefined, def?: boolean): Language | undefined {
 	const
 		oldVal = locale.value;
 

@@ -9,6 +9,7 @@
 import type { LogConfig } from 'core/log';
 import type { PerfConfig } from 'core/perf/config';
 import type { OnlineCheckConfig } from 'core/net';
+import type { Language } from 'lang';
 
 export interface Config {
 	/**
@@ -20,7 +21,7 @@ export interface Config {
 	 * Default system locale
 	 * (used for internalizing)
 	 */
-	locale: CanUndef<string>;
+	locale: CanUndef<Language>;
 
 	/**
 	 * Base API URL: primary service domain
