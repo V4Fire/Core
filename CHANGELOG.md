@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2022-??-??)
+
+#### :house: Internal
+
+* Updated dependencies: `@v4fire/linters@2.0.0`
+
 ## v3.89.0 (2022-09-15)
 
 #### :rocket: New Feature
