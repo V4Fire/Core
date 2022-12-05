@@ -8,11 +8,13 @@
 
 /**
  * [[include:core/iter/combinators/README.md]]
+ *
  * @packageDocumentation
  */
 
 /**
  * Takes iterable objects and returns a new iterator that produces values from them sequentially
+ *
  * @param iterables
  */
 export function sequence<T extends Iterable<any>>(

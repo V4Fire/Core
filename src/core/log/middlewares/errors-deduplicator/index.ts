@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/log/middlewares/extractor/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -38,6 +39,7 @@ export class ErrorsDeduplicatorMiddleware implements LogMiddleware {
 
 	/**
 	 * Returns true if the passed event has an error that's already occurred
+	 *
 	 * @param event - log event from a pipeline
 	 */
 	protected omitEvent(event: LogEvent): boolean {

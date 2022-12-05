@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/json/stream/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -44,6 +45,7 @@ export * from 'core/json/stream/interface';
 
 /**
  * Parses the specified iterable object as a JSON stream and yields tokens via a Generator
+ *
  * @param source
  */
 export function from(source: AnyIterable<string>): AsyncGenerator<Token> {

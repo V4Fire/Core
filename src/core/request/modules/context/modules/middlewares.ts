@@ -20,6 +20,7 @@ import type { RequestResponse, RequestResponseObject } from 'core/request/interf
 export default class RequestContext<D = unknown> extends Super<D> {
 	/**
 	 * Wraps the specified promise: attaches the pending cache, etc.
+	 *
 	 * @param promise
 	 */
 	wrapRequest(promise: RequestResponse<D>): RequestResponse<D> {
@@ -66,6 +67,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 	/**
 	 * Middleware to cache a response object
+	 *
 	 * @param resObj - response object
 	 */
 	saveCache(resObj: RequestResponseObject<D>): Promise<RequestResponseObject<D>> {

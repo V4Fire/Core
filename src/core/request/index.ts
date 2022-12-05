@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/request/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -87,9 +88,9 @@ function request<D = unknown>(opts: CreateRequestOptions<D>): typeof request;
  *
  * @param path - request path URL
  * @param resolver - function to resolve a request: it takes a request URL, request environment, and arguments
- *   from invoking the outer function and can modify some request parameters.
- *   Also, if the function returns a new string, the string will be appended to the request URL, or
- *   if the function returns a string wrapped with an array, the string fully overrides the original URL.
+ * from invoking the outer function and can modify some request parameters.
+ * Also, if the function returns a new string, the string will be appended to the request URL, or
+ * if the function returns a string wrapped with an array, the string fully overrides the original URL.
  *
  * @param opts - request options
  *

@@ -98,6 +98,7 @@ export class ConfigurableMiddleware implements LogMiddleware {
 
 	/**
 	 * Returns true if config patterns allow to log a record with the specified context
+	 *
 	 * @param context
 	 */
 	protected filterContext(context: string): boolean {

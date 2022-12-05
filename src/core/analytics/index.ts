@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/analytics/README.md]]
+ *
  * @packageDocumentation
  */
 

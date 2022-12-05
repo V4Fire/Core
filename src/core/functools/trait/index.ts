@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/functools/trait/README.md]]
+ *
  * @packageDocumentation
  */
 

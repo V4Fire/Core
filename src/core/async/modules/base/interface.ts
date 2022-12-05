@@ -56,6 +56,7 @@ export interface AsyncOptions {
 export interface AsyncCbOptions<CTX extends object = Async> extends AsyncOptions {
 	/**
 	 * If true, then a task namespace is marked as promisified
+	 *
 	 * @default `false`
 	 */
 	promise?: boolean;
@@ -80,6 +81,7 @@ export interface AsyncCbOptions<CTX extends object = Async> extends AsyncOptions
 export interface AsyncCbOptionsSingle<CTX extends object = Async> extends AsyncCbOptions<CTX> {
 	/**
 	 * If false, then the proxy supports multiple callings
+	 *
 	 * @default `true`
 	 */
 	single?: boolean;

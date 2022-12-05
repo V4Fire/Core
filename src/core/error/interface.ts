@@ -19,6 +19,7 @@ export interface ErrorDetailsExtractor<E extends Error> {
 
 	/**
 	 * Extracts details from the passed error
+	 *
 	 * @param error - an error, which details should be extracted
 	 */
 	extract(error: E): unknown;

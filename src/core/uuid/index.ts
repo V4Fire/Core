@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/uuid/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -62,6 +63,7 @@ export function generate(): Uint8Array {
 
 /**
  * Converts the specified binary UUID to a string and returns it
+ *
  * @param uuid
  */
 export function serialize(uuid: Uint8Array): string {
@@ -84,6 +86,7 @@ export function serialize(uuid: Uint8Array): string {
 
 /**
  * Converts the specified UUID string to a binary sequence and returns it
+ *
  * @param uuid
  */
 export function parse(uuid: string): Uint8Array {

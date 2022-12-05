@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/functools/warning/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -29,12 +30,14 @@ export function warn<T extends Function>(
 
 /**
  * Emits a  warning with the specified parameters
+ *
  * @param opts - additional options
  */
 export function warn(opts: InlineWarnOptions): void;
 
 /**
  * Marks a function as non-recommended to use
+ *
  * @param fn - function to wrap
  */
 export function warn<T extends Function>(fn: T): T extends ((...args: infer A) => infer R) ?
@@ -138,6 +141,7 @@ export function warn<T extends Function>(
 			throw new Error(str);
 
 		} else if (consoleCache[str] == null) {
+			// eslint-disable-next-line no-console
 			console.warn(str);
 			consoleCache[str] = true;
 		}

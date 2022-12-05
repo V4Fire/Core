@@ -27,6 +27,7 @@ export interface WrapOptions {
 
 	/**
 	 * True if the property to watch is taken from a prototype
+	 *
 	 * @default `false`
 	 */
 	fromProto?: boolean;

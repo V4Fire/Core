@@ -10,7 +10,8 @@ import Node from 'core/linked-list/node';
 
 /**
  * Double-ended two-way linked list
- * @typeparam T - linked list node data
+ *
+ * @typeParam T - linked list node data
  */
 export default class List<T> {
 	/**
@@ -69,6 +70,7 @@ export default class List<T> {
 
 	/**
 	 * Adds the passed data to the beginning of the list and returns its new length
+	 *
 	 * @param data
 	 */
 	unshift(...data: T[]): number {
@@ -122,6 +124,7 @@ export default class List<T> {
 
 	/**
 	 * Adds the passed data to the end of the list and returns its new length
+	 *
 	 * @param data
 	 */
 	push(...data: T[]): number {
@@ -177,6 +180,7 @@ export default class List<T> {
 
 	/**
 	 * Returns true if the list contains a node with the given data
+	 *
 	 * @param data
 	 */
 	includes(data: T): boolean {

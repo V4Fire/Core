@@ -28,6 +28,7 @@ export class LogPipeline {
 
 	/**
 	 * Carries events through a chain of middlewares and passes them to the engine in the end
+	 *
 	 * @param events
 	 */
 	run(events: CanArray<LogEvent>): void {

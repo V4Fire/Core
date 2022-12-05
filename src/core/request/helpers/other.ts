@@ -8,6 +8,7 @@
 
 /**
  * Merges the specified arguments and returns a new object
+ *
  * @param args
  */
 export function merge<T>(...args: unknown[]): T {

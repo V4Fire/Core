@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/promise/abortable/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -35,7 +36,7 @@ export * from 'core/promise/abortable/interface';
  * Class wraps promise-like objects and adds to them some extra functionality,
  * such as possibility of cancellation, etc.
  *
- * @typeparam T - promise resolved value
+ * @typeParam T - promise resolved value
  */
 export default class AbortablePromise<T = unknown> implements Promise<T> {
 	/**
@@ -612,6 +613,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 
 	/**
 	 * Aborts the current promise (the promise will be rejected)
+	 *
 	 * @param [reason] - abort reason
 	 */
 	abort(reason?: unknown): boolean {

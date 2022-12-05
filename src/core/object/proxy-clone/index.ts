@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/object/proxy-clone/README.md]]
+ *
  * @packageDocumentation
  */
 

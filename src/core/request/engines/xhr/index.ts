@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/request/engines/xhr/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -29,6 +30,7 @@ import type { RequestEngine, RequestResponseChunk } from 'core/request/interface
 
 /**
  * Creates request by using XMLHttpRequest with the specified parameters and returns a promise
+ *
  * @param params
  */
 const request: RequestEngine = (params) => {

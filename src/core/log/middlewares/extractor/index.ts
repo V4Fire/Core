@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/log/middlewares/extractor/README.md]]
+ *
  * @packageDocumentation
  */
 

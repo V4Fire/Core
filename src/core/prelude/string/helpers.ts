@@ -8,6 +8,7 @@
 
 /**
  * Returns true, if the specified character is declared in upper case
+ *
  * @param char
  */
 export function isCharUpper(char: string): boolean {
@@ -135,6 +136,7 @@ export function convertToSeparatedStr(str: string, separator: string, stable?: b
 
 /**
  * Factory to create static string transform methods
+ *
  * @param method
  */
 export function createStaticTransformFunction(method: string): AnyFunction {

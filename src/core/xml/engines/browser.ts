@@ -11,6 +11,7 @@ let
 
 /**
  * Serializes the specified XML node to a string
+ *
  * @param node
  */
 export function serialize(node: Node): string {

@@ -8,7 +8,8 @@
 
 /**
  * [[include:core/async/modules/proxy/README.md]]
- * @packageDeclaration
+ *
+ * @packageDocumentation
  */
 
 import SyncPromise from 'core/promise/sync';
@@ -135,12 +136,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Terminates the specified worker
+	 *
 	 * @param [id] - link to the worker (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearWorker(id?: WorkerLikeP): this;
 
 	/**
 	 * Terminates the specified worker or a group of workers
+	 *
 	 * @param opts - options for the operation
 	 */
 	clearWorker(opts: ClearProxyOptions<WorkerLikeP>): this;
@@ -231,12 +234,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Cancels the specified proxy function
+	 *
 	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearProxy(id?: Function): this;
 
 	/**
 	 * Cancels the specified proxy function or a group of functions
+	 *
 	 * @param opts - options for the operation
 	 */
 	clearProxy(opts: ClearProxyOptions<Function>): this;
@@ -246,12 +251,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Mutes the specified proxy function
+	 *
 	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	muteProxy(id?: Function): this;
 
 	/**
 	 * Mutes the specified proxy function or a group of functions
+	 *
 	 * @param opts - options for the operation
 	 */
 	muteProxy(opts: ClearProxyOptions<Function>): this;
@@ -265,12 +272,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unmutes the specified proxy function
+	 *
 	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unmuteProxy(id?: Function): this;
 
 	/**
 	 * Unmutes the specified proxy function or a group of functions
+	 *
 	 * @param opts - options for the operation
 	 */
 	unmuteProxy(opts: ClearProxyOptions<Function>): this;
@@ -284,12 +293,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Suspends the specified proxy function
+	 *
 	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	suspendProxy(id?: Function): this;
 
 	/**
 	 * Suspends the specified proxy function or a group of functions
+	 *
 	 * @param opts - options for the operation
 	 */
 	suspendProxy(opts: ClearProxyOptions<Function>): this;
@@ -303,12 +314,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unsuspends the specified proxy function
+	 *
 	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unsuspendProxy(id?: Function): this;
 
 	/**
 	 * Unsuspends the specified proxy function or a group of functions
+	 *
 	 * @param opts - options for the operation
 	 */
 	unsuspendProxy(opts: ClearProxyOptions<Function>): this;
@@ -404,12 +417,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unmutes the specified request
+	 *
 	 * @param [id] - link to the request (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unmuteRequest(id?: Promise<unknown>): this;
 
 	/**
 	 * Unmutes the specified request or a group of requests
+	 *
 	 * @param opts - options for the operation
 	 */
 	unmuteRequest(opts: ClearOptionsId<Promise<unknown>>): this;
@@ -419,12 +434,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Suspends the specified request
+	 *
 	 * @param [id] - link to the request (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	suspendRequest(id?: Promise<unknown>): this;
 
 	/**
 	 * Suspends the specified request or a group of requests
+	 *
 	 * @param opts - options for the operation
 	 */
 	suspendRequest(opts: ClearOptionsId<Promise<unknown>>): this;
@@ -434,12 +451,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unsuspends the specified request
+	 *
 	 * @param [id] - link to the request (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unsuspendRequest(id?: Promise<unknown>): this;
 
 	/**
 	 * Unsuspends the specified request or a group of requests
+	 *
 	 * @param opts - options for the operation
 	 */
 	unsuspendRequest(opts: ClearOptionsId<Promise<unknown>>): this;
@@ -612,12 +631,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unmutes the specified iterable object
+	 *
 	 * @param [id] - link to the iterable (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unmuteIterable(id?: AsyncIterable<unknown>): this;
 
 	/**
 	 * Unmutes the specified iterable function or a group of iterable objects
+	 *
 	 * @param opts - options for the operation
 	 */
 	unmuteIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
@@ -646,12 +667,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unsuspends the specified iterable object
+	 *
 	 * @param [id] - link to the iterable (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unsuspendIterable(id?: AsyncIterable<unknown>): this;
 
 	/**
 	 * Unsuspends the specified iterable or a group of iterable objects
+	 *
 	 * @param opts - options for the operation
 	 */
 	unsuspendIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
@@ -877,12 +900,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unmutes the specified promise
+	 *
 	 * @param [id] - link to the promise (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unmutePromise(id?: Promise<unknown>): this;
 
 	/**
 	 * Unmutes the specified promise or a group of promises
+	 *
 	 * @param opts - options for the operation
 	 */
 	unmutePromise(opts: ClearOptionsId<Promise<unknown>>): this;
@@ -892,12 +917,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Suspends the specified promise
+	 *
 	 * @param [id] - link to the promise (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	suspendPromise(id?: Promise<unknown>): this;
 
 	/**
 	 * Suspends the specified promise or a group of promises
+	 *
 	 * @param opts - options for the operation
 	 */
 	suspendPromise(opts: ClearOptionsId<Promise<unknown>>): this;
@@ -907,12 +934,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unsuspends the specified promise
+	 *
 	 * @param [id] - link to the promise (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unsuspendPromise(id?: Promise<unknown>): this;
 
 	/**
 	 * Unsuspends the specified promise or a group of promises
+	 *
 	 * @param opts - options for the operation
 	 */
 	unsuspendPromise(opts: ClearOptionsId<Promise<unknown>>): this;

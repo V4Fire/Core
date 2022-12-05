@@ -14,6 +14,7 @@ import type Cache from 'core/cache/interface';
 export interface AbstractPersistentEngine<V = unknown> {
 	/**
 	 * Initializes a new cache instance from the past one
+	 *
 	 * @param cache
 	 */
 	initCache?(cache: Cache<V>): CanPromise<void>;
@@ -50,12 +51,14 @@ export abstract class AbstractPersistentEngine<V = unknown> {
 
 	/**
 	 * Removes a value from the storage by the specified key
+	 *
 	 * @param key
 	 */
 	abstract remove(key: string): Promise<void>;
 
 	/**
 	 * Returns a value of the `persistentTTL` descriptor by the specified key
+	 *
 	 * @param key
 	 */
 	abstract getTTLFrom(key: string): Promise<CanUndef<number>>;
@@ -71,6 +74,7 @@ export abstract class AbstractPersistentEngine<V = unknown> {
 
 	/**
 	 * Normalized the given TTL value and returns it
+	 *
 	 * @param ttl
 	 */
 	protected normalizeTTL(ttl: Nullable<number>): number {

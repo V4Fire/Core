@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/cache/simple/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -19,8 +20,8 @@ export * from 'core/cache/interface';
 /**
  * Implementation for a simple in-memory cache data structure
  *
- * @typeparam V - value type
- * @typeparam K - key type (`string` by default)
+ * @typeParam V - value type
+ * @typeParam K - key type (`string` by default)
  */
 export default class SimpleCache<V = unknown, K = string> implements Cache<V, K> {
 	/** @see [[Cache.size]] */

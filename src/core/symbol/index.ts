@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/symbol/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -15,6 +16,7 @@ import { PROXY, READONLY } from 'core/prelude/types/const';
 
 /**
  * Returns a factory for flexible creation of unique symbols by the first touch
+ *
  * @param fields - list of predefined fields (it can be useful to shim the Proxy API)
  */
 export default function generator(fields?: string[]): StrictDictionary<symbol> {

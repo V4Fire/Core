@@ -8,6 +8,7 @@
 
 /**
  * Factory to create functions to modify date values
+ *
  * @param mod
  */
 export function createDateModifier(mod: (val: number, base: number) => number = (a) => a): AnyFunction {
@@ -108,6 +109,7 @@ export function createDateModifier(mod: (val: number, base: number) => number = 
 
 /**
  * Factory to create static functions to modify date values
+ *
  * @param method
  */
 export function createStaticDateModifier(method: string): AnyFunction {
@@ -124,6 +126,7 @@ export function createStaticDateModifier(method: string): AnyFunction {
 
 /**
  * Factory to create static functions to compare date values
+ *
  * @param method
  */
 export function createStaticDateComparator(method: string): AnyFunction {
@@ -147,6 +150,7 @@ export function createStaticDateComparator(method: string): AnyFunction {
 
 /**
  * Factory to create static functions to format date values
+ *
  * @param method
  */
 export function createStaticDateFormatter(method: string): AnyFunction {

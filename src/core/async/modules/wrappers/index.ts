@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/async/modules/wrappers/README.md]]
+ *
  * @packageDocumentation
  */
 

@@ -26,6 +26,7 @@ exports.depsRgxpStr = [projectName]
 
 /**
  * RegExp to detect file paths that are registered as dependencies within ".pzlrrc"
+ *
  * @type {RegExp}
  *
  * @example
@@ -56,6 +57,7 @@ exports.isLayerDep = new RegExp(
 
 /**
  * RegExp to detect file paths that aren't registered as dependencies within ".pzlrrc"
+ *
  * @type {RegExp}
  *
  * @example

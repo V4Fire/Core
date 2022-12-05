@@ -42,6 +42,7 @@ export type WarnAlternative = string | WarnAlternativeOptions;
 export interface WarnOptions {
 	/**
 	 * Type of warn context
+	 *
 	 * @type `'warning'`
 	 */
 	context?: WarnContext;

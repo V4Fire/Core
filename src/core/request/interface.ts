@@ -163,11 +163,13 @@ export type ResolverResult = CanUndef<CanArray<string>>;
 
 /**
  * Options for a request
- * @typeparam D - response data type
+ *
+ * @typeParam D - response data type
  */
 export interface CreateRequestOptions<D = unknown> {
 	/**
 	 * HTTP method to create a request
+	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 	 */
 	method?: RequestMethod;
@@ -325,7 +327,7 @@ export interface CreateRequestOptions<D = unknown> {
 	 * Strategy of caching for requests that support caching (by default, only GET requests can be cached):
 	 *
 	 * 1. `'forever'` - caches all requests and stores their values forever within the active session or
-	 *   until the cache expires (if `cacheTTL` is specified);
+	 * until the cache expires (if `cacheTTL` is specified);
 	 * 2. `'queue'` - caches all requests, but more frequent requests will push less frequent requests;
 	 * 3. `'never'` - never caches any requests;
 	 * 4. Or, you can pass a custom cache object.
@@ -388,12 +390,14 @@ export interface CreateRequestOptions<D = unknown> {
 
 	/**
 	 * Value in milliseconds that indicates how long a request value should keep in the offline cache
+	 *
 	 * @default `(1).day()`
 	 */
 	offlineCacheTTL?: number;
 
 	/**
 	 * List of request methods that support caching
+	 *
 	 * @default `['GET']`
 	 */
 	cacheMethods?: RequestMethod[];
@@ -541,7 +545,8 @@ export interface CreateRequestOptions<D = unknown> {
 
 /**
  * Options to retry bad requests
- * @typeparam D - response data type
+ *
+ * @typeParam D - response data type
  */
 export interface RetryOptions<D = unknown> {
 	/**
@@ -688,6 +693,7 @@ export interface RequestEngine {
 
 	/**
 	 * A flag indicates that the active requests with the same request hash can be merged
+	 *
 	 * @default `true`
 	 */
 	pendingCache?: boolean;

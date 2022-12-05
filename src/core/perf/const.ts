@@ -9,4 +9,4 @@
 /**
  * All supported group names
  */
-export const GROUPS = ['network', 'components', 'tools', 'manual'] as const;
+export const GROUPS = <const>['network', 'components', 'tools', 'manual'];

@@ -507,7 +507,7 @@ request('//users', {
 
 ```typescript
 /**
- * @typeparam D - response data type
+ * @typeParam D - response data type
  */
 export interface RetryOptions<D = unknown> {
   /**

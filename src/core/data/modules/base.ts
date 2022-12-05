@@ -127,6 +127,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 	/**
 	 * Returns a key to the class instance cache
+	 *
 	 * @param [paramsForCache]
 	 */
 	getCacheKey(paramsForCache: ProviderOptions = {}): string {
@@ -135,10 +136,10 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 	/**
 	 * Returns an object with authentication parameters
-	 * @param params - additional parameters
+	 *
+	 * @param _params - additional parameters
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-	getAuthParams(params?: Dictionary): Promise<Dictionary> {
+	getAuthParams(_params?: Dictionary): Promise<Dictionary> {
 		return Promise.resolve({});
 	}
 
@@ -150,16 +151,16 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	 * if the function returns a string that wrapped with an array, the string fully override the original URL.
 	 *
 	 * @see [[RequestResolver]]
-	 * @param url - request URL
-	 * @param params - request parameters
+	 * @param _url - request URL
+	 * @param _params - request parameters
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-	resolver<T = unknown>(url: string, params: MiddlewareParams<T>): ResolverResult {
+	resolver<T = unknown>(_url: string, _params: MiddlewareParams<T>): ResolverResult {
 		return undefined;
 	}
 
 	/**
 	 * Connects to a socket server and returns the connection
+	 *
 	 * @param [opts] - additional options for the server
 	 */
 	async connect(opts?: Dictionary): Promise<Socket> {

@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/request/modules/stream-buffer/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -92,6 +93,7 @@ export default class StreamBuffer<T = unknown> {
 
 	/**
 	 * Adds a new value to the stream if it is opened, otherwise does nothing
+	 *
 	 * @param value - item to add
 	 */
 	add(value: T): void {
@@ -118,6 +120,7 @@ export default class StreamBuffer<T = unknown> {
 
 	/**
 	 * Destroys the stream
+	 *
 	 * @param [reason] - reason to destroy
 	 */
 	destroy<R = unknown>(reason?: R): void {

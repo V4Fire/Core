@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/log/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -19,7 +20,6 @@ export * from 'core/log/config';
 
 /**
  * API for logging
- * @defaultExport
  */
 const logger = extend(log);
 export default logger;

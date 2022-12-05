@@ -33,7 +33,8 @@ export interface QueueOptions<T extends InnerQueue<any> = InnerQueue> {
 
 /**
  * An abstract class for any queue data structure
- * @typeparam T - queue element
+ *
+ * @typeParam T - queue element
  */
 export default abstract class Queue<T> {
 	/**
@@ -48,6 +49,7 @@ export default abstract class Queue<T> {
 
 	/**
 	 * Adds a new element to the queue
+	 *
 	 * @param el
 	 */
 	abstract push(el: T): unknown;
@@ -59,6 +61,7 @@ export default abstract class Queue<T> {
 
 	/**
 	 * Alias to `push`
+	 *
 	 * @see [[Queue.push]]
 	 */
 	unshift(el: T): ReturnType<this['push']> {
@@ -67,6 +70,7 @@ export default abstract class Queue<T> {
 
 	/**
 	 * Alias to `pop`
+	 *
 	 * @see [[Queue.pop]]
 	 */
 	shift(): ReturnType<this['pop']> {

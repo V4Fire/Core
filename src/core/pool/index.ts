@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/pool/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -44,7 +45,8 @@ export * from 'core/pool/interface';
 
 /**
  * Implementation of an object pool structure
- * @typeparam T - pool resource
+ *
+ * @typeParam T - pool resource
  */
 export default class Pool<T = unknown> {
 	/**
@@ -84,6 +86,7 @@ export default class Pool<T = unknown> {
 
 	/**
 	 * Event emitter to broadcast pool events
+	 *
 	 * @see [[EventEmitter]]
 	 */
 	protected emitter: EventEmitter = new EventEmitter();
@@ -462,6 +465,7 @@ export default class Pool<T = unknown> {
 
 	/**
 	 * Wraps the specified resource and returns the wrapper
+	 *
 	 * @param resource
 	 */
 	protected wrapResource(resource: Resource<T> | null): OptionalWrappedResource<T> {

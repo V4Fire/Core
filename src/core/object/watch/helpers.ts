@@ -8,6 +8,7 @@
 
 /**
  * Returns true if the specified value can be used as an index within an array
+ *
  * @param value
  */
 export function isValueCanBeArrayIndex(value: unknown): boolean {

@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/async/modules/base/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -118,6 +119,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * Clears all async tasks
+	 *
 	 * @param [opts] - additional options for the operation
 	 */
 	clearAll(opts?: ClearOptions): this {
@@ -139,6 +141,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * Mutes all async tasks
+	 *
 	 * @param [opts] - additional options for the operation
 	 */
 	muteAll(opts?: ClearOptions): this {
@@ -157,6 +160,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * Unmutes all async tasks
+	 *
 	 * @param [opts] - additional options for the operation
 	 */
 	unmuteAll(opts?: ClearOptions): this {
@@ -175,6 +179,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * Suspends all async tasks
+	 *
 	 * @param [opts] - additional options for the operation
 	 */
 	suspendAll(opts?: ClearOptions): this {
@@ -193,6 +198,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * Unsuspends all async tasks
+	 *
 	 * @param [opts] - additional options for the operation
 	 */
 	unsuspendAll(opts?: ClearOptions): this {
@@ -239,6 +245,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * Registers the specified async task
+	 *
 	 * @param task
 	 */
 	protected registerTask<R = unknown>(task: FullAsyncOptions<any>): R | null {

@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/i18n/README.md]]
+ *
  * @packageDocumentation
  */
 

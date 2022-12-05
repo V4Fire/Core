@@ -21,6 +21,7 @@ import Super from 'core/request/modules/context/modules/params';
 export default class RequestContext<D = unknown> extends Super<D> {
 	/**
 	 * Generates a string cache key for specified URL and returns it
+	 *
 	 * @param url
 	 */
 	getRequestKey(url: string): string {
@@ -34,6 +35,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 	/**
 	 * Returns an absolute URL for the request API
+	 *
 	 * @param [apiURL] - base API URL
 	 */
 	resolveAPI(apiURL: Nullable<string> = globalOpts.api): string {
@@ -145,6 +147,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 	/**
 	 * Resolves request parameters and returns an absolute URL for the request
+	 *
 	 * @param [url] - base request URL
 	 */
 	resolveRequest(url?: Nullable<string>): string {

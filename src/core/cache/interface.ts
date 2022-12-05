@@ -13,8 +13,8 @@ export interface ClearFilter<V = unknown, K = string> {
 /**
  * Base interface for a cache data structure
  *
- * @typeparam V - value type
- * @typeparam K - key type (`string` by default)
+ * @typeParam V - value type
+ * @typeParam K - key type (`string` by default)
  */
 export default interface Cache<V = unknown, K = string> {
 	/**
@@ -24,12 +24,14 @@ export default interface Cache<V = unknown, K = string> {
 
 	/**
 	 * Returns true if a value by the specified key exists in the cache
+	 *
 	 * @param key
 	 */
 	has(key: K): boolean;
 
 	/**
 	 * Returns a value from the cache by the specified key
+	 *
 	 * @param key
 	 */
 	get(key: K): CanUndef<V>;
@@ -45,12 +47,14 @@ export default interface Cache<V = unknown, K = string> {
 
 	/**
 	 * Removes a value from the cache by the specified key
+	 *
 	 * @param key
 	 */
 	remove(key: K): CanUndef<V>;
 
 	/**
 	 * Clears the cache by the specified filter and returns a map of removed keys
+	 *
 	 * @param [filter] - filter for removing (if not specified, then all cache values will be removed)
 	 */
 	clear(filter?: ClearFilter<V, K>): Map<K, V>;

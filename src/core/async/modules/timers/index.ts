@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/async/modules/timers/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -57,12 +58,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Wrapper for `globalThis.clearImmediate`
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearImmediate(id?: TimerId): this;
 
 	/**
 	 * Clears the specified "setImmediate" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	clearImmediate(opts: ClearOptionsId<TimerId>): this;
@@ -72,12 +75,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Mutes the specified "setImmediate" timer
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	muteImmediate(id?: TimerId): this;
 
 	/**
 	 * Mutes the specified "setImmediate" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	muteImmediate(opts: ClearOptionsId<TimerId>): this;
@@ -87,6 +92,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unmutes the specified "setImmediate" timer
+	 *
 	 * @param [id] - operation id (if not defined will be got all handlers)
 	 */
 	unmuteImmediate(id?: TimerId): this;
@@ -103,12 +109,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Suspends the specified "setImmediate" timer
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	suspendImmediate(id?: TimerId): this;
 
 	/**
 	 * Suspends the specified "setImmediate" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	suspendImmediate(opts: ClearOptionsId<TimerId>): this;
@@ -118,12 +126,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unsuspends the specified "setImmediate" timer
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unsuspendImmediate(id?: TimerId): this;
 
 	/**
 	 * Unsuspends the specified "setImmediate" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	unsuspendImmediate(opts: ClearOptionsId<TimerId>): this;
@@ -153,12 +163,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Wrapper for `globalThis.clearInterval`
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearInterval(id?: TimerId): this;
 
 	/**
 	 * Clears the specified "setInterval" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	clearInterval(opts: ClearOptionsId<TimerId>): this;
@@ -168,12 +180,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Mutes the specified "setInterval" timer
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	muteInterval(id?: TimerId): this;
 
 	/**
 	 * Mutes the specified "setInterval" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	muteInterval(opts: ClearOptionsId<TimerId>): this;
@@ -183,12 +197,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unmutes the specified "setInterval" timer
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unmuteInterval(id?: TimerId): this;
 
 	/**
 	 * Unmutes the specified "setInterval" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	unmuteInterval(opts: ClearOptionsId<TimerId>): this;
@@ -198,12 +214,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Suspends the specified "setInterval" timer
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	suspendInterval(id?: TimerId): this;
 
 	/**
 	 * Suspends the specified "setInterval" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	suspendInterval(opts: ClearOptionsId<TimerId>): this;
@@ -213,12 +231,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unsuspends the specified "setImmediate" timer
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unsuspendInterval(id?: TimerId): this;
 
 	/**
 	 * Unsuspends the specified "setImmediate" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	unsuspendInterval(opts: ClearOptionsId<TimerId>): this;
@@ -247,12 +267,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Wrapper for `globalThis.clearTimeout`
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearTimeout(id?: TimerId): this;
 
 	/**
 	 * Clears the specified "setTimeout" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	clearTimeout(opts: ClearOptionsId<TimerId>): this;
@@ -262,12 +284,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Mutes the specified "setTimeout" timer
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	muteTimeout(id?: TimerId): this;
 
 	/**
 	 * Mutes the specified "setTimeout" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	muteTimeout(opts: ClearOptionsId<TimerId>): this;
@@ -277,12 +301,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unmutes the specified "setTimeout" timer
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unmuteTimeout(id?: TimerId): this;
 
 	/**
 	 * Unmutes the specified "setTimeout" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	unmuteTimeout(opts: ClearOptionsId<TimerId>): this;
@@ -292,12 +318,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Suspends the specified "setTimeout" timer
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	suspendTimeout(id?: TimerId): this;
 
 	/**
 	 * Suspends the specified "setTimeout" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	suspendTimeout(opts: ClearOptionsId<TimerId>): this;
@@ -307,12 +335,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unsuspends the specified "setTimeout" timer
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unsuspendTimeout(id?: TimerId): this;
 
 	/**
 	 * Unsuspends the specified "setTimeout" timer or a group of names
+	 *
 	 * @param opts - options for the operation
 	 */
 	unsuspendTimeout(opts: ClearOptionsId<TimerId>): this;
@@ -375,12 +405,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Wrapper for `globalThis.cancelIdleCallback`
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearIdleCallback(id?: TimerId): this;
 
 	/**
 	 * Clears the specified "requestIdleCallback" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	clearIdleCallback(opts: ClearOptionsId<TimerId>): this;
@@ -390,12 +422,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Mutes the specified "requestIdleCallback" timer
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	muteIdleCallback(id?: TimerId): this;
 
 	/**
 	 * Mutes the specified "requestIdleCallback" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	muteIdleCallback(opts: ClearOptionsId<TimerId>): this;
@@ -405,12 +439,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unmutes the specified "requestIdleCallback" timer
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unmuteIdleCallback(id?: TimerId): this;
 
 	/**
 	 * Unmutes the specified "requestIdleCallback" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	unmuteIdleCallback(opts: ClearOptionsId<TimerId>): this;
@@ -420,12 +456,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Suspends the specified "requestIdleCallback" timer
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	suspendIdleCallback(id?: TimerId): this;
 
 	/**
 	 * Suspends the specified "requestIdleCallback" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	suspendIdleCallback(opts: ClearOptionsId<TimerId>): this;
@@ -435,12 +473,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unsuspends the specified "requestIdleCallback" timer
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unsuspendIdleCallback(id?: TimerId): this;
 
 	/**
 	 * Unsuspends the specified "requestIdleCallback" timer or a group of timers
+	 *
 	 * @param opts - options for the operation
 	 */
 	unsuspendIdleCallback(opts: ClearOptionsId<TimerId>): this;
@@ -467,6 +507,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Returns a promise that will be resolved on the next tick of the event loop
+	 *
 	 * @param [opts] - additional options for the operation
 	 */
 	nextTick(opts?: AsyncOptions): Promise<void> {
@@ -482,6 +523,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Returns a promise that will be resolved on the process idle
+	 *
 	 * @param [opts] - additional options for the operation
 	 */
 	idle(opts?: AsyncIdleOptions): Promise<IdleDeadline> {

@@ -24,6 +24,7 @@ export class Descriptor {
 
 	/**
 	 * Returns a value from the descriptor
+	 *
 	 * @param receiver - receiver for a get method
 	 */
 	getValue<T = unknown>(receiver: object): T {

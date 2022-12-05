@@ -11,6 +11,7 @@ import type { AnalyticEngine } from 'core/analytics/interface';
 
 /**
  * Sends the specified analytic event
+ *
  * @abstract
  */
 const sendEvent: AnalyticEngine = () => {

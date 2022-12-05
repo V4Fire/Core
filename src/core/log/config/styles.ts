@@ -11,6 +11,7 @@ import type { LogLevel } from 'core/log/interface';
 
 /**
  * Creates an object of styles where each log level property merged with the default property of a log styles config
+ *
  * @param styles
  */
 export function createStyleCache(styles: LogStylesConfig): StylesCache {

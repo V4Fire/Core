@@ -13,6 +13,7 @@ import type { WatchHandlersSet, InternalWatchOptions } from 'core/object/watch/i
 
 /**
  * Returns true if the specified value is a watch proxy
+ *
  * @param value
  */
 export function isProxy(value: unknown): value is object {
@@ -25,6 +26,7 @@ export function isProxy(value: unknown): value is object {
 
 /**
  * Unwraps the specified value to watch and returns the raw object
+ *
  * @param value
  */
 export function unwrap(value: unknown): CanUndef<object> {
@@ -34,6 +36,7 @@ export function unwrap(value: unknown): CanUndef<object> {
 
 /**
  * Returns a type of data to watch or false
+ *
  * @param obj
  */
 export function getProxyType(obj: unknown): Nullable<string> {

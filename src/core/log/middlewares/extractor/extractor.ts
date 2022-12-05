@@ -36,6 +36,7 @@ export class ExtractorMiddleware implements LogMiddleware {
 
 	/**
 	 * Extracts error's details from the passed log event and stores it within the `additionals.error` property
+	 *
 	 * @param event - log event from a pipeline
 	 */
 	protected processEvent(event: LogEvent): LogEvent {

@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/cache/restricted/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -18,8 +19,8 @@ export * from 'core/cache/simple';
 /**
  * Implementation for an in-memory data structure with support for limiting of values in the cache
  *
- * @typeparam V - value type
- * @typeparam K - key type (`string` by default)
+ * @typeParam V - value type
+ * @typeParam K - key type (`string` by default)
  */
 export default class RestrictedCache<V = unknown, K = string> extends SimpleCache<V, K> {
 	/**
@@ -115,7 +116,7 @@ export default class RestrictedCache<V = unknown, K = string> extends SimpleCach
 					key = this.queue.values().next().value,
 					el = this.remove(key);
 
-				if (el) {
+				if (Boolean(el)) {
 					removed.set(key, el);
 				}
 			}

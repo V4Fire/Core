@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/perf/config/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -30,6 +31,7 @@ export * from 'core/perf/config/interface';
 
 /**
  * Returns an instance of the timer engine that defined in the performance config
+ *
  * @param config - performance config
  */
 export function getTimerEngine(config: PerfTimerConfig): PerfTimerEngine {
@@ -38,6 +40,7 @@ export function getTimerEngine(config: PerfTimerConfig): PerfTimerEngine {
 
 /**
  * Creates filter predicates for every group
+ *
  * @param filters - filters from the performance config
  */
 export function createPredicates(filters: PerfGroupFilters): PerfPredicates {
@@ -73,6 +76,7 @@ export function mergeConfigs(baseConfig: PerfConfig, ...configs: Array<Partial<P
 
 /**
  * Preprocesses raw performance config filters and returns a collection of RegExp or Boolean values
+ *
  * @param filters - raw performance config filters
  */
 function createFilters(filters: CanUndef<PerfIncludeFilter | string[] | boolean>): RegExp[] | boolean {

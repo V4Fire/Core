@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/queue/worker/README.md]]
+ *
  * @packageDocumentation
  */
 

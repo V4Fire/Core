@@ -56,7 +56,7 @@ export interface PersistentOptions {
 	 * 1. `'onInit'` - the whole stored data will be loaded during the cache initialization;
 	 * 2. `'onDemand'` - each stored item will be loaded from the cache only on the first touch, i.e. on-demand or lazily;
 	 * 3. `'onOfflineDemand'` - each stored item will be loaded from the cache only on the first touch and only if
-	 *  there is no internet connection (the strategy is useful to create net-first offline storages)
+	 * there is no internet connection (the strategy is useful to create net-first offline storages)
 	 *
 	 * @default `'onDemand'`
 	 */

@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/async/modules/events/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -191,7 +192,6 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				}
 			});
 
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			if (link != null) {
 				links.push(link);
 			}
@@ -347,6 +347,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Removes the specified event listener
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearEventListener(id?: EventId): this;
@@ -372,6 +373,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Mutes the specified event listener
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	muteEventListener(id?: EventId): this;
@@ -389,6 +391,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unmutes the specified event listener
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unmuteEventListener(id?: EventId): this;
@@ -406,6 +409,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Suspends the specified event listener
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	suspendEventListener(id?: EventId): this;
@@ -423,6 +427,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unsuspends the specified event listener
+	 *
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unsuspendEventListener(id?: EventId): this;
@@ -440,6 +445,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Removes the passed event listener from the specified emitter
+	 *
 	 * @param event - event object
 	 */
 	eventListenerDestructor(event: Event): void {

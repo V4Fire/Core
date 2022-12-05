@@ -9,6 +9,7 @@
 export interface ToQueryStringOptions {
 	/**
 	 * If false, then the result string won't be encoded by using `encodeURIComponent`
+	 *
 	 * @default `true`
 	 */
 	encode?: boolean;
@@ -59,6 +60,7 @@ export interface ToQueryStringOptions {
 export interface FromQueryStringOptions {
 	/**
 	 * If false, then the passed string won't be decoded by using `decodeURIComponent`
+	 *
 	 * @default `true`
 	 */
 	decode?: boolean;

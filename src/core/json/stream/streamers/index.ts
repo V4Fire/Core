@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/json/stream/streamers/README.md]]
+ *
  * @packageDocumentation
  */
 

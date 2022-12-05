@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/data/middlewares/wait/README.md]]
+ *
  * @packageDocumentation
  */
 

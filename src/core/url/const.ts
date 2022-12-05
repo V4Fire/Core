@@ -16,6 +16,7 @@ export const
 
 /**
  * Default function to filter query parameters to serialize with the `toQueryString` method
+ *
  * @param value
  */
 export function defaultToQueryStringParamsFilter(value: unknown): boolean {

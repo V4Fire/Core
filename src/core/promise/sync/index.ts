@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/promise/sync/README.md]]
+ *
  * @packageDocumentation
  */
 

@@ -133,6 +133,7 @@ extend(Object, 'reject', selectReject(false));
 
 /**
  * Factory to create Object.select/reject functions
+ *
  * @param select
  */
 export function selectReject(select: boolean): AnyFunction {

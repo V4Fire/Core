@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/xml/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -16,6 +17,7 @@ import { serialize } from 'core/xml/engines';
 
 /**
  * Converts the specified XML node to a DATA:URI string
+ *
  * @param node
  */
 export function toDataURI(node: Node): string {

@@ -57,6 +57,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 
 	/**
 	 * Returns a SyncPromise object that is rejected with a given reason
+	 *
 	 * @param [reason]
 	 */
 	static reject<T = never>(reason?: unknown): SyncPromise<T> {

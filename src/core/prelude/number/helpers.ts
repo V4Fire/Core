@@ -8,6 +8,7 @@
 
 /**
  * Factory to create rounding methods
+ *
  * @param method
  */
 export function createRoundingFunction(method: AnyFunction): AnyFunction {
@@ -32,6 +33,7 @@ export function createRoundingFunction(method: AnyFunction): AnyFunction {
 
 /**
  * Factory to create static rounding methods
+ *
  * @param method
  */
 export function createStaticRoundingFunction(method: string): AnyFunction {
@@ -47,6 +49,7 @@ export function createStaticRoundingFunction(method: string): AnyFunction {
 
 /**
  * Returns a descriptor for a getter that returns a string with attaching the specified type
+ *
  * @param type
  */
 export function createStringTypeGetter(type: string): PropertyDescriptor {
@@ -59,6 +62,7 @@ export function createStringTypeGetter(type: string): PropertyDescriptor {
 
 /**
  * Factory for functions that converts milliseconds by the specified offset
+ *
  * @param offset
  */
 export function createMsFunction(offset: number): AnyFunction {
@@ -72,6 +76,7 @@ export function createMsFunction(offset: number): AnyFunction {
 
 /**
  * Factory for static functions that converts milliseconds by the specified offset
+ *
  * @param offset
  */
 export function createStaticMsFunction(offset: number): AnyFunction {

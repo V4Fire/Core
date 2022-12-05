@@ -18,12 +18,14 @@ export * from 'core/promise/interface';
 
 /**
  * Returns true if the specified promise implements the interface of `ControllablePromise`
+ *
  * @param promise
  */
 export function isControllablePromise<T extends PromiseLike<any>>(promise: T): promise is ControllablePromise<T>;
 
 /**
  * Returns true if the specified object implements the interface of `ControllablePromise`
+ *
  * @param obj
  */
 export function isControllablePromise(obj: unknown): obj is ControllablePromise<PromiseLike<unknown>>;
@@ -35,7 +37,7 @@ export function isControllablePromise(obj: unknown): boolean {
  * Creates a promise that can be resolved from the "outside"
  *
  * @param opts - additional options
- * @typeparam T - promise constructor
+ * @typeParam T - promise constructor
  *
  * @example
  * ```js
@@ -51,7 +53,7 @@ export function createControllablePromise<T extends ControllablePromiseConstruct
  * Creates a promise that can be resolved from the "outside"
  *
  * @param [opts] - additional options
- * @typeparam T - type of the resolved promise value
+ * @typeParam T - type of the resolved promise value
  */
 export function createControllablePromise<T = unknown>(
 	opts?: CreateControllablePromiseOptions<PromiseConstructor>

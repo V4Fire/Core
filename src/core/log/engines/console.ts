@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -26,6 +27,7 @@ export class ConsoleEngine implements LogEngine {
 
 	/**
 	 * Prints the specified event to a console
+	 *
 	 * @param event - log event to print
 	 */
 	log(event: LogEvent): void {
@@ -54,6 +56,7 @@ export class ConsoleEngine implements LogEngine {
 
 	/**
 	 * Returns a string representing of a style for the specified log level
+	 *
 	 * @param logLevel - level of logging that needs a style
 	 */
 	protected getStringifiedStyle(logLevel: LogLevel): string {

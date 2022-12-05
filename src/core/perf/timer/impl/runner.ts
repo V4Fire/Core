@@ -28,6 +28,7 @@ export { PerfTimerId } from 'core/perf/timer/impl/interface';
 export default class PerfTimersRunner {
 	/**
 	 * Combines the passed namespaces together
+	 *
 	 * @param namespaces - namespaces to combine
 	 */
 	static combineNamespaces(...namespaces: Array<CanUndef<string>>): string {
@@ -80,6 +81,7 @@ export default class PerfTimersRunner {
 
 	/**
 	 * Returns a new instance of the performance timer
+	 *
 	 * @param group - timer group
 	 */
 	createTimer(group: PerfGroup): PerfTimer {
@@ -154,6 +156,7 @@ export default class PerfTimersRunner {
 			measurement = this.idToMeasurement[perfTimerId];
 
 		if (measurement == null) {
+			// eslint-disable-next-line no-console
 			console.warn(`A timer with the id "${perfTimerId}" doesn't exist`);
 			return;
 		}

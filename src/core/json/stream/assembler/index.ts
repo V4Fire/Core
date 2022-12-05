@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/json/stream/assembler/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -44,6 +45,7 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 
 	/**
 	 * Sets the value assembling status
+	 *
 	 * @param value
 	 */
 	protected set isValueAssembled(value: boolean) {
@@ -112,6 +114,7 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 
 	/**
 	 * Creates a handler to process starting of an object or array
+	 *
 	 * @param Constr - constructor to create a structure
 	 */
 	protected createStartObjectHandler(Constr: ObjectConstructor | ArrayConstructor): AnyFunction {
@@ -131,6 +134,7 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 
 	/**
 	 * Handler to process an object key value
+	 *
 	 * @param value
 	 */
 	protected keyValue(value: string): void {
@@ -139,6 +143,7 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 
 	/**
 	 * Handler to process a string value
+	 *
 	 * @param value
 	 */
 	protected stringValue(value: string): void {
@@ -148,6 +153,7 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 
 	/**
 	 * Handler to process a number value
+	 *
 	 * @param value
 	 */
 	protected numberValue(value: string): void {
@@ -214,6 +220,7 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 
 	/**
 	 * Saves an assembled value into the internal structure
+	 *
 	 * @param value
 	 */
 	protected saveValue(value: unknown): void {

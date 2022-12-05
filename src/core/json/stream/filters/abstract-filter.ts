@@ -87,6 +87,7 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 
 	/**
 	 * Checks that specified token is matched for the filter
+	 *
 	 * @param token
 	 */
 	protected abstract checkToken(token: FilterToken): Generator<boolean | FilterToken>;
@@ -181,6 +182,7 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 
 	/**
 	 * Check the specified token for filter satisfaction
+	 *
 	 * @param token
 	 */
 	protected*check(token: FilterToken): Generator<FilterToken> {
@@ -270,6 +272,7 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 
 	/**
 	 * Passes the passed token into an output token stream
+	 *
 	 * @param token
 	 */
 	protected*pass(token: FilterToken): Generator<FilterToken> {
@@ -286,6 +289,7 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 
 	/**
 	 * Passes the passed object token into an output token stream
+	 *
 	 * @param token
 	 */
 	protected*passObject(token: FilterToken): Generator<FilterToken> {
@@ -319,6 +323,7 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 
 	/**
 	 * Skips the passed object token from an output token stream
+	 *
 	 * @param chunk
 	 */
 	protected skipObject(chunk: FilterToken): void {

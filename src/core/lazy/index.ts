@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/lazy/README.md]]
+ *
  * @packageDocumentation
  */
 

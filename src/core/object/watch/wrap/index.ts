@@ -61,7 +61,6 @@ export function bindMutationHooks<T extends object>(
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	if (rawOpts == null) {
 		throw new ReferenceError('Options of wrapping are not specified');
 	}

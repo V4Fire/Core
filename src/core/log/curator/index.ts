@@ -90,6 +90,7 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 
 		} catch (e) {
 			// TODO: get rid of console
+			// eslint-disable-next-line no-console
 			console.error(e);
 		}
 	}
@@ -99,6 +100,7 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 
 /**
  * Maps the specified details: executes functions and returns its result
+ *
  * @param details
  */
 function prepareDetails(details: unknown[]): unknown[] {

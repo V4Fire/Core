@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/request/headers/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -97,6 +98,7 @@ export default class V4Headers {
 
 	/**
 	 * Returns a header value by the specified name
+	 *
 	 * @param name
 	 */
 	get(name: string): string | null {
@@ -105,6 +107,7 @@ export default class V4Headers {
 
 	/**
 	 * Returns true if the structure contains a header by the specified name
+	 *
 	 * @param name
 	 */
 	has(name: string): boolean {
@@ -170,6 +173,7 @@ export default class V4Headers {
 
 	/**
 	 * Deletes a header by the specified name
+	 *
 	 * @param name
 	 */
 	delete(name: string): void {
@@ -213,6 +217,7 @@ export default class V4Headers {
 
 	/**
 	 * Normalizes the specified header name
+	 *
 	 * @param name
 	 */
 	protected normalizeHeaderName(name: string): string {
@@ -221,6 +226,7 @@ export default class V4Headers {
 
 	/**
 	 * Normalizes the specified header value
+	 *
 	 * @param value
 	 */
 	protected normalizeHeaderValue(value: unknown): string {

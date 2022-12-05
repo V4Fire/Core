@@ -10,6 +10,7 @@ import type { Event } from 'core/async/interface';
 
 /**
  * Returns true if the specified value is looks like an event object
+ *
  * @param value
  */
 export function isEvent(value: unknown): value is Event {

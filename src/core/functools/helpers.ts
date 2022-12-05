@@ -15,6 +15,7 @@ export function identity<T>(value: T): T {
 
 /**
  * Returns a function that always returns the specified value
+ *
  * @param value
  */
 export function constant<T>(value: T): AnyFunction<any[], T> {

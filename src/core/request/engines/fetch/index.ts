@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/request/engines/fetch/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -27,6 +28,7 @@ import type { RequestEngine, RequestResponseChunk } from 'core/request/interface
 
 /**
  * Creates request by using the fetch API with the specified parameters and returns a promise
+ *
  * @param params
  */
 const request: RequestEngine = (params) => {

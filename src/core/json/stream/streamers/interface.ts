@@ -37,6 +37,7 @@ export default abstract class Streamer<T = unknown> implements TokenProcessor<T>
 
 	/**
 	 * Checks that specified token is matched for the streamer type
+	 *
 	 * @param token
 	 */
 	protected abstract checkToken(token: Token): boolean;

@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/json/stream/parser/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -30,6 +31,7 @@ export * from 'core/json/stream/parser/interface';
 export default class Parser {
 	/**
 	 * Parses the specified iterable object as a JSON stream and yields tokens via a Generator
+	 *
 	 * @param source
 	 */
 	static from(source: Iterable<string> | AsyncIterable<string>): AsyncGenerator<Token>;
@@ -45,6 +47,7 @@ export default class Parser {
 		...processors: T
 	): T extends [TokenProcessor<infer R>] ?
 		AsyncGenerator<R> :
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		T extends [...infer A, TokenProcessor<infer R>] ? AsyncGenerator<R> : unknown;
 
 	static async*from(
@@ -145,6 +148,7 @@ export default class Parser {
 
 	/**
 	 * Processes the passed JSON chunk and yields tokens via an asynchronous Generator
+	 *
 	 * @param chunk
 	 */
 	*processChunk(chunk: string): Generator<Token> {

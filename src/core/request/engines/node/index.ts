@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/request/engines/node/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -26,6 +27,7 @@ import type { RequestEngine, RequestResponseChunk } from 'core/request/interface
 
 /**
  * Creates request by using node.js with the specified parameters and returns a promise
+ *
  * @param params
  */
 const request: RequestEngine = (params) => {

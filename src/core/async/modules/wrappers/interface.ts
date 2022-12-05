@@ -52,7 +52,7 @@ export type WrappedDataProvider = Overwrite<Provider, {
 		opts?: CreateRequestOptions<D> & AsyncOptions
 	): Promise<RequestResponseObject<D>>;
 
-	/**  @see [[Provider.del]] */
+	/** @see [[Provider.del]] */
 	del<D = unknown>(
 		body?: RequestBody,
 		opts?: CreateRequestOptions<D> & AsyncOptions

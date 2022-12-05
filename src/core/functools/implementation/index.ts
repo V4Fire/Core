@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/functools/implementation/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -28,12 +29,14 @@ export function unimplement<T extends Function>(
 
 /**
  * Emits an "unimplemented" warning with the specified parameters
+ *
  * @param opts - additional options
  */
 export function unimplement(opts: InlineWarnOptions): void;
 
 /**
  * Marks the specified function as unimplemented
+ *
  * @param fn - function to wrap
  */
 export function unimplement<T extends Function>(fn: T): T extends ((...args: infer A) => any) ?

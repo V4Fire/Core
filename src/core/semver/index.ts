@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/semver/README.md]]
+ *
  * @packageDocumentation
  */
 

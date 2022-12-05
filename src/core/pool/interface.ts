@@ -22,6 +22,7 @@ export interface WrappedResource<T = unknown> {
 
 	/**
 	 * Returns the resource to the pool
+	 *
 	 * @param args - extra arguments to pass to the `onFree` hook handler
 	 */
 	free(...args: unknown[]): void;
@@ -32,17 +33,19 @@ export interface WrappedResource<T = unknown> {
 	destroy(): void;
 }
 
-export interface OptionalWrappedResource<T> extends WrappedResource<Nullable<T>> {}
+export type OptionalWrappedResource<T> = WrappedResource<Nullable<T>>;
 
 export interface PoolOptions<T = unknown> {
 	/**
 	 * Number of resources to create at pull initialization
+	 *
 	 * @default `0`
 	 */
 	size?: number;
 
 	/**
 	 * The maximum number of resources that the pool can contain
+	 *
 	 * @default `Infinity`
 	 */
 	maxSize?: number;

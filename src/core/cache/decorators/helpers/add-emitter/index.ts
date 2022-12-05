@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/cache/decorators/helpers/add-emitter/README.md]]
+ *
  * @packageDocumentation
  */
 

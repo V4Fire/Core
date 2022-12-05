@@ -139,10 +139,11 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 
 	/**
 	 * Returns the default implementation for the specified cache method with adding a feature of persistent storing
+	 *
 	 * @param method
 	 */
-	protected getDefaultImplementation(method: 'has'): (key: string) => Promise<boolean>
-	protected getDefaultImplementation(method: 'get'): (key: string) => Promise<CanUndef<V>>
+	protected getDefaultImplementation(method: 'has'): (key: string) => Promise<boolean>;
+	protected getDefaultImplementation(method: 'get'): (key: string) => Promise<CanUndef<V>>;
 	protected getDefaultImplementation(method: 'get' | 'has'): (key: string) => Promise<CanUndef<V> | boolean> {
 		return (key) => {
 			if (this.fetchedItems.has(key)) {
@@ -165,6 +166,7 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 
 	/**
 	 * Checks a cache item by the specified key in the persistent storage
+	 *
 	 * @param key
 	 */
 	protected checkItemInStorage(key: string): Promise<void> {

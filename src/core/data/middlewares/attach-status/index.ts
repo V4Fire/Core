@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/data/middlewares/attach-status/README.md]]
+ *
  * @packageDocumentation
  */
 

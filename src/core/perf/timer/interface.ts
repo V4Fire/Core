@@ -15,6 +15,7 @@ import type { PerfTimer } from 'core/perf/timer/impl';
 export interface PerfTimerFactory {
 	/**
 	 * Returns an instance of the performance timer for a specific group
+	 *
 	 * @param group - group name, that timer should belong to. It appears at the beginning of all time marks namespaces.
 	 */
 	getTimer(group: PerfGroup): PerfTimer;

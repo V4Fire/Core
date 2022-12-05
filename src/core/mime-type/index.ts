@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/mime-type/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -21,6 +22,7 @@ export * from 'core/mime-type/interface';
 
 /**
  * Returns a type of data from the specified DATA:URI string
+ *
  * @param uri
  */
 export function getDataTypeFromURI(uri: string): CanUndef<DataType> {
@@ -39,6 +41,7 @@ export function getDataTypeFromURL(url: string): CanUndef<DataType> {
 
 /**
  * Returns a type of data from the specified mime type string
+ *
  * @param str
  */
 export function getDataType(str: string): DataType {

@@ -29,6 +29,7 @@ export interface PerfTimerMeasurement {
 export interface PerfTimer {
 	/**
 	 * Starts measuring for the specified name and returns an identifier of the metrics
+	 *
 	 * @param name - full name of the metrics
 	 */
 	start(name: string): PerfTimerId;

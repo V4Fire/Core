@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -26,6 +27,7 @@ storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace(
 
 /**
  * Returns settings from the application environment by the specified key
+ *
  * @param key
  */
 export async function get(key: string): Promise<CanUndef<Dictionary>> {
@@ -55,6 +57,7 @@ export function set(key: string, value: Dictionary): void {
 
 /**
  * Removes settings from the application environment by the specified key
+ *
  * @param key
  */
 export function remove(key: string): void {

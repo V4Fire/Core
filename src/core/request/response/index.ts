@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/request/response/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -63,7 +64,8 @@ export const
 
 /**
  * Class to work with server response data
- * @typeparam D - response data type
+ *
+ * @typeParam D - response data type
  */
 export default class Response<
 	D extends Nullable<string | JSONLikeValue | ArrayBuffer | Blob | Document | unknown
@@ -80,6 +82,7 @@ export default class Response<
 
 	/**
 	 * Mode type of the response
+	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/API/Response/type
 	 */
 	readonly type: ResponseModeType;
@@ -153,6 +156,7 @@ export default class Response<
 
 	/**
 	 * Reviver function for `JSON.parse`
+	 *
 	 * @default `convertIfDate`
 	 */
 	readonly jsonReviver?: JSONCb;
@@ -284,6 +288,7 @@ export default class Response<
 	/**
 	 * Returns an iterator by the response body.
 	 * Mind, when you parse response via iterator, you won't be able to use other parse methods, like `json` or `text`.
+	 *
 	 * @emits `streamUsed()`
 	 */
 	[Symbol.asyncIterator](): AsyncIterableIterator<RequestResponseChunk> {
@@ -308,6 +313,7 @@ export default class Response<
 
 	/**
 	 * Returns an HTTP header value by the specified name
+	 *
 	 * @param name
 	 */
 	@deprecated({alternative: 'headers.get'})
@@ -659,6 +665,7 @@ export default class Response<
 
 	/**
 	 * Reads the response body or throws an exception if reading is impossible
+	 *
 	 * @emits `bodyUsed()`
 	 */
 	protected readBody(): AbortablePromise<ResponseTypeValue> {
@@ -735,7 +742,6 @@ export default class Response<
 
 		return applyDecoders(stream);
 
-		// eslint-disable-next-line @typescript-eslint/require-await
 		function applyDecoders<T>(
 			stream: AnyIterable,
 			currentDecoder: number = 0

@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/perf/timer/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -22,6 +23,7 @@ export * from 'core/perf/timer/interface';
 
 /**
  * Returns a timers' factory for the passed config
+ *
  * @param config - config, that the new factory will use
  */
 export function getTimerFactory(config: PerfTimerConfig): PerfTimerFactory {

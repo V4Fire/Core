@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/functools/deprecation/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -28,12 +29,14 @@ export function deprecate<T extends Function>(
 
 /**
  * Emits an obsolescence warning with the specified parameters
+ *
  * @param opts - additional options
  */
 export function deprecate(opts: InlineWarnOptions): void;
 
 /**
  * Marks the specified function as obsolescence
+ *
  * @param fn - function to wrap
  */
 export function deprecate<T extends Function>(fn: T): T extends ((...args: infer A) => infer R) ?

@@ -94,6 +94,7 @@ export default class RequestContext<D = unknown> {
 
 	/**
 	 * Alias for `params.query`
+	 *
 	 * @alias
 	 */
 	get query(): RequestQuery {
@@ -102,6 +103,7 @@ export default class RequestContext<D = unknown> {
 
 	/**
 	 * Alias for `params.headers`
+	 *
 	 * @alias
 	 */
 	get headers(): Headers {

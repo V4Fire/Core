@@ -25,6 +25,7 @@ const
 
 /**
  * Class to create a config object with support of inheritance
+ *
  * @template C
  */
 class Config {
@@ -46,7 +47,7 @@ class Config {
 	 * Wrapper for `Object.mixin`
 	 *
 	 * @param {...?} args
-	 * @returns {!Object}
+	 * @returns {!object}
 	 */
 	extend(...args) {
 		return Object.mixin({
@@ -60,8 +61,8 @@ class Config {
 	 * Expands the specified config to a plain object.
 	 * Usually, this method is used to hash the config object.
 	 *
-	 * @param {Object=} [config]
-	 * @returns {!Object}
+	 * @param {object=} [config]
+	 * @returns {!object}
 	 */
 	expand(config = this) {
 		const blacklist = Object.assign(Object.create(null), {
@@ -107,7 +108,7 @@ class Config {
 	/**
 	 * Returns a hash string of the config
 	 *
-	 * @param {Object=} [data] - extra data to hash
+	 * @param {object=} [data] - extra data to hash
 	 * @param {string=} [alg] - hash algorithm
 	 * @param {number} [length] - hash length
 	 * @returns {string}
@@ -129,10 +130,10 @@ class Config {
 	 *
 	 * @template T
 	 * @param {!Array<string>} dirs - list of initial directories ([0] - dirname, [1+] - src fields)
-	 * @param {Object=} [envs] - map of environment variables
-	 * @param {(string|Object)=} [mod] - url for a config modifier or object modifier (env configs)
+	 * @param {object=} [envs] - map of environment variables
+	 * @param {(string | object)=} [mod] - url for a config modifier or object modifier (env configs)
 	 * @param {T} opts
-	 * @returns {!Object}
+	 * @returns {!object}
 	 */
 	createConfig({dirs, envs, mod}, opts) {
 		const

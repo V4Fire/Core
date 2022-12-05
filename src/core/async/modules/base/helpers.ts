@@ -11,6 +11,7 @@ import type { AsyncOptions } from 'core/async/modules/events';
 
 /**
  * Returns true if the specified value is looks like an instance of AsyncOptions
+ *
  * @param value
  */
 export function isAsyncOptions<T extends object = AsyncOptions>(value: unknown): value is T {

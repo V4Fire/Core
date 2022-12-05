@@ -96,7 +96,8 @@ module.exports = config.createConfig(
 
 		/**
 		 * Returns runtime parameters of the application
-		 * @returns {!Object}
+		 *
+		 * @returns {!object}
 		 */
 		runtime() {
 			return {
@@ -134,6 +135,7 @@ module.exports = config.createConfig(
 
 			/**
 			 * Returns the application working directory
+			 *
 			 * @returns {string}
 			 */
 			cwd() {
@@ -153,6 +155,7 @@ module.exports = config.createConfig(
 
 			/**
 			 * Returns a path to the application node_modules directory
+			 *
 			 * @returns {string}
 			 */
 			lib(...args) {
@@ -161,6 +164,7 @@ module.exports = config.createConfig(
 
 			/**
 			 * Returns a path to the application source directory
+			 *
 			 * @returns {string}
 			 */
 			src(...args) {
@@ -169,6 +173,7 @@ module.exports = config.createConfig(
 
 			/**
 			 * Returns a path to the application asset directory
+			 *
 			 * @returns {string}
 			 */
 			assets(...args) {
@@ -177,6 +182,7 @@ module.exports = config.createConfig(
 
 			/**
 			 * Returns an absolute path to the application dist directory
+			 *
 			 * @returns {string}
 			 */
 			output(...args) {
@@ -365,12 +371,14 @@ module.exports = config.createConfig(
 
 			/**
 			 * Default hash algorithm to use
+			 *
 			 * @type {string}
 			 */
 			hashAlg: 'md5',
 
 			/**
 			 * Length of a hashed string
+			 *
 			 * @type {number}
 			 */
 			hashLength: 8,
@@ -378,7 +386,7 @@ module.exports = config.createConfig(
 			/**
 			 * Returns a hash string of the build
 			 *
-			 * @param {Object=} [data] - extra data to hash
+			 * @param {object=} [data] - extra data to hash
 			 * @param {string=} [alg] - hash algorithm
 			 * @param {number} [length] - hash length
 			 * @returns {string}
@@ -408,7 +416,8 @@ module.exports = config.createConfig(
 
 		/**
 		 * Returns parameters for Babel
-		 * @returns {!Object}
+		 *
+		 * @returns {!object}
 		 */
 		babel() {
 			return {
@@ -419,7 +428,8 @@ module.exports = config.createConfig(
 
 		/**
 		 * Returns parameters for TypeScript
-		 * @returns {!Object}
+		 *
+		 * @returns {!object}
 		 */
 		typescript() {
 			const
@@ -437,7 +447,8 @@ module.exports = config.createConfig(
 
 		/**
 		 * Returns parameters for Snakeskin
-		 * @returns {!Object}
+		 *
+		 * @returns {!object}
 		 */
 		snakeskin() {
 			return {
@@ -460,7 +471,8 @@ module.exports = config.createConfig(
 
 		/**
 		 * Returns parameters for Monic
-		 * @returns {{typescript: !Object, javascript: !Object}}
+		 *
+		 * @returns {{typescript: !object, javascript: !object}}
 		 */
 		monic() {
 			const

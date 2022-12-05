@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/linked-list/README.md]]
+ *
  * @packageDocumentation
  */
 

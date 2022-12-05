@@ -52,6 +52,7 @@ export interface ControllablePromiseConstructor<T = unknown> {
 export interface CreateControllablePromiseOptions<T extends ControllablePromiseConstructor> {
 	/**
 	 * Promise constructor
+	 *
 	 * @default `Promise`
 	 */
 	type?: T;

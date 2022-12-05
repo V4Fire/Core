@@ -18,6 +18,7 @@ const
 
 /**
  * Returns the project meta information
+ *
  * @returns {{name: string, version: string}}
  */
 exports.getProjectInfo = function getProjectInfo() {
@@ -27,6 +28,7 @@ exports.getProjectInfo = function getProjectInfo() {
 
 /**
  * Returns the project disclaimer
+ *
  * @param {boolean=} [withVersion]
  */
 exports.getHead = function getHead(withVersion) {

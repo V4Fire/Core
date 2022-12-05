@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/perf/timer/engines/README.md]]
+ *
  * @packageDocumentation
  */
 

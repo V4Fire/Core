@@ -10,6 +10,7 @@
 
 /**
  * [[include:core/object/watch/README.md]]
+ *
  * @packageDocumentation
  */
 

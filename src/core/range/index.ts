@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/range/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -19,7 +20,7 @@ export * from 'core/range/interface';
  * A class to create a range with the specified type.
  * The class supports ranges of numbers, strings, and dates.
  *
- * @typeparam T - range type value
+ * @typeParam T - range type value
  */
 export default class Range<T extends RangeValue> {
 	/**
@@ -44,12 +45,12 @@ export default class Range<T extends RangeValue> {
 
 	/**
 	 * @param [start] - start position:
-	 *   * if it wrapped by an array, the bound won't be included to the range;
-	 *   * If passed as `null`, it means `-Infinite`;
+	 * if it wrapped by an array, the bound won't be included to the range;
+	 * If passed as `null`, it means `-Infinite`;
 	 *
 	 * @param [end] - end position:
-	 *   * if it wrapped by an array, the bound won't be included to the range;
-	 *   * If passed as `null`, it means `Infinite`;
+	 * if it wrapped by an array, the bound won't be included to the range;
+	 * If passed as `null`, it means `Infinite`;
 	 *
 	 * @example
 	 * ```js

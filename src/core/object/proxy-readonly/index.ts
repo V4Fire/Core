@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/object/proxy-readonly/README.md]]
+ *
  * @packageDocumentation
  */
 

@@ -8,6 +8,7 @@
 
 /**
  * [[include:config/README.md]]
+ *
  * @packageDocumentation
  */
 
@@ -108,6 +109,7 @@ const config: Config = {
 
 /**
  * Extends the config object with additional objects
+ *
  * @param objects
  */
 export function extend<T extends Config>(...objects: Array<CanUndef<Dictionary>>): T {
