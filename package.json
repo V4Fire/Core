@@ -30,7 +30,7 @@
     "test": "npm run build && npm run test:typescript && npm run test:eslint && npm run test:jest",
     "test:linters": "npm run test:typescript && npm run test:eslint",
     "test:typescript": "node node_modules/@v4fire/typescript-check",
-    "test:eslint": "eslint config build src",
+    "test:eslint": "npx jest --config jest-eslint.config.js",
     "test:jest": "cross-env NODE_ENV=development && jest",
     "test:ci:jest": "cross-env NODE_ENV=development && jest --maxWorkers 4 --reporters github-actions",
     "up": "npm i && gulp build:standalone && gulp build:doc"
@@ -45,6 +45,7 @@
     "form-data": "4.0.0",
     "fs-extra": "10.0.1",
     "got": "11.8.3",
+    "jest-runner-eslint": "1.1.0",
     "jsdom": "18.1.1",
     "ts-node": "10.7.0",
     "tsconfig-paths": "3.13.0",
@@ -101,7 +102,7 @@
   },
   "devDependencies": {
     "@types/jest": "28.1.4",
-    "@v4fire/linters": "1.9.0",
+    "@v4fire/linters": "git+https://github.com/v4fire/linters#fix_configs",
     "abort-controller": "3.0.0",
     "express": "4.17.3",
     "husky": "7.0.4",

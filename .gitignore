@@ -47,6 +47,7 @@ Icon
 /dist
 /coverage
 /.nyc_output
+.eslintcache
 
 .env
 *.d.js
