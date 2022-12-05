@@ -16,7 +16,6 @@ import type { Language } from 'lang';
 
 export * from 'core/prelude/i18n/const';
 export * from 'core/prelude/i18n/interface';
-export * from 'core/prelude/i18n/defaultLang';
 
 let
 	storage: CanUndef<Promise<AsyncStorageNamespace>>;

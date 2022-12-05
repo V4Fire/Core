@@ -8,7 +8,6 @@
 
 import extend from 'core/prelude/extend';
 import log from 'core/log';
-import { selectDefaultLang } from 'core/prelude/i18n/defaultLang';
 
 import type { Language, TranslateValue, PluralTranslateValue } from 'lang';
 import langDict from 'lang';
@@ -40,7 +39,7 @@ function globalI18n(keysetName: string, customLocale?: Language) {
 		if (!Object.isDictionary(keyset)) {
 			logger.error('Keyset does not exist', `KeysetName: ${keysetName}, LocaleName: ${localeName}`);
 
-			return getDefaultTranslate(keysetName, key, params);
+			return generateText(key, params);
 		}
 
 		const
@@ -52,30 +51,8 @@ function globalI18n(keysetName: string, customLocale?: Language) {
 
 		logger.error('Value does not exist', `KeysetName: ${keysetName}, LocaleName: ${localeName}, Key: ${key}`);
 
-		return getDefaultTranslate(keysetName, key, params);
+		return generateText(key, params);
 	};
-}
-
-/**
- * Used if the translation for the desired language was not found
- *
- * @param keysetName - string
- * @param key - string
- * @param params - i18nParams
- * @returns string
- */
-function getDefaultTranslate(keysetName: string, key: string, params?: i18nParams): string {
-	const
-		defaultLang = selectDefaultLang(),
-		value = langDict[defaultLang]?.[keysetName]?.[key];
-
-	if (value != null) {
-		return generateText(value, params);
-	}
-
-	logger.error('Translate does not exist', `Default language: "${defaultLang}". KeysetName: ${keysetName}, Key: ${key}`);
-
-	return key;
 }
 
 /**
