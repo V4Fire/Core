@@ -13,7 +13,6 @@
 
 import SyncPromise from 'core/promise/sync';
 import Async, { EventEmitterLike } from 'core/async';
-import { deprecate } from 'core/functools';
 
 /**
  * Returns a promise that will be resolved after emitting of all events from the specified emitter
@@ -75,95 +74,33 @@ export function resolveAfterEvents(emitter: EventEmitterLike, ...events: string[
  * semaphore();
  * ```
  */
-export function createsAsyncSemaphore<T>(cb: () => T, ...flags: string[]): (flag: string) => CanUndef<T> {
+export function createsAsyncSemaphore<T>(cb: () => T, ...flags: string[]): (flag: string) => Promise<T> {
 	const
 		flagsStatus = Object.createDict();
 
 	let
-		ready = false;
+		resolve;
+
+	const promise = new SyncPromise<T>((r) => {
+		resolve = r;
+	});
+
+	promise.catch(stderr);
 
 	return (flag) => {
-		if (ready || flagsStatus[flag] != null) {
-			return;
+		if (!promise.isPending || flagsStatus[flag] != null) {
+			return promise;
 		}
 
 		flagsStatus[flag] = true;
 
 		for (let i = 0; i < flags.length; i++) {
 			if (flagsStatus[flags[i]] == null) {
-				return;
+				return promise;
 			}
 		}
 
-		ready = true;
-
-		const
-			res = cb();
-
-		if (Object.isPromise(res)) {
-			res.catch(stderr);
-		}
-
-		return res;
+		resolve(cb());
+		return promise;
 	};
 }
-
-/**
- * @deprecated
- * @see [[createsAsyncSemaphore]]
- */
-export const onEverythingReady = deprecate(
-	{
-		renamedTo: 'createsAsyncSemaphore'
-	},
-
-	function onEverythingReady(cb: () => unknown, ...flags: string[]): (flag: string) => void {
-		return createsAsyncSemaphore(cb, ...flags);
-	}
-);
-
-/**
- * @deprecated
- * @see [[resolveAfterEvents]]
- */
-export const afterEvents = deprecate(
-	{
-		alternative: 'resolveAfterEvents'
-	},
-
-	function afterEvents(emitter: EventEmitterLike, cb: Function | string, ...events: string[]): Promise<void> {
-		const
-			promise = resolveAfterEvents(emitter, ...Array.concat([], Object.isString(cb) ? cb : null, events));
-
-		if (Object.isFunction(cb)) {
-			promise.then(cb, stderr);
-		}
-
-		return promise;
-	}
-);
-
-/**
- * Creates a synchronous promise wrapper for the specified value
- *
- * @deprecated
- * @see [[SyncPromise]]
- * @param resolveValue
- * @param rejectValue
- */
-export const createSyncPromise = deprecate(
-	{
-		alternative: {
-			name: 'SyncPromise',
-			source: 'core/promise/sync'
-		}
-	},
-
-	function createSyncPromise<R = unknown>(resolveValue?: R, rejectValue?: unknown): Promise<R> {
-		if (rejectValue !== undefined) {
-			return SyncPromise.reject(rejectValue);
-		}
-
-		return SyncPromise.resolve(resolveValue);
-	}
-);
