@@ -72,13 +72,17 @@ export function generateText(value: TranslateValue, params?: i18nParams): string
 		pos = 0;
 
 	while (pos < len) {
-		const p1 = template.indexOf('{', pos);
+		const
+			p1 = template.indexOf('{', pos);
+
 		if (p1 === -1) {
 			text += template.substring(pos);
 			return text;
 		}
 
-		const p2 = template.indexOf('}', p1);
+		const
+			p2 = template.indexOf('}', p1);
+
 		if (p2 === -1) {
 			text += template.substring(pos);
 			return text;
