@@ -9,7 +9,7 @@
 /** @type {import('ts-jest').InitialOptionsTsJest} */
 export default {
 	projects: ['<rootDir>'],
-	testMatch: ['<rootDir>/dist/server/core/prelude/i18n/**/*[sS]pec.js'],
+	testMatch: ['<rootDir>/dist/server/**/*[sS]pec.js', '<rootDir>/src/**/*[sS]pec.ts'],
 	rootDir: './',
 	testTimeout: 20000,
 	testEnvironment: 'node',
