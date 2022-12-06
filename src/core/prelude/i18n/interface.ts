@@ -6,8 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { Language } from 'lang';
-
 export interface Locale {
 	/**
 	 * Locale value

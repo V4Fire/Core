@@ -14,5 +14,5 @@ import { deprecate } from 'core/functools';
  * @see [[DateConstructor.getWeekDays]]
  */
 extend(Date, 'getWeekDays', deprecate(function getWeekDays(): string[] {
-	return [t`Mn`, t`Ts`, t`Wd`, t`Th`, t`Fr`, t`St`, t`Sn`];
+	return ['Mn', 'Ts', 'Wd', 'Th', 'Fr', 'St', 'Sn'];
 }));

@@ -12,9 +12,9 @@ import { IS_NODE } from 'core/env';
 import type { AsyncStorageNamespace } from 'core/kv-storage';
 
 import { emitter, locale } from 'core/prelude/i18n/const';
-import type { Language } from 'lang';
 
 export * from 'core/prelude/i18n/const';
+export * from 'core/prelude/i18n/helpers';
 export * from 'core/prelude/i18n/interface';
 
 let

@@ -1,9 +1,4 @@
 /**
- * Supported languages i18n.
- */
-export type Language = 'be' | 'en' | 'kk' | 'ru' | 'tr' | 'tt' | 'uk' | 'id' | 'uz' | 'es' | 'de' | 'hy' | 'ka' | 'ky' | 'sr' | 'fr' | 'lv' | 'lt' | 'ro' | 'fi' | 'az' | 'zh' | 'he' | 'et' | 'no' | 'sv' | 'pt' | 'ar' | 'sw';
-
-/**
  * Dictionary with all translations
  */
 export type LangsDict = {

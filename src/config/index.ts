@@ -42,7 +42,7 @@ const config: Config = {
 		return typeof LOCALE !== 'undefined' ? LOCALE : undefined;
 	},
 
-	set locale(value: CanUndef<string>) {
+	set locale(value: CanUndef<Language>) {
 		this[$$.locale] = value;
 	},
 

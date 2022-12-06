@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 import log from 'core/log';
 
-import type { Language, TranslateValue, PluralTranslateValue } from 'lang';
+import type { TranslateValue, PluralTranslateValue } from 'lang';
 import langDict from 'lang';
 import { locale, pluralizeMap } from 'core/prelude/i18n/const';
 import type { StringLiteralPluralizeForms, i18nParams } from 'core/prelude/i18n/interface';
@@ -30,7 +30,7 @@ const
  * @param [customLocale] - Language
  * @returns (key, params) => string
  */
-function globalI18n(keysetName: string, customLocale?: Language) {
+export function globalI18n(keysetName: string, customLocale?: Language): (key: string, params?: i18nParams) => string {
 	const
 		localeName = customLocale == null ? locale.value : customLocale,
 		keyset = langDict[localeName!]?.[keysetName];
@@ -62,7 +62,7 @@ function globalI18n(keysetName: string, customLocale?: Language) {
  * @param params - i18nParams
  * @returns string
  */
-function generateText(value: TranslateValue, params?: i18nParams): string {
+export function generateText(value: TranslateValue, params?: i18nParams): string {
 	const
 		template = Object.isArray(value) ? pluralizeText(value, params?.count) : value,
 		len = template.length;
@@ -109,7 +109,7 @@ function generateText(value: TranslateValue, params?: i18nParams): string {
  * @param count - number | string
  * @returns string
  */
-function pluralizeText(text: PluralTranslateValue, count: CanUndef<number | string>): string {
+export function pluralizeText(text: PluralTranslateValue, count: CanUndef<number | string>): string {
 	let normalizedCount;
 
 	if (Object.isNumber(count)) {
