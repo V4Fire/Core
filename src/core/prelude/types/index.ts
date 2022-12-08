@@ -9,8 +9,6 @@
  */
 
 import extend from 'core/prelude/extend';
-
-import { deprecate } from 'core/functools';
 import { isNative, toString, nonPrimitiveTypes, READONLY, PROXY } from 'core/prelude/types/const';
 
 /** @see [[ObjectConstructor.cast]] */
@@ -146,7 +144,7 @@ extend(Object, 'isAsyncGenerator', (value) => typeof value === 'function' && val
 
 /** @see [[ObjectConstructor.isIterator]] */
 extend(Object, 'isIterator', (value) => {
-	if (!value || typeof value !== 'object') {
+	if (value == null || typeof value !== 'object' || !('next' in value)) {
 		return false;
 	}
 
@@ -171,9 +169,7 @@ extend(Object, 'isIterable', (value) => {
 		return false;
 	}
 
-	return Boolean(
-		typeof Symbol === 'function' ? value[Symbol.iterator] : typeof value['@@iterator'] === 'function'
-	);
+	return typeof value[Symbol.iterator] === 'function';
 });
 
 /** @see [[ObjectConstructor.isAsyncIterable]] */
@@ -182,9 +178,7 @@ extend(Object, 'isAsyncIterable', (value) => {
 		return false;
 	}
 
-	return Boolean(
-		typeof Symbol === 'function' ? value[Symbol.asyncIterator] : typeof value['@@asyncIterator'] === 'function'
-	);
+	return typeof value[Symbol.asyncIterator] === 'function';
 });
 
 /** @see [[ObjectConstructor.isAnyIterable]] */
@@ -193,20 +187,20 @@ extend(Object, 'isAnyIterable', (value) =>
 
 /** @see [[ObjectConstructor.isPromise]] */
 extend(Object, 'isPromise', (value) => {
-	if (value) {
-		return typeof value.then === 'function' && typeof value.catch === 'function';
+	if (value == null || typeof value !== 'object' || !('then' in value) || !('catch' in value)) {
+		return false;
 	}
 
-	return false;
+	return typeof value.then === 'function' && typeof value.catch === 'function';
 });
 
 /** @see [[ObjectConstructor.isPromiseLike]] */
 extend(Object, 'isPromiseLike', (value) => {
-	if (value) {
-		return typeof value.then === 'function';
+	if (value == null || typeof value !== 'object' || !('then' in value)) {
+		return false;
 	}
 
-	return false;
+	return typeof value.then === 'function';
 });
 
 /** @see [[ObjectConstructor.isProxy]] */
@@ -240,12 +234,3 @@ Object.isSealed = (value) =>
 
 Object.isFrozen = (value) =>
 	value == null || isFrozen(value) || value[READONLY] === true;
-
-/**
- * @deprecated
- * @see [[ObjectConstructor.isDictionary]]
- */
-extend(Object, 'isObject', deprecate({
-	name: 'isObject',
-	renamedTo: 'isDictionary'
-}, isPlainObject));
