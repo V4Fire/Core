@@ -11,10 +11,6 @@
  * @packageDocumentation
  */
 
-//#if node_js
-import XMLHttpRequest from 'xhr2';
-//#endif
-
 import AbortablePromise from 'core/promise/abortable';
 
 import { IS_NODE } from 'core/env';
