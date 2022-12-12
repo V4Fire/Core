@@ -27,7 +27,6 @@ const
  *
  * @param keysetName - string
  * @param [customLocale] - Language
- * @returns (key, params) => string
  */
 export function globalI18n(keysetName: string, customLocale?: Language): (key: string, params?: i18nParams) => string {
 	const
