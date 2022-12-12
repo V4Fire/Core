@@ -12,7 +12,6 @@ import log from 'core/log';
 import type { TranslateValue, PluralTranslateValue } from 'lang';
 import langDict from 'lang';
 import { locale, pluralizeMap } from 'core/prelude/i18n/const';
-import type { StringLiteralPluralizeForms, i18nParams } from 'core/prelude/i18n/interface';
 
 /** @see [[i18n]] */
 extend(globalThis, 'i18n', globalI18n);

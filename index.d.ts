@@ -101,18 +101,32 @@ declare function stderr(err: any): void;
 /**
  * Global i18n function
  */
-declare function i18n(keysetName: string, customLocale?: string): (key: string, params?: Dictionary) => string;
+declare function i18n(keysetName: string, customLocale?: string): (key: string, params?: i18nParams) => string;
 
 /**
  * @alias
- * @see globalI18n
+ * @see i18n
  */
-declare function t(keysetName: string, customLocale?: string): (key: string, params?: Dictionary) => string;
+declare function t(keysetName: string, customLocale?: string): (key: string, params?: i18nParams) => string;
 
 declare function setImmediate(fn: AnyFunction): number;
 declare function clearImmediate(id: number): void;
 
 declare function structuredClone<T>(obj: T): T;
+
+/**
+ * String literal which can be used instead of numbers
+ */
+type StringLiteralPluralizeForms = 'one' | 'some' | 'many' | 'none';
+
+/**
+ * Format of parameters for the i18n function
+ */
+type i18nParams = {
+	count: number | StringLiteralPluralizeForms;
+} & {
+	[key: string]: string | number;
+};
 
 interface Headers {
 	keys(): IterableIterator<string>;
