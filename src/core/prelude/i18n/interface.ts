@@ -22,17 +22,3 @@ export interface Locale {
 	 */
 	isInitialized: Promise<void>;
 }
-
-/**
- * String literal which can be used instead of numbers
- */
-export type StringLiteralPluralizeForms = 'one' | 'some' | 'many' | 'none';
-
-/**
- * Format of parameters for the i18n function
- */
-export type i18nParams = {
-	count: number | StringLiteralPluralizeForms;
-} & {
-	[key: string]: string;
-};

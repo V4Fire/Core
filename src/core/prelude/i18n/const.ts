@@ -7,7 +7,7 @@
  */
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
-import type { Locale, StringLiteralPluralizeForms } from 'core/prelude/i18n/interface';
+import type { Locale } from 'core/prelude/i18n/interface';
 
 /**
  * Event emitter to broadcast localization events

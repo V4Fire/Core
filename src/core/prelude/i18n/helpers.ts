@@ -62,46 +62,16 @@ export function globalI18n(keysetName: string, customLocale?: Language): (key: s
  */
 export function generateText(value: TranslateValue, params?: i18nParams): string {
 	const
-		template = Object.isArray(value) ? pluralizeText(value, params?.count) : value,
-		len = template.length;
+		template = Object.isArray(value) ? pluralizeText(value, params?.count) : value;
 
-	let
-		text = '',
-		pos = 0;
-
-	while (pos < len) {
-		const
-			p1 = template.indexOf('{', pos);
-
-		if (p1 === -1) {
-			text += template.substring(pos);
-			return text;
-		}
-
-		const
-			p2 = template.indexOf('}', p1);
-
-		if (p2 === -1) {
-			text += template.substring(pos);
-			return text;
-		}
-
-		text += template.substring(pos, p1);
-
-		const
-			key = template.substring(p1 + 1, p2);
-
+	return template.replace(/{(.*?)}/gi, (_, key) => {
 		if (params?.[key] == null) {
 			logger.error('Undeclared variable', `"${key}" used in template: "${template}"`);
-			text += key;
-		} else {
-			text += params[key];
+			return key;
 		}
 
-		pos = p2 + 1;
-	}
-
-	return text;
+		return params[key];
+	});
 }
 
 /**
