@@ -24,9 +24,10 @@ const
 
 /**
  * Global i18n function
+ * Allows you to access a specific keyset inside all translations
  *
  * @param keysetName - string
- * @param [customLocale] - Language
+ * @param [customLocale] - allows you to use translation in a language other than the language of the application
  */
 export function globalI18n(keysetName: string, customLocale?: Language): (key: string, params?: i18nParams) => string {
 	const
@@ -106,7 +107,7 @@ export function resolveTemplate(value: TranslateValue, params?: i18nParams): str
  *  {count} products, // None
  * ], 5);
  *
- * console.log(result === '{count} products');
+ * console.log(result); // '{count} products'
  * ```
  */
 export function pluralizeText(text: PluralTranslateValue, count: CanUndef<number | string>): string {
