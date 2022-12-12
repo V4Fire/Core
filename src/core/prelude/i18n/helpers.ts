@@ -59,7 +59,6 @@ export function globalI18n(keysetName: string, customLocale?: Language): (key: s
  *
  * @param value - string for default case and Array<string> for pluralize case
  * @param params - Dictionary with {[keys]: values that will replace the keys}
- * @returns string
  *
  * @example
  * ```typescript
