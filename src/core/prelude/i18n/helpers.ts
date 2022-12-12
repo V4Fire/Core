@@ -37,30 +37,46 @@ export function globalI18n(keysetName: string, customLocale?: Language): (key: s
 		if (!Object.isDictionary(keyset)) {
 			logger.error('Keyset does not exist', `KeysetName: ${keysetName}, LocaleName: ${localeName}`);
 
-			return generateText(key, params);
+			return resolveTemplate(key, params);
 		}
 
 		const
 			translateValue = keyset[key];
 
 		if (translateValue != null) {
-			return generateText(translateValue, params);
+			return resolveTemplate(translateValue, params);
 		}
 
 		logger.error('Value does not exist', `KeysetName: ${keysetName}, LocaleName: ${localeName}, Key: ${key}`);
 
-		return generateText(key, params);
+		return resolveTemplate(key, params);
 	};
 }
 
 /**
- * Generates text from the passed template
+ * Selects a form for pluralized sentences and resolve variables from the passed template
  *
- * @param value - TranslateValue
- * @param params - i18nParams
+ * @param value - string for default case and Array<string> for pluralize case
+ * @param params - Dictionary with {[keys]: values that will replace the keys}
  * @returns string
+ *
+ * @example
+ * ```typescript
+ * const example = resolveTemplate('My name is {name}, I live in {city}', {name: 'John', city: 'Denver'});
+ *
+ * console.log(example); // 'My name is John, I live in Denver'
+ *
+ * const examplePluralize = resolveTemplate([
+ *  {count} product,  // One
+ *  {count} products, // Some
+ *  {count} products, // Many
+ *  {count} products, // None
+ * ], {count: 5});
+ *
+ * console.log(examplePluralize); // '5 products'
+ * ```
  */
-export function generateText(value: TranslateValue, params?: i18nParams): string {
+export function resolveTemplate(value: TranslateValue, params?: i18nParams): string {
 	const
 		template = Object.isArray(value) ? pluralizeText(value, params?.count) : value;
 
@@ -75,11 +91,23 @@ export function generateText(value: TranslateValue, params?: i18nParams): string
 }
 
 /**
- * Select correct form of text
+ * Based on the passed count parameter, the correct pluralized form of the text is selected
  *
  * @param text - PluralTranslateValue
  * @param count - number | string
  * @returns string
+ *
+ * @example
+ * ```typescript
+ * const result = pluralizeText([
+ *  {count} product,  // One
+ *  {count} products, // Some
+ *  {count} products, // Many
+ *  {count} products, // None
+ * ], 5);
+ *
+ * console.log(result === '{count} products');
+ * ```
  */
 export function pluralizeText(text: PluralTranslateValue, count: CanUndef<number | string>): string {
 	let normalizedCount;
