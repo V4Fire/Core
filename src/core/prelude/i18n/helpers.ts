@@ -95,7 +95,6 @@ export function resolveTemplate(value: TranslateValue, params?: i18nParams): str
  *
  * @param text - PluralTranslateValue
  * @param count - number | string
- * @returns string
  *
  * @example
  * ```typescript
