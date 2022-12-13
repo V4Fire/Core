@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export type TranslationPacs = {
-	[key in Locale]?: KeysetTranslations;
+export type LangPacs = {
+	[key in Language]?: KeysetTranslations;
 };
 
 export type Translation = string | PluralTranslation;

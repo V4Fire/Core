@@ -9,88 +9,63 @@
 import { pluralizeText, resolveTemplate } from 'core/prelude/i18n';
 
 describe('core/prelude/i18n', () => {
-	describe('pluralizeText', () => {
-		it('works with pluralize forms', () => {
+	describe('text pluralization', () => {
+		it('using pluralization constants to choose the right form', () => {
 			const input = {
 				forms: ['first form', 'second form', 'third form', 'fourth form'],
 				count: ['one', 'some', 'many', 'none']
 			};
 
 			input.forms.forEach((form, index) => {
-				const result = pluralizeText(input.forms, input.count[index]);
-
-				expect(result).toBe(form);
+				expect(pluralizeText(input.forms, input.count[index])).toBe(form);
 			});
 		});
 
-		it('works with numbers', () => {
+		it('using a number to choose the right form of pluralization', () => {
 			const input = {
 				forms: ['first form', 'second form', 'third form', 'fourth form'],
 				count: [1, 2, 100, 0]
 			};
 
 			input.forms.forEach((form, index) => {
-				const result = pluralizeText(input.forms, input.count[index]);
-
-				expect(result).toBe(form);
+				expect(pluralizeText(input.forms, input.count[index])).toBe(form);
 			});
 		});
 
-		it('If count is invalid return default form', () => {
+		it('if the `count` parameter is invalid, then the default pluralization form should be returned', () => {
 			const input = {
 				forms: [true, false, false, false],
 				count: 'Some invalid count'
 			};
 
-			const result = pluralizeText(input.forms, input.count);
-
-			expect(result).toBe(true);
+			expect(pluralizeText(input.forms, input.count)).toBe(true);
 		});
 	});
 
-	describe('resolveTemplate', () => {
-		it('work without second argument', () => {
-			const
-				string = 'foo bar baz',
-				result = resolveTemplate(string);
-
-			expect(result).toBe(string);
+	describe('substitution of variables and pluralization forms in a template', () => {
+		it('template resolving without additional parameters', () => {
+			expect(resolveTemplate('foo bar baz')).toBe('foo bar baz');
 		});
 
-		it('valid resolve macros', () => {
-			const
-				string = 'foo {macros} baz',
-				result = resolveTemplate(string, {macros: 'bar'});
-
-			expect(result).toBe('foo bar baz');
+		it('passing variables for template resolving', () => {
+			const tpl = 'foo {macros} {macros2}';
+			expect(resolveTemplate(tpl, {macros: 'bar', macros2: 'baz'})).toBe('foo bar baz');
 		});
 
-		it('work with multiply macros', () => {
-			const
-				string = 'foo {macros} {macros2}',
-				result = resolveTemplate(string, {macros: 'bar', macros2: 'baz'});
-
-			expect(result).toBe('foo bar baz');
+		it('if the variable is not set, then it should be displayed as text', () => {
+			const tpl = 'foo {macros} {macros2}';
+			expect(resolveTemplate(tpl, {macros: 'bar'})).toBe('foo bar macros2');
 		});
 
-		it('count with pluralize', () => {
-			const
-				result = resolveTemplate([
-					'one {count}',
-					'two {count}',
-					'five {count}',
-					'zero {count}'
-				], {count: 5});
+		it('passing the `count` parameter for template resolving', () => {
+			const res = resolveTemplate([
+				'one {count}',
+				'two {count}',
+				'five {count}',
+				'zero {count}'
+			], {count: 5});
 
-			expect(result).toBe('five 5');
-		});
-
-		it('if macros undeclared, used it as value', () => {
-			const
-				string = 'foo {macros} {macros2}',
-				result = resolveTemplate(string, {macros: 'bar'});
-
-			expect(result).toBe('foo bar macros2');
+			expect(res).toBe('five 5');
 		});
 	});
 });

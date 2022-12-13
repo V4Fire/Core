@@ -10,7 +10,7 @@ import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import type { Locale } from 'core/prelude/i18n/interface';
 
 /**
- * Event emitter to broadcast localization events
+ * The event emitter to broadcast localization events
  */
 export const
 	emitter = new EventEmitter({maxListeners: 100, newListener: false});
@@ -23,7 +23,7 @@ export const
 	event = emitter;
 
 /**
- * System language
+ * The default application language
  */
 export const locale: Locale = {
 	value: undefined,
@@ -32,11 +32,11 @@ export const locale: Locale = {
 };
 
 /**
- * Dictionary to map literal form to number
+ * A dictionary to map literal pluralization forms to numbers
  */
-export const pluralizeMap: {[key in StringLiteralPluralizeForms]: number} = {
+export const pluralizeMap = Object.createDict({
 	none: 0,
 	one: 1,
 	some: 2,
 	many: 5
-};
+});

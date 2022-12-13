@@ -8,7 +8,7 @@
 
 export interface Locale {
 	/**
-	 * Locale value
+	 * The locale value
 	 */
 	value: CanUndef<Language>;
 
@@ -18,7 +18,9 @@ export interface Locale {
 	isDefined: boolean;
 
 	/**
-	 * Promise of the locale initializing
+	 * The locale initialization promise
 	 */
 	isInitialized: Promise<void>;
 }
+
+export type PluralizationCount = StringPluralizationForms | string | number;

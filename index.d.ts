@@ -84,9 +84,9 @@ declare const IS_PROD: boolean;
 
 declare const APP_NAME: string;
 declare const API_URL: CanUndef<string>;
-declare const LOCALE: Locale;
+declare const LOCALE: Language;
 
-type Locale =
+type Language =
 	'be' | 'en' | 'kk' |
 	'ru' | 'tr' | 'tt' |
 	'uk' | 'id' | 'uz' |
@@ -113,32 +113,30 @@ declare function stderr(err: any): void;
 /**
  * Global i18n function
  */
-declare function i18n(keysetName: string, customLocale?: string): (key: string, params?: i18nParams) => string;
+declare function i18n(keysetName: string, customLocale?: Language): (key: string, params?: I18nParams) => string;
 
 /**
  * @alias
  * @see i18n
  */
-declare function t(keysetName: string, customLocale?: string): (key: string, params?: i18nParams) => string;
+declare const t: typeof i18n;
+
+/**
+ * Parameters for the internationalization function
+ */
+type I18nParams = {count: number | StringPluralizationForms} & {
+	[key: string]: string | number;
+};
+
+/**
+ * String pluralization constants that can be used instead of numbers
+ */
+type StringPluralizationForms = 'one' | 'some' | 'many' | 'none';
 
 declare function setImmediate(fn: AnyFunction): number;
 declare function clearImmediate(id: number): void;
 
 declare function structuredClone<T>(obj: T): T;
-
-/**
- * String literal which can be used instead of numbers
- */
-type StringLiteralPluralizeForms = 'one' | 'some' | 'many' | 'none';
-
-/**
- * Format of parameters for the i18n function
- */
-type i18nParams = {
-	count: number | StringLiteralPluralizeForms;
-} & {
-	[key: string]: string | number;
-};
 
 interface Headers {
 	keys(): IterableIterator<string>;

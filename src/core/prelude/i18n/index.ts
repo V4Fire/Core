@@ -49,13 +49,13 @@ if (IS_NODE) {
 }
 
 /**
- * Sets a new system language
+ * Sets a new application language
  *
  * @param [value]
- * @param [def] - if true, then the language is marked as default
+ * @param [def] - if true, the language is marked as default
  * @emits `setLocale(value: string, oldValue?: string)`
  */
-export function setLocale(value: Language | undefined, def?: boolean): Language | undefined {
+export function setLocale(value: CanUndef<Language>, def?: boolean): CanUndef<Language> {
 	const
 		oldVal = locale.value;
 
