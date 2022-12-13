@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/prelude/i18n/README.md]]
+ * @packageDocumentation
+ */
+
 import config from 'config';
 
 import { IS_NODE } from 'core/env';
