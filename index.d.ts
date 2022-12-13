@@ -84,7 +84,19 @@ declare const IS_PROD: boolean;
 
 declare const APP_NAME: string;
 declare const API_URL: CanUndef<string>;
-declare const LOCALE: Language;
+declare const LOCALE: Locale;
+
+type Locale =
+	'be' | 'en' | 'kk' |
+	'ru' | 'tr' | 'tt' |
+	'uk' | 'id' | 'uz' |
+	'es' | 'de' | 'hy' |
+	'ka' | 'ky' | 'sr' |
+	'fr' | 'lv' | 'lt' |
+	'ro' | 'fi' | 'az' |
+	'zh' | 'he' | 'et' |
+	'no' | 'sv' | 'pt' |
+	'ar' | 'sw';
 
 /**
  * Converts the specified unknown value to any
@@ -164,9 +176,6 @@ type CanVoid<T> = T | void;
 
 type AnyToIgnore = any;
 type AnyToBoolean = any;
-
-type Language = 'be' | 'en' | 'kk' | 'ru' | 'tr' | 'tt' | 'uk' | 'id' | 'uz' | 'es' | 'de' | 'hy' | 'ka' | 'ky' | 'sr' | 'fr' | 'lv' | 'lt' | 'ro' | 'fi' | 'az' | 'zh' | 'he' | 'et' | 'no' | 'sv' | 'pt' | 'ar' | 'sw';
-
 interface AnyFunction<ARGS extends any[] = any[], R = any> extends Function {
 	(...args: ARGS): R;
 }

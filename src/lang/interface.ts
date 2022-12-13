@@ -1,28 +1,19 @@
-/**
- * Dictionary with all translations
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-export type LangsDict = {
-	[key in Language]?: TranslateDictionary;
+
+export type TranslationPacs = {
+	[key in Locale]?: KeysetTranslations;
 };
 
-/**
- * Translation format
- */
-export type TranslateValue = string | PluralTranslateValue;
+export type Translation = string | PluralTranslation;
 
-/**
- * The format of pluralized translations
- * [one, some, many, none]
- */
-export type PluralTranslateValue = [string, string, string, string];
+export type PluralTranslation = [one: string, some: string, many: string, none: string];
 
-/**
- * Dictionary with translations into a specific language
- * Format:
- * {
- *   [keysetName]: {
- *     [key]: value
- *   }
- * }
- */
-export type TranslateDictionary = Dictionary<Dictionary<TranslateValue>>;
+export type Translations = Dictionary<Translation>;
+
+export type KeysetTranslations = Dictionary<Translations>;

@@ -51,6 +51,10 @@ export default {
 };
 ```
 
+```js
+i18n('my-component')('My name is {name}', {name: 'John'});
+```
+
 ## Pluralization of translations
 
 Some keys may have multiple translations depending on some numeric value. For example, "1 apple" or "5 apples".
@@ -81,4 +85,8 @@ export default {
     }
   }
 };
+```
+
+```js
+i18n('my-component', 'ru')('{count} product', {count: 10});
 ```
