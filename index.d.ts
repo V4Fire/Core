@@ -131,7 +131,7 @@ declare const t: typeof i18n;
 /**
  * Parameters for the internationalization function
  */
-type I18nParams = {count: number | StringPluralizationForms} & {
+type I18nParams = {count?: number | StringPluralizationForms} & {
 	[key: string]: string | number;
 };
 
