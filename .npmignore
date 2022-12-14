@@ -30,6 +30,8 @@ $RECYCLE.BIN
 # Icon must ends with two \r.
 Icon
 
+
+
 # Thumbnails
 ._*
 
@@ -62,7 +64,3 @@ Icon
 /tmp
 *.tmp
 *.gz
-
-# NPM ignore list
-/docs
-/.github
