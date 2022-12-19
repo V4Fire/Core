@@ -123,12 +123,6 @@ declare function stderr(err: any): void;
 declare function i18n(keysetName: string, customLocale?: Language): (key: string, params?: I18nParams) => string;
 
 /**
- * @alias
- * @see i18n
- */
-declare const t: typeof i18n;
-
-/**
  * Parameters for the internationalization function
  */
 type I18nParams = {count?: number | StringPluralizationForms} & {

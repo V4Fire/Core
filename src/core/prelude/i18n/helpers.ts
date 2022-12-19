@@ -17,9 +17,6 @@ import type { PluralizationCount } from 'core/prelude/i18n/interface';
 /** @see [[i18n]] */
 extend(globalThis, 'i18n', i18nFactory);
 
-/** @see [[t]] */
-extend(globalThis, 't', i18nFactory);
-
 const
 	logger = log.namespace('i18n');
 
