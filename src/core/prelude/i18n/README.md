@@ -13,6 +13,9 @@ i18n('my-keyset-name')('My name is {name}', {name: 'John'});     // My name is J
 // Pluralize text
 i18n('my-keyset-name')('I have {count} toy', {count: 10});       // I have 10 toys
 
+// Using of several keysets, to implement inheritance or reuse shared translations
+i18n(['my-keyset-name', 'dates'])('February')
+
 // Using translations other than the app default language
 i18n('my-keyset-name', 'ru')('I have {count} toy', {count: 10}); // У меня 10 игрушек
 ```
@@ -163,13 +166,4 @@ Keep in mind that this function is global, i.e. it does not need to be explicitl
 
 ```js
 i18n('my-component')('My name is {name}', {name: 'John'});
-```
-
-#### t
-
-An alias for the `i18n` function.
-Keep in mind that this function is global, i.e. it does not need to be explicitly imported.
-
-```js
-t('my-component')('My name is {name}', {name: 'John'});
 ```

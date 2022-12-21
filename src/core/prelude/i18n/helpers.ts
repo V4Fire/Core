@@ -26,35 +26,33 @@ const
  * For example, the key "Next" may have a different value in different components of the application, therefore,
  * we can use the name of the component as a keyset value.
  *
- * @param keysetName - the name of keyset to use
+ * @param keysetNameOrNames - the name of keyset or array with names of keysets to use.
+ *   If passed as an array, the priority of the cases will be arranged in the order of the elements,
+ *   the first one will have the highest priority.
+ *
  * @param [customLocale] - the locale used to search for translations (the default is taken from
  *   the application settings)
  */
-export function i18nFactory(keysetName: string, customLocale?: Language): (key: string, params?: I18nParams) => string {
+export function i18nFactory(
+	keysetNameOrNames: string | string[], customLocale?: Language
+): (key: string, params?: I18nParams) => string {
 	const
-		resolvedLocale = customLocale ?? locale.value;
+		resolvedLocale = customLocale ?? locale.value,
+		keysetNames = Object.isArray(keysetNameOrNames) ? keysetNameOrNames : [keysetNameOrNames];
 
 	if (resolvedLocale == null) {
 		throw new ReferenceError('The locale for internationalization is not defined');
 	}
 
-	const
-		keyset = langPacs[resolvedLocale]?.[keysetName];
-
 	return function i18n(key: string, params?: I18nParams) {
-		if (!Object.isDictionary(keyset)) {
-			logger.error('The given keyset does not exist', `KeysetName: ${keysetName}, LocaleName: ${resolvedLocale}`);
-			return resolveTemplate(key, params);
-		}
-
 		const
-			translateValue = keyset[key];
+			translateValue = keysetNames.find((keysetName) => langPacs[resolvedLocale]?.[keysetName]?.[key]);
 
 		if (translateValue != null) {
 			return resolveTemplate(translateValue, params);
 		}
 
-		logger.error('Translation for the given key is not found', `KeysetName: ${keysetName}, LocaleName: ${resolvedLocale}, Key: ${key}`);
+		logger.error('Translation for the given key is not found', `KeysetNames: ${keysetNames.join(', ')}, LocaleName: ${resolvedLocale}, Key: ${key}`);
 		return resolveTemplate(key, params);
 	};
 }
