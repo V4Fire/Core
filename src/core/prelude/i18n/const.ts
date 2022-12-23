@@ -26,6 +26,7 @@ export const
  * System language
  */
 export const locale: Locale = {
-	value: undefined,
-	isDefault: false
+	value: '',
+	isDefined: false,
+	isInitialized: Promise.resolve()
 };

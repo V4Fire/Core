@@ -13,7 +13,12 @@ export interface Locale {
 	value: CanUndef<string>;
 
 	/**
-	 * True if the locale is default
+	 * True if the locale is already defined
 	 */
-	isDefault: boolean;
+	isDefined: boolean;
+
+	/**
+	 * Promise of the locale initializing
+	 */
+	isInitialized: Promise<void>;
 }
