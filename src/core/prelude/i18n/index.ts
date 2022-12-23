@@ -23,7 +23,7 @@ if (IS_NODE) {
 } else {
 	(() => {
 		if (storage) {
-			const locale = storage.get<Language>('locale');
+			const locale = storage.get<string>('locale');
 
 			if (locale != null) {
 				setLocale(locale, storage.get<boolean>('isLocaleDef'));
