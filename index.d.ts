@@ -116,11 +116,16 @@ declare function stderr(err: any): void;
  * For example, the key "Next" may have a different value in different components of the application, therefore,
  * we can use the name of the component as a keyset value.
  *
- * @param keysetName - the name of keyset to use
+ * @param keysetNameOrNames - the name of keyset or array with names of keysets to use.
+ *   If passed as an array, the priority of the cases will be arranged in the order of the elements,
+ *   the first one will have the highest priority.
+ *
  * @param [customLocale] - the locale used to search for translations (the default is taken from
  *   the application settings)
  */
-declare function i18n(keysetName: string, customLocale?: Language): (key: string, params?: I18nParams) => string;
+declare function i18n(
+	keysetNameOrNames: CanArray<string>, customLocale?: Language
+): (key: string, params?: I18nParams) => string;
 
 /**
  * Parameters for the internationalization function
