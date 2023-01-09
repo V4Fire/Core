@@ -21,18 +21,14 @@ if (IS_NODE) {
 	setLocale(config.locale);
 
 } else {
-	(() => {
-		if (storage) {
-			const locale = storage.get<string>('locale');
+	const locale = storage.get<string>('locale');
 
-			if (locale != null) {
-				setLocale(locale, storage.get<boolean>('isLocaleDef'));
-				return;
-			}
-		}
+	if (locale != null) {
+		setLocale(locale, storage.get<boolean>('isLocaleDef'));
 
+	} else {
 		setLocale(config.locale, true);
-	})();
+	}
 }
 
 /**
@@ -53,7 +49,7 @@ export function setLocale(value: string | undefined, def?: boolean): string | un
 	locale.value = value;
 	locale.isDefault = Boolean(def);
 
-	if (!IS_NODE && storage != null) {
+	if (!IS_NODE) {
 		storage.set('locale', value);
 		storage.set('isLocaleDef', locale.isDefault);
 	}

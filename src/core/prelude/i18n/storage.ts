@@ -1,14 +1,16 @@
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
 import type { SyncStorageNamespace } from 'core/kv-storage';
 
-let
-	storage: CanUndef<SyncStorageNamespace>;
-
-//#if runtime has core/kv-storage
-// eslint-disable-next-line import/first
 import { local } from 'core/kv-storage';
 
-// eslint-disable-next-line prefer-const
-storage = local.namespace('[[I18N]]');
-//#endif
+const
+	storage: SyncStorageNamespace = local.namespace('[[I18N]]');
 
 export default storage;
