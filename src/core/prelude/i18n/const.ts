@@ -27,8 +27,7 @@ export const
  */
 export const locale: Locale = {
 	value: undefined,
-	isDefined: false,
-	isInitialized: Promise.resolve()
+	isDefault: false
 };
 
 /**

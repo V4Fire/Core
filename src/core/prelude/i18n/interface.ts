@@ -13,14 +13,9 @@ export interface Locale {
 	value: CanUndef<Language>;
 
 	/**
-	 * True if the locale is already defined
+	 * True if the locale is default
 	 */
-	isDefined: boolean;
-
-	/**
-	 * The locale initialization promise
-	 */
-	isInitialized: Promise<void>;
+	isDefault: boolean;
 }
 
 export type PluralizationCount = StringPluralizationForms | string | number;

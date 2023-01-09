@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2022-??-??)
+
+#### :boom: Breaking Change
+
+* `i18n` now works via sync storage
+
 ## v3.82.0 (2022-04-04)
 
 #### :rocket: New Feature
