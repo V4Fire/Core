@@ -46,7 +46,8 @@ export function i18nFactory(
 
 	return function i18n(key: string, params?: I18nParams) {
 		const
-			translateValue = keysetNames.find((keysetName) => langPacs[resolvedLocale]?.[keysetName]?.[key]);
+			correctKeyset = keysetNames.find((keysetName) => langPacs[resolvedLocale]?.[keysetName]?.[key]),
+			translateValue = langPacs[resolvedLocale]?.[correctKeyset ?? '']?.[key];
 
 		if (translateValue != null) {
 			return resolveTemplate(translateValue, params);
