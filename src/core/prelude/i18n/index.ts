@@ -17,28 +17,24 @@ import { IS_NODE } from 'core/env';
 
 import { emitter, locale } from 'core/prelude/i18n/const';
 
+import storage from 'core/prelude/i18n/storage';
+
 export * from 'core/prelude/i18n/const';
 export * from 'core/prelude/i18n/helpers';
 export * from 'core/prelude/i18n/interface';
-
-const storage = import('core/prelude/i18n/storage').then((storage) => storage.default);
 
 if (IS_NODE) {
 	setLocale(config.locale);
 
 } else {
-	(async () => {
-		const
-			s = await storage,
-			l = s.get('locale');
+	const locale = storage.get<Language>('locale');
 
-		if (l != null) {
-			setLocale(s.get('locale'), s.get('isLocaleDef'));
+	if (locale != null) {
+		setLocale(locale, storage.get<boolean>('isLocaleDef'));
 
-		} else {
-			setLocale(config.locale, true);
-		}
-	})();
+	} else {
+		setLocale(config.locale, true);
+	}
 }
 
 /**
@@ -60,10 +56,8 @@ export function setLocale(value: CanUndef<Language>, def?: boolean): CanUndef<La
 	locale.isDefault = Boolean(def);
 
 	if (!IS_NODE) {
-		void storage.then((storage) => {
-			storage.set('locale', value);
-			storage.set('isLocaleDef', locale.isDefault);
-		});
+		storage.set('locale', value);
+		storage.set('isLocaleDef', locale.isDefault);
 	}
 
 	emitter.emit('setLocale', value, oldVal);
