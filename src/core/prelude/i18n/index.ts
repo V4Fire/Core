@@ -55,7 +55,7 @@ export function setLocale(value: CanUndef<Language>, def?: boolean): CanUndef<La
 	locale.value = value;
 	locale.isDefault = Boolean(def);
 
-	if (!IS_NODE) {
+	if (!IS_NODE && storage.set) {
 		storage.set('locale', value);
 		storage.set('isLocaleDef', locale.isDefault);
 	}

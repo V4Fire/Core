@@ -6,11 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { SyncStorageNamespace } from 'core/kv-storage';
+import type { LocaleKVStorage } from 'core/prelude/i18n/interface';
 
 import { local } from 'core/kv-storage';
 
 const
-	storage: SyncStorageNamespace = local.namespace('[[I18N]]');
+	storage: LocaleKVStorage = local.namespace('[[I18N]]');
 
 export default storage;

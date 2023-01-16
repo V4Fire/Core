@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import type { SyncStorage } from 'core/kv-storage';
+
 export interface Locale {
 	/**
 	 * The locale value
@@ -16,6 +18,15 @@ export interface Locale {
 	 * True if the locale is default
 	 */
 	isDefault: boolean;
+}
+
+export interface LocaleKVStorage {
+	get: SyncStorage['get'];
+
+	/**
+	 * Set is optional for read only storage
+	 */
+	set?: SyncStorage['set'];
 }
 
 export type PluralizationCount = StringPluralizationForms | string | number;
