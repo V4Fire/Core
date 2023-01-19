@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.89.1 (2023-01-19)
+
+#### :bug: Bug Fix
+
+* Fixed memory leak when caching requests with a given ttl `core/request`
+
 ## v3.89.0 (2022-09-15)
 
 #### :rocket: New Feature
