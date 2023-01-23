@@ -49,7 +49,7 @@ export function i18nFactory(
 			correctKeyset = keysetNames.find((keysetName) => langPacs[resolvedLocale]?.[keysetName]?.[key]),
 			translateValue = langPacs[resolvedLocale]?.[correctKeyset ?? '']?.[key];
 
-		if (translateValue != null) {
+		if (translateValue != null && translateValue !== '') {
 			return resolveTemplate(translateValue, params);
 		}
 
