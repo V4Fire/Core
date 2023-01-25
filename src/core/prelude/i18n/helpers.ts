@@ -53,7 +53,7 @@ export function i18nFactory(
 			return resolveTemplate(translateValue, params);
 		}
 
-		logger.error('Translation for the given key is not found', `KeysetNames: ${keysetNames.join(', ')}, LocaleName: ${resolvedLocale}, Key: ${key}`);
+		logger.error('Translation for the given key is not found', `Key: ${key}, KeysetNames: ${keysetNames.join(', ')}, LocaleName: ${resolvedLocale}`);
 		return resolveTemplate(key, params);
 	};
 }
