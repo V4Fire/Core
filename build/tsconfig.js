@@ -23,7 +23,7 @@ module.exports = function buildTSConfig() {
 		fs = require('fs'),
 		find = require('find-up').sync,
 		path = require('upath'),
-		glob = require('glob');
+		glob = require('fast-glob');
 
 	const
 		tsconfig = require('tsconfig');
