@@ -77,7 +77,7 @@ export default class StreamBuffer<T = unknown> {
 
 			while (true) {
 				if (buffer.length > 0) {
-					yield buffer.pop();
+					yield buffer.shift();
 					continue;
 				}
 
