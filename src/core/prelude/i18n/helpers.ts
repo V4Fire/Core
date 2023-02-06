@@ -47,13 +47,13 @@ export function i18nFactory(
 		throw new ReferenceError('The locale for internationalization is not defined');
 	}
 
-	return function i18n(value: string | string[], params?: I18nParams) {
+	return function i18n(value: string | TemplateStringsArray, params?: I18nParams) {
 		if (Object.isArray(value) && value.length !== 1) {
 			throw new SyntaxError('Using i18n with template literals is allowed only without variables');
 		}
 
 		const
-			key = Object.isArray(value) ? value[0] : value,
+			key = Object.isArray(value) ? value[0] : <string>value,
 			correctKeyset = keysetNames.find((keysetName) => langPacs[resolvedLocale]?.[keysetName]?.[key]),
 			translateValue = langPacs[resolvedLocale]?.[correctKeyset ?? '']?.[key];
 

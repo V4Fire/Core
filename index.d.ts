@@ -125,7 +125,7 @@ declare function stderr(err: any): void;
  */
 declare function i18n(
 	keysetNameOrNames: CanArray<string>, customLocale?: Language
-): (key: string | string[], params?: I18nParams) => string;
+): (key: string | TemplateStringsArray, params?: I18nParams) => string;
 
 /**
  * @alias
@@ -133,7 +133,7 @@ declare function i18n(
  */
 declare function t(
 	keysetNameOrNames: CanArray<string>, customLocale?: Language
-): (key: string | string[], params?: I18nParams) => string;
+): (key: string | TemplateStringsArray, params?: I18nParams) => string;
 
 /**
  * Parameters for the internationalization function
