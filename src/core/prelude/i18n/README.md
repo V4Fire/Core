@@ -20,6 +20,28 @@ i18n(['my-keyset-name', 'dates'])('February')
 i18n('my-keyset-name', 'ru')('I have {count} toy', {count: 10}); // У меня 10 игрушек
 ```
 
+## Alias
+
+For the abbreviated form i18n, there are aliases. `t` - has a completely similar interface and does the same thing as i18n.
+
+```js
+t('my-keyset-name')('my key') === i18n('my-keyset-name')('my key');
+
+t(['my-keyset-name', 'dates'])('February') === i18n(['my-keyset-name', 'dates'])('February');
+```
+
+## Tagged templates
+
+For simple forms, without variables and internationalization. We can use `i18n` as tagged templates.
+
+```js
+const translateForMyKeyset = t('my-keyset-name');
+translateForMyKeyset`my key`;
+
+const i18nForMyKeyset = i18n('my-keyset-name');
+i18nForMyKeyset`my key`;
+```
+
 ## Language pack structure
 
 The structure of the language map consists of several levels:
