@@ -53,7 +53,7 @@ export function i18nFactory(
 		}
 
 		const
-			key = Object.isArray(value) ? value[0] : <string>value,
+			key = Object.isString(value) ? value : value[0],
 			correctKeyset = keysetNames.find((keysetName) => langPacs[resolvedLocale]?.[keysetName]?.[key]),
 			translateValue = langPacs[resolvedLocale]?.[correctKeyset ?? '']?.[key];
 
