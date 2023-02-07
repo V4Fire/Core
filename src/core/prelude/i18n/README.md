@@ -20,9 +20,9 @@ i18n(['my-keyset-name', 'dates'])('February')
 i18n('my-keyset-name', 'ru')('I have {count} toy', {count: 10}); // У меня 10 игрушек
 ```
 
-## Alias
+## Alias for the i18n function
 
-For the abbreviated form i18n, there are aliases. `t` - has a completely similar interface and does the same thing as i18n.
+Because i18n function calls can create a lot of syntactic noise, there is an alias for this function with the more capacious name `t`.
 
 ```js
 t('my-keyset-name')('my key') === i18n('my-keyset-name')('my key');
@@ -30,16 +30,14 @@ t('my-keyset-name')('my key') === i18n('my-keyset-name')('my key');
 t(['my-keyset-name', 'dates'])('February') === i18n(['my-keyset-name', 'dates'])('February');
 ```
 
-## Tagged templates
+## Using the i18n function as a string tag
 
-For simple forms, without variables and internationalization. We can use `i18n` as tagged templates.
+To reduce syntactic noise, it is allowed to use the internationalization function as a regular string tag.
+Please note that in this option we cannot forward additional parameters (for example, for pluralization).
 
 ```js
-const translateForMyKeyset = t('my-keyset-name');
-translateForMyKeyset`my key`;
-
-const i18nForMyKeyset = i18n('my-keyset-name');
-i18nForMyKeyset`my key`;
+const t = i18n('my-keyset-name');
+console.log(t`my key`);
 ```
 
 ## Language pack structure
