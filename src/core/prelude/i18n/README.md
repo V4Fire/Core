@@ -20,16 +20,6 @@ i18n(['my-keyset-name', 'dates'])('February')
 i18n('my-keyset-name', 'ru')('I have {count} toy', {count: 10}); // У меня 10 игрушек
 ```
 
-## Alias for the i18n function
-
-Because i18n function calls can create a lot of syntactic noise, there is an alias for this function with the more capacious name `t`.
-
-```js
-t('my-keyset-name')('my key') === i18n('my-keyset-name')('my key');
-
-t(['my-keyset-name', 'dates'])('February') === i18n(['my-keyset-name', 'dates'])('February');
-```
-
 ## Using the i18n function as a string tag
 
 To reduce syntactic noise, it is allowed to use the internationalization function as a regular string tag.

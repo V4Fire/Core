@@ -128,14 +128,6 @@ declare function i18n(
 ): (key: string | TemplateStringsArray, params?: I18nParams) => string;
 
 /**
- * @alias
- * @see i18n
- */
-declare function t(
-	keysetNameOrNames: CanArray<string>, customLocale?: Language
-): (key: string | TemplateStringsArray, params?: I18nParams) => string;
-
-/**
  * Parameters for the internationalization function
  */
 type I18nParams = {count?: number | StringPluralizationForms} & {
