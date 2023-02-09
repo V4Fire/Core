@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2022-??-??)
+
+#### :boom: Breaking Change
+
+* `core/prelude/i18n` module redesigned and reworked
+
 ## v3.89.1 (2023-01-19)
 
 #### :bug: Bug Fix
