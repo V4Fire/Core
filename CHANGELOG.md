@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :boom: Breaking Change
 
-* `core/prelude/i18n` now works via sync storage
+* `core/prelude/i18n` module redesigned and reworked
 
 ## v3.89.0 (2022-09-15)
 
