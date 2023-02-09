@@ -9,11 +9,11 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v3.??.?? (2022-??-??)
+## v3.90.00 (2022-02-09)
 
 #### :boom: Breaking Change
 
-* `i18n` now works via sync storage
+* Redesigned internationalization module
 
 ## v3.82.0 (2022-04-04)
 
