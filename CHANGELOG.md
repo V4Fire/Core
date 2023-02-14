@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.? (2022-??-??)
+
+#### :house: Internal
+
+* Improved tsconfig
+
 ## v3.90.0 (2022-02-09)
 
 #### :boom: Breaking Change
