@@ -17,6 +17,18 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Improved tsconfig
 
+## v3.90.0 (2022-02-09)
+
+#### :boom: Breaking Change
+
+* Redesigned internationalization module `core/prelude/i18n`
+
+## v3.89.1 (2023-01-19)
+
+#### :bug: Bug Fix
+
+* Fixed memory leak when caching requests with a given ttl `core/request`
+
 ## v3.89.0 (2022-09-15)
 
 #### :rocket: New Feature

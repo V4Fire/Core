@@ -84,7 +84,19 @@ declare const IS_PROD: boolean;
 
 declare const APP_NAME: string;
 declare const API_URL: CanUndef<string>;
-declare const LOCALE: string;
+declare const LOCALE: Language;
+
+type Language =
+	'be' | 'en' | 'kk' |
+	'ru' | 'tr' | 'tt' |
+	'uk' | 'id' | 'uz' |
+	'es' | 'de' | 'hy' |
+	'ka' | 'ky' | 'sr' |
+	'fr' | 'lv' | 'lt' |
+	'ro' | 'fi' | 'az' |
+	'zh' | 'he' | 'et' |
+	'no' | 'sv' | 'pt' |
+	'ar' | 'sw';
 
 /**
  * Converts the specified unknown value to any
@@ -99,20 +111,33 @@ declare function Any(obj: any): any;
 declare function stderr(err: any): void;
 
 /**
- * Global i18n function (can be used as a string tag or simple function)
+ * Creates a function to internationalize strings in an application based on the given locale and keyset.
+ * Keyset allows you to share the same keys in different contexts.
+ * For example, the key "Next" may have a different value in different components of the application, therefore,
+ * we can use the name of the component as a keyset value.
+ *
+ * @param keysetNameOrNames - the name of keyset or array with names of keysets to use.
+ *   If passed as an array, the priority of the cases will be arranged in the order of the elements,
+ *   the first one will have the highest priority.
+ *
+ * @param [customLocale] - the locale used to search for translations (the default is taken from
+ *   the application settings)
  */
-declare function i18n(strings: any | string[], ...expr: any[]): string;
+declare function i18n(
+	keysetNameOrNames: CanArray<string>, customLocale?: Language
+): (key: string | TemplateStringsArray, params?: I18nParams) => string;
 
 /**
- * @alias
- * @see globalI18n
+ * Parameters for the internationalization function
  */
-declare function t(strings: any | string[], ...expr: any[]): string;
+type I18nParams = {count?: number | StringPluralizationForms} & {
+	[key: string]: string | number;
+};
 
 /**
- * Global i18n loopback (can be used as a string tag or simple function)
+ * String pluralization constants that can be used instead of numbers
  */
-declare function l(strings: any | string[], ...expr: any[]): string;
+type StringPluralizationForms = 'one' | 'some' | 'many' | 'none';
 
 declare function setImmediate(fn: AnyFunction): number;
 declare function clearImmediate(id: number): void;
@@ -155,7 +180,6 @@ type CanVoid<T> = T | void;
 
 type AnyToIgnore = any;
 type AnyToBoolean = any;
-
 interface AnyFunction<ARGS extends any[] = any[], R = any> extends Function {
 	(...args: ARGS): R;
 }

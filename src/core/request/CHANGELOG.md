@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.89.1 (2023-01-19)
+
+#### :bug: Bug Fix
+
+* Fixed memory leak when caching requests with a given ttl
+
 ## v3.81.2 (2022-04-04)
 
 #### :bug: Bug Fix

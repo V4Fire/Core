@@ -45,6 +45,9 @@ import type {
 export const
 	$$ = symbolGenerator();
 
+const
+	cacheStore = Object.createDict<WeakMap<AbstractCache, AbstractCache>>();
+
 export default class RequestContext<D = unknown> {
 	/**
 	 * Promise that resolves when the instance is already initialized
@@ -208,21 +211,39 @@ export default class RequestContext<D = unknown> {
 			cacheAPI = await cacheAPI;
 
 			if (p.cacheTTL != null) {
-				cacheAPI = addTTL(cacheAPI, p.cacheTTL);
+				const wrap = () => addTTL(cacheAPI, p.cacheTTL);
+
+				// eslint-disable-next-line require-atomic-updates
+				cacheAPI = await getWrappedCache(`ttl.${p.cacheTTL}`, wrap);
 			}
 
 			if (p.offlineCache === true && storage != null) {
 				const storageAPI = await storage;
 
-				// eslint-disable-next-line require-atomic-updates
-				cacheAPI = await addPersistent(cacheAPI, storageAPI, {
+				const wrap = () => addPersistent(cacheAPI, storageAPI, {
 					persistentTTL: p.offlineCacheTTL,
 					loadFromStorage: 'onOfflineDemand'
 				});
+
+				// eslint-disable-next-line require-atomic-updates
+				cacheAPI = await getWrappedCache(`persistent.${p.offlineCacheTTL}`, wrap);
 			}
 
 			Object.set(this, 'cache', cacheAPI);
 			caches.add(cacheAPI);
+
+			async function getWrappedCache<T>(key: string, wrap: () => CanPromise<T>): Promise<T> {
+				cacheStore[key] ??= new WeakMap();
+
+				const
+					store = cacheStore[key]!;
+
+				if (!store.has(cacheAPI)) {
+					store.set(cacheAPI, Object.cast(await wrap()));
+				}
+
+				return Object.cast(store.get(cacheAPI));
+			}
 		})();
 	}
 }
