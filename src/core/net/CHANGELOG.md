@@ -9,6 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.92.0 (2023-02-21)
+
+#### :bug: Bug Fix
+
+* Fixed bug with network request caching
+* Fixed bug with request timeout
+
 ## v3.67.0 (2021-12-01)
 
 #### :boom: Breaking Change

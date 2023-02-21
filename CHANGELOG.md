@@ -11,6 +11,18 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.92.0 (2023-02-21)
+
+#### :boom: Breaking Change
+
+* New default config for `core/net` `config`
+
+#### :bug: Bug Fix
+
+* `core/net`:
+  * Fixed bug with network request caching
+  * Fixed bug with request timeout
+
 ## v3.91.0 (2023-02-14)
 
 #### :house: Internal
