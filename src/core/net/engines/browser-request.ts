@@ -22,7 +22,7 @@ globalThis.addEventListener('offline', () => emitter.emit('sync'));
  * This engine checks the connection by using a request for some data from the internet.
  */
 export async function isOnline(): Promise<boolean | null> {
-	if (navigator.onLine === false) {
+	if ('onLine' in navigator && !navigator.onLine) {
 		return false;
 	}
 
@@ -51,19 +51,19 @@ export async function isOnline(): Promise<boolean | null> {
 		checkOnline();
 
 		function checkOnline() {
-			const
-				img = new Image();
+			const xhr = new XMLHttpRequest();
+			xhr.open('OPTIONS', `${url}?_=${Date.now()}`, true);
 
-			img.onload = () => {
+			xhr.addEventListener('readystatechange', () => {
 				if (timer != null) {
 					clearTimeout(timer);
 				}
 
 				resolve(true);
-			};
+			}, {once: true});
 
-			img.onerror = retry;
-			img.src = `${url}?d=${Date.now()}`;
+			xhr.addEventListener('error', retry, {once: true});
+			xhr.send();
 		}
 
 		function retry() {

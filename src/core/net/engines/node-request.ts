@@ -45,7 +45,7 @@ export async function isOnline(): Promise<boolean | null> {
 		checkOnline();
 
 		function checkOnline() {
-			got(`${url}?d=${Date.now()}`, {throwHttpErrors: false}).then(() => {
+			got(`${url}?_=${Date.now()}`, {throwHttpErrors: false, method: 'OPTIONS'}).then(() => {
 				if (timer != null) {
 					clearTimeout(timer);
 				}
