@@ -33,11 +33,44 @@ export async function isOnline(): Promise<boolean | null> {
 		return null;
 	}
 
-	let
-		retriesCount = 0;
-
 	return new Promise((resolve) => {
-		const retry = () => {
+		let
+			retriesCount = 0;
+
+		let
+			timer,
+			timeout = false;
+
+		if (online.checkTimeout != null) {
+			timer = setTimeout(() => {
+				timeout = true;
+				resolve(false);
+			}, online.checkTimeout);
+		}
+
+		checkOnline();
+
+		function checkOnline() {
+			const
+				img = new Image();
+
+			img.onload = () => {
+				if (timer != null) {
+					clearTimeout(timer);
+				}
+
+				resolve(true);
+			};
+
+			img.onerror = retry;
+			img.src = `${url}?d=${Date.now()}`;
+		}
+
+		function retry() {
+			if (timeout) {
+				return;
+			}
+
 			if (
 				state.status == null ||
 				online.retryCount == null ||
@@ -48,38 +81,6 @@ export async function isOnline(): Promise<boolean | null> {
 			} else {
 				checkOnline();
 			}
-		};
-
-		checkOnline();
-
-		function checkOnline(): void {
-			const
-				img = new Image();
-
-			let
-				timer;
-
-			if (online.checkTimeout != null) {
-				timer = setTimeout(retry, online.checkTimeout);
-			}
-
-			img.onload = () => {
-				if (timer != null) {
-					clearTimeout(timer);
-				}
-
-				resolve(true);
-			};
-
-			img.onerror = () => {
-				if (timer != null) {
-					clearTimeout(timer);
-				}
-
-				retry();
-			};
-
-			img.src = `${url}?d=${Date.now()}`;
 		}
 	});
 }

@@ -27,11 +27,38 @@ export async function isOnline(): Promise<boolean | null> {
 		return null;
 	}
 
-	let
-		retriesCount = 0;
-
 	return new Promise((resolve) => {
-		const retry = () => {
+		let
+			retriesCount = 0;
+
+		let
+			timer,
+			timeout = false;
+
+		if (online.checkTimeout != null) {
+			timer = setTimeout(() => {
+				timeout = true;
+				resolve(false);
+			}, online.checkTimeout);
+		}
+
+		checkOnline();
+
+		function checkOnline() {
+			got(`${url}?d=${Date.now()}`, {throwHttpErrors: false}).then(() => {
+				if (timer != null) {
+					clearTimeout(timer);
+				}
+
+				resolve(true);
+			}, retry);
+		}
+
+		function retry() {
+			if (timeout) {
+				return;
+			}
+
 			if (
 				state.status == null ||
 				online.retryCount == null ||
@@ -42,15 +69,6 @@ export async function isOnline(): Promise<boolean | null> {
 			} else {
 				checkOnline();
 			}
-		};
-
-		checkOnline();
-
-		function checkOnline(): void {
-			got(`${url}?d=${Date.now()}`, {
-				timeout: online.checkTimeout,
-				throwHttpErrors: false
-			}).then(resolve.bind(null, true), retry);
 		}
 	});
 }
