@@ -28,7 +28,7 @@ extend({
     // Default options:
 
     // How often need to check the online connection (ms)
-    checkInterval: (5).seconds(),
+    checkInterval: (30).seconds(),
 
     // Timeout of a connection checking request
     checkTimeout: (2).seconds(),
@@ -43,7 +43,7 @@ extend({
     persistence: true,
 
     // How long to store a checking result in the local cache
-    cacheTTL: 0.3.second()
+    cacheTTL: (1).second()
   }
 });
 ```
