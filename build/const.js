@@ -9,13 +9,14 @@
  */
 
 const
-	{config: {projectName, dependencies}} = require('@pzlr/build-core');
+	{config: {projectName, dependencies, externalDependencies}} = require('@pzlr/build-core');
 
 /**
  * String with project dependencies to use with regular expressions
  */
 exports.depsRgxpStr = [projectName]
 	.concat(dependencies)
+	.concat(externalDependencies ?? [])
 
 	.map((el) => {
 		const src = Object.isString(el) ? el : el.src;
