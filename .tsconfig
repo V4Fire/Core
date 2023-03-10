@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "outDir": "ts_dist",
 
     "target": "es5",
     "module": "commonjs",
@@ -15,22 +16,14 @@
     "allowJs": false,
     "skipLibCheck": false,
 
+    "disableSizeLimit": true,
+    "forceConsistentCasingInFileNames": true,
+
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
 
     "noImplicitOverride": true,
     "importsNotUsedAsValues": "error"
-  },
-
-  "typeAcquisition": {
-    "exclude": ["node"]
-  },
-
-  "exclude": [
-    "dist",
-    "config",
-    "node_modules",
-    "**/*.spec.ts"
-  ]
+  }
 }

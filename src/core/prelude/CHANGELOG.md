@@ -19,6 +19,12 @@ Changelog
 
 * Fixed an error when calling `String.capitalize` with an empty string
 
+## v3.90.0 (2022-02-09)
+
+#### :boom: Breaking Change
+
+* Redesigned internationalization module
+
 ## v3.82.0 (2022-04-04)
 
 #### :rocket: New Feature

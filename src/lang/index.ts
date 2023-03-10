@@ -11,4 +11,8 @@
  * @packageDocumentation
  */
 
-export default {};
+import type { LangPacs } from 'lang/interface';
+
+export * from 'lang/interface';
+
+export default <LangPacs>{};
