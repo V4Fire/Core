@@ -25,5 +25,10 @@
 
     "noImplicitOverride": true,
     "importsNotUsedAsValues": "error"
-  }
+  },
+
+  "include": [
+    "./index.d.ts",
+    "./src/**/*.@(ts|js)"
+  ]
 }
