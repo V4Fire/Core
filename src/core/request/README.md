@@ -435,7 +435,9 @@ request('//create-user', {
 
 #### responseType
 
-A type of the response data (if not specified, it will be cast dynamically from the response headers):
+The data type of the response.
+By default, the data type is taken from the `content-type` header, and if not set, then based on this parameter.
+However, you can change this behavior with the `forceResponseType` parameter.
 
 1. `'text'` - the result is interpreted as a simple string;
 2. `'json'` - the result is interpreted as a JSON string;
@@ -453,6 +455,10 @@ request('//users', {
   decoder: fromMessagePack
 }).data.then(console.log);
 ```
+
+#### forceResponseType
+
+If true, then the `responseType` parameter takes precedence over the `content-type` header from the server.
 
 #### [okStatuses = `new Range(200, 299)`]
 

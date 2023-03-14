@@ -181,9 +181,6 @@ export default function createProviderEngine(
 				};
 			};
 
-			const
-				headers = Object.reject(providerResponse.headers, 'content-type');
-
 			return resolve(new Response(getResponse, {
 				url: providerResponse.url,
 				redirected: providerResponse.redirected,
@@ -195,8 +192,9 @@ export default function createProviderEngine(
 				status: providerResponse.status,
 				statusText: providerResponse.statusText,
 
-				headers,
+				headers: providerResponse.headers,
 				responseType: 'object',
+				forceResponseType: true,
 
 				decoder: params.decoders,
 				streamDecoder: params.streamDecoders,

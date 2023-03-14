@@ -150,6 +150,7 @@ const request: RequestEngine = (params) => {
 
 				headers: Object.cast(response.headers),
 				responseType: p.responseType,
+				forceResponseType: p.forceResponseType,
 
 				decoder: p.decoders,
 				streamDecoder: p.streamDecoders,

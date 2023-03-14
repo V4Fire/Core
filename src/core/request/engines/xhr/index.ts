@@ -148,6 +148,7 @@ const request: RequestEngine = (params) => {
 
 				headers: xhr.getAllResponseHeaders(),
 				responseType: p.responseType,
+				forceResponseType: p.forceResponseType,
 
 				decoder: p.decoders,
 				streamDecoder: p.streamDecoders,

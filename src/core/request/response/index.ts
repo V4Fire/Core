@@ -245,8 +245,16 @@ export default class Response<
 			this.body = body;
 		}
 
-		const contentType = this.headers['content-type'];
-		this.sourceResponseType = contentType != null ? getDataType(contentType) : p.responseType;
+		const
+			contentType = this.headers['content-type'] != null ? getDataType(this.headers['content-type']) : undefined;
+
+		if (p.forceResponseType) {
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+			this.sourceResponseType = p.responseType ?? contentType;
+
+		} else {
+			this.sourceResponseType = contentType ?? p.responseType;
+		}
 
 		if (p.decoder == null) {
 			this.decoders = [];

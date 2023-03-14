@@ -157,6 +157,7 @@ const request: RequestEngine = (params) => {
 
 				headers: res.headers,
 				responseType: p.responseType,
+				forceResponseType: p.forceResponseType,
 
 				decoder: p.decoders,
 				streamDecoder: p.streamDecoders,
