@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.93.0 (2023-03-14)
+
+#### :rocket: New Feature
+
+* Added a new option `forceResponseType`
+
 ## v3.89.1 (2023-01-19)
 
 #### :bug: Bug Fix

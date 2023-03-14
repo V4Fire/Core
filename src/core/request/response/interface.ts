@@ -79,6 +79,7 @@ export interface ResponseOptions {
 	okStatuses?: OkStatuses;
 
 	responseType?: ResponseType;
+	forceResponseType?: boolean;
 	headers?: RawHeaders;
 
 	decoder?: WrappedDecoder | WrappedDecoders;

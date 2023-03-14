@@ -21,6 +21,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Fixed an error when calling `String.capitalize` with an empty string
 
+## v3.93.0 (2023-03-14)
+
+#### :rocket: New Feature
+
+* Added a new option `forceResponseType` `core/request`
+
 ## v3.92.0 (2023-02-21)
 
 #### :boom: Breaking Change
