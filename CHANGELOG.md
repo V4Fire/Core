@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.93.1 (2023-03-14)
+
+#### :bug: Bug Fix
+
+* Fixed Node.js engine `core/request`
+
 ## v3.93.0 (2023-03-14)
 
 #### :rocket: New Feature
