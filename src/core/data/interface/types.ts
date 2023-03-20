@@ -61,8 +61,8 @@ export type ModelMethod =
 	'get' |
 	'post' |
 	'add' |
-	'upd' |
-	'del';
+	'update' |
+	'delete';
 
 export interface ProviderOptions {
 	/**

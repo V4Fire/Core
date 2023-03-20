@@ -429,8 +429,8 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	peek<D = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<D>): RequestPromise<D> {
 		const
 			url = this.resolveURL(this.basePeekURL),
-			eventName = this.name(),
-			method = this.method() ?? this.peekMethod;
+			method = this.method() ?? this.peekMethod,
+			eventName = this.name();
 
 		const req = this.request(url, this.resolver.bind(this), this.getRequestOptions('peek', {
 			...opts,
@@ -449,8 +449,8 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	post<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
 		const
 			url = this.resolveURL(),
-			eventName = this.name(),
-			method = this.method() ?? 'POST';
+			method = this.method() ?? 'POST',
+			eventName = this.name();
 
 		const req = this.request(url, this.resolver.bind(this), this.getRequestOptions(eventName ?? 'post', {
 			...opts,
@@ -469,8 +469,8 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	add<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
 		const
 			url = this.resolveURL(this.baseAddURL),
-			eventName = this.name() ?? 'add',
-			method = this.method() ?? this.addMethod;
+			method = this.method() ?? this.addMethod,
+			eventName = this.name() ?? 'add';
 
 		const req = this.request(url, this.resolver.bind(this), this.getRequestOptions('add', {
 			...opts,
@@ -481,22 +481,14 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		return this.updateRequest(url, eventName, req);
 	}
 
-	/**
-	 * @alias
-	 * @see [[Provider.upd]]
-	 */
-	update<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
-		return this.upd(body, opts);
-	}
-
 	/** @inheritDoc */
-	upd<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
+	update<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
 		const
 			url = this.resolveURL(this.baseUpdURL),
-			eventName = this.name() ?? 'upd',
-			method = this.method() ?? this.updMethod;
+			method = this.method() ?? this.updMethod,
+			eventName = this.name() ?? 'update';
 
-		const req = this.request(url, this.resolver.bind(this), this.getRequestOptions('upd', {
+		const req = this.request(url, this.resolver.bind(this), this.getRequestOptions('update', {
 			...opts,
 			body,
 			method
@@ -505,22 +497,14 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		return this.updateRequest(url, eventName, req);
 	}
 
-	/**
-	 * @alias
-	 * @see [[Provider.del]]
-	 */
-	delete<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
-		return this.del(body, opts);
-	}
-
 	/** @inheritDoc */
-	del<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
+	delete<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
 		const
 			url = this.resolveURL(this.baseDelURL),
-			eventName = this.name() ?? 'del',
-			method = this.method() ?? this.delMethod;
+			method = this.method() ?? this.delMethod,
+			eventName = this.name() ?? 'delete';
 
-		const req = this.request(url, this.resolver.bind(this), this.getRequestOptions('del', {
+		const req = this.request(url, this.resolver.bind(this), this.getRequestOptions('delete', {
 			...opts,
 			body,
 			method
