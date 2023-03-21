@@ -110,6 +110,30 @@
     "ts-jest": "28.0.8",
     "xhr2": "0.2.1"
   },
+  "overrides": {
+    "@babel/generator": "7.21.1",
+    "@babel/parser": "7.17.7",
+    "@babel/plugin-transform-destructuring": "7.20.7",
+    "@babel/plugin-transform-parameters": "7.20.7",
+    "@babel/plugin-transform-typescript": "7.21.0",
+    "@babel/traverse": "7.21.2",
+    "@babel/types": "7.21.2",
+    "@types/yargs": "17.0.22",
+    "caniuse-lite": "1.0.30001462",
+    "collection.js": "6.7.11",
+    "core-js-compat": "3.29.0",
+    "core-js": "3.29.0",
+    "deepmerge": "4.3.0",
+    "readable-stream": "3.6.1",
+    "es-abstract": "1.21.1",
+    "electron-to-chromium": "1.4.322",
+    "graceful-fs": "4.2.10",
+    "@types/node": "16.11.25",
+    "prettier": "2.8.4",
+    "regexpu-core": "5.3.1",
+    "spdx-license-ids": "3.0.12",
+    "ws": "8.12.1"
+  },
   "directories": {
     "doc": "docs"
   }
