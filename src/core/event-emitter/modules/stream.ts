@@ -2,6 +2,8 @@ import type EventEmitter from 'core/event-emitter';
 
 import type { HandlerParameters, EmitterEvent, EventHandler } from 'core/event-emitter/interface';
 
+import { createsAsyncSemaphore } from 'core/event';
+
 /**
  *
  */
@@ -40,25 +42,24 @@ export default class Stream implements AsyncIterableIterator<HandlerParameters> 
 		this.emitter = emitter;
 		this.events = new Set(events);
 
-		for (const event of events) {
-			const handler: EventHandler = (params) => {
-				this.resolvePromise?.({done: false, value: params});
+		const
+			semaphore = createsAsyncSemaphore(this.return.bind(this), ...this.events);
+
+		for (const event of this.events) {
+			const resolveCurrentPromise: EventHandler = (value) => {
+				this.resolvePromise?.({done: false, value});
 
 				this.resolvePromise = null;
 				this.pendingPromise = null;
 			};
 
-			this.handlers.set(event, handler);
+			this.handlers.set(event, resolveCurrentPromise);
 
-			this.emitter.on(event, handler);
+			this.emitter.on(event, resolveCurrentPromise);
 
 			this.emitter.on(`off.${event}`, () => {
-				this.events.delete(event);
-				this.emitter.off(event, handler);
-
-				if (this.events.size === 0) {
-					void this.return();
-				}
+				this.emitter.off(event, resolveCurrentPromise);
+				semaphore(event);
 			});
 		}
 	}
