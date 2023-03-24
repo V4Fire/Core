@@ -57,7 +57,7 @@ export default class Stream implements AsyncIterableIterator<HandlerParameters> 
 
 			this.emitter.on(event, resolveCurrentPromise);
 
-			this.emitter.on(`off.${event}`, () => {
+			this.emitter.once(`off.${event}`, () => {
 				this.emitter.off(event, resolveCurrentPromise);
 				semaphore(event);
 			});

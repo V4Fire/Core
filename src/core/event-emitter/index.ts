@@ -39,15 +39,52 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 	/**
 	 *
 	 */
-	on(events: CanArray<EmitterEvent>, handler: EventHandler): void {
-		this.normalizeEvents(events).forEach((event) => this.engine.on(event, handler));
+	on(events: CanArray<EmitterEvent>, handler: EventHandler): void;
+
+	/**
+	 *
+	 */
+	on(events: CanArray<EmitterEvent>): AsyncIterableIterator<HandlerParameters>;
+
+	on(events: CanArray<EmitterEvent>, handler?: EventHandler): CanVoid<AsyncIterableIterator<HandlerParameters>> {
+		events = this.normalizeEvents(events);
+
+		if (handler == null) {
+			return new Stream(this, events);
+		}
+
+		events.forEach((event) => this.engine.on(event, handler));
 	}
 
 	/**
 	 *
 	 */
-	stream(events: CanArray<EmitterEvent>): AsyncIterableIterator<HandlerParameters> {
-		return new Stream(this, this.normalizeEvents(events));
+	once(events: CanArray<EmitterEvent>, handler: EventHandler): void;
+
+	/**
+	 *
+	 */
+	once(events: CanArray<EmitterEvent>): AsyncIterableIterator<HandlerParameters>;
+
+	/**
+	 *
+	 */
+	once(events: CanArray<EmitterEvent>, handler?: EventHandler): CanVoid<AsyncIterableIterator<HandlerParameters>> {
+		events = this.normalizeEvents(events);
+
+		for (const event of events) {
+			const wrapper: EventHandler = (params) => {
+				handler?.(params);
+
+				this.off(event, wrapper);
+			};
+
+			this.on(event, wrapper);
+		}
+
+		if (handler == null) {
+			return new Stream(this, events);
+		}
 	}
 
 	/**
@@ -89,3 +126,4 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 		return Array.isArray(event) ? event : [event];
 	}
 }
+
