@@ -7,13 +7,17 @@ import type {
 	EmitterEvent,
 
 	EventHandler,
-	HandlerParameters
+	HandlerValues,
+	HandlerParameters,
+
+	OffOptions
 
 } from 'core/event-emitter/interface';
 
 import { defaultOptions } from 'core/event-emitter/const';
 
 import Stream from 'core/event-emitter/modules/stream';
+import createEmitterPromise from 'core/event-emitter/modules/promise';
 
 export * from 'core/event-emitter/interface';
 
@@ -44,9 +48,9 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 	/**
 	 *
 	 */
-	on(events: CanArray<EmitterEvent>): AsyncIterableIterator<HandlerParameters>;
+	on(events: CanArray<EmitterEvent>): AsyncIterableIterator<HandlerValues>;
 
-	on(events: CanArray<EmitterEvent>, handler?: EventHandler): CanVoid<AsyncIterableIterator<HandlerParameters>> {
+	on(events: CanArray<EmitterEvent>, handler?: EventHandler): CanVoid<AsyncIterableIterator<HandlerValues>> {
 		events = this.normalizeEvents(events);
 
 		if (handler == null) {
@@ -59,22 +63,29 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 	/**
 	 *
 	 */
+	promifisy(events: CanArray<EmitterEvent>): Promise<HandlerParameters> {
+		return createEmitterPromise(this, this.normalizeEvents(events));
+	}
+
+	/**
+	 *
+	 */
 	once(events: CanArray<EmitterEvent>, handler: EventHandler): void;
 
 	/**
 	 *
 	 */
-	once(events: CanArray<EmitterEvent>): AsyncIterableIterator<HandlerParameters>;
+	once(events: CanArray<EmitterEvent>): AsyncIterableIterator<HandlerValues>;
 
 	/**
 	 *
 	 */
-	once(events: CanArray<EmitterEvent>, handler?: EventHandler): CanVoid<AsyncIterableIterator<HandlerParameters>> {
+	once(events: CanArray<EmitterEvent>, handler?: EventHandler): CanVoid<AsyncIterableIterator<HandlerValues>> {
 		events = this.normalizeEvents(events);
 
 		for (const event of events) {
-			const wrapper: EventHandler = (params) => {
-				handler?.(params);
+			const wrapper: EventHandler = (...params) => {
+				handler?.(...params);
 
 				this.off(event, wrapper);
 			};
@@ -90,9 +101,14 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 	/**
 	 *
 	 */
-	off(events?: CanArray<EmitterEvent>, handler?: EventHandler): void {
+	off(events?: CanArray<EmitterEvent>, handler?: EventHandler, options?: OffOptions): void {
+		const
+			{emit = true} = options ?? {};
+
 		if (events == null) {
-			this.engine.getEvents().forEach((event) => this.emit(`off.${event}`));
+			if (emit) {
+				this.engine.getEvents().forEach((event) => this.emit(`off.${event}`));
+			}
 
 			this.engine.offAll();
 
@@ -100,7 +116,9 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 		}
 
 		for (const event of this.normalizeEvents(events)) {
-			this.emit(`off.${event}`);
+			if (emit) {
+				this.emit(`off.${event}`);
+			}
 
 			if (handler == null) {
 				this.engine.offAll(event);
@@ -113,9 +131,9 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 	/**
 	 *
 	 */
-	emit(events: CanArray<EmitterEvent>, data?: unknown): void {
+	emit(events: CanArray<EmitterEvent>, ...params: HandlerValues): void {
 		for (const event of this.normalizeEvents(events)) {
-			this.engine.emit(event, {data, event});
+			this.engine.emit(event, ...params, {event});
 		}
 	}
 

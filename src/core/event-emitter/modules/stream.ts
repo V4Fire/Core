@@ -1,13 +1,13 @@
 import type EventEmitter from 'core/event-emitter';
 
-import type { HandlerParameters, EmitterEvent, EventHandler } from 'core/event-emitter/interface';
+import type { HandlerValues, EmitterEvent, EventHandler } from 'core/event-emitter/interface';
 
 import { createsAsyncSemaphore } from 'core/event';
 
 /**
  *
  */
-export default class Stream implements AsyncIterableIterator<HandlerParameters> {
+export default class Stream implements AsyncIterableIterator<HandlerValues> {
 	/**
 	 *
 	 */
@@ -21,12 +21,12 @@ export default class Stream implements AsyncIterableIterator<HandlerParameters> 
 	/**
 	 *
 	 */
-	protected resolvePromise: Nullable<(params: IteratorResult<HandlerParameters>) => void> = null;
+	protected resolvePromise: Nullable<(params: IteratorResult<HandlerValues>) => void> = null;
 
 	/**
 	 *
 	 */
-	protected pendingPromise: Nullable<Promise<IteratorResult<HandlerParameters>>> = null;
+	protected pendingPromise: Nullable<Promise<IteratorResult<HandlerValues>>> = null;
 
 	/**
 	 *
@@ -46,8 +46,8 @@ export default class Stream implements AsyncIterableIterator<HandlerParameters> 
 			semaphore = createsAsyncSemaphore(this.return.bind(this), ...this.events);
 
 		for (const event of this.events) {
-			const resolveCurrentPromise: EventHandler = (value) => {
-				this.resolvePromise?.({done: false, value});
+			const resolveCurrentPromise: EventHandler = (...params) => {
+				this.resolvePromise?.({done: false, value: params});
 
 				this.resolvePromise = null;
 				this.pendingPromise = null;
@@ -67,14 +67,14 @@ export default class Stream implements AsyncIterableIterator<HandlerParameters> 
 	/**
 	 *
 	 */
-	[Symbol.asyncIterator](): AsyncIterableIterator<HandlerParameters> {
+	[Symbol.asyncIterator](): AsyncIterableIterator<HandlerValues> {
 		return this;
 	}
 
 	/**
 	 *
 	 */
-	next(): Promise<IteratorResult<HandlerParameters>> {
+	next(): Promise<IteratorResult<HandlerValues>> {
 		if (this.isDone) {
 			return this.return();
 		}

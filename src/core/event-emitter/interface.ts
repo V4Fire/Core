@@ -37,7 +37,7 @@ export interface EmitterEngine {
 	/**
 	 *
 	 */
-	emit(event: EmitterEvent, data?: unknown): void;
+	emit(event: EmitterEvent, ...params: unknown[]): void;
 
 	/**
 	 *
@@ -58,17 +58,17 @@ export type EmitterEvent = string;
 /**
  *
  */
-export type EventHandler = (params: HandlerParameters) => void;
+export type EventHandler = (...params: HandlerParameters) => void;
 
 /**
  *
  */
-export interface HandlerParameters {
-	/**
-	 *
-	 */
-	data?: unknown;
+export type HandlerParameters = [...values: HandlerValues, meta: HandlerMeta];
 
+/**
+ *
+ */
+export interface HandlerMeta {
 	/**
 	 *
 	 */
@@ -78,4 +78,13 @@ export interface HandlerParameters {
 /**
  *
  */
+export type HandlerValues = unknown[];
+
+/**
+ *
+ */
 type InferFactoryParameters<T extends EmitterEngineFactory> = Parameters<T>[0];
+
+export interface OffOptions {
+	emit?: boolean;
+}
