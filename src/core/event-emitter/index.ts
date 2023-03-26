@@ -1,3 +1,9 @@
+import { isEmitterEvent } from 'core/event-emitter/helpers';
+
+import { defaultOptions } from 'core/event-emitter/const';
+
+import Stream from 'core/event-emitter/modules/stream';
+
 import type {
 
 	EmitterEngine,
@@ -7,17 +13,9 @@ import type {
 	EmitterEvent,
 
 	EventHandler,
-	HandlerValues,
-	HandlerParameters,
-
-	OffOptions
+	HandlerValues
 
 } from 'core/event-emitter/interface';
-
-import { defaultOptions } from 'core/event-emitter/const';
-
-import Stream from 'core/event-emitter/modules/stream';
-import createEmitterPromise from 'core/event-emitter/modules/promise';
 
 export * from 'core/event-emitter/interface';
 
@@ -43,47 +41,42 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 	/**
 	 *
 	 */
-	on(events: CanArray<EmitterEvent>, handler: EventHandler): void;
+	on(events: CanIterable<EmitterEvent>, handler: EventHandler): void;
 
 	/**
 	 *
 	 */
-	on(events: CanArray<EmitterEvent>): AsyncIterableIterator<HandlerValues>;
+	on(events: CanIterable<EmitterEvent>): AsyncIterableIterator<HandlerValues>;
 
-	on(events: CanArray<EmitterEvent>, handler?: EventHandler): CanVoid<AsyncIterableIterator<HandlerValues>> {
-		events = this.normalizeEvents(events);
+	on(events: CanIterable<EmitterEvent>, handler?: EventHandler): CanVoid<AsyncIterableIterator<HandlerValues>> {
+		const
+			eventsArr = this.normalizeEvents(events);
 
 		if (handler == null) {
-			return new Stream(this, events);
+			return new Stream(this, eventsArr);
 		}
 
-		events.forEach((event) => this.engine.on(event, handler));
+		eventsArr.forEach((event) => this.engine.on(event, handler));
 	}
 
 	/**
 	 *
 	 */
-	promifisy(events: CanArray<EmitterEvent>): Promise<HandlerParameters> {
-		return createEmitterPromise(this, this.normalizeEvents(events));
-	}
+	once(events: CanIterable<EmitterEvent>, handler: EventHandler): void;
 
 	/**
 	 *
 	 */
-	once(events: CanArray<EmitterEvent>, handler: EventHandler): void;
+	once(events: CanIterable<EmitterEvent>): AsyncIterableIterator<HandlerValues>;
 
 	/**
 	 *
 	 */
-	once(events: CanArray<EmitterEvent>): AsyncIterableIterator<HandlerValues>;
+	once(events: CanIterable<EmitterEvent>, handler?: EventHandler): CanVoid<AsyncIterableIterator<HandlerValues>> {
+		const
+			eventsArr = this.normalizeEvents(events);
 
-	/**
-	 *
-	 */
-	once(events: CanArray<EmitterEvent>, handler?: EventHandler): CanVoid<AsyncIterableIterator<HandlerValues>> {
-		events = this.normalizeEvents(events);
-
-		for (const event of events) {
+		for (const event of eventsArr) {
 			const wrapper: EventHandler = (...params) => {
 				handler?.(...params);
 
@@ -94,21 +87,18 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 		}
 
 		if (handler == null) {
-			return new Stream(this, events);
+			return new Stream(this, eventsArr);
 		}
 	}
 
 	/**
 	 *
 	 */
-	off(events?: CanArray<EmitterEvent>, handler?: EventHandler, options?: OffOptions): void {
-		const
-			{emit = true} = options ?? {};
+	off(events?: CanIterable<EmitterEvent>, handler?: EventHandler): void {
+		const emitOff = (e: string) => this.emit(`off.${e}`);
 
 		if (events == null) {
-			if (emit) {
-				this.engine.getEvents().forEach((event) => this.emit(`off.${event}`));
-			}
+			this.engine.getEvents().forEach(emitOff);
 
 			this.engine.offAll();
 
@@ -116,32 +106,34 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 		}
 
 		for (const event of this.normalizeEvents(events)) {
-			if (emit) {
-				this.emit(`off.${event}`);
-			}
-
 			if (handler == null) {
+				emitOff(event);
+
 				this.engine.offAll(event);
 			} else {
 				this.engine.off(event, handler);
+
+				if (!this.engine.hasListeners(event)) {
+					emitOff(event);
+				}
 			}
 		}
+
 	}
 
 	/**
 	 *
 	 */
-	emit(events: CanArray<EmitterEvent>, ...params: HandlerValues): void {
+	emit(events: CanIterable<EmitterEvent>, ...values: HandlerValues): void {
 		for (const event of this.normalizeEvents(events)) {
-			this.engine.emit(event, ...params, {event});
+			this.engine.emit(event, ...values);
 		}
 	}
 
 	/**
 	 *
 	 */
-	protected normalizeEvents(event: CanArray<EmitterEvent>): EmitterEvent[] {
-		return Array.isArray(event) ? event : [event];
+	protected normalizeEvents(event: CanIterable<EmitterEvent>): EmitterEvent[] {
+		return isEmitterEvent(event) ? [event] : [...event];
 	}
 }
-

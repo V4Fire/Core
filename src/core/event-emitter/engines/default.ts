@@ -27,6 +27,13 @@ class Engine extends EventEmitter2 implements EmitterEngine {
 			return String(event);
 		});
 	}
+
+	/**
+	 *
+	 */
+	override hasListeners(event: string): boolean {
+		return <boolean>super.hasListeners(event);
+	}
 }
 
 /**

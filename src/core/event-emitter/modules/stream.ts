@@ -1,8 +1,17 @@
 import type EventEmitter from 'core/event-emitter';
 
-import type { HandlerValues, EmitterEvent, EventHandler } from 'core/event-emitter/interface';
+import type {
+
+	HandlerValues,
+
+	EmitterEvent,
+	EventHandler
+
+} from 'core/event-emitter/interface';
 
 import { createsAsyncSemaphore } from 'core/event';
+
+import { Queue } from 'core/queue';
 
 /**
  *
@@ -16,12 +25,17 @@ export default class Stream implements AsyncIterableIterator<HandlerValues> {
 	/**
 	 *
 	 */
-	protected readonly events: Set<EmitterEvent>;
+	protected readonly events: EmitterEvent[];
 
 	/**
 	 *
 	 */
-	protected resolvePromise: Nullable<(params: IteratorResult<HandlerValues>) => void> = null;
+	protected readonly queue: Queue<HandlerValues> = new Queue();
+
+	/**
+	 *
+	 */
+	protected resolvePromise: Nullable<(value: IteratorResult<HandlerValues>) => void> = null;
 
 	/**
 	 *
@@ -36,31 +50,26 @@ export default class Stream implements AsyncIterableIterator<HandlerValues> {
 	/**
 	 *
 	 */
-	protected handlers: Map<EmitterEvent, EventHandler> = new Map();
+	protected returnAfterEmptyQueue: boolean = false;
 
 	constructor(emitter: EventEmitter, events: EmitterEvent[]) {
 		this.emitter = emitter;
-		this.events = new Set(events);
+		this.events = events;
+
+		const terminateStream = () => {
+			if (this.queue.length > 0) {
+				this.returnAfterEmptyQueue = true;
+			} else {
+				void this.return();
+			}
+		};
 
 		const
-			semaphore = createsAsyncSemaphore(this.return.bind(this), ...this.events);
+			semaphore = createsAsyncSemaphore(terminateStream, ...this.events);
 
 		for (const event of this.events) {
-			const resolveCurrentPromise: EventHandler = (...params) => {
-				this.resolvePromise?.({done: false, value: params});
-
-				this.resolvePromise = null;
-				this.pendingPromise = null;
-			};
-
-			this.handlers.set(event, resolveCurrentPromise);
-
-			this.emitter.on(event, resolveCurrentPromise);
-
-			this.emitter.once(`off.${event}`, () => {
-				this.emitter.off(event, resolveCurrentPromise);
-				semaphore(event);
-			});
+			this.emitter.on(event, this.onEvent);
+			this.emitter.once(`off.${event}`, () => semaphore(event));
 		}
 	}
 
@@ -79,7 +88,27 @@ export default class Stream implements AsyncIterableIterator<HandlerValues> {
 			return this.return();
 		}
 
-		return this.pendingPromise ??= new Promise((resolve) => this.resolvePromise = resolve);
+		if (this.queue.length > 0) {
+			const value = this.queue.shift()!;
+			return Promise.resolve({done: false, value});
+		}
+
+		if (this.returnAfterEmptyQueue) {
+			return this.return();
+		}
+
+		return this.pendingPromise ??= createPromise.call(this);
+
+		function createPromise(this: Stream): Promise<IteratorResult<HandlerValues>> {
+			return new Promise((resolve) => {
+				this.resolvePromise = (chunk) => {
+					resolve(chunk);
+
+					this.resolvePromise = null;
+					this.pendingPromise = null;
+				};
+			});
+		}
 	}
 
 	/**
@@ -96,10 +125,9 @@ export default class Stream implements AsyncIterableIterator<HandlerValues> {
 		}
 
 		this.resolvePromise?.(chunk);
-		this.offAllHandlers();
+		this.offAllListeners();
+		this.queue.clear();
 
-		this.resolvePromise = null;
-		this.pendingPromise = null;
 		this.isDone = true;
 
 		return Promise.resolve(chunk);
@@ -108,13 +136,18 @@ export default class Stream implements AsyncIterableIterator<HandlerValues> {
 	/**
 	 *
 	 */
-	throw(): any {
-		return <any>null;
+	protected offAllListeners(): void {
+		this.emitter.off(this.events, this.onEvent);
 	}
 
-	protected offAllHandlers(): void {
-		for (const [event, handler] of this.handlers) {
-			this.emitter.off(event, handler);
+	/**
+	 *
+	 */
+	protected onEvent: EventHandler = (...value) => {
+		if (this.pendingPromise == null) {
+			this.queue.push(value);
+		} else {
+			this.resolvePromise?.({done: false, value});
 		}
-	}
+	};
 }
