@@ -50,7 +50,7 @@ export default class Stream implements AsyncIterableIterator<HandlerValues> {
 	/**
 	 *
 	 */
-	protected returnAfterEmptyQueue: boolean = false;
+	protected returnAfterQueueIsEmpty: boolean = false;
 
 	constructor(emitter: EventEmitter, events: EmitterEvent[]) {
 		this.emitter = emitter;
@@ -58,7 +58,7 @@ export default class Stream implements AsyncIterableIterator<HandlerValues> {
 
 		const terminateStream = () => {
 			if (this.queue.length > 0) {
-				this.returnAfterEmptyQueue = true;
+				this.returnAfterQueueIsEmpty = true;
 			} else {
 				void this.return();
 			}
@@ -93,7 +93,7 @@ export default class Stream implements AsyncIterableIterator<HandlerValues> {
 			return Promise.resolve({done: false, value});
 		}
 
-		if (this.returnAfterEmptyQueue) {
+		if (this.returnAfterQueueIsEmpty) {
 			return this.return();
 		}
 

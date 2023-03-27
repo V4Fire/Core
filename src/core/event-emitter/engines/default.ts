@@ -19,9 +19,9 @@ class Engine extends EventEmitter2 implements EmitterEngine {
 	 *
 	 */
 	getEvents(): EmitterEvent[] {
-		return this.eventNames().map((event) => {
+		return this.eventNames().flatMap((event) => {
 			if (Array.isArray(event)) {
-				return String(event).replaceAll(',', '.');
+				return event.map(String);
 			}
 
 			return String(event);
