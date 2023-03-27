@@ -4,6 +4,8 @@ import { defaultOptions } from 'core/event-emitter/const';
 
 import Stream from 'core/event-emitter/modules/stream';
 
+import { createsAsyncSemaphore } from 'core/event';
+
 import type {
 
 	EmitterEngine,
@@ -76,9 +78,17 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 		const
 			eventsArr = this.normalizeEvents(events);
 
+		const
+			// Creating the stream here so that it can subscribe to the "off.event" event
+			stream = handler == null ? new Stream(this, eventsArr) : null;
+
 		for (const event of eventsArr) {
 			const wrapper: EventHandler = (...params) => {
-				handler?.(...params);
+				if (handler == null) {
+					this.emit(`off.${event}`);
+				} else {
+					handler(...params);
+				}
 
 				this.off(event, wrapper);
 			};
@@ -86,8 +96,50 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 			this.on(event, wrapper);
 		}
 
-		if (handler == null) {
-			return new Stream(this, eventsArr);
+		if (stream != null) {
+			return stream;
+		}
+	}
+
+	/**
+	 *
+	 */
+	any(events: CanIterable<EmitterEvent>, handler: EventHandler): void;
+
+	/**
+	 *
+	 */
+	any(events: CanIterable<EmitterEvent>): AsyncIterableIterator<HandlerValues>;
+
+	/**
+	 *
+	 */
+	any(events: CanIterable<EmitterEvent>, handler?: EventHandler): CanVoid<AsyncIterableIterator<HandlerValues>> {
+		const
+			eventsArr = this.normalizeEvents(events),
+			map = new Map<string, EventHandler>();
+
+		const
+			// Creating the stream here so that it can subscribe to the "off.event" event
+			stream = handler == null ? new Stream(this, eventsArr) : null;
+
+		for (const event of eventsArr) {
+			const wrapper: EventHandler = (...params) => {
+				if (handler == null) {
+					void stream?.return();
+				} else {
+					handler(...params);
+				}
+
+				map.forEach((handler, event) => this.off(event, handler));
+			};
+
+			this.on(event, wrapper);
+			map.set(event, wrapper);
+		}
+
+		if (stream != null) {
+			return stream;
 		}
 	}
 
@@ -95,7 +147,8 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 	 *
 	 */
 	off(events?: CanIterable<EmitterEvent>, handler?: EventHandler): void {
-		const emitOff = (e: string) => this.emit(`off.${e}`);
+		const
+			emitOff = (e: string) => this.emit(`off.${e}`);
 
 		if (events == null) {
 			this.engine.getEvents().forEach(emitOff);
