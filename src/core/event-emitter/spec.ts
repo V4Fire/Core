@@ -2,102 +2,107 @@ import EventEmitter from 'core/event-emitter';
 
 describe('core/event-emitter', () => {
 	describe('subscribes to an event and recieves the emitted data', () => {
-		describe('subscribing by a callback', () => {
-			it('until the callback is unsubscribed explicitly', () => {
+		describe('until all events are emitted only once', () => {
+			it('via callback', () => {
 				const
 					emitter = new EventEmitter(),
-					e = 'event';
+					events = ['foo', 'bar'];
 
 				const
 					listener = jest.fn(),
 					recievedValues: unknown[] = [];
 
-				emitter.on(e, (...values) => {
+				emitter.once(events, (...values) => {
 					recievedValues.push(...values);
 					listener();
 				});
 
-				emitter.emit(e, 1);
-				emitter.emit(e, 2, 3);
-
-				expect(listener).toBeCalledTimes(2);
-				expect(recievedValues).toEqual([1, 2, 3]);
-
-				emitter.off(e);
-
-				emitter.emit(e, 4, 5);
-
-				expect(listener).toBeCalledTimes(2);
-				expect(recievedValues).toEqual([1, 2, 3]);
-			});
-
-			it('until the event is emitted only once', () => {
-				const
-					emitter = new EventEmitter(),
-					e = 'event';
-
-				const
-					listener = jest.fn(),
-					recievedValues: unknown[] = [];
-
-				emitter.once(e, (...values) => {
-					recievedValues.push(...values);
-					listener();
-				});
-
-				emitter.emit(e, 1);
-				emitter.emit(e, 2, 3);
-
+				emitter.emit('foo', 1);
 				expect(listener).toBeCalledTimes(1);
 				expect(recievedValues).toEqual([1]);
-			});
-		});
 
-		describe('subscribing via stream', () => {
-			it('until all listeners to the event are unsubscribed', async () => {
+				emitter.emit('bar', 2, 3);
+				expect(listener).toBeCalledTimes(2);
+				expect(recievedValues).toEqual([1, 2, 3]);
+
+				emitter.emit('foo', 4);
+				emitter.emit('bar', 5, 6);
+
+				expect(listener).toBeCalledTimes(2);
+				expect(recievedValues).toEqual([1, 2, 3]);
+			});
+
+			it('via stream', async () => {
 				const
 					emitter = new EventEmitter(),
-					e = 'event';
+					events = ['foo', 'bar'];
 
 				const
 					stream = createStream(),
 					listener = jest.fn(),
 					recievedValues: unknown[] = [];
 
-				emitter.emit(e, 1);
-				emitter.emit(e, 2);
+				emitter.emit('foo', 1);
+				emitter.emit('foo', 2);
 
-				queueMicrotask(() => emitter.emit(e, 3));
-				queueMicrotask(() => emitter.off(e));
+				queueMicrotask(() => emitter.emit('bar', 3));
+				queueMicrotask(() => emitter.off(events));
 
 				await stream;
 
-				expect(recievedValues).toEqual([1, 2, 3]);
-				expect(listener).toBeCalledTimes(3);
+				expect(listener).toBeCalledTimes(2);
+				expect(recievedValues).toEqual([1, 3]);
 
 				async function createStream(): Promise<void> {
-					for await (const values of emitter.on(e)) {
+					for await (const values of emitter.once(events)) {
 						recievedValues.push(...values);
 						listener();
 					}
 				}
 			});
+		});
 
-			it('until the event is emitted only once', async () => {
+		describe('until any of the events is emitted only once', () => {
+			it('via callback', () => {
 				const
 					emitter = new EventEmitter(),
-					e = 'event';
+					events = ['foo', 'bar'];
+
+				const
+					listener = jest.fn(),
+					recievedValues: unknown[] = [];
+
+				emitter.any(events, (...values) => {
+					recievedValues.push(...values);
+					listener();
+				});
+
+				const [first, second] = Math.random() > 0.5 ? events : [...events].reverse();
+
+				emitter.emit(first, 1);
+				emitter.emit(first, 2);
+				emitter.emit(second, 3);
+
+				expect(listener).toBeCalledTimes(1);
+				expect(recievedValues).toEqual([1]);
+			});
+
+			it('via stream', async () => {
+				const
+					emitter = new EventEmitter(),
+					events = ['foo', 'bar'];
 
 				const
 					stream = createStream(),
 					listener = jest.fn(),
 					recievedValues: unknown[] = [];
 
-				emitter.emit(e, 1);
-				emitter.emit(e, 2);
+				const
+					[first, second] = Math.random() > 0.5 ? events : [...events].reverse();
 
-				queueMicrotask(() => emitter.emit(e, 3));
-				queueMicrotask(() => emitter.off(e));
+				emitter.emit(first, 1);
+				emitter.emit(first, 2);
+				emitter.emit(second, 3);
 
 				await stream;
 
@@ -105,32 +110,69 @@ describe('core/event-emitter', () => {
 				expect(listener).toBeCalledTimes(1);
 
 				async function createStream(): Promise<void> {
-					for await (const values of emitter.once(e)) {
+					for await (const values of emitter.any(events)) {
 						recievedValues.push(...values);
 						listener();
 					}
 				}
 			});
 		});
-	});
 
-	it.only('foo', async () => {
-		const
-			ee = new EventEmitter(),
-			stream = createStream();
+		it('subscribing by a callback until it is unsubscribed explicitly', () => {
+			const
+				emitter = new EventEmitter(),
+				e = 'event';
 
-		ee.emit('foo', 'foo');
+			const
+				listener = jest.fn(),
+				recievedValues: unknown[] = [];
 
-		queueMicrotask(() => ee.emit('bar', 'bar'));
+			emitter.on(e, (...values) => {
+				recievedValues.push(...values);
+				listener();
+			});
 
-		await stream;
+			emitter.emit(e, 1);
+			emitter.emit(e, 2, 3);
 
-		console.log('yoo');
+			expect(listener).toBeCalledTimes(2);
+			expect(recievedValues).toEqual([1, 2, 3]);
 
-		async function createStream(): Promise<void> {
-			for await (const data of ee.once(['foo', 'bar'])) {
-				console.log(data);
+			emitter.off(e);
+
+			emitter.emit(e, 4, 5);
+
+			expect(listener).toBeCalledTimes(2);
+			expect(recievedValues).toEqual([1, 2, 3]);
+		});
+
+		it('subscribing via stream until all listeners to the event are unsubscribed', async () => {
+			const
+				emitter = new EventEmitter(),
+				e = 'event';
+
+			const
+				stream = createStream(),
+				listener = jest.fn(),
+				recievedValues: unknown[] = [];
+
+			emitter.emit(e, 1);
+			emitter.emit(e, 2);
+
+			queueMicrotask(() => emitter.emit(e, 3));
+			queueMicrotask(() => emitter.off(e));
+
+			await stream;
+
+			expect(recievedValues).toEqual([1, 2, 3]);
+			expect(listener).toBeCalledTimes(3);
+
+			async function createStream(): Promise<void> {
+				for await (const values of emitter.on(e)) {
+					recievedValues.push(...values);
+					listener();
+				}
 			}
-		}
+		});
 	});
 });
