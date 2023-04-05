@@ -11,6 +11,14 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.94.0 (2023-04-05)
+
+#### :house: Internal
+
+* Moving to yarn package manager
+* Updated CI script to yarn
+* Removed unused dependencies
+
 ## v3.93.1 (2023-03-14)
 
 #### :bug: Bug Fix
