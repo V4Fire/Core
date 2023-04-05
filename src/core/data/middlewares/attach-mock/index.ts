@@ -14,7 +14,7 @@
 import AbortablePromise from 'core/promise/abortable';
 import * as env from 'core/env';
 
-import Provider, { RequestError } from 'core/data';
+import Provider, { RequestError, type MockDictionary } from 'core/data';
 import { Response, MiddlewareParams } from 'core/request';
 
 import type { MockOptions } from 'core/data/middlewares/attach-mock/interface';
@@ -57,35 +57,15 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 	}
 
 	const
-		{opts, ctx} = params;
+		{opts, ctx} = params,
+		mocks = await getProviderMocks(this, opts);
 
-	const
-		id = opts.cacheId,
-		mocksDecl = (<typeof Provider>this.constructor).mocks ?? this.mocks;
-
-	const canIgnore =
-		mocksDecl == null ||
-		!Object.isString(id) ||
-		mockOpts.patterns.every((rgxp) => !RegExp.test(rgxp, id));
-
-	if (canIgnore) {
+	if (!mocks) {
 		return;
 	}
 
-	let
-		mocks = await mocksDecl;
-
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-	if (mocks == null) {
-		return;
-	}
-
-	if ('default' in mocks) {
-		mocks = mocks.default;
-	}
-
 	const
-		requests = mocks[String(opts.method)];
+		requests = mocks[opts.method];
 
 	if (requests == null) {
 		return;
@@ -104,6 +84,7 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 		const
 			request = requests[i];
 
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		if (request == null) {
 			continue;
 		}
@@ -186,4 +167,41 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 		})
 
 		.then(ctx.wrapAsResponse.bind(ctx));
+}
+
+/**
+ * Extracts mocks from the provider
+ *
+ * @param provider
+ * @param opts
+ */
+async function getProviderMocks(
+	provider: Provider,
+	opts: MiddlewareParams['opts']
+): Promise<MockDictionary | null> {
+	const
+		id = opts.cacheId,
+		mocksDecl = (<typeof Provider>provider.constructor).mocks ?? provider.mocks;
+
+	const canIgnore =
+		mocksDecl == null ||
+		!Object.isString(id) ||
+		mockOpts?.patterns.every((rgxp) => !RegExp.test(rgxp, id));
+
+	if (canIgnore) {
+		return null;
+	}
+
+	let mocks = await mocksDecl;
+
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	if (mocks == null) {
+		return null;
+	}
+
+	if ('default' in mocks) {
+		mocks = mocks.default;
+	}
+
+	return mocks;
 }
