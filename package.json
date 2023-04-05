@@ -5,7 +5,7 @@
   "main": "lib/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.93.1",
+  "version": "3.94.0",
   "author": "kobezzza <kobezzza@gmail.com> (https://github.com/kobezzza)",
   "repository": {
     "type": "git",
@@ -27,15 +27,15 @@
     "build:tsconfig": "node build/build-tsconfig",
     "build:standalone": "gulp build:standalone",
     "watch:standalone": "gulp watch:standalone",
-    "test": "npm run build && npm run test:typescript && npm run test:eslint && npm run test:jest",
-    "test:linters": "npm run test:typescript && npm run test:eslint",
+    "test": "yarn build && yarn test:typescript && yarn test:eslint && yarn test:jest",
+    "test:linters": "yarn test:typescript && yarn test:eslint",
     "test:typescript": "node node_modules/@v4fire/typescript-check",
-    "test:eslint": "eslint config build src",
+    "test:eslint": "npx eslint config build src",
     "test:jest": "cross-env NODE_ENV=development && jest",
-    "test:ci:jest": "cross-env NODE_ENV=development && jest --maxWorkers 4 --reporters github-actions",
-    "up": "npm i && gulp build:standalone && gulp build:doc"
+    "test:ci:jest": "cross-env NODE_ENV=development && jest --maxWorkers 4 --reporters github-actions"
   },
   "dependencies": {
+    "@babel/runtime": "7.21.0",
     "@swc/core": "1.2.153",
     "@swc/helpers": "0.3.8",
     "@v4fire/config": "1.0.0",
