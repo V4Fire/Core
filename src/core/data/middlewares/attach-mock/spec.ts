@@ -29,7 +29,7 @@ describe('core/data/middlewares/attach-mock', () => {
     delete TestProvider.mocks;
   });
 
-  describe.skip('should set mocks', () => {
+  describe('should set mocks', () => {
     it('via in-place declaration', async () => {
       TestProvider.mocks = <Mocks>{
         GET: [{response: responseData}]
