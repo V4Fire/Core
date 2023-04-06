@@ -6,12 +6,12 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import request from 'core/request';
+import request, { RequestError } from 'core/request';
 
 import Provider, { RequestPromise, provider } from 'core/data';
 import type { Mocks } from 'core/data/interface';
 
-import { responseData } from 'core/data/middlewares/attach-mock/__mocks__/response-data';
+import { responseData } from 'core/data/middlewares/attach-mock/test/response-data';
 
 describe('core/data/middlewares/attach-mock', () => {
   @provider('attach-mock')
@@ -39,7 +39,7 @@ describe('core/data/middlewares/attach-mock', () => {
     });
 
     it('via dynamic import', async () => {
-      TestProvider.mocks = <Mocks>import('core/data/middlewares/attach-mock/__mocks__/test-provider-mocks');
+      TestProvider.mocks = <Mocks>import('core/data/middlewares/attach-mock/test/test-provider-mocks');
 
       expect(await unwrapResponse(new TestProvider().get())).toBe(responseData);
     });
