@@ -83,7 +83,8 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 	const customResponse: MockCustomResponse = {
 		status: undefined,
 		responseType: undefined,
-		decoders: undefined
+		decoders: undefined,
+		headers: undefined
 	};
 
 	let
@@ -100,7 +101,8 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 				responseType: customResponse.responseType ?? (<any>mock).responseType ?? opts.responseType,
 				okStatuses: opts.okStatuses,
 				// FIXME: customResponse.decoders (Decoders) type doesn't match with ctx.decoders (WrappedDecoders)
-				decoder: mock.decoders === false ? undefined : (<any>customResponse).decoders ?? ctx.decoders
+				decoder: mock.decoders === false ? undefined : (<any>customResponse).decoders ?? ctx.decoders,
+				headers: customResponse.headers ?? mock.headers
 			});
 
 			if (!response.ok) {

@@ -195,6 +195,31 @@ describe('core/data/middlewares/attach-mock', () => {
         expect((<RequestError>error).message).toMatch('[invalidStatus] GET  302');
       });
     });
+
+    test('should override headers', async () => {
+      const headers = {
+        'content-length': 0
+      };
+
+      TestProvider.mocks = <Mocks>{
+        GET: [
+          {
+            headers: {
+              'content-type': 'application/json'
+            },
+            response: (opts, res) => {
+              res.status = 204;
+              res.headers = headers;
+            }
+          }
+        ]
+      };
+
+      const {response} = await new TestProvider().get();
+      expect(response.status).toEqual(204);
+      expect([...response.headers.keys()]).toEqual(['content-length']);
+      expect(response.headers.get('content-length')).toEqual('0');
+    });
   });
 
   async function unwrapResponse<T>(promise: RequestPromise<T>): Promise<Nullable<T>> {
