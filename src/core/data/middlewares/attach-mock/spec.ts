@@ -173,6 +173,30 @@ describe('core/data/middlewares/attach-mock', () => {
     });
   });
 
+  describe('mock response function', () => {
+    test('should override mock status', async () => {
+      expect.assertions(2);
+
+      TestProvider.mocks = <Mocks>{
+        GET: [
+          {
+            status: 200,
+            response: (opts, res) => {
+              res.status = 302;
+
+              return null;
+            }
+          }
+        ]
+      };
+
+      return new TestProvider().get().catch((error) => {
+        expect(error).toBeInstanceOf(RequestError);
+        expect((<RequestError>error).message).toMatch('[invalidStatus] GET  302');
+      });
+    });
+  });
+
   async function unwrapResponse<T>(promise: RequestPromise<T>): Promise<Nullable<T>> {
     return (await promise).data;
   }
