@@ -27,6 +27,9 @@ $RECYCLE.BIN
 .LSOverride
 .vscode
 
+# Icon must ends with two \r.
+Icon
+
 # Thumbnails
 ._*
 
@@ -38,12 +41,14 @@ $RECYCLE.BIN
 /bower_components
 /node_modules
 /.yalc
+/.yarn
 /yalc.lock
 
 # Build && test
 /dist
 /coverage
 /.nyc_output
+/.husky
 
 .env
 *.d.js
@@ -59,3 +64,9 @@ $RECYCLE.BIN
 /tmp
 *.tmp
 *.gz
+
+# NPM ignore list
+/docs
+/.github
+/assets
+/typedoc.json
