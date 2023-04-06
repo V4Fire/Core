@@ -14,12 +14,21 @@
 import AbortablePromise from 'core/promise/abortable';
 import * as env from 'core/env';
 
-import Provider, { RequestError, type MockDictionary } from 'core/data';
+import Provider, { RequestError } from 'core/data';
+import type { MockDictionary, MockCustomResponse, Mock } from 'core/data';
 import { Response, MiddlewareParams } from 'core/request';
 
 import type { MockOptions } from 'core/data/middlewares/attach-mock/interface';
 
 export * from 'core/data/middlewares/attach-mock/interface';
+
+type RequestMatchingData = Partial<Pick<MiddlewareParams['opts'], 'query' | 'body' | 'headers'>>;
+
+interface MockBestMatch {
+	score: number;
+	mismatches: number;
+	mock: Mock | null;
+}
 
 let
 	mockOpts: CanUndef<MockOptions>;
@@ -65,83 +74,20 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 	}
 
 	const
-		requests = mocks[opts.method];
+		mock = findMockForRequestData(mocks[opts.method] ?? [], getRequestMatchingData(opts));
 
-	if (requests == null) {
+	if (!mock) {
 		return;
 	}
 
-	const requestKeys = [
-		'query',
-		'body',
-		'headers'
-	];
-
-	let
-		currentRequest;
-
-	for (let i = 0; i < requests.length; i++) {
-		const
-			request = requests[i];
-
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-		if (request == null) {
-			continue;
-		}
-
-		requestKeys: for (let keys = requestKeys, i = 0; i < keys.length; i++) {
-			const
-				key = keys[i];
-
-			if (!(key in request)) {
-				currentRequest = request;
-				continue;
-			}
-
-			const
-				valFromMock = request[key],
-				reqVal = opts[key];
-
-			if (Object.isPlainObject(valFromMock)) {
-				for (let keys = Object.keys(valFromMock), i = 0; i < keys.length; i++) {
-					const
-						key = keys[i];
-
-					if (!Object.fastCompare(valFromMock[key], reqVal?.[key])) {
-						currentRequest = undefined;
-						break requestKeys;
-					}
-				}
-
-				currentRequest = request;
-				continue;
-			}
-
-			if (Object.fastCompare(reqVal, valFromMock)) {
-				currentRequest = request;
-				continue;
-			}
-
-			currentRequest = undefined;
-		}
-
-		if (currentRequest != null) {
-			break;
-		}
-	}
-
-	if (currentRequest === undefined) {
-		return;
-	}
-
-	const customResponse: typeof currentRequest = {
+	const customResponse: MockCustomResponse = {
 		status: undefined,
 		responseType: undefined,
 		decoders: undefined
 	};
 
 	let
-		{response} = currentRequest;
+		{response} = mock;
 
 	if (Object.isFunction(response)) {
 		response = response.call(this, params, customResponse);
@@ -150,10 +96,11 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 	return () => AbortablePromise.resolve(response, ctx.parent)
 		.then((data) => {
 			const response = new Response(data, {
-				status: customResponse.status ?? currentRequest.status ?? 200,
-				responseType: customResponse.responseType ?? currentRequest.responseType ?? opts.responseType,
+				status: customResponse.status ?? mock.status ?? 200,
+				responseType: customResponse.responseType ?? (<any>mock).responseType ?? opts.responseType,
 				okStatuses: opts.okStatuses,
-				decoder: currentRequest.decoders === false ? undefined : customResponse.decoders ?? ctx.decoders
+				// FIXME: customResponse.decoders (Decoders) type doesn't match with ctx.decoders (WrappedDecoders)
+				decoder: mock.decoders === false ? undefined : (<any>customResponse).decoders ?? ctx.decoders
 			});
 
 			if (!response.ok) {
@@ -204,4 +151,114 @@ async function getProviderMocks(
 	}
 
 	return mocks;
+}
+
+/**
+ * Returns request data needed for mock matching
+ * @param opts
+ */
+function getRequestMatchingData(opts: MiddlewareParams['opts']): RequestMatchingData {
+	const requestKeys = [
+		'query',
+		'body',
+		'headers'
+	];
+
+	const requestData = {};
+
+	for (let i = 0; i < requestKeys.length; i++) {
+		const key = <keyof RequestMatchingData>requestKeys[i];
+		if (opts[key] != null) {
+			requestData[key] = opts[key];
+		}
+	}
+
+	return requestData;
+}
+
+/**
+ * Returns best matching mock for given request data or first mock
+ *
+ * @param mocks
+ * @param requestData
+ */
+function findMockForRequestData(mocks: Mock[], requestData: RequestMatchingData): Mock | null {
+	let bestMatch: MockBestMatch = {
+		score: -1,
+		mismatches: Number.MAX_SAFE_INTEGER,
+		mock: null
+	};
+
+	for (let i = 0; i < mocks.length; i++) {
+		const mock = mocks[i];
+
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+		if (mock != null) {
+			const [score, mismatches] = calculateMockMatchScore(mock, requestData);
+
+			// Allow only non-comparable or matching mocks
+			if (score !== 0 && score >= bestMatch.score && bestMatch.mismatches > mismatches) {
+				bestMatch = {score, mismatches, mock};
+			}
+		}
+	}
+
+	// Return first mock if none match for legacy reasons
+	return bestMatch.mock ?? mocks[0];
+}
+
+/**
+ * Returns match score and mismatches of the mock to given request data
+ *
+ * if `score` is `-1` than mock is non-comparable \
+ * if `score` is `0` than mock doesn't match the request data
+ *
+ * @param mock
+ * @param requestData
+ */
+function calculateMockMatchScore(
+	mock: Mock,
+	requestData: RequestMatchingData
+): [number, number] {
+	const
+		requestKeys = Object.keys(requestData);
+
+	let
+		score = 0,
+		mismatches = 0;
+
+	requestKeys: for (let i = 0; i < requestKeys.length; i++) {
+		const key = requestKeys[i];
+
+		if (!(key in mock)) {
+			mismatches += 1;
+			continue;
+		}
+
+		const
+			valFromMock = mock[key],
+			reqVal = requestData[key];
+
+		if (Object.isPlainObject(valFromMock)) {
+			for (let keys = Object.keys(valFromMock), i = 0; i < keys.length; i++) {
+				const key = keys[i];
+
+				if (!Object.fastCompare(valFromMock[key], reqVal[key])) {
+					score = 0;
+					break requestKeys;
+				}
+			}
+
+			score += 1;
+		} else if (Object.fastCompare(reqVal, valFromMock)) {
+			score += 1;
+		} else {
+			score = 0;
+		}
+	}
+
+	return [
+		mismatches === requestKeys.length ? -1 : score,
+		mismatches
+	];
 }
