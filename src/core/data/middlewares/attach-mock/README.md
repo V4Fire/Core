@@ -72,6 +72,20 @@ export default class User extends Provider {
           age: 30
         };
        }
+    }],
+    POST: [{
+      response(params, response) {
+        if (!params.opts.headers['authorization']) {
+          response.status = 302;
+          response.headers = { location: '/login' }
+          return;
+        }
+
+        // authorize user 
+        // ...
+
+        response.status = 201;
+      }
     }]
   };
 
