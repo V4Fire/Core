@@ -28,6 +28,10 @@ class Engine extends EventEmitter2 implements EmitterEngine {
 		});
 	}
 
+	prepend(event: EmitterEvent, handler: AnyFunction): void {
+		this.prependListener(event, handler);
+	}
+
 	/**
 	 *
 	 */

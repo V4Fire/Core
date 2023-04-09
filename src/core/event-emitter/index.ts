@@ -41,7 +41,7 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 	protected readonly localEmitter: EventEmitter2 = new EventEmitter2();
 
 	constructor(options: EmitterOptions<T> = {}) {
-		this.options = Object.mixin(true, defaultOptions, options);
+		this.options = Object.mixin(true, {}, defaultOptions, options);
 		this.engine = this.options.engine(this.options.engineOptions);
 	}
 
@@ -60,11 +60,20 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 			eventsArr = this.normalizeEvents(events);
 
 		if (handler == null) {
-			return new Stream(this, this.localEmitter, eventsArr);
+			return this.stream(eventsArr);
 		}
 
 		eventsArr.forEach((event) => this.engine.on(event, handler));
 	}
+
+	/**
+	 *
+	 */
+	 prepend(events: CanIterable<EmitterEvent>, handler: EventHandler): void {
+		 this.normalizeEvents(events).forEach((event) => {
+			 this.engine.prepend(event, handler);
+		 });
+	 }
 
 	/**
 	 *
@@ -81,8 +90,7 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 	 */
 	once(events: CanIterable<EmitterEvent>, handler?: EventHandler): CanVoid<AsyncIterableIterator<HandlerValues>> {
 		const
-			eventsArr = this.normalizeEvents(events),
-			stream = this.getStream(handler, eventsArr);
+			eventsArr = this.normalizeEvents(events);
 
 		eventsArr.forEach((event) => {
 			const wrapper: EventHandler = (...params) => {
@@ -98,8 +106,8 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 			this.on(event, wrapper);
 		});
 
-		if (stream != null) {
-			return stream;
+		if (handler == null) {
+			return this.stream(eventsArr);
 		}
 	}
 
@@ -119,26 +127,27 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 	any(events: Iterable<EmitterEvent>, handler?: EventHandler): CanVoid<AsyncIterableIterator<HandlerValues>> {
 		const
 			eventsArr = this.normalizeEvents(events),
-			handlers = new Map<string, EventHandler>(),
-			stream = this.getStream(handler, eventsArr);
+			handlers = new Map<string, EventHandler>();
 
 		eventsArr.forEach((event) => {
 			const wrapper: EventHandler = (...params) => {
-				if (handler == null) {
-					void stream?.return();
-				} else {
-					handler(...params);
-				}
+				handler?.(...params);
 
-				handlers.forEach((handler, event) => this.off(event, handler));
+				handlers.forEach((localHandler, event) => {
+					this.off(event, localHandler);
+
+					if (handler == null) {
+						this.localEmitter.emit(`off.${event}`);
+					}
+				});
 			};
 
 			this.on(event, wrapper);
 			handlers.set(event, wrapper);
 		});
 
-		if (stream != null) {
-			return stream;
+		if (handler == null) {
+			return this.stream(eventsArr);
 		}
 	}
 
@@ -192,11 +201,7 @@ export default class EventEmitter<T extends EmitterEngineFactory = typeof defaul
 	/**
 	 *
 	 */
-	protected getStream(handler: Nullable<EventHandler>, eventsArr: EmitterEvent[]): Nullable<Stream> {
-		if (handler != null) {
-			return;
-		}
-
+	protected stream(eventsArr: EmitterEvent[]): Stream {
 		return new Stream(this, this.localEmitter, eventsArr);
 	}
 }

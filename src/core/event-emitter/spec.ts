@@ -46,7 +46,7 @@ describe('core/event-emitter', () => {
 				emitter.emit('foo', 2);
 
 				queueMicrotask(() => emitter.emit('bar', 3));
-				queueMicrotask(() => emitter.off(events));
+				queueMicrotask(() => emitter.emit('bar', 4));
 
 				await stream;
 

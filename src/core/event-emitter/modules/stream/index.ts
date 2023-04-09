@@ -92,7 +92,7 @@ export default class Stream implements AsyncIterableIterator<HandlerValues> {
 		const
 			semaphore = createsAsyncSemaphore(terminateStream, ...this.events);
 
-		for (const event of this.events) {
+		this.events.forEach((event) => {
 			const handler: EventHandler = (...value) => {
 				if (this.pendingPromise == null) {
 					this.queue.push({event, value});
@@ -103,7 +103,7 @@ export default class Stream implements AsyncIterableIterator<HandlerValues> {
 
 			this.listeners.set(event, handler);
 
-			this.emitter.on(event, handler);
+			this.emitter.prepend(event, handler);
 
 			this.localEmitter.once(`off.${event}`, (options?: LocalOptions) => {
 				semaphore(event);
@@ -112,7 +112,7 @@ export default class Stream implements AsyncIterableIterator<HandlerValues> {
 					this.forbiddenEvents.add(event);
 				}
 			});
-		}
+		});
 	}
 
 	/**

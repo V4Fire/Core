@@ -32,6 +32,11 @@ export interface EmitterEngine {
 	/**
 	 *
 	 */
+	prepend(event: EmitterEvent, handler: AnyFunction): void;
+
+	/**
+	 *
+	 */
 	off(event: EmitterEvent, handler: AnyFunction): void;
 
 	/**
