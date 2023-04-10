@@ -1,4 +1,4 @@
 export const responseData = {
-  id: 1,
-  test: 'string'
+	id: 1,
+	test: 'string'
 };

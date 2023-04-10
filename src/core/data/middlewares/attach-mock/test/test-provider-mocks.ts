@@ -3,7 +3,7 @@ import { responseData } from 'core/data/middlewares/attach-mock/test/response-da
 export default {
 	GET: [
 		{
-      response: responseData
+			response: responseData
 		}
 	]
 };
