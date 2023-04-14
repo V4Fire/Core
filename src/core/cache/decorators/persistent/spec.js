@@ -18,13 +18,21 @@ import { INDEX_STORAGE_NAME, TTL_POSTFIX } from 'core/cache/decorators/persisten
 import engines from 'core/cache/decorators/persistent/engines';
 
 describe('core/cache/decorators/persistent', () => {
+	const
+		originalIsDictionary = Object.isDictionary;
+
 	beforeEach(async () => {
 		await asyncLocal.clear();
 	});
 
 	beforeAll(() => {
+		// https://github.com/facebook/jest/issues/14074
+		Object.isDictionary = (v) => originalIsDictionary(v) || (typeof v === 'object' && v != null && structuredClone({}).constructor === v.constructor);
+
 		jest.spyOn(Date, 'now').mockImplementation(() => 0);
 	});
+
+	afterAll(() => Object.isDictionary = originalIsDictionary);
 
 	describe('core functionality', () => {
 		it('providing the default `persistentTTL` option', async () => {
