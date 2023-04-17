@@ -14,17 +14,17 @@ import type { Mocks } from 'core/data/interface';
 import { responseData } from 'core/data/middlewares/attach-mock/test/response-data';
 
 describe('core/data/middlewares/attach-mock', () => {
-  @provider('attach-mock')
-  class TestProvider extends Provider {
-    static override readonly request: typeof request = request({
-      responseType: 'json'
-    });
-  }
+	@provider('attach-mock')
+	class TestProvider extends Provider {
+		static override readonly request: typeof request = request({
+			responseType: 'json'
+		});
+	}
 
-  beforeEach(() => {
-    globalThis.setEnv('mock', {patterns: ['.*']});
-    delete TestProvider.mocks;
-  });
+	beforeEach(() => {
+		globalThis.setEnv('mock', {patterns: ['.*']});
+		delete TestProvider.mocks;
+	});
 
 	describe('toggle mocks by calling `setEnv`', () => {
 		test('should be disabled when pattern is an empty string', async () => {
@@ -35,207 +35,207 @@ describe('core/data/middlewares/attach-mock', () => {
 		test('should be enabled when pattern matches the provider', async () => {
 			globalThis.setEnv('mock', {patterns: ['TestProvider']});
 			TestProvider.mocks = <Mocks>{
-        GET: [{response: responseData}]
-      };
+				GET: [{response: responseData}]
+			};
 
 			await expect(unwrapResponse(new TestProvider().get())).resolves.toBe(responseData);
 		});
 	});
 
-  describe('should set mocks', () => {
-    it('via in-place declaration', async () => {
-      TestProvider.mocks = <Mocks>{
-        GET: [{response: responseData}]
-      };
+	describe('should set mocks', () => {
+		it('via in-place declaration', async () => {
+			TestProvider.mocks = <Mocks>{
+				GET: [{response: responseData}]
+			};
 
-      expect(await unwrapResponse(new TestProvider().get())).toBe(responseData);
-    });
+			expect(await unwrapResponse(new TestProvider().get())).toBe(responseData);
+		});
 
-    it('via dynamic import', async () => {
-      TestProvider.mocks = <Mocks>import('core/data/middlewares/attach-mock/test/test-provider-mocks');
+		it('via dynamic import', async () => {
+			TestProvider.mocks = <Mocks>import('core/data/middlewares/attach-mock/test/test-provider-mocks');
 
-      expect(await unwrapResponse(new TestProvider().get())).toBe(responseData);
-    });
-  });
+			expect(await unwrapResponse(new TestProvider().get())).toBe(responseData);
+		});
+	});
 
-  describe('legacy', () => {
-    const query = 'Abracadabra';
+	describe('legacy', () => {
+		const query = 'Abracadabra';
 
-    test('should return first mock if none match', async () => {
-      TestProvider.mocks = <Mocks>{
-        GET: [
-          {query: 'mystery', response: null},
-          {query, response: responseData}
-        ]
-      };
+		test('should return first mock if none match', async () => {
+			TestProvider.mocks = <Mocks>{
+				GET: [
+					{query: 'mystery', response: null},
+					{query, response: responseData}
+				]
+			};
 
-      expect(await unwrapResponse(new TestProvider().get('Harry'))).toBe(null);
-    });
-  });
+			expect(await unwrapResponse(new TestProvider().get('Harry'))).toBe(null);
+		});
+	});
 
-  describe('should find mock', () => {
-    test('given `string` query', async () => {
-      const query = 'Abracadabra';
+	describe('should find mock', () => {
+		test('given `string` query', async () => {
+			const query = 'Abracadabra';
 
-      TestProvider.mocks = <Mocks>{
-        GET: [
-          {response: null},
-          {query, response: responseData}
-        ]
-      };
+			TestProvider.mocks = <Mocks>{
+				GET: [
+					{response: null},
+					{query, response: responseData}
+				]
+			};
 
-      expect(await unwrapResponse(new TestProvider().get(query))).toBe(responseData);
-    });
+			expect(await unwrapResponse(new TestProvider().get(query))).toBe(responseData);
+		});
 
-    test('given `object` query', async () => {
-      const query = {a: 1, b: 2};
+		test('given `object` query', async () => {
+			const query = {a: 1, b: 2};
 
-      TestProvider.mocks = <Mocks>{
-        GET: [
-          {response: null},
-          {query, response: responseData}
-        ]
-      };
+			TestProvider.mocks = <Mocks>{
+				GET: [
+					{response: null},
+					{query, response: responseData}
+				]
+			};
 
-      expect(await unwrapResponse(new TestProvider().get(query))).toBe(responseData);
-    });
+			expect(await unwrapResponse(new TestProvider().get(query))).toBe(responseData);
+		});
 
-    test('given `string` body', async () => {
-      const body = 'a=1&b=2';
+		test('given `string` body', async () => {
+			const body = 'a=1&b=2';
 
-      TestProvider.mocks = <Mocks>{
-        POST: [
-          {response: null},
-          {body, response: responseData}
-        ]
-      };
+			TestProvider.mocks = <Mocks>{
+				POST: [
+					{response: null},
+					{body, response: responseData}
+				]
+			};
 
-      expect(await unwrapResponse(new TestProvider().add(body))).toBe(responseData);
-    });
+			expect(await unwrapResponse(new TestProvider().add(body))).toBe(responseData);
+		});
 
-    test('given `object` body', async () => {
-      const body = {a: 1, b: 2};
+		test('given `object` body', async () => {
+			const body = {a: 1, b: 2};
 
-      TestProvider.mocks = <Mocks>{
-        POST: [
-          {response: null},
-          {body, response: responseData}
-        ]
-      };
+			TestProvider.mocks = <Mocks>{
+				POST: [
+					{response: null},
+					{body, response: responseData}
+				]
+			};
 
-      expect(await unwrapResponse(new TestProvider().add(body))).toBe(responseData);
-    });
+			expect(await unwrapResponse(new TestProvider().add(body))).toBe(responseData);
+		});
 
-    test('given headers', async () => {
-      const headers = {accept: 'application/xml'};
+		test('given headers', async () => {
+			const headers = {accept: 'application/xml'};
 
-      TestProvider.mocks = <Mocks>{
-        GET: [
-          {response: null},
-          {headers, response: responseData}
-        ]
-      };
+			TestProvider.mocks = <Mocks>{
+				GET: [
+					{response: null},
+					{headers, response: responseData}
+				]
+			};
 
-      expect(await unwrapResponse(new TestProvider().get(undefined, {headers}))).toBe(responseData);
-    });
-  });
+			expect(await unwrapResponse(new TestProvider().get(undefined, {headers}))).toBe(responseData);
+		});
+	});
 
-  describe('should not find mock', () => {
-    test('given `string` query and mock with `object` query', async () => {
-      TestProvider.mocks = <Mocks>{
-        GET: [
-          {response: null},
-          {query: {a: 1, b: 2}, response: responseData}
-        ]
-      };
+	describe('should not find mock', () => {
+		test('given `string` query and mock with `object` query', async () => {
+			TestProvider.mocks = <Mocks>{
+				GET: [
+					{response: null},
+					{query: {a: 1, b: 2}, response: responseData}
+				]
+			};
 
-      expect(await unwrapResponse(new TestProvider().get('Abracadabra'))).toBeNull();
-    });
-  });
+			expect(await unwrapResponse(new TestProvider().get('Abracadabra'))).toBeNull();
+		});
+	});
 
-  describe('find best matching mock', () => {
-    const query = 'Abracadabra';
-    const headers = {accept: 'application/xml'};
+	describe('find best matching mock', () => {
+		const query = 'Abracadabra';
+		const headers = {accept: 'application/xml'};
 
-    test([
-      'given 2 mocks with same queries, but one of the mocks is without headers',
-      '- should find mock without headers'
-    ].join(' '), async () => {
-      TestProvider.mocks = <Mocks>{
-        GET: [
-          {query, response: null},
-          {query, headers, response: responseData}
-        ]
-      };
+		test([
+			'given 2 mocks with same queries, but one of the mocks is without headers',
+			'- should find mock without headers'
+		].join(' '), async () => {
+			TestProvider.mocks = <Mocks>{
+				GET: [
+					{query, response: null},
+					{query, headers, response: responseData}
+				]
+			};
 
-      expect(await unwrapResponse(new TestProvider().get(query))).toBeNull();
-    });
+			expect(await unwrapResponse(new TestProvider().get(query))).toBeNull();
+		});
 
-    test([
-      'given 2 mocks with same queries, but different headers',
-      '- should find mock with matching headers'
-    ].join(' '), async () => {
-      TestProvider.mocks = <Mocks>{
-        GET: [
-          {query, headers: {accept: 'application/json'}, response: null},
-          {query, headers, response: responseData}
-        ]
-      };
+		test([
+			'given 2 mocks with same queries, but different headers',
+			'- should find mock with matching headers'
+		].join(' '), async () => {
+			TestProvider.mocks = <Mocks>{
+				GET: [
+					{query, headers: {accept: 'application/json'}, response: null},
+					{query, headers, response: responseData}
+				]
+			};
 
-      expect(await unwrapResponse(new TestProvider().get(query, {headers}))).toBe(responseData);
-    });
-  });
+			expect(await unwrapResponse(new TestProvider().get(query, {headers}))).toBe(responseData);
+		});
+	});
 
-  describe('mock response function', () => {
-    test('should override mock status', async () => {
-      expect.assertions(2);
+	describe('mock response function', () => {
+		test('should override mock status', async () => {
+			expect.assertions(2);
 
-      TestProvider.mocks = <Mocks>{
-        GET: [
-          {
-            status: 200,
-            response: (opts, res) => {
-              res.status = 302;
+			TestProvider.mocks = <Mocks>{
+				GET: [
+					{
+						status: 200,
+						response: (opts, res) => {
+							res.status = 302;
 
-              return null;
-            }
-          }
-        ]
-      };
+							return null;
+						}
+					}
+				]
+			};
 
-      return new TestProvider().get().catch((error) => {
-        expect(error).toBeInstanceOf(RequestError);
-        expect((<RequestError>error).message).toMatch('[invalidStatus] GET  302');
-      });
-    });
+			return new TestProvider().get().catch((error) => {
+				expect(error).toBeInstanceOf(RequestError);
+				expect((<RequestError>error).message).toMatch('[invalidStatus] GET  302');
+			});
+		});
 
-    test('should override headers', async () => {
-      const headers = {
-        'content-length': 0
-      };
+		test('should override headers', async () => {
+			const headers = {
+				'content-length': 0
+			};
 
-      TestProvider.mocks = <Mocks>{
-        GET: [
-          {
-            headers: {
-              'content-type': 'application/json'
-            },
-            response: (opts, res) => {
-              res.status = 204;
-              res.headers = headers;
-            }
-          }
-        ]
-      };
+			TestProvider.mocks = <Mocks>{
+				GET: [
+					{
+						headers: {
+							'content-type': 'application/json'
+						},
+						response: (opts, res) => {
+							res.status = 204;
+							res.headers = headers;
+						}
+					}
+				]
+			};
 
-      const {response} = await new TestProvider().get();
-      expect(response.status).toEqual(204);
-      expect([...response.headers.keys()]).toEqual(['content-length']);
-      expect(response.headers.get('content-length')).toEqual('0');
-    });
-  });
+			const {response} = await new TestProvider().get();
+			expect(response.status).toEqual(204);
+			expect([...response.headers.keys()]).toEqual(['content-length']);
+			expect(response.headers.get('content-length')).toEqual('0');
+		});
+	});
 
-  async function unwrapResponse<T>(promise: RequestPromise<T>): Promise<Nullable<T>> {
-    return (await promise).data;
-  }
+	async function unwrapResponse<T>(promise: RequestPromise<T>): Promise<Nullable<T>> {
+		return (await promise).data;
+	}
 });
