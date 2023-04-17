@@ -26,13 +26,13 @@ describe('core/data/middlewares/attach-mock', () => {
 		delete TestProvider.mocks;
 	});
 
-	describe('toggle mocks by calling `setEnv`', () => {
-		test('should be disabled when pattern is an empty string', async () => {
+	describe('global setting which mocks should be loaded', () => {
+		test('if the pattern is specified as an empty string, then mocks should be disabled', async () => {
 			globalThis.setEnv('mock', {patterns: ['']});
 			await expect(() => new TestProvider().get()).rejects.toThrow();
 		});
 
-		test('should be enabled when pattern matches the provider', async () => {
+		test('should load mock data if pattern matches by provider name', async () => {
 			globalThis.setEnv('mock', {patterns: ['TestProvider']});
 			TestProvider.mocks = <Mocks>{
 				GET: [{response: responseData}]
@@ -42,7 +42,7 @@ describe('core/data/middlewares/attach-mock', () => {
 		});
 	});
 
-	describe('should set mocks', () => {
+	describe('setting mocks for a data provider', () => {
 		it('via in-place declaration', async () => {
 			TestProvider.mocks = <Mocks>{
 				GET: [{response: responseData}]
@@ -58,22 +58,7 @@ describe('core/data/middlewares/attach-mock', () => {
 		});
 	});
 
-	describe('legacy', () => {
-		const query = 'Abracadabra';
-
-		test('should return first mock if none match', async () => {
-			TestProvider.mocks = <Mocks>{
-				GET: [
-					{query: 'mystery', response: null},
-					{query, response: responseData}
-				]
-			};
-
-			expect(await unwrapResponse(new TestProvider().get('Harry'))).toBe(null);
-		});
-	});
-
-	describe('should find mock', () => {
+	describe('loading mocks matching', () => {
 		test('given `string` query', async () => {
 			const query = 'Abracadabra';
 
@@ -140,26 +125,13 @@ describe('core/data/middlewares/attach-mock', () => {
 		});
 	});
 
-	describe('should not find mock', () => {
-		test('given `string` query and mock with `object` query', async () => {
-			TestProvider.mocks = <Mocks>{
-				GET: [
-					{response: null},
-					{query: {a: 1, b: 2}, response: responseData}
-				]
-			};
-
-			expect(await unwrapResponse(new TestProvider().get('Abracadabra'))).toBeNull();
-		});
-	});
-
-	describe('find best matching mock', () => {
+	describe('choice of mock with the best matching', () => {
 		const query = 'Abracadabra';
 		const headers = {accept: 'application/xml'};
 
 		test([
-			'given 2 mocks with same queries, but one of the mocks is without headers',
-			'- should find mock without headers'
+			'given 2 mocks with the same queries, but one of the mocks is without headers',
+			'- should find a mock without headers'
 		].join(' '), async () => {
 			TestProvider.mocks = <Mocks>{
 				GET: [
@@ -172,8 +144,8 @@ describe('core/data/middlewares/attach-mock', () => {
 		});
 
 		test([
-			'given 2 mocks with same queries, but different headers',
-			'- should find mock with matching headers'
+			'given 2 mocks with the same queries, but different headers',
+			'- should find a mock with matching headers'
 		].join(' '), async () => {
 			TestProvider.mocks = <Mocks>{
 				GET: [
@@ -186,7 +158,35 @@ describe('core/data/middlewares/attach-mock', () => {
 		});
 	});
 
-	describe('mock response function', () => {
+	describe('ignoring mocks that do not match', () => {
+		test('given `string` query and mock with `object` query', async () => {
+			TestProvider.mocks = <Mocks>{
+				GET: [
+					{response: null},
+					{query: {a: 1, b: 2}, response: responseData}
+				]
+			};
+
+			expect(await unwrapResponse(new TestProvider().get('Abracadabra'))).toBeNull();
+		});
+	});
+
+	describe('legacy', () => {
+		const query = 'Abracadabra';
+
+		test('should load the first mock if none match', async () => {
+			TestProvider.mocks = <Mocks>{
+				GET: [
+					{query: 'mystery', response: null},
+					{query, response: responseData}
+				]
+			};
+
+			expect(await unwrapResponse(new TestProvider().get('Harry'))).toBe(null);
+		});
+	});
+
+	describe('mock assignments as a function', () => {
 		test('should override mock status', async () => {
 			expect.assertions(2);
 
@@ -196,7 +196,6 @@ describe('core/data/middlewares/attach-mock', () => {
 						status: 200,
 						response: (opts, res) => {
 							res.status = 302;
-
 							return null;
 						}
 					}
@@ -220,6 +219,7 @@ describe('core/data/middlewares/attach-mock', () => {
 						headers: {
 							'content-type': 'application/json'
 						},
+
 						response: (opts, res) => {
 							res.status = 204;
 							res.headers = headers;

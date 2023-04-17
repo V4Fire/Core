@@ -15,10 +15,10 @@ import { mockOpts } from 'core/data/middlewares/attach-mock/const';
 import type { RequestMatchingData, MockBestMatch } from 'core/data/middlewares/attach-mock/interface';
 
 /**
- * Extracts mocks from the provider
+ * Extracts mocks from the passed data provider class
  *
  * @param provider
- * @param opts
+ * @param opts - request options
  */
 export async function getProviderMocks(
 	provider: Provider,
@@ -52,9 +52,10 @@ export async function getProviderMocks(
 }
 
 /**
- * Returns best matching mock for given request data or first mock
+ * Returns the best matching mock from the passed list for the given request data.
+ * Otherwise, returns the first mock from the list.
  *
- * @param mocks
+ * @param mocks - the available mocks
  * @param requestData
  */
 export function findMockForRequestData(mocks: Mock[], requestData: RequestMatchingData): Mock | null {
@@ -81,17 +82,16 @@ export function findMockForRequestData(mocks: Mock[], requestData: RequestMatchi
 }
 
 /**
- * Returns match score and mismatches of the mock to given request data
+ * Returns the match/mismatch score of the passed mock for the given request data.
  *
- * if `score` is `-1` than mock is non-comparable \
- * if `score` is `0` than mock doesn't match the request data
+ * If `score` is `-1` than the mock is non-comparable.
+ * If `score` is `0` than the mock doesn't match the request data.
  *
  * @param mock
  * @param requestData
  *
- *
  * @example
- * ```typescript
+ * ```js
  * const requestData = {query: 'Abracadabra', headers: {accept: 'application/json'}};
  *
  * calculateMockMatchScore({}, requestData) // [-1, 2]

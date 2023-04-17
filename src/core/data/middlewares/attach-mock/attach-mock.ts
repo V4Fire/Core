@@ -8,16 +8,14 @@
 
 import AbortablePromise from 'core/promise/abortable';
 
-import Provider, { RequestError } from 'core/data';
-import type { MockCustomResponse } from 'core/data';
-
+import Provider, { RequestError, MockCustomResponse } from 'core/data';
 import { Response, MiddlewareParams } from 'core/request';
 
 import { mockOpts, optionsInitializer } from 'core/data/middlewares/attach-mock/const';
 import { getProviderMocks, findMockForRequestData } from 'core/data/middlewares/attach-mock/helpers';
 
 /**
- * Middleware: attaches mock data from the `mocks` property
+ * Middleware: attaches mock data from the `mocks` property of the data provider instance
  * @param params
  */
 export async function attachMock(this: Provider, params: MiddlewareParams): Promise<CanUndef<Function>> {

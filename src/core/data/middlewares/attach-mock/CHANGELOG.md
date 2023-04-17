@@ -13,7 +13,7 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added headers support for the mock custom response
+* Added headers support for mock custom response
 * Improved mock matching algorithm
 
 #### :house: Internal

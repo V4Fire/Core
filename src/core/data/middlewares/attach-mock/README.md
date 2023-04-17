@@ -42,9 +42,9 @@ export default class User extends Provider {
 }
 ```
 
-Mind that the root keys of mocks represent HTTP methods, but not provider methods.
-The values contain arrays of request objects to match: the algorithm finds the most suitable option and returns its response.
-Also, the middleware supports dynamically casting responses:
+Keep in mind that mock root keys represent HTTP methods, not provider methods.
+The values contain arrays of query objects for matching: the algorithm finds the best match and returns its answer.
+In addition, the middleware supports dynamic response casting.
 
 ```js
 import Provider, { provider } from 'core/data';
@@ -77,11 +77,11 @@ export default class User extends Provider {
       response(params, response) {
         if (!params.opts.headers['authorization']) {
           response.status = 302;
-          response.headers = { location: '/login' }
+          response.headers = {location: '/login'};
           return;
         }
 
-        // authorize user 
+        // authorize user
         // ...
 
         response.status = 201;
@@ -93,7 +93,7 @@ export default class User extends Provider {
 }
 ```
 
-Finally, you can use dynamic importing with mocks:
+Finally, you can use dynamic importing with mocks.
 
 ```js
 import Provider, { provider } from 'core/data';
@@ -113,7 +113,7 @@ export default class User extends Provider {
 
 ## Enabling data mocks
 
-By default, all data mocks are disabled, but you can enable them just type to a console of a browser:
+By default, all data mocks are disabled, but you can enable them by simply typing in your browser consoleЖ
 
 ```js
 // Enables mocks for the User provider
@@ -123,5 +123,5 @@ setEnv('mock', {patterns: ['User']});
 setEnv('mock', {patterns: ['.*']});
 ```
 
-The values of patterns are converted to RegExp objects and applied to provider names (including namespaces).
-Config settings are stored within a local browser storage.
+These patterns are converted to RegExp objects and matched with provider names (including namespaces).
+Configuration settings are stored in the browser local storage.
