@@ -16,7 +16,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :rocket: New Feature
 
 * `core/data/middlewares/attach-mock`:
-  * Added headers support for the mock custom response
+  * Added headers support for mock custom response
   * Improved mock matching algorithm
 
 #### :house: Internal
