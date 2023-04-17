@@ -65,8 +65,7 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 				status: customResponse.status ?? mock.status ?? 200,
 				responseType: customResponse.responseType ?? (<any>mock).responseType ?? opts.responseType,
 				okStatuses: opts.okStatuses,
-				// FIXME: customResponse.decoders (Decoders) type doesn't match with ctx.decoders (WrappedDecoders)
-				decoder: mock.decoders === false ? undefined : (<any>customResponse).decoders ?? ctx.decoders,
+				decoder: mock.decoders === false ? undefined : customResponse.decoders ?? ctx.decoders,
 				headers: customResponse.headers ?? mock.headers
 			});
 

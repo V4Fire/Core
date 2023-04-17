@@ -10,6 +10,7 @@ import type {
 
 	Encoders,
 	Decoders,
+	WrappedDecoders,
 
 	CreateRequestOptions,
 	RequestMethod,
@@ -33,7 +34,7 @@ export type MockResponseValue =
 export interface MockCustomResponse {
 	status?: number;
 	responseType?: ResponseTypeValue;
-	decoders?: Decoders;
+	decoders?: WrappedDecoders;
 	headers?: MockResponseHeaders;
 }
 
