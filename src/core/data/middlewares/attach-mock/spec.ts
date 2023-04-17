@@ -21,13 +21,26 @@ describe('core/data/middlewares/attach-mock', () => {
     });
   }
 
-  beforeAll(() => {
-    globalThis.setEnv('mock', {patterns: ['.*']});
-  });
-
   beforeEach(() => {
+    globalThis.setEnv('mock', {patterns: ['.*']});
     delete TestProvider.mocks;
   });
+
+	describe('toggle mocks by calling `setEnv`', () => {
+		test('should be disabled when pattern is an empty string', async () => {
+			globalThis.setEnv('mock', {patterns: ['']});
+			await expect(() => new TestProvider().get()).rejects.toThrow();
+		});
+
+		test('should be enabled when pattern matches the provider', async () => {
+			globalThis.setEnv('mock', {patterns: ['TestProvider']});
+			TestProvider.mocks = <Mocks>{
+        GET: [{response: responseData}]
+      };
+
+			await expect(unwrapResponse(new TestProvider().get())).resolves.toBe(responseData);
+		});
+	});
 
   describe('should set mocks', () => {
     it('via in-place declaration', async () => {
