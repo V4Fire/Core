@@ -11,6 +11,22 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2023-??-??)
+
+#### :rocket: New Feature
+
+* `core/data/middlewares/attach-mock`:
+  * Added headers support for mock custom response
+  * Improved mock matching algorithm
+
+#### :house: Internal
+
+* Added spec for the `core/data/middlewares/attach-mock`
+
+#### :nail_care: Polish
+
+* Refactor of the `core/data/middlewares/attach-mock`
+
 ## v3.94.0 (2023-04-05)
 
 #### :house: Internal

@@ -9,6 +9,25 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2023-??-??)
+
+#### :rocket: New Feature
+
+* Added headers support for mock custom response
+* Improved mock matching algorithm
+
+#### :house: Internal
+
+* Added spec
+
+#### :nail_care: Polish
+
+* Refactor
+
+#### :memo: Documentation
+
+* Added an example for custom response with headers
+
 ## v3.81.1 (2022-04-01)
 
 #### :memo: Documentation
