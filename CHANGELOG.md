@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.95.1 (2023-04-18)
+
+#### :rocket: New Feature
+
+* Added the ability to change the data storage path for the `node` runtime `core/kv-storage`
+
 ## v3.95.0 (2023-04-17)
 
 #### :rocket: New Feature
