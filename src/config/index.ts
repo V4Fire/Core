@@ -68,6 +68,10 @@ const config: Config = {
 		cacheTTL: (1).second()
 	},
 
+	kvStorage: {
+		nodePath: './tmp/local'
+	},
+
 	log: {
 		pipelines: [
 			{
