@@ -8,18 +8,20 @@
 
 import Storage from 'dom-storage';
 import * as fs from 'fs-extra';
+import config from 'config';
 
 import { Cache } from 'core/cache';
 
-const
-	tmpDir = './tmp/local';
+export * from 'core/kv-storage/engines/node-localstorage/interface';
 
-if (!fs.existsSync(tmpDir)) {
-	fs.mkdirpSync(tmpDir);
+const {nodePath} = config.kvStorage;
+
+if (!fs.existsSync(nodePath)) {
+	fs.mkdirpSync(nodePath);
 }
 
 const
-	localStorage = new Storage(`${tmpDir}/storage.json`, {strict: true, ws: ''}),
+	localStorage = new Storage(`${nodePath}/storage.json`, {strict: true, ws: ''}),
 	sessionStorage = new Cache();
 
 export const
