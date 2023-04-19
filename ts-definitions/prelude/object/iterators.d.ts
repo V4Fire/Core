@@ -114,6 +114,32 @@ interface ObjectConstructor {
 	): void;
 
 	/**
+	 * Iterates over the specified array-like object
+	 *
+	 * @param obj - object to iterate
+	 * @param opts - additional options
+	 * @param cb - callback function that is called on each of object elements
+	 */
+	forEach<V>(
+		obj: ArrayLike<V>,
+		opts: ObjectForEachOptions,
+		cb: (el: V, i: number, data: ArrayLike<V>) => any,
+	): void;
+
+	/**
+	 * Iterates over the specified array-like object
+	 *
+	 * @param obj - object to iterate
+	 * @param cb - callback function that is called on each of object elements
+	 * @param [opts] - additional options
+	 */
+	forEach<V>(
+		obj: ArrayLike<V>,
+		cb: (el: V, i: number, data: ArrayLike<V>) => any,
+		opts?: ObjectForEachOptions
+	): void;
+
+	/**
 	 * Iterates over the specified iterable object
 	 *
 	 * @param obj - object to iterate
