@@ -11,6 +11,13 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+
+## v3.95.2 (2023-04-19)
+
+#### :bug: Bug Fix
+
+* Fix typings for array-like objects in `Object.forEach`
+
 ## v3.95.1 (2023-04-18)
 
 #### :rocket: New Feature

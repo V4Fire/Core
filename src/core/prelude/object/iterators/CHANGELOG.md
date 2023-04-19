@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.95.2 (2023-04-19)
+
+#### :bug: Bug Fix
+
+* Fix typings for array-like objects in `Object.forEach`
+
 ## v3.78.0 (2022-03-16)
 
 #### :boom: Breaking Change
