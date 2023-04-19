@@ -88,7 +88,7 @@ extend(Object, 'forEach', (
 	}
 
 	if (!passDescriptor && notOwn == null) {
-		if (Object.isArray(obj)) {
+		if (Object.isArrayLike(obj)) {
 			for (let i = 0; i < obj.length; i++) {
 				cb(obj[i], i, obj);
 			}
