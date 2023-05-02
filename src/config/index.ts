@@ -42,7 +42,7 @@ const config: Config = {
 		return typeof LOCALE !== 'undefined' ? LOCALE : undefined;
 	},
 
-	set locale(value: CanUndef<string>) {
+	set locale(value: CanUndef<Language>) {
 		this[$$.locale] = value;
 	},
 
@@ -60,12 +60,16 @@ const config: Config = {
 
 	online: {
 		checkURL: '',
-		checkInterval: (5).seconds(),
-		cacheTTL: 0.3.second(),
+		checkInterval: (30).seconds(),
 		checkTimeout: (2).seconds(),
 		retryCount: 3,
+		lastDateSyncInterval: (1).minute(),
 		persistence: true,
-		lastDateSyncInterval: (1).minute()
+		cacheTTL: (1).second()
+	},
+
+	kvStorage: {
+		nodePath: './tmp/local'
 	},
 
 	log: {

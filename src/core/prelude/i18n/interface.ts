@@ -6,19 +6,27 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import type { SyncStorage } from 'core/kv-storage';
+
 export interface Locale {
 	/**
-	 * Locale value
+	 * The locale value
 	 */
-	value: CanUndef<string>;
+	value: CanUndef<Language>;
 
 	/**
-	 * True if the locale is already defined
+	 * True if the locale is default
 	 */
-	isDefined: boolean;
-
-	/**
-	 * Promise of the locale initializing
-	 */
-	isInitialized: Promise<void>;
+	isDefault: boolean;
 }
+
+export interface LocaleKVStorage {
+	get: SyncStorage['get'];
+
+	/**
+	 * Set is optional for read only storage
+	 */
+	set?: SyncStorage['set'];
+}
+
+export type PluralizationCount = StringPluralizationForms | string | number;

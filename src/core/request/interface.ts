@@ -233,8 +233,9 @@ export interface CreateRequestOptions<D = unknown> {
 	contentType?: string;
 
 	/**
-	 * Type of the response data
-	 * (if not specified, it will be cast dynamically from the response headers):
+	 * The data type of the response.
+	 * By default, the data type is taken from the `content-type` header, and if not set, then based on this parameter.
+	 * However, you can change this behavior with the `forceResponseType` parameter.
 	 *
 	 * 1. `'text'` - result is interpreted as a simple string;
 	 * 1. `'json'` - result is interpreted as a JSON object;
@@ -253,6 +254,12 @@ export interface CreateRequestOptions<D = unknown> {
 	 * ```
 	 */
 	responseType?: ResponseType;
+
+	/**
+	 * If true, then the `responseType` parameter takes precedence over the `content-type` header from the server
+	 * @default `false`
+	 */
+	forceResponseType?: boolean;
 
 	/**
 	 * A list of status codes (or a single code) that match successful operation.
@@ -668,6 +675,7 @@ export interface RequestOptions {
 
 	readonly contentType?: string;
 	readonly responseType?: ResponseType;
+	readonly forceResponseType?: boolean;
 
 	readonly decoders?: WrappedDecoders;
 	readonly streamDecoders?: WrappedStreamDecoders;

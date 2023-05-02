@@ -67,7 +67,7 @@ module.exports = config.createConfig(
 		 */
 		locale: o('locale', {
 			env: true,
-			default: 'en-US',
+			default: 'en',
 			coerce(value) {
 				globalThis['LOCALE'] = value;
 				return value;

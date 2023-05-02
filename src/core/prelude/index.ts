@@ -13,7 +13,13 @@ import 'core/prelude/number';
 import 'core/prelude/regexp';
 import 'core/prelude/function';
 import 'core/prelude/string';
-import 'core/prelude/global';
-import 'core/prelude/date';
+
 import 'core/prelude/i18n';
 import 'core/prelude/i18n/helpers';
+
+import 'core/prelude/global';
+import 'core/prelude/date';
+
+//#if runtime has prelude/number/format
+import 'core/prelude/number/format';
+//#endif

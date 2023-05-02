@@ -1,5 +1,3 @@
-'use strict';
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -8,4 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-globalThis.i18n = (str) => str;
+export const responseData = {
+	id: 1,
+	test: 'string'
+};

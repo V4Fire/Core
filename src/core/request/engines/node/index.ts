@@ -118,7 +118,7 @@ const request: RequestEngine = (params) => {
 
 			const getResponse = async () => {
 				const
-					completeData = new Uint8Array(loaded);
+					completeData: Array<[number, Uint8Array]> = [];
 
 				let
 					pos = 0;
@@ -128,11 +128,18 @@ const request: RequestEngine = (params) => {
 						continue;
 					}
 
-					completeData.set(data, pos);
+					completeData.push([pos, data]);
 					pos += data.length;
 				}
 
-				return completeData.buffer;
+				return completeData.reduce(
+					(buffer, [pos, data]) => {
+						buffer.set(data, pos);
+						return buffer;
+					},
+
+					new Uint8Array(loaded)
+				).buffer;
 			};
 
 			getResponse[Symbol.asyncIterator] = streamBuffer[Symbol.asyncIterator].bind(streamBuffer);
@@ -150,6 +157,7 @@ const request: RequestEngine = (params) => {
 
 				headers: Object.cast(response.headers),
 				responseType: p.responseType,
+				forceResponseType: p.forceResponseType,
 
 				decoder: p.decoders,
 				streamDecoder: p.streamDecoders,

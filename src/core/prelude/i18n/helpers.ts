@@ -6,92 +6,146 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import log from 'core/log';
 import extend from 'core/prelude/extend';
 
-import * as langDict from 'lang';
-import { locale } from 'core/prelude/i18n/const';
+import langPacs, { Translation, PluralTranslation } from 'lang';
 
-const
-	ws = /[\r\n]+/g;
-
-// Normalize translates
-Object.forEach(langDict, (el) => {
-	if (typeof el !== 'object') {
-		return el;
-	}
-
-	const
-		map = Object.createDict();
-
-	Object.forEach(el, (el, key) => {
-		map[String(key).replace(ws, ' ')] = String(el).replace(ws, ' ');
-		return map;
-	});
-});
+import { locale, pluralizeMap } from 'core/prelude/i18n/const';
+import type { PluralizationCount } from 'core/prelude/i18n/interface';
 
 /** @see [[i18n]] */
-extend(globalThis, 'i18n', globalI18n);
+extend(globalThis, 'i18n', i18nFactory);
 
-/** @see [[t]] */
-extend(globalThis, 't', globalI18n);
+const
+	logger = log.namespace('i18n');
 
-/** @see [[l]] */
-extend(globalThis, 'l', (strings: unknown | string[], ...exprs: unknown[]): string => {
-	if (strings == null) {
-		return '';
+/**
+ * Creates a function to internationalize strings in an application based on the given locale and keyset.
+ * Keyset allows you to share the same keys in different contexts.
+ * For example, the key "Next" may have a different value in different components of the application, therefore,
+ * we can use the name of the component as a keyset value.
+ *
+ * @param keysetNameOrNames - the name of keyset or array with names of keysets to use.
+ *   If passed as an array, the priority of the cases will be arranged in the order of the elements,
+ *   the first one will have the highest priority.
+ *
+ * @param [customLocale] - the locale used to search for translations (the default is taken from
+ *   the application settings)
+ */
+export function i18nFactory(
+	keysetNameOrNames: string | string[], customLocale?: Language
+): (key: string, params?: I18nParams) => string {
+	const
+		resolvedLocale = customLocale ?? locale.value,
+		keysetNames = Object.isArray(keysetNameOrNames) ? keysetNameOrNames : [keysetNameOrNames];
+
+	if (resolvedLocale == null) {
+		throw new ReferenceError('The locale for internationalization is not defined');
 	}
 
-	if (Object.isArray(strings)) {
-		if (strings.length === 1) {
-			return String(strings[0]);
+	return function i18n(value: string | TemplateStringsArray, params?: I18nParams) {
+		if (Object.isArray(value) && value.length !== 1) {
+			throw new SyntaxError('Using i18n with template literals is allowed only without variables');
 		}
 
-		let
-			str = '';
+		const
+			key = Object.isString(value) ? value : value[0],
+			correctKeyset = keysetNames.find((keysetName) => langPacs[resolvedLocale]?.[keysetName]?.[key]),
+			translateValue = langPacs[resolvedLocale]?.[correctKeyset ?? '']?.[key];
 
-		for (let i = 0; i < strings.length; i++) {
-			str += String(strings[i]) + (i in exprs ? String(exprs[i]) : '');
+		if (translateValue != null && translateValue !== '') {
+			return resolveTemplate(translateValue, params);
 		}
 
-		return str;
-	}
-
-	return String(strings);
-});
-
-function globalI18n(strings: unknown | string[], ...exprs: unknown[]): string {
-	if (strings == null) {
-		return '';
-	}
-
-	if (!Object.isArray(strings)) {
-		return localI18n(strings);
-	}
-
-	let str = '';
-	if (exprs.length === 0) {
-		for (let i = 0; i < strings.length; i++) {
-			str += localI18n(strings[i]);
-		}
-
-	} else {
-		for (let i = 0; i < strings.length; i++) {
-			str += localI18n(strings[i]) + (i in exprs ? String(exprs[i]) : '');
-		}
-	}
-
-	return str;
+		logger.error('Translation for the given key is not found', `Key: ${key}, KeysetNames: ${keysetNames.join(', ')}, LocaleName: ${resolvedLocale}`);
+		return resolveTemplate(key, params);
+	};
 }
 
-function localI18n(val: unknown, customLocale?: string): string {
+/**
+ * Returns the form for plural sentences and resolves variables from the passed template
+ *
+ * @param value - a string for the default case, or an array of strings for the plural case
+ * @param params - a dictionary with parameters for internationalization
+ *
+ * @example
+ * ```typescript
+ * const example = resolveTemplate('My name is {name}, I live in {city}', {name: 'John', city: 'Denver'});
+ *
+ * console.log(example); // 'My name is John, I live in Denver'
+ *
+ * const examplePluralize = resolveTemplate([
+ *  {count} product,  // One
+ *  {count} products, // Some
+ *  {count} products, // Many
+ *  {count} products, // None
+ * ], {count: 5});
+ *
+ * console.log(examplePluralize); // '5 products'
+ * ```
+ */
+export function resolveTemplate(value: Translation, params?: I18nParams): string {
 	const
-		str = String(val),
-		localeName = customLocale == null ? locale.value : customLocale;
+		template = Object.isArray(value) ? pluralizeText(value, params?.count) : value;
 
-	if (Object.isTruly(localeName) && localeName != null) {
-		const w = langDict[localeName]?.[str];
-		return w != null ? String(w) : str;
+	return template.replace(/{([^}]+)}/g, (_, key) => {
+		if (params?.[key] == null) {
+			logger.error('Undeclared variable', `Name: "${key}", Template: "${template}"`);
+			return key;
+		}
+
+		return params[key];
+	});
+}
+
+/**
+ * Returns the correct plural form to translate based on the given count
+ *
+ * @param pluralTranslation - list of translation variants
+ * @param count - the value on the basis of which the form of pluralization will be selected
+ *
+ * @example
+ * ```typescript
+ * const result = pluralizeText([
+ *  {count} product,  // One
+ *  {count} products, // Some
+ *  {count} products, // Many
+ *  {count} products, // None
+ * ], 5);
+ *
+ * console.log(result); // '{count} products'
+ * ```
+ */
+export function pluralizeText(pluralTranslation: PluralTranslation, count: CanUndef<PluralizationCount>): string {
+	let normalizedCount;
+
+	if (Object.isNumber(count)) {
+		normalizedCount = count;
+
+	} else if (Object.isString(count)) {
+		if (count in pluralizeMap) {
+			normalizedCount = pluralizeMap[count];
+		}
 	}
 
-	return str;
+	if (normalizedCount == null) {
+		logger.error('Invalid value of the `count` parameter for string pluralization', `String: ${pluralTranslation[0]}`);
+		normalizedCount = 1;
+	}
+
+	switch (normalizedCount) {
+		case 0:
+			return pluralTranslation[3];
+
+		case 1:
+			return pluralTranslation[0];
+
+		default:
+			if (normalizedCount > 1 && normalizedCount < 5) {
+				return pluralTranslation[1];
+			}
+
+			return pluralTranslation[2];
+	}
 }

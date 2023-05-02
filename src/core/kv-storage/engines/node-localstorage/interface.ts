@@ -1,5 +1,3 @@
-'use strict';
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -8,6 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-module.exports = {
-	...require('@v4fire/linters/.prettierrc')
+export interface KVStorageConfig {
+	nodePath: string;
 }

@@ -11,6 +11,85 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+
+## v3.95.2 (2023-04-19)
+
+#### :bug: Bug Fix
+
+* Fix typings for array-like objects in `Object.forEach`
+
+## v3.95.1 (2023-04-18)
+
+#### :rocket: New Feature
+
+* Added the ability to change the data storage path for the `node` runtime `core/kv-storage`
+
+## v3.95.0 (2023-04-17)
+
+#### :rocket: New Feature
+
+* `core/data/middlewares/attach-mock`:
+  * Added headers support for mock custom response
+  * Improved mock matching algorithm
+
+#### :house: Internal
+
+* Added spec for the `core/data/middlewares/attach-mock`
+
+#### :nail_care: Polish
+
+* Refactor of the `core/data/middlewares/attach-mock`
+
+## v3.94.0 (2023-04-05)
+
+#### :house: Internal
+
+* Moving to yarn package manager
+* Updated CI script to yarn
+* Removed unused dependencies
+
+## v3.93.1 (2023-03-14)
+
+#### :bug: Bug Fix
+
+* Fixed Node.js engine `core/request`
+
+## v3.93.0 (2023-03-14)
+
+#### :rocket: New Feature
+
+* Added a new option `forceResponseType` `core/request`
+
+## v3.92.0 (2023-02-21)
+
+#### :boom: Breaking Change
+
+* New default config for `core/net` `config`
+
+#### :bug: Bug Fix
+
+* `core/net`:
+  * Fixed bug with network request caching
+  * Fixed bug with request timeout
+
+## v3.91.0 (2023-02-14)
+
+#### :house: Internal
+
+* Improved tsconfig
+
+## v3.90.0 (2022-02-09)
+
+#### :boom: Breaking Change
+
+* Redesigned internationalization module `core/prelude/i18n`
+
+## v3.89.1 (2023-01-19)
+
+#### :bug: Bug Fix
+
+* Fixed memory leak when caching requests with a given ttl `core/request`
+
 ## v3.89.0 (2022-09-15)
 
 #### :rocket: New Feature

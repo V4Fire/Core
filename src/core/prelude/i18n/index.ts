@@ -6,55 +6,45 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/prelude/i18n/README.md]]
+ * @packageDocumentation
+ */
+
 import config from 'config';
 
 import { IS_NODE } from 'core/env';
-import type { AsyncStorageNamespace } from 'core/kv-storage';
 
 import { emitter, locale } from 'core/prelude/i18n/const';
 
+import storage from 'core/prelude/i18n/storage';
+
 export * from 'core/prelude/i18n/const';
+export * from 'core/prelude/i18n/helpers';
 export * from 'core/prelude/i18n/interface';
-
-let
-	storage: CanUndef<Promise<AsyncStorageNamespace>>;
-
-//#if runtime has core/kv-storage
-// eslint-disable-next-line prefer-const
-storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[I18N]]'));
-//#endif
 
 if (IS_NODE) {
 	setLocale(config.locale);
 
 } else {
-	locale.isInitialized = (async () => {
-		try {
-			const
-				s = await storage,
-				l = await s.get<string>('locale');
+	const locale = storage.get<Language>('locale');
 
-			if (l != null) {
-				setLocale(l, await s.get<boolean>('isLocaleDef'));
-				return;
-			}
+	if (locale != null) {
+		setLocale(locale, storage.get<boolean>('isLocaleDef'));
 
-			throw new Error('Default language');
-
-		} catch {
-			setLocale(config.locale, true);
-		}
-	})();
+	} else {
+		setLocale(config.locale, true);
+	}
 }
 
 /**
- * Sets a new system language
+ * Sets a new application language
  *
  * @param [value]
- * @param [def] - if true, then the language is marked as default
+ * @param [def] - if true, the language is marked as default
  * @emits `setLocale(value: string, oldValue?: string)`
  */
-export function setLocale(value: string | undefined, def?: boolean): string | undefined {
+export function setLocale(value: CanUndef<Language>, def?: boolean): CanUndef<Language> {
 	const
 		oldVal = locale.value;
 
@@ -63,13 +53,11 @@ export function setLocale(value: string | undefined, def?: boolean): string | un
 	}
 
 	locale.value = value;
-	locale.isDefined = Boolean(def);
+	locale.isDefault = Boolean(def);
 
-	if (!IS_NODE && storage != null) {
-		storage.then((storage) => Promise.all([
-			storage.set('locale', value),
-			storage.set('isLocaleDef', locale.isDefined)
-		])).catch(stderr);
+	if (!IS_NODE && storage.set) {
+		storage.set('locale', value);
+		storage.set('isLocaleDef', locale.isDefault);
 	}
 
 	emitter.emit('setLocale', value, oldVal);
