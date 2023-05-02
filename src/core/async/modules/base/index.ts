@@ -57,6 +57,11 @@ export default class Async<CTX extends object = Async<any>> {
 	static flat: typeof flatAsync = flatAsync;
 
 	/**
+	 * {@link flatAsync}
+	 */
+	flat: typeof flatAsync = flatAsync;
+
+	/**
 	 * The lock status.
 	 * If true, then all new tasks won't be registered.
 	 */

@@ -8,6 +8,9 @@
 
 /* eslint-disable @typescript-eslint/ban-types */
 
+/**
+ * Handles function overloads promisifying the return type
+ */
 type Overloads<T> = T extends () => infer R
 	? T extends (...args: infer A) => any
 		? (...args: A) => Promisify<R>
@@ -171,8 +174,14 @@ type Overloads<T> = T extends () => infer R
 
 	: never;
 
+/**
+ * Adds `Promise` properties to the specified value
+ */
 type WithPromise<Wrapped, Origin> = Wrapped & Promise<Origin>;
 
+/**
+ * Maps primitive values to their object representation and "unwraps" `PromiseLike` objects
+ */
 type GetSchema<Value> = Value extends string
 	? String
 	: Value extends number
@@ -185,10 +194,12 @@ type GetSchema<Value> = Value extends string
 	? Symbol
 	: Value extends PromiseLike<infer Item>
 	? GetSchema<Item>
-	: Value extends Array<infer Item>
-	? WithPromise<Array<Promisify<Item>>, Item[]>
 	: Value;
 
+/**
+ * Promisifies members of the specified schema by creating an object with the promisified properties
+ * or promisifying return type of the function overloads
+ */
 type PromisifySchema<Schema, Origin> = Schema extends AnyFunction
 	? Overloads<Origin>
 
@@ -199,4 +210,8 @@ type PromisifySchema<Schema, Origin> = Schema extends AnyFunction
 		Origin
 	>;
 
+/**
+ * Patches all members of the specified value in such a way that
+ * each of them will be wrapped in a promise but at the same time preserving its own properties
+ */
 export type Promisify<Value> = PromisifySchema<GetSchema<Value>, Value>;

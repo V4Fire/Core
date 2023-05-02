@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { Promisify } from 'core/async/modules/flat/interface';
+import type { Promisify } from 'core/async/modules/flat/interface/promisify';
 import { proxymify } from 'core/async/modules/flat/helpers';
 
 export * from 'core/async/modules/flat/interface';
@@ -33,7 +33,10 @@ export function flatAsync<T>(value: CanPromiseLike<T>): Promisify<T>;
  * }
  *
  * // "21"
- * const str = await flatAsync(getData)()[0].toFixed(1);
+ * const str1 = await flatAsync(getData)()[0].toFixed(1);
+
+ * // "21"
+ * const str2 = await flatAsync(getData())[0].toFixed(1);
  * ```
  */
 export default function flatAsync<T>(

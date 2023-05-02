@@ -8,16 +8,9 @@
 
 import Async from 'core/async';
 import flat from 'core/async/modules/flat';
+import { expectType } from 'core/async/modules/flat/interface/expect-type';
 
-type F<T> = (<G>() => G extends T ? 1 : 2);
-
-type AreEquals<A, B, Y = unknown, N = never> =
-  F<A> extends F<B> ? Y : N;
-
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export function expectType<A, B extends A & AreEquals<A, B>>(): void {}
-
-describe.only('core/async/modules/flat', () => {
+describe('core/async/modules/flat', () => {
 	it('returns the last value from chain and infers its type', async () => {
 		const data = Promise.resolve({
 			foo: {
@@ -28,15 +21,15 @@ describe.only('core/async/modules/flat', () => {
 		const val = await flat(data)
 			.foo
 			.bar
-			.at(0)(21)
+			.at(0)?.(21)
 			.toString()
 			.split('');
 
 		expect(val).toEqual(['4', '2']);
-		expectType<string[], typeof val>();
+		expectType<CanUndef<string[]>, typeof val>();
 	});
 
-	it.only('infers type of overloaded function', async () => {
+	it('infers type of overloaded function', async () => {
 		function fn(arg: number): string;
 		function fn(arg: string): Promise<number>;
 		function fn(arg: string | number): Promise<number> | string {
