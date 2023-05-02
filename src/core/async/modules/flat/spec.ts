@@ -29,7 +29,7 @@ describe('core/async/modules/flat', () => {
 		expectType<CanUndef<string[]>, typeof val>();
 	});
 
-	it('infers type of overloaded function', async () => {
+	it('infers the type of the overloaded function', async () => {
 		function fn(arg: number): string;
 		function fn(arg: string): Promise<number>;
 		function fn(arg: string | number): Promise<number> | string {
@@ -48,7 +48,7 @@ describe('core/async/modules/flat', () => {
 		expect(s2).toBe('1.0');
 	});
 
-	it('throws expection or rejects a promise if trying to access an undefined property', async () => {
+	it('throws an expection or rejects a promise if trying to access an undefined property', async () => {
 		const thenHandler = jest.fn();
 		const promise = flat([1])[10]
 			.toString()

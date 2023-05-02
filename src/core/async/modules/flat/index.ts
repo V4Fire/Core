@@ -24,7 +24,7 @@ export function flatAsync<T>(value: CanPromiseLike<T>): Promisify<T>;
  *
  * @param value
  * Can be any value or a function that returns any value.
- * The final value will be wrapped in `Promise`.
+ * The final value will be wrapped in the `Promise`.
  *
  * @example
  * ```typescript

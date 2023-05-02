@@ -9,7 +9,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
 /**
- * Handles function overloads promisifying the return type
+ * Promisifies each function overload return type
  */
 type Overloads<T> = T extends () => infer R
 	? T extends (...args: infer A) => any
@@ -198,7 +198,7 @@ type GetSchema<Value> = Value extends string
 
 /**
  * Promisifies members of the specified schema by creating an object with the promisified properties
- * or promisifying return type of the function overloads
+ * or promisifying return type of each function overload
  */
 type PromisifySchema<Schema, Origin> = Schema extends AnyFunction
 	? Overloads<Origin>
