@@ -7,20 +7,20 @@
  */
 
 /**
- * The function implements the logic of chaining promises flatly usign the `Proxy` object.
+ * The function implements the logic of chaining promises flatly using the `Proxy` object.
  * It creates a chain of promises where each next promise takes a value from the previous one.
  *
- * @param getPromiseLike - the function that returns the previous promise in chain
+ * @param getPrevPromiseLike - the function that returns the previous promise in chain
  */
-export function proxymify<T>(getPromiseLike: (...args: unknown[]) => PromiseLike<T>): unknown {
-	return new Proxy(getPromiseLike, {
-		get(_: unknown, prop: string): unknown {
-			const promiseLike = getPromiseLike();
-			return handleNativePromise(promiseLike, prop) ?? proxymifyNextValue(promiseLike, prop);
+export function proxymify<T>(getPrevPromiseLike: (...args: unknown[]) => PromiseLike<T>): unknown {
+	return new Proxy(getPrevPromiseLike, {
+		get(_: unknown, nextProp: string): unknown {
+			const prevPromiseLike = getPrevPromiseLike();
+			return handleNativePromise(prevPromiseLike, nextProp) ?? proxymifyNextValue(prevPromiseLike, nextProp);
 		},
 
 		apply(target: (...args: unknown[]) => PromiseLike<Function>, _: unknown, args: unknown[]): unknown {
-			return proxymifyNextValueFromFunctionCall(target, args);
+			return proxymifyNextValueFromMethodCall(target, args);
 		}
 	});
 }
@@ -28,28 +28,28 @@ export function proxymify<T>(getPromiseLike: (...args: unknown[]) => PromiseLike
 /**
  * Checks if the passed prop is in the `Promise.prototype` and tries to get value by this prop.
  *
- * @param promiseLike - previos `PromiseLike`
- * @param prop - possible key from `Promise.prototype`
+ * @param prevPromiseLike - previos `PromiseLike`
+ * @param nextProp - possible key from `Promise.prototype`
  */
-function handleNativePromise<T>(promiseLike: PromiseLike<T>, prop: string | symbol): unknown {
-	if (!Object.hasOwnProperty(Promise.prototype, prop)) {
+function handleNativePromise<T>(prevPromiseLike: PromiseLike<T>, nextProp: string | symbol): unknown {
+	if (!Object.hasOwnProperty(Promise.prototype, nextProp)) {
 		return;
 	}
 
-	const value = promiseLike[prop];
-	return Object.isFunction(value) ? value.bind(promiseLike) : value;
+	const value = prevPromiseLike[nextProp];
+	return Object.isFunction(value) ? value.bind(prevPromiseLike) : value;
 }
 
 /**
- * Creates next promise in chain that gets value from the previos one by accessing it using the specified prop.
+ * Creates next promise in chain that gets a value from the previos one by accessing it using the specified prop.
  *
- * @param promiseLike - previos `PromiseLike`
- * @param prop - key to get next value
+ * @param prevPromiseLike - previous `PromiseLike`
+ * @param nextProp - key to get next value
  */
-function proxymifyNextValue<Data>(promiseLike: PromiseLike<Data>, prop: string | symbol): unknown {
+function proxymifyNextValue<Data>(prevPromiseLike: PromiseLike<Data>, nextProp: string | symbol): unknown {
 	return proxymify(async () => {
-		const data = await promiseLike;
-		const value = data[prop];
+		const data = await prevPromiseLike;
+		const value = data[nextProp];
 		return Object.isFunction(value) ? value.bind(data) : value;
 	});
 }
@@ -58,12 +58,12 @@ function proxymifyNextValue<Data>(promiseLike: PromiseLike<Data>, prop: string |
  * Creates next promise in chain that gets value from the previos one by calling the function.
  * This function is called when we try to call a method on the previos proxied object.
  *
- * @param getFn - the function that returns `PromiseLike` with currently calling function
- * @param args - arguments for the function
+ * @param getPrevMethod - the function that returns `PromiseLike` with currently calling method
+ * @param args - arguments for the method
  */
-function proxymifyNextValueFromFunctionCall(getFn: () => PromiseLike<Function>, args: unknown[]): unknown {
+function proxymifyNextValueFromMethodCall(getPrevMethod: () => PromiseLike<Function>, args: unknown[]): unknown {
 	return proxymify(async () => {
-		const fn = await getFn();
-		return fn(...args);
+		const method = await getPrevMethod();
+		return method(...args);
 	});
 }

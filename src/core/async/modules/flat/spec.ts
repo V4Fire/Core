@@ -79,5 +79,6 @@ describe('core/async/modules/flat', () => {
 			values = await Promise.all([bar, baz]);
 
 		expect(values).toEqual(['bar', 'baz']);
+		expectType<[string, string], typeof values>();
 	});
 });
