@@ -29,7 +29,7 @@ Async.flat(promise);
 new Async().flat(promise);
 ```
 
-The module also provides the `Promisify` type for patching your entity fields:
+The module also provides the `Promisify` type for patching your value:
 
 ```typescript
 import type { Promisify } from 'core/async/modules/flat';
