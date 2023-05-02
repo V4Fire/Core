@@ -10,7 +10,7 @@
  * The function implements the logic of chaining promises flatly using the `Proxy` object.
  * It creates a chain of promises where each next promise takes a value from the previous one.
  *
- * @param getPrevPromiseLike - the function that returns the previous promise in chain
+ * @param getPrevPromiseLike - the function that returns the previous `PromiseLike` in chain
  */
 export function proxymify<T>(getPrevPromiseLike: (...args: unknown[]) => PromiseLike<T>): unknown {
 	return new Proxy(getPrevPromiseLike, {
@@ -28,7 +28,7 @@ export function proxymify<T>(getPrevPromiseLike: (...args: unknown[]) => Promise
 /**
  * Checks if the passed prop is in the `Promise.prototype` and tries to get value by this prop.
  *
- * @param prevPromiseLike - previos `PromiseLike`
+ * @param prevPromiseLike - previous `PromiseLike`
  * @param nextProp - possible key from `Promise.prototype`
  */
 function handleNativePromise<T>(prevPromiseLike: PromiseLike<T>, nextProp: string | symbol): unknown {
@@ -41,7 +41,7 @@ function handleNativePromise<T>(prevPromiseLike: PromiseLike<T>, nextProp: strin
 }
 
 /**
- * Creates next promise in chain that gets a value from the previos one by accessing it using the specified prop.
+ * Creates next promise in chain that gets a value from the previous one by accessing it using the specified prop.
  *
  * @param prevPromiseLike - previous `PromiseLike`
  * @param nextProp - key to get next value
@@ -55,15 +55,15 @@ function proxymifyNextValue<Data>(prevPromiseLike: PromiseLike<Data>, nextProp: 
 }
 
 /**
- * Creates next promise in chain that gets value from the previos one by calling the function.
- * This function is called when we try to call a method on the previos proxied object.
+ * Creates next promise in chain that gets value from the previous one by calling the function.
+ * This function is called when we try to call a method on the previous proxied object.
  *
- * @param getPrevMethod - the function that returns `PromiseLike` with currently calling method
+ * @param getMethod - the function that returns `PromiseLike` with currently calling method
  * @param args - arguments for the method
  */
-function proxymifyNextValueFromMethodCall(getPrevMethod: () => PromiseLike<Function>, args: unknown[]): unknown {
+function proxymifyNextValueFromMethodCall(getMethod: () => PromiseLike<Function>, args: unknown[]): unknown {
 	return proxymify(async () => {
-		const method = await getPrevMethod();
+		const method = await getMethod();
 		return method(...args);
 	});
 }
