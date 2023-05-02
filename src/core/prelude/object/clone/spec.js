@@ -7,6 +7,11 @@
  */
 
 describe('core/prelude/object/clone/fastClone', () => {
+	beforeAll(() => {
+		// https://github.com/facebook/jest/issues/14074
+
+	});
+
 	it('simple object cloning', () => {
 		const
 			obj1 = {};
@@ -96,15 +101,25 @@ describe('core/prelude/object/clone/fastClone', () => {
 	});
 
 	it('cloning of map objects', () => {
-		const obj = new Map([[1, 2], [2, {a: 1}]]);
-		expect(Object.fastClone(obj)).not.toBe(obj);
-		expect(Object.fastClone(obj)).toEqual(obj);
+		const
+			obj = new Map([[1, 2], [2, {a: 1}]]),
+			cloned = Object.fastClone(obj);
+
+		/** @see https://github.com/jestjs/jest/issues/14011 */
+		cloned.constructor = obj.constructor;
+		expect(cloned).not.toBe(obj);
+		expect(cloned).toEqual(obj);
 	});
 
 	it('cloning of set objects', () => {
-		const obj = new Set([{a: 1}]);
-		expect(Object.fastClone(obj)).not.toBe(obj);
-		expect(Object.fastClone(obj)).toEqual(obj);
+		const
+			obj = new Set([{a: 1}]),
+			cloned = Object.fastClone(obj);
+
+		/** @see https://github.com/jestjs/jest/issues/14011 */
+		cloned.constructor = obj.constructor;
+		expect(cloned).not.toBe(obj);
+		expect(cloned).toEqual(obj);
 	});
 
 	it('custom revivers/replacers', () => {

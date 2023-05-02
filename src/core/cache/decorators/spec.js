@@ -16,6 +16,16 @@ import RestrictedCache from 'core/cache/restricted';
 import { INDEX_STORAGE_NAME } from 'core/cache/decorators/persistent/engines/const';
 
 describe('core/cache/decorators', () => {
+	const
+		originalIsDictionary = Object.isDictionary;
+
+	beforeAll(() => {
+		// https://github.com/facebook/jest/issues/14074
+		Object.isDictionary = (v) => originalIsDictionary(v) || (typeof v === 'object' && v != null && structuredClone({}).constructor === v.constructor);
+	});
+
+	afterAll(() => Object.isDictionary = originalIsDictionary);
+
 	it('complex test', async () => {
 		jest.spyOn(Date, 'now').mockReturnValue(0);
 
