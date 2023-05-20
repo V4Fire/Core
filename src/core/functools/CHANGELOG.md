@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.95.3 (2023-05-25)
+
+#### :bug: Bug Fix
+
+* Fixed the bug with `debounce` and `throttle` decorated methods being executed on every call ignoring delay
+
 ## v3.51.0 (2021-06-15)
 
 #### :rocket: New Feature

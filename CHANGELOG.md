@@ -12,6 +12,12 @@ Changelog
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
 
+## v3.95.3 (2023-05-25)
+
+#### :bug: Bug Fix
+
+* Fixed the bug with `debounce` and `throttle` decorated methods being executed on every call ignoring delay `src/core/functools/lazy`
+
 ## v3.95.3 (2023-05-22)
 
 #### :bug: Bug Fix
