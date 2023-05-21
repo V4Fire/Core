@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.95.3 (2023-05-22)
+
+#### :bug: Bug Fix
+
+* Fixed the bug with network request having CORS preflight request
+
 ## v3.92.0 (2023-02-21)
 
 #### :bug: Bug Fix

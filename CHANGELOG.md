@@ -12,6 +12,12 @@ Changelog
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
 
+## v3.95.3 (2023-05-22)
+
+#### :bug: Bug Fix
+
+* Fixed the bug with network request having CORS preflight request
+
 ## v3.95.2 (2023-04-19)
 
 #### :bug: Bug Fix
