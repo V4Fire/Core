@@ -21,6 +21,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Fixed an error when calling `String.capitalize` with an empty string
 
+## v3.95.3 (2023-05-22)
+
+#### :bug: Bug Fix
+
+* Fixed the bug with network request having CORS preflight request
+
 ## v3.93.0 (2023-03-14)
 
 #### :rocket: New Feature
