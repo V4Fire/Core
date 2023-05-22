@@ -52,7 +52,7 @@ export async function isOnline(): Promise<boolean | null> {
 
 		function checkOnline() {
 			const xhr = new XMLHttpRequest();
-			xhr.open('OPTIONS', `${url}?_=${Date.now()}`, true);
+			xhr.open('HEAD', `${url}?_=${Date.now()}`, true);
 
 			xhr.addEventListener('readystatechange', () => {
 				if (timer != null) {
