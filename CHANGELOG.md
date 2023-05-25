@@ -21,7 +21,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Fixed an error when calling `String.capitalize` with an empty string
 
-## v3.95.3 (2023-05-25)
+## v3.95.4 (2023-05-25)
 
 #### :bug: Bug Fix
 
