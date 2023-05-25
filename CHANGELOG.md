@@ -12,7 +12,7 @@ Changelog
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
 
-## v3.95.3 (2023-05-25)
+## v3.95.4 (2023-05-25)
 
 #### :bug: Bug Fix
 
