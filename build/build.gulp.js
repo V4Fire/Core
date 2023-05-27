@@ -162,7 +162,8 @@ module.exports = function init(gulp) {
 
 			.pipe(
 				$.babel({
-					plugins: opts.type === 'server' ? [insertRequireInitializer] : []
+					plugins: opts.type === 'server' ? [insertRequireInitializer] : [],
+					comments: false
 				})
 			)
 

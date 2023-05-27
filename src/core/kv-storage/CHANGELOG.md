@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.95.1 (2023-04-18)
+
+#### :rocket: New Feature
+
+* Added the ability to change the data storage path for the `node` runtime
+
 ## v3.54.0 (2021-07-09)
 
 #### :boom: Breaking Change

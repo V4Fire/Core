@@ -41,12 +41,14 @@ Icon
 /bower_components
 /node_modules
 /.yalc
+/.yarn
 /yalc.lock
 
 # Build && test
 /dist
 /coverage
 /.nyc_output
+/.husky
 
 .env
 *.d.js
@@ -66,3 +68,5 @@ Icon
 # NPM ignore list
 /docs
 /.github
+/assets
+/typedoc.json

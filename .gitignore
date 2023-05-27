@@ -27,6 +27,14 @@ $RECYCLE.BIN
 .LSOverride
 .vscode
 
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 # Icon must ends with two \r.
 Icon
 
