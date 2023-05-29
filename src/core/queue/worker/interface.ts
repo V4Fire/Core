@@ -90,7 +90,7 @@ export default abstract class WorkerQueue<T, V = unknown> extends AbstractQueue<
 	 * @param worker
 	 * @param [opts] - additional options
 	 */
-	protected constructor(worker: QueueWorker<T, V>, opts: WorkerQueueOptions = {}) {
+	constructor(worker: QueueWorker<T, V>, opts: WorkerQueueOptions = {}) {
 		super();
 
 		this.worker = worker;

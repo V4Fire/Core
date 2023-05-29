@@ -15,3 +15,6 @@ export type RangeType =
 	'number' |
 	'string' |
 	'date';
+
+export type CompatibleTypes<Type extends RangeValue> =
+	Type extends string ? string : Type extends number ? number : Date;

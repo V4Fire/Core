@@ -15,9 +15,9 @@
  * Takes iterable objects and returns a new iterator that produces values from them sequentially
  * @param iterables
  */
-export function sequence<T extends Iterable<any>>(
-	...iterables: T[]
-): IterableIterator<IterableType<T>>;
+export function sequence<T>(
+	...iterables: Array<Iterable<T>>
+): IterableIterator<T>;
 
 /**
  * Takes async iterable objects and returns a new async iterator that produces values from them sequentially

@@ -110,7 +110,7 @@ function watch<T extends object>(
 	obj: T,
 	path: WatchPath,
 	opts: WatchOptions,
-	handler?: MultipleWatchHandler
+	handler?: WatchHandler
 ): Watcher<T>;
 
 // eslint-disable-next-line max-lines-per-function

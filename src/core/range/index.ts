@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import type { RangeValue, RangeType } from 'core/range/interface';
+import type { RangeValue, RangeType, CompatibleTypes } from 'core/range/interface';
 
 export * from 'core/range/interface';
 
@@ -254,7 +254,7 @@ export default class Range<T extends RangeValue> {
 	 * console.log(new Range(0, 10).intersect(new Range('a', 'z')).toString());
 	 * ```
 	 */
-	intersect(range: Range<T extends string ? string : T>): Range<T> {
+	intersect<V extends CompatibleTypes<T>>(range: Range<V>): Range<T | V> {
 		const
 			start = <T>Math.max(this.start, range.start),
 			end = <T>Math.min(this.end, range.end);
@@ -299,7 +299,7 @@ export default class Range<T extends RangeValue> {
 	 * console.log(new Range(0, 10).union(new Range('a', 'z')).toString());
 	 * ```
 	 */
-	union(range: Range<T extends string ? string : T>): Range<T> {
+	union<V extends CompatibleTypes<T>>(range: Range<V>): Range<T | V> {
 		if (this.type !== range.type) {
 			return new Range(<T>0, [<T>0]);
 		}

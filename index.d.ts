@@ -1750,7 +1750,7 @@ interface ObjectConstructor {
 	 * ```
 	 */
 	Result<A1, A extends any[], R>(value: (a1: A1, ...a: A) => R):
-		(a1: Maybe<A1> | Either<A1>, ...rest: A) => Either<R>;
+		(a1: A1 | Maybe<A1> | Either<A1>, ...rest: A) => Either<R>;
 
 	/**
 	 * Wraps the specified value into the Either structure
@@ -2510,7 +2510,7 @@ interface NumberConstructor {
 	 * Returns a curried version of `Number.pad`
 	 * @param opts - additional options
 	 */
-	pad(opts: NumberPadOptions): (value: string) => string;
+	pad(opts: NumberPadOptions): (value: number) => string;
 
 	/**
 	 * Returns a string from a number with adding extra zeros to the start, if necessary
@@ -2757,7 +2757,7 @@ interface Number {
 	 * @param targetLength - length of the resulting string once the current string has been padded
 	 * @param [opts] - additional options
 	 */
-	pad(targetLength?: number, opts?: NumberPadOptions): string;
+	pad(targetLength?: number | NumberPadOptions, opts?: NumberPadOptions): string;
 
 	/**
 	 * Returns a string representation of the number by the specified pattern.
@@ -2825,7 +2825,8 @@ interface Number {
 	ceil(precision?: number): number;
 }
 
-type RegExpFlag = '' | 'g' | 'i' | 'm' | 'u' | 'y' | 's';
+type RegExpSingleFlag = '' | 'g' | 'i' | 'm' | 'u' | 'y' | 's';
+type RegExpFlag = `${RegExpSingleFlag}${RegExpSingleFlag}${RegExpSingleFlag}${RegExpSingleFlag}${RegExpSingleFlag}`;
 
 interface RegExp {
 	/**
@@ -2881,7 +2882,7 @@ interface RegExpConstructor {
 	 * @param rgxp
 	 * @param flags
 	 */
-	addFlags(rgxp: RegExp, ...flags: RegExpFlag[]): RegExp;
+	addFlags(rgxp: RegExp, ...flags: [RegExpFlag, ...RegExpFlag[]]): RegExp;
 
 	/**
 	 * Returns a curried version of `RegExp.addFlags`
@@ -2901,7 +2902,7 @@ interface RegExpConstructor {
 	 * @param rgxp
 	 * @param flags
 	 */
-	removeFlags(rgxp: RegExp, ...flags: RegExpFlag[]): RegExp;
+	removeFlags(rgxp: RegExp, ...flags: [RegExpFlag, ...RegExpFlag[]]): RegExp;
 
 	/**
 	 * Returns a curried version of `RegExp.removeFlags`
@@ -2921,7 +2922,7 @@ interface RegExpConstructor {
 	 * @param rgxp
 	 * @param flags
 	 */
-	setFlags(rgxp: RegExp, ...flags: RegExpFlag[]): RegExp;
+	setFlags(rgxp: RegExp, ...flags: [RegExpFlag, ...RegExpFlag[]]): RegExp;
 
 	/**
 	 * Returns a curried version of `RegExp.setFlags`
@@ -3084,6 +3085,20 @@ interface DateConstructor {
 	isBetween(date: Date, left: DateCreateValue, right: DateCreateValue, margin?: number): boolean;
 
 	/**
+	 * Returns true if the date is less than the now date
+	 *
+	 * @param date - date that will be checked
+	 */
+	isPast(date: Date): boolean;
+
+	/**
+	 * Returns true if the date is greater than the now date
+	 *
+	 * @param date - date that will be checked
+	 */
+	isFuture(date: Date): boolean;
+
+	/**
 	 * Returns a new date based on the current so that it starts at the beginning of a day
 	 * @param date
 	 */
@@ -3205,7 +3220,7 @@ interface DateConstructor {
 	 * @param opts
 	 * @param locale
 	 */
-	format(opts: Intl.NumberFormatOptions, locale?: CanArray<string>): (date: Date) => string;
+	format(opts: Intl.DateTimeFormatOptions, locale?: CanArray<string>): (date: Date) => string;
 
 	/**
 	 * Returns a string representation of the date by the specified pattern.
@@ -3294,7 +3309,7 @@ interface DateConstructor {
 	 * Returns a curried version of `Date.toHTMLTimeString`
 	 * @param opts - additional options
 	 */
-	toHTMLTimeString(opts: DateHTMLDateStringOptions): (date: Date) => string;
+	toHTMLTimeString(opts: DateHTMLTimeStringOptions): (date: Date) => string;
 
 	/**
 	 * Returns an HTML string representation of a timestamp from the date.
@@ -4020,7 +4035,7 @@ interface Function {
 	 * ```
 	 */
 	result<A1, A extends any[], R>(this: (a1: A1, ...rest: A) => R):
-		(a1: Maybe<A1> | Either<A1>, ...rest: A) => Either<R>;
+		(a1: A1 | Maybe<A1> | Either<A1>, ...rest: A) => Either<R>;
 
 	/**
 	 * Returns a curried equivalent of the function.

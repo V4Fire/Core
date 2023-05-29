@@ -17,5 +17,13 @@
     "strictPropertyInitialization": true,
     "experimentalDecorators": true,
     "noImplicitOverride": true
-  }
+  },
+  "typeAcquisition": {
+    "exclude": ["node"]
+  },
+  "exclude": [
+    "dist",
+    "config",
+    "node_modules"
+  ]
 }

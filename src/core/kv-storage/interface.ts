@@ -110,7 +110,7 @@ export interface StorageEngine {
 	exists?(key: unknown): unknown;
 	includes?(key: unknown): unknown;
 	has?(key: unknown): unknown;
-	keys?(): Iterable<unknown>;
+	keys?(): Promise<Iterable<unknown>>;
 	clear?(): unknown;
 	clearAll?(): unknown;
 	truncate?(): unknown;

@@ -22,7 +22,7 @@ export class TestBaseError extends BaseError {}
 export class TestDetailedBaseError extends BaseError {
 	readonly reason: unknown;
 
-	constructor(message: string, reason: unknown, cause: Error) {
+	constructor(message: string, reason: unknown, cause?: Error) {
 		super(message, cause);
 		this.reason = reason;
 	}
