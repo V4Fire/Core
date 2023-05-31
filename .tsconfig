@@ -28,7 +28,11 @@
   },
 
   "include": [
+    "./src/**/*.ts"
+  ],
+
+  "files": [
     "./index.d.ts",
-    "./src/**/*.@(ts|js)"
+    "./jest.config.ts"
   ]
 }
