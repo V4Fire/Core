@@ -21,8 +21,8 @@ export const dataProviderMethodsToReplace: DataProviderMethodsToReplace[] = [
 	'peek',
 	'post',
 	'add',
-	'upd',
-	'del'
+	'update',
+	'delete'
 ];
 
 export const asyncOptionsKeys: Array<keyof AsyncOptions> = ['group', 'label', 'join'];

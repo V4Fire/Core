@@ -33,7 +33,7 @@ req('/search')
 
 const req2 = request('/search', {
   engine: createProviderEngine(DataProvider, {
-    PATCH: 'upd'
+    PATCH: 'update'
   })
 });
 ```

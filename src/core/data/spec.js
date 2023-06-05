@@ -105,12 +105,12 @@ describe('core/data', () => {
 			.toEqual({id: '1', value: 'things'});
 
 		const spy = jest.fn();
-		dp.emitter.on('upd', async (getData) => spy('upd', await getData()));
+		dp.emitter.on('update', async (getData) => spy('update', await getData()));
 
-		expect(await dp.upd({id: 12345, value: ['abc', 'def', 'ghi']}).data)
+		expect(await dp.update({id: 12345, value: ['abc', 'def', 'ghi']}).data)
 			.toEqual({message: 'Success'});
 
-		expect(spy).toHaveBeenCalledWith('upd', {message: 'Success'});
+		expect(spy).toHaveBeenCalledWith('update', {message: 'Success'});
 	});
 
 	it('`get` with extra providers', async () => {

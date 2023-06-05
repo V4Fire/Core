@@ -78,7 +78,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * // So we can use it to clear or suspend requests, etc.
 	 * $a.clearAll({group: 'api.User'})
 	 *
-	 * wrappedProvider.upd({uuid: 1}, {
+	 * wrappedProvider.update({uuid: 1}, {
 	 *   // All wrapped methods can take additional Async parameters as the second argument: `group`, `label` and `join`
 	 *   group: 'bla',
 	 *   label: 'foo',
