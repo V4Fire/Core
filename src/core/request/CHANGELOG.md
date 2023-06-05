@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.93.1 (2023-03-14)
+
+#### :bug: Bug Fix
+
+* Fixed Node.js engine
+
 ## v3.93.0 (2023-03-14)
 
 #### :rocket: New Feature

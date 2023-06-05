@@ -10,6 +10,7 @@ import type {
 
 	Encoders,
 	Decoders,
+	WrappedDecoders,
 
 	CreateRequestOptions,
 	RequestMethod,
@@ -24,6 +25,8 @@ import type {
 import type { ResponseTypeValue } from 'core/request/response/interface';
 import type { Provider } from 'core/data/interface';
 
+export type MockResponseHeaders = Dictionary<CanArray<unknown>>;
+
 export type MockResponseValue =
 	ResponseTypeValue |
 	object;
@@ -31,7 +34,8 @@ export type MockResponseValue =
 export interface MockCustomResponse {
 	status?: number;
 	responseType?: ResponseTypeValue;
-	decoders?: Decoders;
+	decoders?: WrappedDecoders;
+	headers?: MockResponseHeaders;
 }
 
 export interface MockResponseFunction<D = unknown> {
@@ -46,14 +50,16 @@ export interface Mock<D = unknown> {
 	status?: number;
 	query?: RequestQuery;
 	body?: RequestBody;
-	headers?: Dictionary<CanArray<unknown>>;
+	headers?: MockResponseHeaders;
 	decoders?: boolean;
 	response: MockResponse<D>;
 }
 
+export type MockDictionary = {[key in RequestMethod]?: Mock[]};
+
 export type Mocks = CanPromise<
-	{[key in RequestMethod]?: Mock[]} |
-	{default: {[key in RequestMethod]?: Mock[]}}
+	MockDictionary |
+	{default: MockDictionary}
 >;
 
 export type ModelMethod =
