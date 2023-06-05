@@ -851,7 +851,7 @@ This parameter is used when you're parsing responses in a stream form.
 ```js
 import request from 'core/request';
 
-import { sequence } from 'core/iter/combinators';
+import { seq } from 'core/iter/combinators';
 import { pick, andPick, assemble, streamArray } from 'core/json/stream';
 
 /*

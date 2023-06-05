@@ -223,7 +223,7 @@ describe('core/async/modules/wrappers', () => {
 				removeListener: () => originalMethods.removeListener = true
 			});
 
-			emitter.off(null);
+			emitter.off(1);
 			emitter.removeEventListener('foo');
 			emitter.removeListener({}, () => null, 'bar', 1);
 

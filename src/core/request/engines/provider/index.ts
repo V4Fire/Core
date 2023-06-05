@@ -102,7 +102,7 @@ export default function createProviderEngine(
 			);
 
 			if (providerMethod == null || !Object.isFunction(provider[providerMethod])) {
-				throw new ReferenceError('A provider method is not found at the data provider instance');
+				throw new ReferenceError(`The passed provider method "${providerMethod}" is not found at the data provider instance`);
 			}
 
 			const

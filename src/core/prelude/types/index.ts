@@ -93,13 +93,13 @@ extend(Object, 'isPlainObject', isPlainObject);
 function isPlainObject(value: unknown): boolean {
 	value = Object.unwrapProxy(value);
 
-	if (!value || typeof value !== 'object') {
+	if (value == null || typeof value !== 'object') {
 		return false;
 	}
 
 	const constr = value.constructor;
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-	return !constr || constr === Object;
+	return constr == null || constr === Object || constr.name === 'Object';
 }
 
 /** @see [[ObjectConstructor.isCustomObject]] */

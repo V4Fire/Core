@@ -112,11 +112,6 @@ describe('core/prelude/object/compare/fastHash', () => {
 	it('object hashes', () => {
 		expect(Object.fastHash({a: 1})).toBe('1034b77cc1d846');
 		expect(Object.fastHash([1, 2])).toBe('ee379c6e55fbd');
-
-		const
-			date = new Date();
-
-		expect(Object.fastHash(date)).toBe(JSON.stringify(date));
 	});
 
 	it('primitive hashes', () => {

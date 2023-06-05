@@ -73,7 +73,7 @@ describe('core/data', () => {
 		// eslint-disable-next-line no-unused-vars
 		class TestNamespacedProvider extends Provider {
 			static encoders = {
-				upd: [
+				update: [
 					(data) => {
 						data.value = data.value.join('-');
 						return data;
@@ -92,9 +92,9 @@ describe('core/data', () => {
 
 			baseGetURL = 'http://localhost:3000/json/1';
 
-			updMethod = 'POST';
+			updateMethod = 'POST';
 
-			baseUpdURL = 'http://localhost:3000/json';
+			baseUpdateURL = 'http://localhost:3000/json';
 		}
 
 		const

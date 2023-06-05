@@ -7,7 +7,7 @@
  */
 
 import { intoIter } from 'core/iter';
-import { sequence } from 'core/iter/combinators';
+import { seq } from 'core/iter/combinators';
 import { from, filter, pick, andPick, assemble, streamArray, streamObject } from 'core/json/stream';
 
 describe('core/json/stream', () => {
@@ -140,7 +140,7 @@ describe('core/json/stream', () => {
 				]
 			})));
 
-			const seq = seq(
+			const stream = seq(
 				assemble(pick(tokens, 'total')),
 				assemble(andPick(tokens, 'data.0')),
 				assemble(andPick(tokens, '1', {from: 'array'}))
@@ -149,7 +149,7 @@ describe('core/json/stream', () => {
 			const
 				res = [];
 
-			for await (const val of seq) {
+			for await (const val of stream) {
 				res.push(val);
 			}
 

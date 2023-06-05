@@ -245,8 +245,8 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		obj.baseGetURL = undefined;
 		obj.basePeekURL = undefined;
 		obj.baseAddURL = undefined;
-		obj.baseUpdURL = undefined;
-		obj.baseDelURL = undefined;
+		obj.baseUpdateURL = undefined;
+		obj.baseDeleteURL = undefined;
 
 		return obj;
 	}
@@ -484,8 +484,8 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	/** @inheritDoc */
 	update<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
 		const
-			url = this.resolveURL(this.baseUpdURL),
-			method = this.method() ?? this.updMethod,
+			url = this.resolveURL(this.baseUpdateURL),
+			method = this.method() ?? this.updateMethod,
 			eventName = this.name() ?? 'update';
 
 		const req = this.request(url, this.resolver.bind(this), this.getRequestOptions('update', {
@@ -500,8 +500,8 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	/** @inheritDoc */
 	delete<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
 		const
-			url = this.resolveURL(this.baseDelURL),
-			method = this.method() ?? this.delMethod,
+			url = this.resolveURL(this.baseDeleteURL),
+			method = this.method() ?? this.deleteMethod,
 			eventName = this.name() ?? 'delete';
 
 		const req = this.request(url, this.resolver.bind(this), this.getRequestOptions('delete', {
