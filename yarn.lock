@@ -1481,12 +1481,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:7.21.0":
-  version: 7.21.0
-  resolution: "@babel/runtime@npm:7.21.0"
+"@babel/runtime@npm:7.17.0":
+  version: 7.17.0
+  resolution: "@babel/runtime@npm:7.17.0"
   dependencies:
-    regenerator-runtime: ^0.13.11
-  checksum: 7b33e25bfa9e0e1b9e8828bb61b2d32bdd46b41b07ba7cb43319ad08efc6fda8eb89445193e67d6541814627df0ca59122c0ea795e412b99c5183a0540d338ab
+    regenerator-runtime: ^0.13.4
+  checksum: 1864ac3c6aa061798c706ce858af311f06f6ad6efafc20cca7029fdaa9786c58ccaf5bdb8bd133cb505f27bed7659b65f1503b8da58adbd1eb88f7333644e6ed
   languageName: node
   linkType: hard
 
@@ -3019,7 +3019,7 @@ __metadata:
     "@babel/plugin-transform-runtime": 7.17.0
     "@babel/preset-env": 7.16.11
     "@babel/preset-typescript": 7.16.7
-    "@babel/runtime": 7.21.0
+    "@babel/runtime": 7.17.0
     "@babel/template": 7.16.7
     "@config/config": "npm:config@1.31.0"
     "@pzlr/build-core": 2.13.0
@@ -3094,11 +3094,15 @@ __metadata:
       optional: true
     "@babel/preset-typescript":
       optional: true
+    "@babel/runtime":
+      optional: true
     "@babel/template":
       optional: true
     "@config/config":
       optional: true
     "@pzlr/build-core":
+      optional: true
+    "@v4fire/config":
       optional: true
     del:
       optional: true
@@ -3138,6 +3142,8 @@ __metadata:
       optional: true
     node-blob:
       optional: true
+    node-fetch:
+      optional: true
     node-object-hash:
       optional: true
     path-equal:
@@ -3157,6 +3163,8 @@ __metadata:
     typescript:
       optional: true
     upath:
+      optional: true
+    xhr2:
       optional: true
   languageName: unknown
   linkType: soft
@@ -10634,7 +10642,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regenerator-runtime@npm:^0.13.11":
+"regenerator-runtime@npm:^0.13.11, regenerator-runtime@npm:^0.13.4":
   version: 0.13.11
   resolution: "regenerator-runtime@npm:0.13.11"
   checksum: 27481628d22a1c4e3ff551096a683b424242a216fee44685467307f14d58020af1e19660bf2e26064de946bad7eff28950eae9f8209d55723e2d9351e632bbb4
