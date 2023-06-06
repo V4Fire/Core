@@ -36,7 +36,7 @@ You should use this function in child projects.
 'use strict';
 
 const
-  config = require('config');
+  config = require('@config/config');
 
 module.exports = function (gulp = require('gulp')) {
   include('@super/core/gulpfile', __dirname)(gulp);
