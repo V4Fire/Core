@@ -20,7 +20,7 @@ export * from 'core/queue/merge/interface';
 
 /**
  * Implementation of a queue data structure with support of task merging by a specified hash function
- * @typeparam T - the queue element
+ * @typeParam T - the queue element
  */
 export default class MergeQueue<T> extends AbstractQueue<T> {
 	/**
@@ -58,7 +58,6 @@ export default class MergeQueue<T> extends AbstractQueue<T> {
 	protected readonly hashFn: HashFn<T>;
 
 	/**
-	 * @override
 	 * @param [hashFn] - a function to calculate task hashes
 	 */
 	constructor(hashFn?: HashFn<T>) {

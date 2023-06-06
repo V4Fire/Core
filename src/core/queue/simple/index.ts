@@ -20,7 +20,7 @@ export * from 'core/queue/interface';
 
 /**
  * Implementation of a queue data structure based on a linked-list
- * @typeparam T - the queue element
+ * @typeParam T - the queue element
  */
 export default class SimpleQueue<T> extends Queue<T> {
 	/**
@@ -43,7 +43,6 @@ export default class SimpleQueue<T> extends Queue<T> {
 	 */
 	protected innerQueue: this['InnerQueue'];
 
-	/** @override */
 	constructor() {
 		super();
 		this.innerQueue = this.createInnerQueue();

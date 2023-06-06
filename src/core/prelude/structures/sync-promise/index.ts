@@ -258,7 +258,6 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 		});
 	}
 
-	/** @override */
 	readonly [Symbol.toStringTag]: 'Promise';
 
 	/**

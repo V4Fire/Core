@@ -91,7 +91,6 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 		}
 
 		if (opts.numberAsString) {
-			// eslint-disable-next-line @typescript-eslint/unbound-method
 			this.numberValue = this.stringValue;
 		}
 	}

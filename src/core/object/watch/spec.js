@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -6,6 +5,8 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+
+/* eslint-disable max-lines-per-function, max-lines */
 
 import watch, { mute, unmute, unwatchable, set, unset, isProxy } from 'core/object/watch';
 

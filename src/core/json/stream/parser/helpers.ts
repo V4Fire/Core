@@ -8,6 +8,7 @@
 
 /**
  * Returns a symbol from the passed HEX char string
+ *
  * @param str
  *
  * @example

@@ -162,7 +162,6 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 		keys;
 
 	try {
-		// eslint-disable-next-line @typescript-eslint/unbound-method
 		get = engine.getItem ?? engine.get;
 
 		if (Object.isFunction(get)) {
@@ -172,7 +171,6 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 			throw new ReferenceError('A method to get a value from the storage is not defined');
 		}
 
-		// eslint-disable-next-line @typescript-eslint/unbound-method
 		set = engine.setItem ?? engine.set;
 
 		if (Object.isFunction(set)) {
@@ -182,7 +180,6 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 			throw new ReferenceError('A method to set a value to the storage is not defined');
 		}
 
-		// eslint-disable-next-line @typescript-eslint/unbound-method
 		remove = engine.removeItem ?? engine.remove ?? engine.delete;
 
 		if (Object.isFunction(remove)) {
@@ -193,19 +190,16 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 		}
 
 		{
-			// eslint-disable-next-line @typescript-eslint/unbound-method
 			const _ = engine.exists ?? engine.exist ?? engine.includes ?? engine.has;
 			has = Object.isFunction(_) ? _.bind(engine) : undefined;
 		}
 
 		{
-			// eslint-disable-next-line @typescript-eslint/unbound-method
 			const _ = engine.clear ?? engine.clearAll ?? engine.truncate;
 			clear = Object.isFunction(_) ? _.bind(engine) : undefined;
 		}
 
 		{
-			// eslint-disable-next-line @typescript-eslint/unbound-method
 			const _ = engine.keys;
 			keys = Object.isFunction(_) ? _.bind(engine) : () => Object.keys(engine);
 		}

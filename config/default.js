@@ -1,5 +1,3 @@
-'use strict';
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -7,6 +5,8 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+
+'use strict';
 
 require('dotenv').config();
 require('./global');
@@ -96,7 +96,7 @@ module.exports = config.createConfig(
 
 		/**
 		 * Returns runtime parameters of the application
-		 * @returns {!Object}
+		 * @returns {object}
 		 */
 		runtime() {
 			return {
@@ -378,9 +378,10 @@ module.exports = config.createConfig(
 			/**
 			 * Returns a hash string of the build
 			 *
-			 * @param {Object=} [data] - extra data to hash
-			 * @param {string=} [alg] - hash algorithm
-			 * @param {number} [length] - hash length
+			 * @param {object} opts
+			 * @param {object} [opts.data] - extra data to hash
+			 * @param {string} [opts.alg] - hash algorithm
+			 * @param {number} [opts.length] - hash length
 			 * @returns {string}
 			 */
 			hash({data, alg = this.hashAlg, length = this.hashLength} = {}) {
@@ -408,7 +409,7 @@ module.exports = config.createConfig(
 
 		/**
 		 * Returns parameters for Babel
-		 * @returns {!Object}
+		 * @returns {object}
 		 */
 		babel() {
 			return {
@@ -419,7 +420,7 @@ module.exports = config.createConfig(
 
 		/**
 		 * Returns parameters for TypeScript
-		 * @returns {!Object}
+		 * @returns {object}
 		 */
 		typescript() {
 			const
@@ -437,7 +438,7 @@ module.exports = config.createConfig(
 
 		/**
 		 * Returns parameters for Snakeskin
-		 * @returns {!Object}
+		 * @returns {object}
 		 */
 		snakeskin() {
 			return {
@@ -460,7 +461,7 @@ module.exports = config.createConfig(
 
 		/**
 		 * Returns parameters for Monic
-		 * @returns {{typescript: !Object, javascript: !Object}}
+		 * @returns {{typescript: object, javascript: object}}
 		 */
 		monic() {
 			const

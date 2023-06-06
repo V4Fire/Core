@@ -1,5 +1,3 @@
-'use strict';
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -8,13 +6,15 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+'use strict';
+
 require('@config/config');
 
 /**
  * Initializes the specified gulp instance.
  * This helper brings a feature to extends one gulp config from another.
  *
- * @param gulp - link to the gulp module
+ * @param {import('gulp').Gulp} gulp - link to the gulp module
  *
  * @example
  * ```js

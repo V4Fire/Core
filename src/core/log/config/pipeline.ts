@@ -41,6 +41,7 @@ export function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogP
 			if (Object.isString(nameOrTuple)) {
 				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				if (middlewareFactory[nameOrTuple] == null) {
+					// eslint-disable-next-line no-console
 					console.error(`Can't find the middleware "${nameOrTuple}"`);
 					continue;
 				}
@@ -53,6 +54,7 @@ export function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogP
 
 				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				if (middlewareFactory[name] == null) {
+					// eslint-disable-next-line no-console
 					console.error(`Can't find the middleware "${name}"`);
 					continue;
 				}
@@ -64,6 +66,7 @@ export function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogP
 
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	if (engineFactory[engine] == null) {
+		// eslint-disable-next-line no-console
 		console.error(`Can't find the engine "${engine}"`);
 		return;
 	}

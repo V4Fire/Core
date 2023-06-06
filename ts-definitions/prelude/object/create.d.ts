@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/unified-signatures */
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -7,6 +5,8 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+
+/* eslint-disable @typescript-eslint/unified-signatures */
 
 interface ObjectConstructor {
 	/**
@@ -253,6 +253,7 @@ interface ObjectConstructor {
 	 * Returns a curried version of `Object.reject`
 	 * @param condition - whitelist of keys to filter
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	reject<C>(condition: []): <D extends object>(obj: Nullable<D>) => D;
 
 	/**

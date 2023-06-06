@@ -1,5 +1,3 @@
-'use strict';
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -7,6 +5,8 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+
+'use strict';
 
 const
 	{config: {superRgxp}} = require('@pzlr/build-core');
@@ -24,7 +24,7 @@ const
  *   source?: boolean
  * }}
  */
-// eslint-disable-next-line no-unused-vars
+
 const IncludeOptions = {};
 
 /**

@@ -139,7 +139,6 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 			valMap: ValMap = new Map();
 
 		const
-			// eslint-disable-next-line @typescript-eslint/unbound-method
 			dateToJSON = Date.prototype.toJSON,
 			functionToJSON = Function.prototype['toJSON'];
 

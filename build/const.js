@@ -1,5 +1,3 @@
-'use strict';
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -7,6 +5,8 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+
+'use strict';
 
 const
 	{config: {projectName, dependencies}} = require('@pzlr/build-core');
@@ -26,6 +26,7 @@ exports.depsRgxpStr = [projectName]
 
 /**
  * RegExp to detect file paths that are registered as dependencies within ".pzlrrc"
+ *
  * @type {RegExp}
  *
  * @example
@@ -56,6 +57,7 @@ exports.isLayerDep = new RegExp(
 
 /**
  * RegExp to detect file paths that aren't registered as dependencies within ".pzlrrc"
+ *
  * @type {RegExp}
  *
  * @example

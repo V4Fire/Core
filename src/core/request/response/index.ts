@@ -63,7 +63,7 @@ export const
 
 /**
  * Class to work with server response data
- * @typeparam D - response data type
+ * @typeParam D - response data type
  */
 export default class Response<
 	D extends Nullable<string | JSONLikeValue | ArrayBuffer | Blob | Document | unknown
@@ -743,7 +743,6 @@ export default class Response<
 
 		return applyDecoders(stream);
 
-		// eslint-disable-next-line @typescript-eslint/require-await
 		function applyDecoders<T>(
 			stream: AnyIterable,
 			currentDecoder: number = 0

@@ -109,7 +109,6 @@ export function isOnline(
 
 	//#endif
 
-	// eslint-disable-next-line no-unreachable
 	return Promise.resolve({
 		status: true
 	});

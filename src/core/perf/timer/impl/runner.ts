@@ -154,6 +154,7 @@ export default class PerfTimersRunner {
 			measurement = this.idToMeasurement[perfTimerId];
 
 		if (measurement == null) {
+			// eslint-disable-next-line no-console
 			console.warn(`A timer with the id "${perfTimerId}" doesn't exist`);
 			return;
 		}

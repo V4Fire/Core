@@ -45,8 +45,8 @@ export interface WorkerQueueOptions<T extends Tasks<any> = Tasks> {
 /**
  * An abstract class for a worker queue data structure
  *
- * @typeparam T - the task element
- * @typeparam V - the worker value
+ * @typeParam T - the task element
+ * @typeParam V - the worker value
  */
 export default abstract class WorkerQueue<T, V = unknown> extends AbstractQueue<T> {
 	/**

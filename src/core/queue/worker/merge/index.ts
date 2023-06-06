@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/queue/worker/merge/README.md]]
- * @packageDocumentation
  */
 
 import WorkerQueue from 'core/queue/worker/interface';
@@ -30,8 +29,8 @@ export * from 'core/queue/worker/merge/interface';
 /**
  * Implementation of a worker queue data structure with support of task merging by a specified hash function
  *
- * @typeparam T - the task element
- * @typeparam V - the worker value
+ * @typeParam T - the task element
+ * @typeParam V - the worker value
  */
 export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> {
 	override readonly Tasks!: Tasks<string>;
@@ -56,7 +55,6 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 	protected readonly hashFn: HashFn<T>;
 
 	/**
-	 * @override
 	 * @param worker
 	 * @param [opts] - additional options
 	 */
@@ -155,7 +153,6 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 		}
 
 		const
-			// eslint-disable-next-line @typescript-eslint/unbound-method
 			{task, promise, resolve} = taskObj;
 
 		const cb = () => {

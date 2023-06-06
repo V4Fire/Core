@@ -22,8 +22,8 @@ export * from 'core/cache/decorators/ttl/interface';
 /**
  * Wraps the specified cache object to add a feature of the cache expiring
  *
- * @typeparam V - value type of the cache object
- * @typeparam K - key type of the cache object
+ * @typeParam V - value type of the cache object
+ * @typeParam K - key type of the cache object
  *
  * @param cache - cache object to wrap
  * @param ttl - default ttl value in milliseconds
@@ -45,7 +45,6 @@ export default function addTTL<
 	V = unknown,
 	K extends string = string,
 >(cache: T, ttl?: number): TTLCache<V, K, CacheWithEmitter<V, K, T>> {
-	// eslint-disable-next-line @typescript-eslint/unbound-method
 	const {
 		remove: originalRemove,
 		set: originalSet,

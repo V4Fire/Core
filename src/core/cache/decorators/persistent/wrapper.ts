@@ -74,7 +74,6 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 	 * Implements API of the wrapped cache object
 	 */
 	protected implementAPI(): void {
-		// eslint-disable-next-line @typescript-eslint/unbound-method
 		const {
 			remove: originalRemove,
 			set: originalSet,
@@ -141,8 +140,8 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 	 * Returns the default implementation for the specified cache method with adding a feature of persistent storing
 	 * @param method
 	 */
-	protected getDefaultImplementation(method: 'has'): (key: string) => Promise<boolean>
-	protected getDefaultImplementation(method: 'get'): (key: string) => Promise<CanUndef<V>>
+	protected getDefaultImplementation(method: 'has'): (key: string) => Promise<boolean>;
+	protected getDefaultImplementation(method: 'get'): (key: string) => Promise<CanUndef<V>>;
 	protected getDefaultImplementation(method: 'get' | 'has'): (key: string) => Promise<CanUndef<V> | boolean> {
 		return (key) => {
 			if (this.fetchedItems.has(key)) {

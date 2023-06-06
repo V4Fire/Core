@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars-experimental */
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -37,22 +35,22 @@ export default class NeverCache<V = any, K = any> implements Cache<V, K> {
 	}
 
 	/** @see [[Cache.has]] */
-	has(key: K): boolean {
+	has(_key: K): boolean {
 		return false;
 	}
 
 	/** @see [[Cache.get]] */
-	get(key: K): undefined {
+	get(_ey: K): undefined {
 		return undefined;
 	}
 
 	/** @see [[Cache.set]] */
-	set(key: K, value: V): V {
+	set(_key: K, value: V): V {
 		return value;
 	}
 
 	/** @see [[Cache.remove]] */
-	remove(key: K): CanUndef<V> {
+	remove(_key: K): CanUndef<V> {
 		return undefined;
 	}
 
@@ -72,7 +70,7 @@ export default class NeverCache<V = any, K = any> implements Cache<V, K> {
 	}
 
 	/** @see [[Cache.clear]] */
-	clear(filter?: ClearFilter<V, K>): Map<K, V> {
+	clear(_filter?: ClearFilter<V, K>): Map<K, V> {
 		return new Map();
 	}
 }
