@@ -8,7 +8,7 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see [[ObjectConstructor.forEach]] */
+/** {@link ObjectConstructor.forEach} */
 extend(Object, 'forEach', (
 	obj: unknown,
 	optsOrCb: ObjectForEachOptions | AnyFunction,

@@ -23,7 +23,7 @@ export * from 'core/perf/timer/impl/interface';
 
 /**
  * Returns a configured instance of the `Perf` class
- * @param [perfConfig] - config that overrides the default performance config fields {@see config.perf}
+ * @param [perfConfig] - config that overrides the default performance config fields {@link config.perf}
  */
 export function perf(perfConfig?: Partial<PerfConfig>): Perf {
 	const

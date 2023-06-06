@@ -17,7 +17,7 @@ export interface LogEvent {
 
 	/**
 	 *  @deprecated
-	 *  @see additionals
+	 *  {@link additionals}
 	 */
 	readonly details: Dictionary;
 }

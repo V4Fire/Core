@@ -20,7 +20,7 @@ export * from 'core/cache/interface';
  * Loopback class for a cache data structure
  */
 export default class NeverCache<V = any, K = any> implements Cache<V, K> {
-	/** @see [[Cache.size]] */
+	/** {@link Cache.size} */
 	get size(): number {
 		return this.storage.size;
 	}
@@ -34,42 +34,42 @@ export default class NeverCache<V = any, K = any> implements Cache<V, K> {
 		return this.keys();
 	}
 
-	/** @see [[Cache.has]] */
+	/** {@link Cache.has} */
 	has(_key: K): boolean {
 		return false;
 	}
 
-	/** @see [[Cache.get]] */
+	/** {@link Cache.get} */
 	get(_ey: K): undefined {
 		return undefined;
 	}
 
-	/** @see [[Cache.set]] */
+	/** {@link Cache.set} */
 	set(_key: K, value: V): V {
 		return value;
 	}
 
-	/** @see [[Cache.remove]] */
+	/** {@link Cache.remove} */
 	remove(_key: K): CanUndef<V> {
 		return undefined;
 	}
 
-	/** @see [[Cache.keys]] */
+	/** {@link Cache.keys} */
 	keys(): IterableIterator<K> {
 		return this.storage.keys();
 	}
 
-	/** @see [[Cache.values]] */
+	/** {@link Cache.values} */
 	values(): IterableIterator<V> {
 		return this.storage.values();
 	}
 
-	/** @see [[Cache.entries]] */
+	/** {@link Cache.entries} */
 	entries(): IterableIterator<[K, V]> {
 		return this.storage.entries();
 	}
 
-	/** @see [[Cache.clear]] */
+	/** {@link Cache.clear} */
 	clear(_filter?: ClearFilter<V, K>): Map<K, V> {
 		return new Map();
 	}

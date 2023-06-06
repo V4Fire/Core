@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 import { unicode } from 'core/prelude/string/const';
 
-/** @see [[String.letters]] */
+/** {@link String.letters} */
 extend(String.prototype, 'letters', function* letters(this: string): IterableIterator<string> {
 	let
 		baseStr: Nullable<string> = null,
@@ -67,5 +67,5 @@ extend(String.prototype, 'letters', function* letters(this: string): IterableIte
 	}
 });
 
-/** @see [[StringConstructor.letters]] */
+/** {@link StringConstructor.letters} */
 extend(String, 'letters', (str: string) => str.letters());

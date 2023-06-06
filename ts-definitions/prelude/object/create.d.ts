@@ -54,7 +54,7 @@ interface ObjectConstructor {
 
 	/**
 	 * @deprecated
-	 * @see ObjectConstructor.createEnumLike
+	 * {@link ObjectConstructor.createEnumLike}
 	 */
 	createMap<D extends object, K extends keyof D>(obj: Nullable<D>):
 		D extends Array<infer E> ? Dictionary<E | number> : D & {[I: string]: K};
@@ -422,7 +422,7 @@ interface ObjectFromArrayOptions<T = boolean> {
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectFromArrayOptions.key]]
+	 * {@link ObjectFromArrayOptions.key}
 	 */
 	keyConverter?(i: number, el: unknown): PropertyKey;
 
@@ -436,7 +436,7 @@ interface ObjectFromArrayOptions<T = boolean> {
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectFromArrayOptions.value]]
+	 * {@link ObjectFromArrayOptions.value}
 	 */
 	valueConverter?(el: unknown, i: number): T;
 }

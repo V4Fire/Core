@@ -29,8 +29,8 @@ export default abstract class Provider {
 	 * Transport function for a request.
 	 * Basically, you can use an overload of the request API for flexibly extending.
 	 *
-	 * @see [[request]]
-	 * @see [[CreateRequestOptions]]
+	 * {@link request}
+	 * {@link CreateRequestOptions}
 	 *
 	 * @example
 	 * ```js
@@ -51,7 +51,7 @@ export default abstract class Provider {
 	 * Sequence of middlewares that is provided to the request function.
 	 * An object form is easily to extend, bur you can choose any different form.
 	 *
-	 * @see [[Middlewares]]
+	 * {@link Middlewares}
 	 * @example
 	 * ```js
 	 * import request from 'core/request';
@@ -79,7 +79,7 @@ export default abstract class Provider {
 	 * The key of a map element represent a name of the provider method: 'get', 'post', etc.
 	 * The value of a map element represent a sequence of encoders for the specified provider method.
 	 *
-	 * @see [[Encoders]]
+	 * {@link Encoders}
 	 * @example
 	 * ```js
 	 * class MyProvider extends Provider {
@@ -97,7 +97,7 @@ export default abstract class Provider {
 	 * The key of a map element represent a name of the provider method: 'get', 'post', etc.
 	 * The value of a map element represent a sequence of decoders for the specified provider method.
 	 *
-	 * @see [[Decoders]]
+	 * {@link Decoders}
 	 * @example
 	 * ```js
 	 * class MyProvider extends Provider {
@@ -118,7 +118,7 @@ export default abstract class Provider {
 	 * The key of a map element represent a method request type: 'GET', 'POST', etc.
 	 * The value of a map element represent a list of parameters to match.
 	 *
-	 * @see [[Middlewares]]
+	 * {@link Middlewares}
 	 * @example
 	 * ```js
 	 * import { attachMock } from 'core/data/middlewares';
@@ -348,13 +348,13 @@ export default abstract class Provider {
 
 	/**
 	 * @deprecated
-	 * @see [[Provider.mocks]]
+	 * {@link Provider.mocks}
 	 */
 	mocks?: Mocks;
 
 	/**
 	 * @deprecated
-	 * @see [[Provider.globalEmitter]]
+	 * {@link Provider.globalEmitter}
 	 */
 	get globalEvent(): EventEmitter {
 		deprecate({name: 'globalEvent', type: 'accessor', renamedTo: 'globalEmitter'});

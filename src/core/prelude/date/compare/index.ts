@@ -9,31 +9,31 @@
 import extend from 'core/prelude/extend';
 import { createStaticDateComparator } from 'core/prelude/date/helpers';
 
-/** @see [[Date.is]] */
+/** {@link Date.is} */
 extend(Date.prototype, 'is', function is(this: Date, date: DateCreateValue, margin: number = 0): boolean {
 	return Math.abs(this.valueOf() - Date.create(date).valueOf()) <= margin;
 });
 
-/** @see [[DateConstructor.is]] */
+/** {@link DateConstructor.is} */
 extend(Date, 'is', createStaticDateComparator('is'));
 
-/** @see [[Date.isPast]] */
+/** {@link Date.isPast} */
 extend(Date.prototype, 'isPast', function isPast(this: Date): boolean {
 	return this.valueOf() < Date.now();
 });
 
-/** @see [[DateConstructor.isPast]] */
+/** {@link DateConstructor.isPast} */
 extend(Date, 'isPast', (date: Date) => date.isPast());
 
-/** @see [[Date.isFuture]] */
+/** {@link Date.isFuture} */
 extend(Date.prototype, 'isFuture', function isFuture(this: Date): boolean {
 	return this.valueOf() > Date.now();
 });
 
-/** @see [[DateConstructor.isFuture]] */
+/** {@link DateConstructor.isFuture} */
 extend(Date, 'isFuture', (date: Date) => date.isFuture());
 
-/** @see [[Date.isAfter]] */
+/** {@link Date.isAfter} */
 extend(Date.prototype, 'isAfter', function isAfter(
 	this: Date,
 	date: DateCreateValue,
@@ -42,10 +42,10 @@ extend(Date.prototype, 'isAfter', function isAfter(
 	return this.valueOf() > Date.create(date).valueOf() - margin;
 });
 
-/** @see [[DateConstructor.isAfter]] */
+/** {@link DateConstructor.isAfter} */
 extend(Date, 'isAfter', createStaticDateComparator('isAfter'));
 
-/** @see [[Date.isBefore]] */
+/** {@link Date.isBefore} */
 extend(Date.prototype, 'isBefore', function isBefore(
 	this: Date,
 	date: DateCreateValue,
@@ -54,10 +54,10 @@ extend(Date.prototype, 'isBefore', function isBefore(
 	return this.valueOf() < Date.create(date).valueOf() + margin;
 });
 
-/** @see [[DateConstructor.isBefore]] */
+/** {@link DateConstructor.isBefore} */
 extend(Date, 'isBefore', createStaticDateComparator('isBefore'));
 
-/** @see [[Date.isBetween]] */
+/** {@link Date.isBetween} */
 extend(Date.prototype, 'isBetween', function isBetween(
 	this: Date,
 	left: DateCreateValue,
@@ -68,7 +68,7 @@ extend(Date.prototype, 'isBetween', function isBetween(
 	return v >= Date.create(left).valueOf() - margin && v <= Date.create(right).valueOf() + margin;
 });
 
-/** @see [[DateConstructor.isBetween]] */
+/** {@link DateConstructor.isBetween} */
 extend(Date, 'isBetween', function isBetween(
 	date: DateCreateValue,
 	left?: DateCreateValue,

@@ -12,7 +12,7 @@ import type { eventEmitter } from 'core/cache/decorators/helpers/add-emitter';
 export type PersistentCache<V = unknown, K = string, T extends CacheWithEmitter<V, K> = CacheWithEmitter<V, K>> = {
 	[key in Exclude<(keyof CacheWithEmitter<V, K>), 'set' | 'size' | typeof eventEmitter>]: ReturnPromise<CacheWithEmitter<V, K>[key]>
 } & {
-	/** @see [[Cache.size]] */
+	/** {@link Cache.size} */
 	size: [T['size']];
 
 	/**
@@ -33,7 +33,7 @@ export type PersistentCache<V = unknown, K = string, T extends CacheWithEmitter<
 	 */
 	removePersistentTTLFrom(key: K): Promise<boolean>;
 
-	/** @see [[CacheWithEmitter[eventEmitterSymbol]]] */
+	/** {@link CacheWithEmitter[eventEmitterSymbol} */
 	eventEmitter: T[typeof eventEmitter];
 };
 

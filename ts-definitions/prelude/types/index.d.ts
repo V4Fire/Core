@@ -320,8 +320,8 @@ interface ObjectConstructor {
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectConstructor.isPlainObject]]
-	 * @see [[ObjectConstructor.isDictionary]]
+	 * {@link ObjectConstructor.isPlainObject}
+	 * {@link ObjectConstructor.isDictionary}
 	 */
 	isObject(value: any): value is Dictionary;
 }

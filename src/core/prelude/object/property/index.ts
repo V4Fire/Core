@@ -8,7 +8,7 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see [[ObjectConstructor.get]] */
+/** {@link ObjectConstructor.get} */
 extend(Object, 'get', (
 	obj: unknown,
 	path: ObjectPropertyPath | ObjectGetOptions,
@@ -71,7 +71,7 @@ extend(Object, 'get', (
 	return get;
 });
 
-/** @see [[ObjectConstructor.has]] */
+/** {@link ObjectConstructor.has} */
 extend(Object, 'has', (
 	obj: unknown,
 	path: ObjectPropertyPath | ObjectGetOptions,
@@ -140,7 +140,7 @@ extend(Object, 'has', (
 const
 	{hasOwnProperty: nativeHasOwnProperty} = Object.prototype;
 
-/** @see [[ObjectConstructor.hasOwnProperty]] */
+/** {@link ObjectConstructor.hasOwnProperty} */
 extend(Object, 'hasOwnProperty', function hasOwnProperty(
 	this: unknown,
 	obj: unknown,
@@ -166,12 +166,12 @@ extend(Object, 'hasOwnProperty', function hasOwnProperty(
 	return (key) => Object.hasOwnProperty(obj, key);
 });
 
-/** @see [[ObjectConstructor.defineSymbol]] */
+/** {@link ObjectConstructor.defineSymbol} */
 extend(Object, 'defineSymbol', function defineSymbol<T>(obj: T, symbol: symbol, value: unknown): T {
 	return Object.defineProperty(obj, symbol, {value, configurable: true, enumerable: false, writable: true});
 });
 
-/** @see [[ObjectConstructor.set]] */
+/** {@link ObjectConstructor.set} */
 extend(Object, 'set', function set(
 	obj: unknown,
 	path: ObjectPropertyPath | ObjectGetOptions,
@@ -314,7 +314,7 @@ extend(Object, 'set', function set(
 	}
 });
 
-/** @see [[ObjectConstructor.delete]] */
+/** {@link ObjectConstructor.delete} */
 extend(Object, 'delete', (
 	obj: unknown,
 	path: ObjectPropertyPath | ObjectGetOptions,

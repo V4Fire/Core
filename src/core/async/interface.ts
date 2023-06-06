@@ -137,7 +137,7 @@ export type FullAsyncOptions<CTX extends object = Async> =
 
 		/**
 		 * @deprecated
-		 * @see [[FullAsyncOptions.needCall]]
+		 * {@link FullAsyncOptions.needCall}
 		 */
 		needCall?: boolean;
 

@@ -50,7 +50,7 @@ export interface Provider {
 
 	/**
 	 * @deprecated
-	 * @see [[Provider.emitter]]
+	 * {@link Provider.emitter}
 	 */
 	readonly event: EventEmitterLike;
 

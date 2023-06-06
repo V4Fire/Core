@@ -14,7 +14,7 @@ import langPacs, { Translation, PluralTranslation } from 'lang';
 import { locale, pluralizeMap } from 'core/prelude/i18n/const';
 import type { PluralizationCount } from 'core/prelude/i18n/interface';
 
-/** @see [[i18n]] */
+/** {@link i18n} */
 extend(globalThis, 'i18n', i18nFactory);
 
 const

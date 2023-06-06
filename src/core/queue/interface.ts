@@ -59,7 +59,7 @@ export default abstract class Queue<T> {
 
 	/**
 	 * Alias to `push`
-	 * @see [[Queue.push]]
+	 * {@link Queue.push}
 	 */
 	unshift(el: T): ReturnType<this['push']> {
 		return Object.cast(this.push(el));
@@ -67,7 +67,7 @@ export default abstract class Queue<T> {
 
 	/**
 	 * Alias to `pop`
-	 * @see [[Queue.pop]]
+	 * {@link Queue.pop}
 	 */
 	shift(): ReturnType<this['pop']> {
 		return Object.cast(this.pop());

@@ -17,7 +17,7 @@ export const
 
 /**
  * @deprecated
- * @see [[emitter]]
+ * {@link emitter}
  */
 export const
 	event = emitter;

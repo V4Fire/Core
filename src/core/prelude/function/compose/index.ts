@@ -8,7 +8,7 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see [[FunctionConstructor.compose]] */
+/** {@link FunctionConstructor.compose} */
 extend(Function, 'compose', (...fns: Array<Nullable<AnyFunction>>) => function wrapper(this: unknown, ...args: unknown[]): unknown {
 	if (fns.length === 0) {
 		return;
@@ -45,7 +45,7 @@ extend(Function, 'compose', (...fns: Array<Nullable<AnyFunction>>) => function w
 	return res;
 });
 
-/** @see [[Function.compose]] */
+/** {@link Function.compose} */
 extend(Function.prototype, 'compose', function compose(
 	this: AnyFunction,
 	...fns: Array<Nullable<AnyFunction>>

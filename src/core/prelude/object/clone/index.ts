@@ -13,7 +13,7 @@ const
 	objRef = '[[OBJ_REF:base]]',
 	valRef = '[[VAL_REF:';
 
-/** @see [[ObjectConstructor.fastClone]] */
+/** {@link ObjectConstructor.fastClone} */
 extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 	if (!Object.isTruly(obj)) {
 		if (opts !== undefined) {

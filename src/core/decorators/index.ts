@@ -17,7 +17,7 @@ import * as tools from 'core/functools';
 
 /**
  * @deprecated
- * @see core/functools
+ * {@link core/functools}
  * @decorator
  */
 export const once = tools.deprecate(
@@ -32,7 +32,7 @@ export const once = tools.deprecate(
 
 /**
  * @deprecated
- * @see core/functools
+ * {@link core/functools}
  * @decorator
  */
 export const debounce = tools.deprecate(
@@ -47,7 +47,7 @@ export const debounce = tools.deprecate(
 
 /**
  * @deprecated
- * @see core/functools
+ * {@link core/functools}
  * @decorator
  */
 export const throttle = tools.deprecate(
