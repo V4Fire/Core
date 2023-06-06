@@ -31,13 +31,13 @@ interface ObjectConstructor {
 interface FastCloneOptions {
 	/**
 	 * Replacer function for `JSON.stringify`
-	 * @see [[JSON.stringify]]
+	 * {@link JSON.stringify}
 	 */
 	replacer?: JSONCb;
 
 	/**
 	 * Reviver function for `JSON.parse`
-	 * @see [[JSON.parse]]
+	 * {@link JSON.parse}
 	 */
 	reviver?: JSONCb;
 

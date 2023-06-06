@@ -10,10 +10,10 @@ import log from 'core/log';
 import extend from 'core/prelude/extend';
 import { errorsToIgnore } from 'core/prelude/global/const';
 
-/** @see Any */
+/** {@link globalThis.Any} */
 extend(globalThis, 'Any', (obj) => obj);
 
-/** @see stderr */
+/** {@link globalThis.stderr} */
 extend(globalThis, 'stderr', (err) => {
 	if (err instanceof Object) {
 		if (errorsToIgnore[err.type] === true) {

@@ -282,13 +282,13 @@ interface ObjectForEachOptions {
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectForEachOptions.passDescriptor]]
+	 * {@link ObjectForEachOptions.passDescriptor}
 	 */
 	withDescriptor?: boolean;
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectForEachOptions.propsToIterate]]
+	 * {@link ObjectForEachOptions.propsToIterate}
 	 */
 	notOwn?: boolean | -1;
 }

@@ -19,40 +19,40 @@ export type DataProviderBodyMethodsToReplace = 'post' | 'add' | 'update' | 'dele
 export type DataProviderMethodsToReplace = DataProviderQueryMethodsToReplace | DataProviderBodyMethodsToReplace;
 
 export type WrappedDataProvider = Overwrite<Provider, {
-	/** @see [[Provider.emitter]] */
+	/** {@link Provider.emitter} */
 	emitter: EventEmitterLike;
 
-	/** @see [[Provider.get]] */
+	/** {@link Provider.get} */
 	get<D = unknown>(
 		query?: RequestQuery,
 		opts?: CreateRequestOptions<D> & AsyncOptions
 	): Promise<RequestResponseObject<D>>;
 
-	/** @see [[Provider.peek]] */
+	/** {@link Provider.peek} */
 	peek<D = unknown>(
 		query?: RequestQuery,
 		opts?: CreateRequestOptions<D> & AsyncOptions
 	): Promise<RequestResponseObject<D>>;
 
-	/** @see [[Provider.post]] */
+	/** {@link Provider.post} */
 	post<D = unknown>(
 		body?: RequestBody,
 		opts?: CreateRequestOptions<D> & AsyncOptions
 	): Promise<RequestResponseObject<D>>;
 
-	/** @see [[Provider.add]] */
+	/** {@link Provider.add} */
 	add<D = unknown>(
 		body?: RequestBody,
 		opts?: CreateRequestOptions<D> & AsyncOptions
 	): Promise<RequestResponseObject<D>>;
 
-	/** @see [[Provider.upd]] */
+	/** {@link Provider.upd} */
 	upd<D = unknown>(
 		body?: RequestBody,
 		opts?: CreateRequestOptions<D> & AsyncOptions
 	): Promise<RequestResponseObject<D>>;
 
-	/**  @see [[Provider.del]] */
+	/**  {@link Provider.del} */
 	del<D = unknown>(
 		body?: RequestBody,
 		opts?: CreateRequestOptions<D> & AsyncOptions
@@ -126,28 +126,28 @@ export type EventEmitterOverwritten<T extends EventEmitterLike> = Overwrite<T, {
 export type AsyncOptionsForWrappers = Pick<AsyncOptions, 'group'>;
 
 export interface WrappedAsyncStorageNamespace {
-	/** @see [[AsyncStorage.has]] */
+	/** {@link AsyncStorage.has} */
 	has(key: string, opts?: AsyncOptions): Promise<boolean>;
 	has(key: string, ...args: unknown[]): Promise<boolean>;
 
-	/** @see [[AsyncStorage.get]] */
+	/** {@link AsyncStorage.get} */
 	get<T = unknown>(key: string, opts?: AsyncOptions): Promise<CanUndef<T>>;
 	get<T = unknown>(key: string, ...args: unknown[]): Promise<CanUndef<T>>;
 
-	/** @see [[AsyncStorage.set]] */
+	/** {@link AsyncStorage.set} */
 	set(key: string, value: unknown, opts?: AsyncOptions): Promise<void>;
 	set(key: string, value: unknown, ...args: unknown[]): Promise<void>;
 
-	/** @see [[AsyncStorage.remove]] */
+	/** {@link AsyncStorage.remove} */
 	remove(key: string, opts?: AsyncOptions): Promise<void>;
 	remove(key: string, ...args: unknown[]): Promise<void>;
 
-	/** @see [[AsyncStorage.clear]] */
+	/** {@link AsyncStorage.clear} */
 	clear<T = unknown>(filter?: ClearFilter<T>, opts?: unknown[]): Promise<void>;
 	clear<T = unknown>(filter?: ClearFilter<T>, ...args: unknown[]): Promise<void>;
 }
 
 export interface WrappedAsyncStorage extends WrappedAsyncStorageNamespace {
-	/** @see [[AsyncStorage.namespace]] */
+	/** {@link AsyncStorage.namespace} */
 	namespace(name: string, opts?: AsyncOptionsForWrappers): WrappedAsyncStorageNamespace;
 }

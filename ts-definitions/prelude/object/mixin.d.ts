@@ -273,43 +273,43 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectMixinOptions.concatArrays]]
+	 * {@link ObjectMixinOptions.concatArrays}
 	 */
 	concatArray?: boolean;
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectMixinOptions.concatArrays]]
+	 * {@link ObjectMixinOptions.concatArrays}
 	 */
 	concatFn?(a: unknown[], b: unknown[], key: K): unknown[];
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectMixinOptions.propsToCopy]]
+	 * {@link ObjectMixinOptions.propsToCopy}
 	 */
 	onlyNew?: boolean | -1;
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectMixinOptions.propsToCopy]]
+	 * {@link ObjectMixinOptions.propsToCopy}
 	 */
 	traits?: boolean | -1;
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectMixinOptions.skipUndefs]]
+	 * {@link ObjectMixinOptions.skipUndefs}
 	 */
 	withUndef?: boolean;
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectMixinOptions.withDescriptors]]
+	 * {@link ObjectMixinOptions.withDescriptors}
 	 */
 	withDescriptor?: boolean;
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectMixinOptions.withDescriptors]]
+	 * {@link ObjectMixinOptions.withDescriptors}
 	 */
 	withAccessors?: boolean;
 }

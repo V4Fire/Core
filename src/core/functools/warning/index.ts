@@ -155,7 +155,7 @@ export function warn<T extends Function>(
  * Decorator for `warn`
  *
  * @decorator
- * @see [[warn]]
+ * {@link warn}
  *
  * @example
  * ```js
@@ -173,7 +173,7 @@ export function warned(target: object, key: string | symbol, descriptor: Propert
  * Decorator for `warn`.
  * This overload adds a feature to provide additional options.
  *
- * @see [[warn]]
+ * {@link warn}
  * @param [opts] - additional options
  *
  * @example

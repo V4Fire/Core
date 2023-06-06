@@ -38,13 +38,13 @@ export type AddEmitter =
 	<T extends Cache<V, K>, V = unknown, K extends string = string>(cache: T) => AddEmitterReturn<T>;
 
 export interface AddEmitterReturn<T extends Cache<V, K>, V = unknown, K extends string = string> {
-	/** @see [[Cache.set]] */
+	/** {@link Cache.set} */
 	set: T['set'];
 
-	/** @see [[Cache.remove]] */
+	/** {@link Cache.remove} */
 	remove: T['remove'];
 
-	/** @see [[Cache.clear]] */
+	/** {@link Cache.clear} */
 	clear: T['clear'];
 
 	/**

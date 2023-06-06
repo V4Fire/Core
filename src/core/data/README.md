@@ -273,7 +273,7 @@ interface ProviderOptions {
   alias?: string;
 
   /**
-   * @see [[CreateRequestOptions.externalRequest]]
+   * {@link CreateRequestOptions.externalRequest}
    * @default `false`
    */
   externalRequest?: boolean;

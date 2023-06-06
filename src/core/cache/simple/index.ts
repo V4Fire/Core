@@ -23,7 +23,7 @@ export * from 'core/cache/interface';
  * @typeParam K - key type (`string` by default)
  */
 export default class SimpleCache<V = unknown, K = string> implements Cache<V, K> {
-	/** @see [[Cache.size]] */
+	/** {@link Cache.size} */
 	get size(): number {
 		return this.storage.size;
 	}
@@ -37,23 +37,23 @@ export default class SimpleCache<V = unknown, K = string> implements Cache<V, K>
 		return this.keys();
 	}
 
-	/** @see [[Cache.has]] */
+	/** {@link Cache.has} */
 	has(key: K): boolean {
 		return this.storage.has(key);
 	}
 
-	/** @see [[Cache.get]] */
+	/** {@link Cache.get} */
 	get(key: K): CanUndef<V> {
 		return this.storage.get(key);
 	}
 
-	/** @see [[Cache.set]] */
+	/** {@link Cache.set} */
 	set(key: K, value: V): V {
 		this.storage.set(key, value);
 		return value;
 	}
 
-	/** @see [[Cache.remove]] */
+	/** {@link Cache.remove} */
 	remove(key: K): CanUndef<V> {
 		if (this.has(key)) {
 			const val = this.storage.get(key);
@@ -62,22 +62,22 @@ export default class SimpleCache<V = unknown, K = string> implements Cache<V, K>
 		}
 	}
 
-	/** @see [[Cache.keys]] */
+	/** {@link Cache.keys} */
 	keys(): IterableIterator<K> {
 		return this.storage.keys();
 	}
 
-	/** @see [[Cache.values]] */
+	/** {@link Cache.values} */
 	values(): IterableIterator<V> {
 		return this.storage.values();
 	}
 
-	/** @see [[Cache.entries]] */
+	/** {@link Cache.entries} */
 	entries(): IterableIterator<[K, V]> {
 		return this.storage.entries();
 	}
 
-	/** @see [[Cache.clear]] */
+	/** {@link Cache.clear} */
 	clear(filter?: ClearFilter<V, K>): Map<K, V> {
 		if (filter) {
 			const

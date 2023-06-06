@@ -85,7 +85,7 @@ export const asyncSession = factory(asyncSessionStorage, true);
  * Alias for a has method of the synchronous local storage API
  *
  * @alias
- * @see [[local]]
+ * {@link local}
  */
 export const has = local.has.bind(local);
 
@@ -93,7 +93,7 @@ export const has = local.has.bind(local);
  * Alias for a get method of the synchronous local storage API
  *
  * @alias
- * @see [[local]]
+ * {@link local}
  */
 export const get = local.get.bind(local);
 
@@ -101,7 +101,7 @@ export const get = local.get.bind(local);
  * Alias for a set method of the synchronous local storage API
  *
  * @alias
- * @see [[local]]
+ * {@link local}
  */
 export const set = local.set.bind(local);
 
@@ -109,7 +109,7 @@ export const set = local.set.bind(local);
  * Alias for a remove method of the synchronous local storage API
  *
  * @alias
- * @see [[local]]
+ * {@link local}
  */
 export const remove = local.remove.bind(local);
 
@@ -117,7 +117,7 @@ export const remove = local.remove.bind(local);
  * Alias for a clear method of the synchronous local storage API
  *
  * @alias
- * @see [[local]]
+ * {@link local}
  */
 export const clear = local.clear.bind(local);
 
@@ -125,7 +125,7 @@ export const clear = local.clear.bind(local);
  * Alias for a namespace method of the synchronous local storage API
  *
  * @alias
- * @see [[local]]
+ * {@link local}
  *
  * @example
  * ```js

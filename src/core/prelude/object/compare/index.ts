@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 import { funcCache } from 'core/prelude/object/const';
 
-/** @see [[ObjectConstructor.fastCompare]] */
+/** {@link ObjectConstructor.fastCompare} */
 extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): boolean | AnyFunction {
 	if (arguments.length < 2) {
 		return (b) => Object.fastCompare(a, b);
@@ -126,7 +126,7 @@ extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): bool
 	return JSON.stringify(a, createSerializer(a, b, cache)) === JSON.stringify(b, createSerializer(a, b, cache));
 });
 
-/** @see [[ObjectConstructor.fastHash]] */
+/** {@link ObjectConstructor.fastHash} */
 extend(Object, 'fastHash', (obj) => {
 	const res = JSON.stringify(obj, createSerializer(obj, undefined, funcCache));
 	return cyrb53(Object.isTruly(res) ? res : 'null');

@@ -8,7 +8,7 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see [[ObjectConstructor.size]] */
+/** {@link ObjectConstructor.size} */
 extend(Object, 'size', (obj: unknown) => {
 	if (!Object.isTruly(obj)) {
 		return 0;

@@ -63,7 +63,7 @@ export function concatURLs(...urls: Array<Nullable<string>>): string {
 
 /**
  * @deprecated
- * @see [[concatURLs]]
+ * {@link concatURLs}
  * @param urls
  */
 export function concatUrls(...urls: Array<Nullable<string>>): string {

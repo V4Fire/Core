@@ -84,7 +84,7 @@ export default class Pool<T = unknown> {
 
 	/**
 	 * Event emitter to broadcast pool events
-	 * @see [[EventEmitter]]
+	 * {@link EventEmitter}
 	 */
 	protected emitter: EventEmitter = new EventEmitter();
 
