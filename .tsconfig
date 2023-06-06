@@ -29,7 +29,8 @@
 
   "include": [
     "./src/**/*.ts",
-    "./src/**/*.js"
+    "./src/**/*.js",
+    "ts-definitions/**/*.ts"
   ],
 
   "files": [
