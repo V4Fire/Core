@@ -163,7 +163,7 @@ export type ResolverResult = CanUndef<CanArray<string>>;
 
 /**
  * Options for a request
- * @typeparam D - response data type
+ * @typeParam D - response data type
  */
 export interface CreateRequestOptions<D = unknown> {
 	/**
@@ -548,7 +548,7 @@ export interface CreateRequestOptions<D = unknown> {
 
 /**
  * Options to retry bad requests
- * @typeparam D - response data type
+ * @typeParam D - response data type
  */
 export interface RetryOptions<D = unknown> {
 	/**

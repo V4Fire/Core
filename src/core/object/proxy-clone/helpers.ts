@@ -30,7 +30,6 @@ export class Descriptor {
 		const
 			{descriptor} = this;
 
-		// eslint-disable-next-line @typescript-eslint/unbound-method
 		if (Object.isFunction(descriptor.get)) {
 			return descriptor.get.call(receiver);
 		}

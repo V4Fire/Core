@@ -44,7 +44,7 @@ export * from 'core/pool/interface';
 
 /**
  * Implementation of an object pool structure
- * @typeparam T - pool resource
+ * @typeParam T - pool resource
  */
 export default class Pool<T = unknown> {
 	/**
@@ -175,6 +175,7 @@ export default class Pool<T = unknown> {
 
 		Object.assign(this, Object.reject(p, 'size'));
 
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		this.hashFn ??= (() => '[[DEFAULT]]');
 		this.resourceFactory = resourceFactory;
 

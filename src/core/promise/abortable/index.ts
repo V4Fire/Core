@@ -35,7 +35,7 @@ export * from 'core/promise/abortable/interface';
  * Class wraps promise-like objects and adds to them some extra functionality,
  * such as possibility of cancellation, etc.
  *
- * @typeparam T - promise resolved value
+ * @typeParam T - promise resolved value
  */
 export default class AbortablePromise<T = unknown> implements Promise<T> {
 	/**
@@ -350,7 +350,6 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 		}, parent);
 	}
 
-	/** @override */
 	readonly [Symbol.toStringTag]: 'Promise';
 
 	/**

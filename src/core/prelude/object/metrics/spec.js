@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/typedef, @typescript-eslint/restrict-plus-operands */
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core

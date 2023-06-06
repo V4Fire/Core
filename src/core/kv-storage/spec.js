@@ -16,7 +16,6 @@ import {
 
 } from 'core/kv-storage';
 
-// eslint-disable-next-line import/extensions
 import * as IDBEngine from 'core/kv-storage/engines/fake-indexeddb';
 
 const kv = {

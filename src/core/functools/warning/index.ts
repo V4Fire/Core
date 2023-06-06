@@ -138,6 +138,7 @@ export function warn<T extends Function>(
 			throw new Error(str);
 
 		} else if (consoleCache[str] == null) {
+			// eslint-disable-next-line no-console
 			console.warn(str);
 			consoleCache[str] = true;
 		}

@@ -33,7 +33,7 @@ export interface QueueOptions<T extends InnerQueue<any> = InnerQueue> {
 
 /**
  * An abstract class for any queue data structure
- * @typeparam T - queue element
+ * @typeParam T - queue element
  */
 export default abstract class Queue<T> {
 	/**

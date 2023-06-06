@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/async/modules/proxy/README.md]]
- * @packageDeclaration
  */
 
 import SyncPromise from 'core/promise/sync';
@@ -984,7 +983,6 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		}
 
 		if (Object.isFunction(fn)) {
-			// eslint-disable-next-line @typescript-eslint/unbound-method
 			if ('catch' in promise && Object.isFunction(promise.catch)) {
 				promise.catch(() => {
 					// Promise error loopback

@@ -1,5 +1,3 @@
-/* eslint-disable no-bitwise */
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -7,6 +5,8 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+
+/* eslint-disable no-bitwise */
 
 export class Xor128 implements IterableIterator<number> {
 	protected x: number;

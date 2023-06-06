@@ -138,7 +138,6 @@ extend(Object, 'has', (
 });
 
 const
-	// eslint-disable-next-line @typescript-eslint/unbound-method
 	{hasOwnProperty: nativeHasOwnProperty} = Object.prototype;
 
 /** @see [[ObjectConstructor.hasOwnProperty]] */

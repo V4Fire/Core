@@ -19,6 +19,7 @@ export const consoleEngine: PerfTimerEngine = {
 			args.push(additional);
 		}
 
+		// eslint-disable-next-line no-console
 		console.warn(...args);
 	},
 

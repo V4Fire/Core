@@ -331,7 +331,6 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 			const
 				refProxy = ref[toProxyObject]?.get(handlers) ?? Object.createDict();
 
-			// eslint-disable-next-line @typescript-eslint/unbound-method
 			if (!Object.isFunction(Object.getOwnPropertyDescriptor(refProxy, key)?.get)) {
 				ref[key] = refProxy[key];
 			}

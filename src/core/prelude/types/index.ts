@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -7,6 +5,8 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 
 import extend from 'core/prelude/extend';
 import { isNative, toString, nonPrimitiveTypes, READONLY, PROXY } from 'core/prelude/types/const';

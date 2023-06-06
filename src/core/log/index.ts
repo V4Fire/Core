@@ -19,7 +19,6 @@ export * from 'core/log/config';
 
 /**
  * API for logging
- * @defaultExport
  */
 const logger = extend(log);
 export default logger;
