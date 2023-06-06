@@ -70,8 +70,6 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 	return obj;
 
 	function jsonBasedClone(obj: object, opts?: FastCloneOptions): object {
-		console.log(111, obj, obj instanceof Map);
-
 		if (obj instanceof Map) {
 			const
 				map = new Map();
