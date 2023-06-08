@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/mime-type/README.md]]
- * @packageDocumentation
  */
 
 import { deprecate } from 'core/functools/deprecation';

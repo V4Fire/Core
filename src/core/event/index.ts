@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/event/README.md]]
- * @packageDocumentation
  */
 
 import SyncPromise from 'core/promise/sync';

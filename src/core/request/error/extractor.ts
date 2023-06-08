@@ -64,7 +64,8 @@ export class RequestErrorDetailsExtractor implements ErrorDetailsExtractor<Reque
 	/**
 	 * Filters the specified headers according to settings
 	 *
-	 * {@link headersFilterParams}
+	 * {@link FilterParams}
+	 *
 	 * @param headers - headers that need to be filtered
 	 */
 	protected prepareHeaders(headers: CanUndef<RawHeaders>): CanUndef<Headers> {

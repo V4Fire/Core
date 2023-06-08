@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/promise/abortable/README.md]]
- * @packageDocumentation
  */
 
 import { IGNORE } from 'core/promise/abortable/const';

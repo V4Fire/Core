@@ -10,7 +10,6 @@
 
 /**
  * [[include:core/decorators/README.md]]
- * @packageDocumentation
  */
 
 import * as tools from 'core/functools';

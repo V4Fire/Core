@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/status-codes/README.md]]
- * @packageDocumentation
  */
 
 import { StatusCodes } from 'core/status-codes/interface';

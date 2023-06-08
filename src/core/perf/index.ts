@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/perf/README.md]]
- * @packageDocumentation
  */
 
 import config from 'config';

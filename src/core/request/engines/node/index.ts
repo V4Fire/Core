@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/request/engines/node/README.md]]
- * @packageDocumentation
  */
 
 import got, { Options, Response as GotResponse } from 'got';

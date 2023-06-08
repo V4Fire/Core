@@ -10,7 +10,6 @@
 
 /**
  * [[include:core/object/watch/README.md]]
- * @packageDocumentation
  */
 
 import watchEngine from 'core/object/watch/engines';

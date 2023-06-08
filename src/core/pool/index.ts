@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/pool/README.md]]
- * @packageDocumentation
  */
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';

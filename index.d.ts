@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/* eslint-disable @typescript-eslint/triple-slash-reference */
+
 /**
  * [[include:core/prelude/README.md]]
  * @packageDocumentation

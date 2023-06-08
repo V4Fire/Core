@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/queue/simple/README.md]]
- * @packageDocumentation
  */
 
 import LinkedList from 'core/linked-list';

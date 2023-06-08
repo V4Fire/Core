@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/net/README.md]]
- * @packageDocumentation
  */
 
 import config from 'config';

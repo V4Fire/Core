@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/functools/implementation/README.md]]
- * @packageDocumentation
  */
 
 import { warn, warned, WarnOptions, InlineWarnOptions, WarnedFn } from 'core/functools/warning';
@@ -81,6 +80,7 @@ export function unimplemented(target: object, key: string | symbol, descriptor: 
  * This overload adds a feature to provide additional options.
  *
  * {@link unimplement}
+ *
  * @param [opts] - additional options
  *
  * @example

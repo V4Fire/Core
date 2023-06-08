@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/async/modules/base/README.md]]
- * @packageDocumentation
  */
 
 import { deprecate, deprecated } from 'core/functools';

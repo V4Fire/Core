@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/request/error/README.md]]
- * @packageDocumentation
  */
 
 import BaseError from 'core/error';

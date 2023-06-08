@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/i18n/README.md]]
- * @packageDocumentation
  */
 
 export * from 'core/prelude/i18n';

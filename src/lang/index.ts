@@ -8,7 +8,6 @@
 
 /**
  * [[include:lang/README.md]]
- * @packageDocumentation
  */
 
 import type { LangPacs } from 'lang/interface';

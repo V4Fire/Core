@@ -12,7 +12,7 @@ import type { CreateRequestOptions, RequestQuery, RequestResponseObject, Request
 import type Async from 'core/async';
 import type { AsyncOptions, ClearOptionsId, ProxyCb, EventEmitterLike } from 'core/async';
 
-import type { ClearFilter } from 'core/kv-storage';
+import type { ClearFilter, AsyncStorage } from 'core/kv-storage';
 
 export type DataProviderQueryMethodsToReplace = 'get' | 'peek';
 export type DataProviderBodyMethodsToReplace = 'post' | 'add' | 'update' | 'delete';

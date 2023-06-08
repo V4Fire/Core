@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/json/stream/README.md]]
- * @packageDocumentation
  */
 
 import { seq } from 'core/iter/combinators';

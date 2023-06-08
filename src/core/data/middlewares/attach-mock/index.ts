@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/data/middlewares/attach-mock/README.md]]
- * @packageDocumentation
  */
 
 import * as env from 'core/env';

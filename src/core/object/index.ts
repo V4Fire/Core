@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/object/README.md]]
- * @packageDocumentation
  */
 
 export { default as select } from 'core/object/select';

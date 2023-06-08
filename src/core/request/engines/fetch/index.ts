@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/request/engines/fetch/README.md]]
- * @packageDocumentation
  */
 
 //#if node_js

@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/iter/combinators/README.md]]
- * @packageDocumentation
  */
 
 /**

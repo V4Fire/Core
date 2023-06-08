@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/data/middlewares/README.md]]
- * @packageDocumentation
  */
 
 export * from 'core/data/middlewares/attach-mock';

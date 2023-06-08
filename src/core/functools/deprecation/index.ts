@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/functools/deprecation/README.md]]
- * @packageDocumentation
  */
 
 import { warn, warned, WarnOptions, InlineWarnOptions, WarnedFn } from 'core/functools/warning';
@@ -71,6 +70,7 @@ export function deprecated(target: object, key: string | symbol, descriptor: Pro
  * This overload adds a feature to provide additional options.
  *
  * {@link deprecate}
+ *
  * @param [opts] - additional options
  */
 export function deprecated(opts?: WarnOptions): Function;

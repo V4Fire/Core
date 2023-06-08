@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/linked-list/README.md]]
- * @packageDocumentation
  */
 
 export { default } from 'core/linked-list/list';

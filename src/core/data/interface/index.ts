@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/data/interface/README.md]]
- * @packageDocumentation
  */
 
 import type { EventEmitterLike } from 'core/async';

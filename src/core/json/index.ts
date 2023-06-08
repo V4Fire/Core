@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/json/README.md]]
- * @packageDocumentation
  */
 
 export * from 'core/json/revivers';

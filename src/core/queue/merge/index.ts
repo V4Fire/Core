@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/queue/merge/README.md]]
- * @packageDocumentation
  */
 
 import SimpleQueue from 'core/queue/simple';

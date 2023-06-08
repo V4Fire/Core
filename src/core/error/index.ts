@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/error/README.md]]
- * @packageDocumentation
  */
 
 export * from 'core/error/interface';
