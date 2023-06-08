@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/data/middlewares/wait/README.md]]
- * @packageDocumentation
  */
 
 import type { MiddlewareParams } from 'core/request';

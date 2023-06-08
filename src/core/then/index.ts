@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/then/README.md]]
- * @packageDocumentation
  */
 
 export { default } from 'core/promise/abortable';

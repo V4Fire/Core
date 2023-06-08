@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/uuid/README.md]]
- * @packageDocumentation
  */
 
 import { IS_NODE } from 'core/env';

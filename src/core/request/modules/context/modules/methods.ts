@@ -196,8 +196,8 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 	/**
 	 * Returns an absolute URL for the request
-	 *
 	 * {@link RequestContext.resolveRequest}
+	 *
 	 * @param [url] - base request URL
 	 */
 	@deprecated({renamedTo: 'resolveRequest'})

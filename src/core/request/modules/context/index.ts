@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/request/context/README.md]]
- * @packageDocumentation
  */
 
 import log from 'core/log';

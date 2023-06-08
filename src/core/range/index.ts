@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/range/README.md]]
- * @packageDocumentation
  */
 
 import type { RangeValue, RangeType } from 'core/range/interface';

@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/json/stream/parser/README.md]]
- * @packageDocumentation
  */
 
 import { parserStates } from 'core/json/stream/parser/states';

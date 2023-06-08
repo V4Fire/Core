@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/cache/restricted/README.md]]
- * @packageDocumentation
  */
 
 import SimpleCache, { ClearFilter } from 'core/cache/simple';

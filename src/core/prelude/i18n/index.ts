@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/prelude/i18n/README.md]]
- * @packageDocumentation
  */
 
 import config from 'config';

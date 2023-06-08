@@ -6,9 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/* eslint-disable jsdoc/no-undefined-types */
+
 /**
  * [[include:core/functools/trait/README.md]]
- * @packageDocumentation
  */
 
 /**

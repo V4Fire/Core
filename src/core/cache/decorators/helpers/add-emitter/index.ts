@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/cache/decorators/helpers/add-emitter/README.md]]
- * @packageDocumentation
  */
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';

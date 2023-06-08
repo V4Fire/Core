@@ -10,6 +10,7 @@ import type { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import { deprecate } from 'core/functools';
 
 import request, { Middlewares, RequestMethod } from 'core/request';
+import type { CreateRequestOptions, Encoders, Decoders } from 'core/request';
 import select, { SelectParams } from 'core/object/select';
 
 import { emitter } from 'core/data/const';
@@ -52,6 +53,7 @@ export default abstract class Provider {
 	 * An object form is easily to extend, bur you can choose any different form.
 	 *
 	 * {@link Middlewares}
+	 *
 	 * @example
 	 * ```js
 	 * import request from 'core/request';
@@ -80,6 +82,7 @@ export default abstract class Provider {
 	 * The value of a map element represent a sequence of encoders for the specified provider method.
 	 *
 	 * {@link Encoders}
+	 *
 	 * @example
 	 * ```js
 	 * class MyProvider extends Provider {
@@ -98,6 +101,7 @@ export default abstract class Provider {
 	 * The value of a map element represent a sequence of decoders for the specified provider method.
 	 *
 	 * {@link Decoders}
+	 *
 	 * @example
 	 * ```js
 	 * class MyProvider extends Provider {
@@ -119,6 +123,7 @@ export default abstract class Provider {
 	 * The value of a map element represent a list of parameters to match.
 	 *
 	 * {@link Middlewares}
+	 *
 	 * @example
 	 * ```js
 	 * import { attachMock } from 'core/data/middlewares';

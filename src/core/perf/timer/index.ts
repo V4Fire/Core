@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/perf/timer/README.md]]
- * @packageDocumentation
  */
 
 import type { PerfGroup } from 'core/perf/interface';

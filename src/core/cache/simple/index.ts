@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/cache/simple/README.md]]
- * @packageDocumentation
  */
 
 import type Cache from 'core/cache/interface';

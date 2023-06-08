@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/json/stream/streamers/README.md]]
- * @packageDocumentation
  */
 
 export { default as ArrayStreamer } from 'core/json/stream/streamers/array';

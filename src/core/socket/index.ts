@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/socket/README.md]]
- * @packageDocumentation
  */
 
 import type { Socket } from 'core/socket/interface';

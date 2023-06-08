@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/env/README.md]]
- * @packageDocumentation
  */
 
 export * from 'core/prelude/env';

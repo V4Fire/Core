@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/cache/decorators/persistent/README.md]]
- * @packageDocumentation
  */
 
 import type { AsyncStorageNamespace, SyncStorageNamespace } from 'core/kv-storage';

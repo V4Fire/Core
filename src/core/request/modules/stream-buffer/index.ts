@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/request/modules/stream-buffer/README.md]]
- * @packageDocumentation
  */
 
 import { createControllablePromise } from 'core/promise';

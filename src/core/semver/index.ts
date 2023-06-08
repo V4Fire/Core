@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/semver/README.md]]
- * @packageDocumentation
  */
 
 import { operations, compareRgxp, operandLengthErrorText } from 'core/semver/const';

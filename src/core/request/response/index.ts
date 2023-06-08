@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/request/response/README.md]]
- * @packageDocumentation
  */
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
@@ -292,6 +291,7 @@ export default class Response<
 	/**
 	 * Returns an iterator by the response body.
 	 * Mind, when you parse response via iterator, you won't be able to use other parse methods, like `json` or `text`.
+	 *
 	 * @emits `streamUsed()`
 	 */
 	[Symbol.asyncIterator](): AsyncIterableIterator<RequestResponseChunk> {

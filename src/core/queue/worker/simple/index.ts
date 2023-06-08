@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/queue/worker/simple/README.md]]
- * @packageDocumentation
  */
 
 import WorkerQueue from 'core/queue/worker/interface';

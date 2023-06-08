@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/request/engines/provider/README.md]]
- * @packageDocumentation
  */
 
 import AbortablePromise from 'core/promise/abortable';

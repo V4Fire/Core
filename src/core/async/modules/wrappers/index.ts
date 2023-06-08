@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/async/modules/wrappers/README.md]]
- * @packageDocumentation
  */
 
 import type { Provider } from 'core/data';

@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/kv-storage/README.md]]
- * @packageDocumentation
  */
 
 import { convertIfDate } from 'core/json';

@@ -9,6 +9,8 @@
 import type { GROUPS } from 'core/perf/const';
 import type { PerfTimer } from 'core/perf/timer/impl';
 
+import type { PerfTimerFactory } from 'core/perf/timer/interface';
+
 /**
  * Supported group types
  */

@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/object/select/README.md]]
- * @packageDocumentation
  */
 
 import type { SelectParams } from 'core/object/select/interface';

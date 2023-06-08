@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/functools/warning/README.md]]
- * @packageDocumentation
  */
 
 import { consoleCache } from 'core/functools/warning/const';
@@ -174,6 +173,7 @@ export function warned(target: object, key: string | symbol, descriptor: Propert
  * This overload adds a feature to provide additional options.
  *
  * {@link warn}
+ *
  * @param [opts] - additional options
  *
  * @example

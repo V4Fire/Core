@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/async/modules/timers/README.md]]
- * @packageDocumentation
  */
 
 import SyncPromise from 'core/promise/sync';

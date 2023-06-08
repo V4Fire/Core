@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/data/middlewares/attach-status/README.md]]
- * @packageDocumentation
  */
 
 import type { Response, MiddlewareParams } from 'core/request';

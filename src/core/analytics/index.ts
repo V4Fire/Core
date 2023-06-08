@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/analytics/README.md]]
- * @packageDocumentation
  */
 
 import engine from 'core/analytics/engines';

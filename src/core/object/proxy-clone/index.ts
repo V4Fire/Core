@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/object/proxy-clone/README.md]]
- * @packageDocumentation
  */
 
 import * as support from 'core/const/support';

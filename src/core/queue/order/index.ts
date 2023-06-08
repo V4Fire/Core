@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/queue/order/README.md]]
- * @packageDocumentation
  */
 
 import Queue from 'core/queue/interface';

@@ -8,6 +8,7 @@
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import symbolGenerator from 'core/symbol';
+import type { RequestResolver } from 'core/request';
 
 import { readonly } from 'core/object/proxy-readonly';
 import { unimplement } from 'core/functools/implementation';
@@ -149,6 +150,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	 * if the function returns a string that wrapped with an array, the string fully override the original URL.
 	 *
 	 * {@link RequestResolver}
+	 *
 	 * @param _url - request URL
 	 * @param _params - request parameters
 	 */

@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/data/README.md]]
- * @packageDocumentation
  */
 
 //#set runtime.core/data

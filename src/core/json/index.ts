@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/json/README.md]]
- * @packageDocumentation
  */
 
 import { isDateStr } from 'core/prelude/date/const';
@@ -19,7 +18,7 @@ const
 /**
  * Reviver for the `JSON.parse` method: converts all strings that are looks like a date to Date
  *
- * @param key
+ * @param _key
  * @param value
  *
  * @example
@@ -27,7 +26,7 @@ const
  * JSON.parse('"2015-10-12"', convertIfDate) instanceof Date // true
  * ```
  */
-export function convertIfDate(key: string, value: unknown): unknown {
+export function convertIfDate(_key: string, value: unknown): unknown {
 	if (Object.isString(value) && value.length >= minDateLength && RegExp.test(isDateStr, value)) {
 		const date = Date.create(value);
 		return isNaN(date.valueOf()) ? value : date;

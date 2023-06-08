@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/perf/config/README.md]]
- * @packageDocumentation
  */
 
 import { GROUPS } from 'core/perf/const';

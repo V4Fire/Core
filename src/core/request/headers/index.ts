@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/request/headers/README.md]]
- * @packageDocumentation
  */
 
 import { applyQueryForStr } from 'core/request/helpers/interpolation';

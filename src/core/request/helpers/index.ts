@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/request/helpers/README.md]]
- * @packageDocumentation
  */
 
 export * from 'core/request/helpers/const';
