@@ -70,3 +70,6 @@ $RECYCLE.BIN
 
 # Cache
 .eslintcache
+
+# Doc folder
+docs
