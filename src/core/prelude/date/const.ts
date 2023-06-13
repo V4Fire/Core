@@ -6,8 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { createDict } from 'core/prelude/object/create';
+import { forEach } from 'core/prelude/object/iterators';
+
+import { format } from 'core/prelude/date/format';
+import { beginningOfDay } from 'core/prelude/date/create';
+
 export const
-	formatCache = Object.createDict<Intl.DateTimeFormat>();
+	formatCache = createDict<Intl.DateTimeFormat>();
 
 export const
 	dateChunkRgxp = /(\d{1,4}[-./]\d{1,2}[-./]\d{1,4})/,
@@ -22,24 +28,24 @@ export const
 	isDateStr = new RegExp(`^${dateChunkRgxp.source}${timeChunkRgxp.source}${zoneChunkRgxp.source}$`),
 	isFloatStr = /^\d+\.\d+$/;
 
-export const createAliases = Object.createDict({
+export const createAliases = createDict({
 	now: () => new Date(),
-	today: () => new Date().beginningOfDay(),
+	today: () => beginningOfDay.call(new Date()),
 
 	yesterday: () => {
 		const v = new Date();
 		v.setDate(v.getDate() - 1);
-		return v.beginningOfDay();
+		return beginningOfDay.call(v);
 	},
 
 	tomorrow: () => {
 		const v = new Date();
 		v.setDate(v.getDate() + 1);
-		return v.beginningOfDay();
+		return beginningOfDay.call(v);
 	}
 });
 
-export const formatAliases = Object.createDict({
+export const formatAliases = createDict({
 	e: 'era',
 	Y: 'year',
 	M: 'month',
@@ -51,30 +57,30 @@ export const formatAliases = Object.createDict({
 	z: 'timeZoneName'
 });
 
-Object.forEach(formatAliases, (val) => {
+forEach(formatAliases, (val) => {
 	formatAliases[val] = val;
 });
 
 ['Y', 'M', 'w', 'd', 'h', 'm', 's'].forEach((key) => {
-	const format = (date) => {
+	const formatFunc = (date) => {
 		const
 			now = new Date();
 
-		if (date.format(key) !== now.format(key)) {
+		if (format.call(date, key) !== format.call(now, key)) {
 			return formatAliases[key];
 		}
 	};
 
-	formatAliases[`${key}?`] = format;
-	formatAliases[`${formatAliases[key]}?`] = format;
+	formatAliases[`${key}?`] = formatFunc;
+	formatAliases[`${formatAliases[key]}?`] = formatFunc;
 });
 
-export const boolAliases = Object.createDict({
+export const boolAliases = createDict({
 	'+': true,
 	'-': false
 });
 
-export const defaultFormats = Object.createDict(<Intl.DateTimeFormatOptions>{
+export const defaultFormats = createDict(<Intl.DateTimeFormatOptions>{
 	era: 'short',
 	year: 'numeric',
 	month: 'short',

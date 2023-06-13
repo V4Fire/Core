@@ -20,13 +20,18 @@ import {
 
 } from 'core/prelude/date/const';
 
+import { isTruly, isString, isNumber } from 'core/prelude/types';
+import { parse } from 'core/prelude/object/convert';
+
+import { test } from 'core/prelude/regexp';
+
 /** @see [[Date.clone]] */
-extend(Date.prototype, 'clone', function clone(this: Date): Date {
+export const clone = extend<Date['clone']>(Date.prototype, 'clone', function clone(this: Date): Date {
 	return new Date(this);
 });
 
 /** @see [[DateConstructor.create]] */
-extend(Date, 'create', (pattern?: DateCreateValue) => {
+export const create = extend<typeof Date.create>(Date, 'create', (pattern?: DateCreateValue) => {
 	if (pattern == null || pattern === '') {
 		return new Date();
 	}
@@ -35,7 +40,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 		return new Date(pattern);
 	}
 
-	if (Object.isString(pattern)) {
+	if (isString(pattern)) {
 		if (pattern in createAliases) {
 			return createAliases[pattern]();
 		}
@@ -54,7 +59,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 		};
 
 		const normalizeZone = (zone) => {
-			if (RegExp.test(normalizeZoneRgxp, zone)) {
+			if (test(normalizeZoneRgxp, zone)) {
 				return `${zone.substr(0, 3)}:${zone.substr(3)}`;
 			}
 
@@ -80,20 +85,20 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 			const
 				normalizedDate = normalizeDate(date);
 
-			time = Object.isTruly(time) ? time : '00:00:00';
-			zone = Object.isTruly(zone) ? zone : getZone(normalizedDate);
+			time = isTruly(time) ? time : '00:00:00';
+			zone = isTruly(zone) ? zone : getZone(normalizedDate);
 
 			return `${normalizedDate}T${time}${normalizeZone(zone)}`;
 		};
 
-		return new Date(Date.parse(pattern.replace(isDateStr, replacer)));
+		return new Date(parse(pattern.replace(isDateStr, replacer)));
 	}
 
-	if (Object.isString(pattern) && isFloatStr.test(pattern)) {
+	if (isString(pattern) && isFloatStr.test(pattern)) {
 		const float = parseFloat(pattern);
 		pattern = float > 0 ? float * 1e3 : pattern;
 
-	} else if (Object.isNumber(pattern) && !pattern.isInteger()) {
+	} else if (isNumber(pattern) && !pattern.isInteger()) {
 		pattern *= 1e3;
 	}
 
@@ -101,89 +106,91 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 });
 
 /** @see [[Date.beginningOfDay]] */
-extend(Date.prototype, 'beginningOfDay', function beginningOfDay(this: Date): Date {
-	const date = this.clone();
+export const beginningOfDay = extend<Date['beginningOfDay']>(Date.prototype, 'beginningOfDay', function beginningOfDay(this: Date): Date {
+	const date = clone.call(this);
 	date.setHours(0, 0, 0, 0);
 	return date;
 });
 
-/** @see [[DateConstructor.beginningOfDay]] */
-extend(Date, 'beginningOfDay', (date: Date) => date.beginningOfDay());
-
 /** @see [[Date.endOfDay]] */
-extend(Date.prototype, 'endOfDay', function endOfDay(this: Date): Date {
-	const date = this.clone();
+export const endOfDay = extend<Date['endOfDay']>(Date.prototype, 'endOfDay', function endOfDay(this: Date): Date {
+	const date = clone.call(this);
 	date.setHours(23, 59, 59, 999);
 	return date;
 });
 
-/** @see [[DateConstructor.endOfDay]] */
-extend(Date, 'endOfDay', (date: Date) => date.endOfDay());
-
 /** @see [[Date.beginningOfWeek]] */
-extend(Date.prototype, 'beginningOfWeek', function beginningOfWeek(this: Date): Date {
-	const date = this.clone();
+export const beginningOfWeek = extend<Date['beginningOfWeek']>(Date.prototype, 'beginningOfWeek', function beginningOfWeek(this: Date): Date {
+	const date = clone.call(this);
 	date.setDate(this.getDate() - this.getDay());
 	return date.beginningOfDay();
 });
 
-/** @see [[DateConstructor.beginningOfWeek]] */
-extend(Date, 'beginningOfWeek', (date: Date) => date.beginningOfWeek());
-
 /** @see [[Date.endOfWeek]] */
-extend(Date.prototype, 'endOfWeek', function endOfWeek(this: Date): Date {
-	const date = this.clone();
+export const endOfWeek = extend<Date['endOfWeek']>(Date.prototype, 'endOfWeek', function endOfWeek(this: Date): Date {
+	const date = clone.call(this);
 	date.setDate(this.getDate() + 6 - this.getDay());
 	return date.endOfDay();
 });
 
-/** @see [[DateConstructor.endOfWeek]] */
-extend(Date, 'endOfWeek', (date: Date) => date.endOfWeek());
-
 /** @see [[Date.beginningOfMonth]] */
-extend(Date.prototype, 'beginningOfMonth', function beginningOfMonth(this: Date): Date {
-	const date = this.clone();
+export const beginningOfMonth = extend<Date['beginningOfMonth']>(Date.prototype, 'beginningOfMonth', function beginningOfMonth(this: Date): Date {
+	const date = clone.call(this);
 	date.setDate(1);
-	return date.beginningOfDay();
+	return beginningOfDay.call(date);
 });
-
-/** @see [[DateConstructor.beginningOfMonth]] */
-extend(Date, 'beginningOfMonth', (date: Date) => date.beginningOfMonth());
 
 /** @see [[Date.endOfMonth]] */
-extend(Date.prototype, 'endOfMonth', function endOfMonth(this: Date): Date {
-	const date = this.clone();
+export const endOfMonth = extend<Date['endOfMonth']>(Date.prototype, 'endOfMonth', function endOfMonth(this: Date): Date {
+	const date = clone.call(this);
 	date.setMonth(this.getMonth() + 1, 0);
-	return date.endOfDay();
+	return endOfDay.call(date);
 });
-
-/** @see [[DateConstructor.endOfMonth]] */
-extend(Date, 'endOfMonth', (date: Date) => date.endOfMonth());
 
 /** @see [[Date.daysInMonth]] */
-extend(Date.prototype, 'daysInMonth', function daysInMonth(this: Date): number {
-	return this.clone().endOfMonth().getDate();
+export const daysInMonth = extend<Date['daysInMonth']>(Date.prototype, 'daysInMonth', function daysInMonth(this: Date): number {
+	return endOfMonth.call(clone.call(this)).getDate();
 });
-
-/** @see [[DateConstructor.daysInMonth]] */
-extend(Date, 'daysInMonth', (date: Date) => date.daysInMonth());
 
 /** @see [[Date.beginningOfYear]] */
-extend(Date.prototype, 'beginningOfYear', function beginningOfYear(this: Date): Date {
-	const date = this.clone();
+export const beginningOfYear = extend<Date['beginningOfYear']>(Date.prototype, 'beginningOfYear', function beginningOfYear(this: Date): Date {
+	const date = clone.call(this);
 	date.setMonth(0, 1);
-	return date.beginningOfDay();
+	return beginningOfDay.call(date);
 });
+
+/** @see [[Date.endOfYear]] */
+export const endOfYear = extend<Date['endOfYear']>(Date.prototype, 'endOfYear', function endOfYear(this: Date): Date {
+	const date = clone.call(this);
+	date.setMonth(12, 0);
+	return endOfDay.call(date);
+});
+
+//#if prelude/standalone
+/** @see [[DateConstructor.endOfYear]] */
+extend(Date, 'endOfYear', (date: Date) => date.endOfYear());
 
 /** @see [[DateConstructor.beginningOfYear]] */
 extend(Date, 'beginningOfYear', (date: Date) => date.beginningOfYear());
 
-/** @see [[Date.endOfYear]] */
-extend(Date.prototype, 'endOfYear', function endOfYear(this: Date): Date {
-	const date = this.clone();
-	date.setMonth(12, 0);
-	return date.endOfDay();
-});
+/** @see [[DateConstructor.daysInMonth]] */
+extend(Date, 'daysInMonth', (date: Date) => date.daysInMonth());
 
-/** @see [[DateConstructor.endOfYear]] */
-extend(Date, 'endOfYear', (date: Date) => date.endOfYear());
+/** @see [[DateConstructor.endOfMonth]] */
+extend(Date, 'endOfMonth', (date: Date) => date.endOfMonth());
+
+/** @see [[DateConstructor.beginningOfMonth]] */
+extend(Date, 'beginningOfMonth', (date: Date) => date.beginningOfMonth());
+
+/** @see [[DateConstructor.endOfWeek]] */
+extend(Date, 'endOfWeek', (date: Date) => date.endOfWeek());
+
+/** @see [[DateConstructor.beginningOfWeek]] */
+extend(Date, 'beginningOfWeek', (date: Date) => date.beginningOfWeek());
+
+/** @see [[DateConstructor.endOfDay]] */
+extend(Date, 'endOfDay', (date: Date) => date.endOfDay());
+
+/** @see [[DateConstructor.beginningOfDay]] */
+extend(Date, 'beginningOfDay', (date: Date) => date.beginningOfDay());
+//#endif

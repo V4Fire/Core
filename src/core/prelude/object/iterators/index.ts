@@ -8,8 +8,22 @@
 
 import extend from 'core/prelude/extend';
 
+import {
+
+	isFunction,
+	isPlainObject,
+	isString,
+	isIterable,
+	isMap,
+	isSet,
+	isArray,
+	isArrayLike,
+	isTruly
+
+} from 'core/prelude/types';
+
 /** @see [[ObjectConstructor.forEach]] */
-extend(Object, 'forEach', (
+export const forEach = extend< typeof Object.forEach>(Object, 'forEach', (
 	obj: unknown,
 	optsOrCb: ObjectForEachOptions | AnyFunction,
 	cbOrOpts?: AnyFunction | ObjectForEachOptions
@@ -22,19 +36,19 @@ extend(Object, 'forEach', (
 		p: ObjectForEachOptions,
 		cb: AnyFunction;
 
-	if (Object.isFunction(cbOrOpts)) {
+	if (isFunction(cbOrOpts)) {
 		cb = cbOrOpts;
-		p = Object.isPlainObject(optsOrCb) ? optsOrCb : {};
+		p = isPlainObject(optsOrCb) ? optsOrCb : {};
 
 	} else {
-		if (Object.isFunction(optsOrCb)) {
+		if (isFunction(optsOrCb)) {
 			cb = optsOrCb;
 
 		} else {
 			throw new ReferenceError('A callback to iterate is not specified');
 		}
 
-		p = Object.isPlainObject(cbOrOpts) ? cbOrOpts : {};
+		p = isPlainObject(cbOrOpts) ? cbOrOpts : {};
 	}
 
 	const
@@ -60,7 +74,7 @@ extend(Object, 'forEach', (
 			notOwn = p.notOwn;
 	}
 
-	if (Object.isString(obj)) {
+	if (isString(obj)) {
 		let
 			i = 0;
 
@@ -88,7 +102,7 @@ extend(Object, 'forEach', (
 	}
 
 	if (!passDescriptor && notOwn == null) {
-		if (Object.isArrayLike(obj)) {
+		if (isArrayLike(obj)) {
 			for (let i = 0; i < obj.length; i++) {
 				cb(obj[i], i, obj);
 			}
@@ -96,7 +110,7 @@ extend(Object, 'forEach', (
 			return;
 		}
 
-		if (Object.isMap(obj) || Object.isSet(obj)) {
+		if (isMap(obj) || isSet(obj)) {
 			for (let o = obj.entries(), i = o.next(); !i.done; i = o.next()) {
 				const [key, el] = i.value;
 				cb(el, key, obj);
@@ -105,12 +119,12 @@ extend(Object, 'forEach', (
 			return;
 		}
 
-		if (Object.isIterable(obj)) {
+		if (isIterable(obj)) {
 			let
 				i = 0;
 
 			for (const el of obj) {
-				if (Object.isArray(el) && el.length === 2) {
+				if (isArray(el) && el.length === 2) {
 					cb(el[1], el[0], obj);
 
 				} else {
@@ -122,7 +136,7 @@ extend(Object, 'forEach', (
 		}
 	}
 
-	if (Object.isTruly(notOwn)) {
+	if (isTruly(notOwn)) {
 		if (notOwn === -1) {
 			for (const key in obj) {
 				if (Object.hasOwnProperty(obj, key)) {
@@ -136,8 +150,8 @@ extend(Object, 'forEach', (
 		}
 
 		if (p.withNonEnumerables) {
-			Object.forEach(obj, cb, {withNonEnumerables: true, passDescriptor});
-			Object.forEach(Object.getPrototypeOf(obj), cb, {propsToIterate: 'all', passDescriptor});
+			forEach(obj, cb, {withNonEnumerables: true, passDescriptor});
+			forEach(Object.getPrototypeOf(obj), cb, {propsToIterate: 'all', passDescriptor});
 			return;
 		}
 

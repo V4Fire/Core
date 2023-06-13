@@ -6,6 +6,15 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { letters } from 'core/prelude/string/index';
+import {
+
+	isTruly,
+	isBoolean,
+	isDictionary
+
+} from 'core/prelude/types';
+
 /**
  * Returns true, if the specified character is declared in upper case
  * @param char
@@ -87,7 +96,7 @@ export function toDasherize(
  */
 export function convertToSeparatedStr(str: string, separator: string, stable?: boolean): string {
 	const
-		symbols = [...str.letters()];
+		symbols = [...letters(str)];
 
 	let
 		res = '';
@@ -112,7 +121,7 @@ export function convertToSeparatedStr(str: string, separator: string, stable?: b
 		if (isCharUpper(el)) {
 			const needSeparator = i > 0 && (
 				stable ||
-				Object.isTruly(nextChar) && nextChar !== separator && !isCharUpper(nextChar)
+				isTruly(nextChar) && nextChar !== separator && !isCharUpper(nextChar)
 			);
 
 			if (needSeparator) {
@@ -124,7 +133,7 @@ export function convertToSeparatedStr(str: string, separator: string, stable?: b
 		} else {
 			res += el;
 
-			if (Object.isTruly(nextChar) && isCharUpper(nextChar)) {
+			if (isTruly(nextChar) && isCharUpper(nextChar)) {
 				res += separator;
 			}
 		}
@@ -139,7 +148,7 @@ export function convertToSeparatedStr(str: string, separator: string, stable?: b
  */
 export function createStaticTransformFunction(method: string): AnyFunction {
 	return (value: string | boolean | Dictionary, opts: boolean | Dictionary) => {
-		if (Object.isBoolean(value) || Object.isDictionary(value)) {
+		if (isBoolean(value) || isDictionary(value)) {
 			opts = value;
 			return (value) => String[method](value, opts);
 		}

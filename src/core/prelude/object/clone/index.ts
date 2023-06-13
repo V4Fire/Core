@@ -9,15 +9,26 @@
 import extend from 'core/prelude/extend';
 import type { ValMap } from 'core/prelude/object/clone/interface';
 
+import {
+
+	isTruly,
+	isFunction,
+	isFrozen,
+	isExtensible,
+	unwrapProxy,
+	isSealed
+
+} from 'core/prelude/types';
+
 const
 	objRef = '[[OBJ_REF:base]]',
 	valRef = '[[VAL_REF:';
 
 /** @see [[ObjectConstructor.fastClone]] */
-extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
-	if (!Object.isTruly(obj)) {
+export const fastClone = extend<typeof Object.fastClone>(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
+	if (!isTruly(obj)) {
 		if (opts !== undefined) {
-			return (obj) => Object.fastClone(obj, opts);
+			return (obj) => fastClone(obj, opts);
 		}
 
 		return obj;
@@ -31,14 +42,14 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 		const
 			p = opts ?? {};
 
-		if (Object.isFrozen(obj) && p.freezable !== false) {
+		if (isFrozen(obj) && p.freezable !== false) {
 			return obj;
 		}
 
 		let
 			clone;
 
-		if (Object.isFunction(p.reviver) || Object.isFunction(p.replacer)) {
+		if (isFunction(p.reviver) || isFunction(p.replacer)) {
 			clone = jsonBasedClone(obj, opts);
 
 		} else {
@@ -51,15 +62,15 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 		}
 
 		if (p.freezable !== false) {
-			if (!Object.isExtensible(obj)) {
+			if (!isExtensible(obj)) {
 				Object.preventExtensions(clone);
 			}
 
-			if (Object.isSealed(obj)) {
+			if (isSealed(obj)) {
 				Object.seal(clone);
 			}
 
-			if (Object.isFrozen(obj)) {
+			if (isFrozen(obj)) {
 				Object.freeze(clone);
 			}
 		}
@@ -76,7 +87,7 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 
 			for (let o = obj.entries(), el = o.next(); !el.done; el = o.next()) {
 				const val = el.value;
-				map.set(val[0], Object.fastClone(val[1], opts));
+				map.set(val[0], fastClone(val[1], opts));
 			}
 
 			return map;
@@ -87,7 +98,7 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 				set = new Set();
 
 			for (let o = obj.values(), el = o.next(); !el.done; el = o.next()) {
-				set.add(Object.fastClone(el.value, opts));
+				set.add(fastClone(el.value, opts));
 			}
 
 			return set;
@@ -197,7 +208,7 @@ export function createSerializer(
 			}
 		}
 
-		return Object.unwrapProxy(value);
+		return unwrapProxy(value);
 	};
 }
 
@@ -227,7 +238,7 @@ export function createParser(
 			}
 		}
 
-		if (Object.isFunction(reviver)) {
+		if (isFunction(reviver)) {
 			return reviver(key, value);
 		}
 

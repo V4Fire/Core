@@ -1,0 +1,580 @@
+{
+  "Array": {
+    "union": {
+      "path": "core/prelude/array",
+      "name": "union"
+    },
+    "concat": {
+      "path": "core/prelude/array",
+      "name": "concat"
+    }
+  },
+  "Date": {
+    "is": {
+      "path": "core/prelude/date/compare",
+      "name": "is"
+    },
+    "isPast": {
+      "path": "core/prelude/date/compare",
+      "name": "isPast"
+    },
+    "isFuture": {
+      "path": "core/prelude/date/compare",
+      "name": "isFuture"
+    },
+    "isAfter": {
+      "path": "core/prelude/date/compare",
+      "name": "isAfter"
+    },
+    "isBefore": {
+      "path": "core/prelude/date/compare",
+      "name": "isBefore"
+    },
+    "isBetween": {
+      "path": "core/prelude/date/compare",
+      "name": "isBetween"
+    },
+    "clone": {
+      "path": "core/prelude/date/create",
+      "name": "clone"
+    },
+    "create": {
+      "path": "core/prelude/date/create",
+      "name": "create"
+    },
+    "beginningOfDay": {
+      "path": "core/prelude/date/create",
+      "name": "beginningOfDay"
+    },
+    "endOfDay": {
+      "path": "core/prelude/date/create",
+      "name": "endOfDay"
+    },
+    "beginningOfWeek": {
+      "path": "core/prelude/date/create",
+      "name": "beginningOfWeek"
+    },
+    "endOfWeek": {
+      "path": "core/prelude/date/create",
+      "name": "endOfWeek"
+    },
+    "beginningOfMonth": {
+      "path": "core/prelude/date/create",
+      "name": "beginningOfMonth"
+    },
+    "endOfMonth": {
+      "path": "core/prelude/date/create",
+      "name": "endOfMonth"
+    },
+    "daysInMonth": {
+      "path": "core/prelude/date/create",
+      "name": "daysInMonth"
+    },
+    "beginningOfYear": {
+      "path": "core/prelude/date/create",
+      "name": "beginningOfYear"
+    },
+    "endOfYear": {
+      "path": "core/prelude/date/create",
+      "name": "endOfYear"
+    },
+    "format": {
+      "path": "core/prelude/date/format",
+      "name": "format"
+    },
+    "short": {
+      "path": "core/prelude/date/format",
+      "name": "short"
+    },
+    "medium": {
+      "path": "core/prelude/date/format",
+      "name": "medium"
+    },
+    "long": {
+      "path": "core/prelude/date/format",
+      "name": "long"
+    },
+    "toHTMLTimeString": {
+      "path": "core/prelude/date/format",
+      "name": "toHTMLTimeString"
+    },
+    "toHTMLDateString": {
+      "path": "core/prelude/date/format",
+      "name": "toHTMLDateString"
+    },
+    "toHTMLString": {
+      "path": "core/prelude/date/format",
+      "name": "toHTMLString"
+    },
+    "add": {
+      "path": "core/prelude/date/modify",
+      "name": "add"
+    },
+    "set": {
+      "path": "core/prelude/date/modify",
+      "name": "set"
+    },
+    "rewind": {
+      "path": "core/prelude/date/modify",
+      "name": "rewind"
+    },
+    "relative": {
+      "path": "core/prelude/date/relative",
+      "name": "relative"
+    },
+    "relativeTo": {
+      "path": "core/prelude/date/relative",
+      "name": "relativeTo"
+    }
+  },
+  "Function": {
+    "compose": {
+      "path": "core/prelude/function/compose",
+      "name": "compose"
+    },
+    "curry": {
+      "path": "core/prelude/function/curry",
+      "name": "curry"
+    },
+    "debounce": {
+      "path": "core/prelude/function/lazy",
+      "name": "debounce"
+    },
+    "throttle": {
+      "path": "core/prelude/function/lazy",
+      "name": "throttle"
+    },
+    "once": {
+      "path": "core/prelude/function/memoize",
+      "name": "once"
+    },
+    "option": {
+      "path": "core/prelude/function/monad",
+      "name": "option"
+    },
+    "result": {
+      "path": "core/prelude/function/monad",
+      "name": "result"
+    }
+  },
+  "Object": {
+    "Option": {
+      "path": "core/prelude/function/monad",
+      "name": "Option"
+    },
+    "Result": {
+      "path": "core/prelude/function/monad",
+      "name": "Result"
+    },
+    "fastClone": {
+      "path": "core/prelude/object/clone",
+      "name": "fastClone"
+    },
+    "fastCompare": {
+      "path": "core/prelude/object/compare",
+      "name": "fastCompare"
+    },
+    "trySerialize": {
+      "path": "core/prelude/object/convert",
+      "name": "trySerialize"
+    },
+    "parse": {
+      "path": "core/prelude/object/convert",
+      "name": "parse"
+    },
+    "createDict": {
+      "path": "core/prelude/object/create",
+      "name": "createDict"
+    },
+    "convertEnumToDict": {
+      "path": "core/prelude/object/create",
+      "name": "convertEnumToDict"
+    },
+    "createEnumLike": {
+      "path": "core/prelude/object/create",
+      "name": "createEnumLike"
+    },
+    "fromArray": {
+      "path": "core/prelude/object/create",
+      "name": "fromArray"
+    },
+    "select": {
+      "path": "core/prelude/object/create",
+      "name": "select"
+    },
+    "reject": {
+      "path": "core/prelude/object/create",
+      "name": "reject"
+    },
+    "forEach": {
+      "path": "core/prelude/object/iterators",
+      "name": "forEach"
+    },
+    "size": {
+      "path": "core/prelude/object/metrics",
+      "name": "size"
+    },
+    "mixin": {
+      "path": "core/prelude/object/mixin",
+      "name": "mixin"
+    },
+    "get": {
+      "path": "core/prelude/object/property",
+      "name": "get"
+    },
+    "has": {
+      "path": "core/prelude/object/property",
+      "name": "has"
+    },
+    "hasOwnProperty": {
+      "path": "core/prelude/object/property",
+      "name": "hasOwnProperty"
+    },
+    "defineSymbol": {
+      "path": "core/prelude/object/property",
+      "name": "defineSymbol"
+    },
+    "set": {
+      "path": "core/prelude/object/property",
+      "name": "set"
+    },
+    "delete": {
+      "path": "core/prelude/object/property",
+      "name": "deleteObj"
+    },
+    "cast": {
+      "path": "core/prelude/types",
+      "name": "cast"
+    },
+    "isTruly": {
+      "path": "core/prelude/types",
+      "name": "isTruly"
+    },
+    "isPrimitive": {
+      "path": "core/prelude/types",
+      "name": "isPrimitive"
+    },
+    "isUndef": {
+      "path": "core/prelude/types",
+      "name": "isUndef"
+    },
+    "isNull": {
+      "path": "core/prelude/types",
+      "name": "isNull"
+    },
+    "isNullable": {
+      "path": "core/prelude/types",
+      "name": "isNullable"
+    },
+    "isString": {
+      "path": "core/prelude/types",
+      "name": "isString"
+    },
+    "throw": {
+      "path": "core/prelude/types",
+      "name": "objThrow"
+    },
+    "isNumber": {
+      "path": "core/prelude/types",
+      "name": "isNumber"
+    },
+    "isBoolean": {
+      "path": "core/prelude/types",
+      "name": "isBoolean"
+    },
+    "isSymbol": {
+      "path": "core/prelude/types",
+      "name": "isSymbol"
+    },
+    "isRegExp": {
+      "path": "core/prelude/types",
+      "name": "isRegExp"
+    },
+    "isDate": {
+      "path": "core/prelude/types",
+      "name": "isDate"
+    },
+    "isArray": {
+      "path": "core/prelude/types",
+      "name": "isArray"
+    },
+    "isArrayLike": {
+      "path": "core/prelude/types",
+      "name": "isArrayLike"
+    },
+    "isMap": {
+      "path": "core/prelude/types",
+      "name": "isMap"
+    },
+    "isWeakMap": {
+      "path": "core/prelude/types",
+      "name": "isWeakMap"
+    },
+    "isSet": {
+      "path": "core/prelude/types",
+      "name": "isSet"
+    },
+    "isWeakSet": {
+      "path": "core/prelude/types",
+      "name": "isWeakSet"
+    },
+    "isDictionary": {
+      "path": "core/prelude/types",
+      "name": "isDictionary"
+    },
+    "isPlainObject": {
+      "path": "core/prelude/types",
+      "name": "isPlainObject"
+    },
+    "unwrapProxy": {
+      "path": "core/prelude/types",
+      "name": "unwrapProxy"
+    },
+    "isCustomObject": {
+      "path": "core/prelude/types",
+      "name": "isCustomObject"
+    },
+    "isSimpleObject": {
+      "path": "core/prelude/types",
+      "name": "isSimpleObject"
+    },
+    "isFunction": {
+      "path": "core/prelude/types",
+      "name": "isFunction"
+    },
+    "isSimpleFunction": {
+      "path": "core/prelude/types",
+      "name": "isSimpleFunction"
+    },
+    "isGenerator": {
+      "path": "core/prelude/types",
+      "name": "isGenerator"
+    },
+    "isAsyncGenerator": {
+      "path": "core/prelude/types",
+      "name": "isAsyncGenerator"
+    },
+    "isIterator": {
+      "path": "core/prelude/types",
+      "name": "isIterator"
+    },
+    "isIterable": {
+      "path": "core/prelude/types",
+      "name": "isIterable"
+    },
+    "isAsyncIterable": {
+      "path": "core/prelude/types",
+      "name": "isAsyncIterable"
+    },
+    "isIterableIterator": {
+      "path": "core/prelude/types",
+      "name": "isIterableIterator"
+    },
+    "isAsyncIterator": {
+      "path": "core/prelude/types",
+      "name": "isAsyncIterator"
+    },
+    "isAnyIterator": {
+      "path": "core/prelude/types",
+      "name": "isAnyIterator"
+    },
+    "isAnyIterable": {
+      "path": "core/prelude/types",
+      "name": "isAnyIterable"
+    },
+    "isPromise": {
+      "path": "core/prelude/types",
+      "name": "isPromise"
+    },
+    "isPromiseLike": {
+      "path": "core/prelude/types",
+      "name": "isPromiseLike"
+    },
+    "isProxy": {
+      "path": "core/prelude/types",
+      "name": "isProxy"
+    }
+  },
+  "Number": {
+    "second": {
+      "path": "core/prelude/number/converters",
+      "name": "second"
+    },
+    "seconds": {
+      "path": "core/prelude/number/converters",
+      "name": "seconds"
+    },
+    "minute": {
+      "path": "core/prelude/number/converters",
+      "name": "minute"
+    },
+    "minutes": {
+      "path": "core/prelude/number/converters",
+      "name": "minutes"
+    },
+    "hour": {
+      "path": "core/prelude/number/converters",
+      "name": "hour"
+    },
+    "hours": {
+      "path": "core/prelude/number/converters",
+      "name": "hours"
+    },
+    "day": {
+      "path": "core/prelude/number/converters",
+      "name": "day"
+    },
+    "days": {
+      "path": "core/prelude/number/converters",
+      "name": "days"
+    },
+    "week": {
+      "path": "core/prelude/number/converters",
+      "name": "week"
+    },
+    "weeks": {
+      "path": "core/prelude/number/converters",
+      "name": "weeks"
+    },
+    "em": {
+      "path": "core/prelude/number/converters",
+      "name": "em"
+    },
+    "rem": {
+      "path": "core/prelude/number/converters",
+      "name": "rem"
+    },
+    "px": {
+      "path": "core/prelude/number/converters",
+      "name": "px"
+    },
+    "per": {
+      "path": "core/prelude/number/converters",
+      "name": "per"
+    },
+    "vh": {
+      "path": "core/prelude/number/converters",
+      "name": "vh"
+    },
+    "vw": {
+      "path": "core/prelude/number/converters",
+      "name": "vw"
+    },
+    "vmin": {
+      "path": "core/prelude/number/converters",
+      "name": "vmin"
+    },
+    "vmax": {
+      "path": "core/prelude/number/converters",
+      "name": "vmax"
+    },
+    "pad": {
+      "path": "core/prelude/number/format",
+      "name": "pad"
+    },
+    "format": {
+      "path": "core/prelude/number/format",
+      "name": "format"
+    },
+    "isSafe": {
+      "path": "core/prelude/number/metrics",
+      "name": "isSafe"
+    },
+    "isInteger": {
+      "path": "core/prelude/number/metrics",
+      "name": "isInteger"
+    },
+    "isFloat": {
+      "path": "core/prelude/number/metrics",
+      "name": "isFloat"
+    },
+    "isEven": {
+      "path": "core/prelude/number/metrics",
+      "name": "isEven"
+    },
+    "isOdd": {
+      "path": "core/prelude/number/metrics",
+      "name": "isOdd"
+    },
+    "isNatural": {
+      "path": "core/prelude/number/metrics",
+      "name": "isNatural"
+    },
+    "isPositive": {
+      "path": "core/prelude/number/metrics",
+      "name": "isPositive"
+    },
+    "isNegative": {
+      "path": "core/prelude/number/metrics",
+      "name": "isNegative"
+    },
+    "isNonNegative": {
+      "path": "core/prelude/number/metrics",
+      "name": "isNonNegative"
+    },
+    "isBetweenZeroAndOne": {
+      "path": "core/prelude/number/metrics",
+      "name": "isBetweenZeroAndOne"
+    },
+    "isPositiveBetweenZeroAndOne": {
+      "path": "core/prelude/number/metrics",
+      "name": "isPositiveBetweenZeroAndOne"
+    },
+    "floor": {
+      "path": "core/prelude/number/rounding",
+      "name": "floor"
+    },
+    "round": {
+      "path": "core/prelude/number/rounding",
+      "name": "round"
+    },
+    "ceil": {
+      "path": "core/prelude/number/rounding",
+      "name": "ceil"
+    }
+  },
+  "RegExp": {
+    "escape": {
+      "path": "core/prelude/regexp",
+      "name": "escape"
+    },
+    "addFlags": {
+      "path": "core/prelude/regexp",
+      "name": "addFlags"
+    },
+    "removeFlags": {
+      "path": "core/prelude/regexp",
+      "name": "removeFlags"
+    },
+    "test": {
+      "path": "core/prelude/regexp",
+      "name": "test"
+    },
+    "setFlags": {
+      "path": "core/prelude/regexp",
+      "name": "setFlags"
+    }
+  },
+  "String": {
+    "letters": {
+      "path": "core/prelude/string",
+      "name": "letters"
+    },
+    "capitalize": {
+      "path": "core/prelude/string",
+      "name": "capitalize"
+    },
+    "camelize": {
+      "path": "core/prelude/string",
+      "name": "camelize"
+    },
+    "dasherize": {
+      "path": "core/prelude/string",
+      "name": "dasherize"
+    },
+    "underscore": {
+      "path": "core/prelude/string",
+      "name": "underscore"
+    }
+  }
+}

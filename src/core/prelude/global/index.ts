@@ -24,3 +24,14 @@ extend(globalThis, 'stderr', (err) => {
 		log.error('stderr', err);
 	}
 });
+
+export const stderr = (err: any): void => {
+	if (err instanceof Object) {
+		if (errorsToIgnore[err.type] === true) {
+			log.info('stderr', err);
+			return;
+		}
+
+		log.error('stderr', err);
+	}
+};

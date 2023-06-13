@@ -9,8 +9,16 @@
 import extend from 'core/prelude/extend';
 import { emptyArray } from 'core/prelude/array/const';
 
+import {
+
+	isIterable,
+	isPrimitive,
+	cast
+
+} from 'core/prelude/types';
+
 /** @see [[Array.union]] */
-extend(Array.prototype, 'union', function union(
+export const union = extend<typeof Array.union>(Array.prototype, 'union', function union(
 	this: unknown[],
 	...args: Array<Iterable<unknown> | unknown>
 ): unknown[] {
@@ -28,8 +36,8 @@ extend(Array.prototype, 'union', function union(
 				continue;
 			}
 
-			if (Object.isIterable(val) && !Object.isPrimitive(val)) {
-				yield* Object.cast(val[Symbol.iterator]());
+			if (isIterable(val) && !isPrimitive(val)) {
+				yield* cast(val[Symbol.iterator]());
 
 			} else {
 				yield val;
@@ -40,17 +48,8 @@ extend(Array.prototype, 'union', function union(
 	return [...new Set(makeIterator())];
 });
 
-/** @see [[ArrayConstructor.union]] */
-extend(Array, 'union', (arr: unknown[], ...args: Array<Iterable<unknown> | unknown>) => {
-	if (args.length === 0) {
-		return (...args) => Array.union(arr, ...args);
-	}
-
-	return arr.union(...args);
-});
-
 /** @see [[ArrayConstructor.concat]] */
-extend(Array, 'concat', (arr: unknown[], ...args: Array<CanArray<unknown>>) => {
+export const concat = extend<typeof Array.concat>(Array, 'concat', (arr: unknown[], ...args: Array<CanArray<unknown>>) => {
 	if (args.length === 0) {
 		return (...args) => Array.concat(arr, ...args);
 	}
@@ -58,23 +57,26 @@ extend(Array, 'concat', (arr: unknown[], ...args: Array<CanArray<unknown>>) => {
 	// Optimization for simple cases
 	switch (args.length) {
 		case 1:
-			return arr.concat(args[0] != null ? args[0] : emptyArray);
+			return concat.call(arr, args[0] != null ? args[0] : emptyArray);
 
 		case 2:
-			return arr.concat(
+			return concat.call(
+				arr,
 				args[0] != null ? args[0] : emptyArray,
 				args[1] != null ? args[1] : emptyArray
 			);
 
 		case 3:
-			return arr.concat(
+			return concat.call(
+				arr,
 				args[0] != null ? args[0] : emptyArray,
 				args[1] != null ? args[1] : emptyArray,
 				args[2] != null ? args[2] : emptyArray
 			);
 
 		case 4:
-			return arr.concat(
+			return concat.call(
+				arr,
 				args[0] != null ? args[0] : emptyArray,
 				args[1] != null ? args[1] : emptyArray,
 				args[2] != null ? args[2] : emptyArray,
@@ -94,7 +96,18 @@ extend(Array, 'concat', (arr: unknown[], ...args: Array<CanArray<unknown>>) => {
 				}
 			}
 
-			return arr.concat(...filteredArgs);
+			return concat.call(arr, ...filteredArgs);
 		}
 	}
 });
+
+// #if prelude/standalone
+/** @see [[ArrayConstructor.union]] */
+extend(Array, 'union', (arr: unknown[], ...args: Array<Iterable<unknown> | unknown>) => {
+	if (args.length === 0) {
+		return (...args) => arr.union(arr, ...args);
+	}
+
+	return arr.union(...args);
+});
+// #endif

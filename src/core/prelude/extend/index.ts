@@ -13,7 +13,11 @@
  * @param name - method name
  * @param method
  */
-export default function extend(obj: Function | object, name: string, method: Function | PropertyDescriptor): void {
+export default function extend<
+		T
+	>(obj: Function | object,
+		name: string,
+		method: AnyFunction | PropertyDescriptor): T {
 	const descriptor: PropertyDescriptor = {
 		configurable: true
 	};
@@ -62,4 +66,11 @@ export default function extend(obj: Function | object, name: string, method: Fun
 	Object.defineProperty(obj, name, descriptor);
 
 	//#endunless
+	return function extendedFunc(...args: any) {
+		if (typeof method === 'function') {
+				return method.call(...args);
+		}
+
+		return method;
+	};
 }

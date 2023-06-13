@@ -20,6 +20,8 @@ import {
 
 } from 'core/prelude/structures/sync-promise/interface';
 
+import { isTruly, isPromiseLike } from 'core/prelude/types';
+
 export * from 'core/prelude/structures/sync-promise/interface';
 
 /**
@@ -46,7 +48,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	static resolve(): SyncPromise<void>;
 	static resolve<T = unknown>(value?: Value<T>): SyncPromise<T> {
 		const
-			Constr = Object.isTruly(this) ? this : SyncPromise;
+			Constr = isTruly(this) ? this : SyncPromise;
 
 		if (value instanceof Constr) {
 			return value;
@@ -60,7 +62,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	 * @param [reason]
 	 */
 	static reject<T = never>(reason?: unknown): SyncPromise<T> {
-		const Constr = Object.isTruly(this) ? this : SyncPromise;
+		const Constr = isTruly(this) ? this : SyncPromise;
 		return new Constr((_, reject) => reject(reason));
 	}
 
@@ -322,7 +324,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 
 			this.value = val;
 
-			if (Object.isPromiseLike(val)) {
+			if (isPromiseLike(val)) {
 				// eslint-disable-next-line @typescript-eslint/no-use-before-define
 				val.then(forceResolve, reject);
 				return;
@@ -452,7 +454,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 					let
 						res = cb?.();
 
-					if (Object.isPromiseLike(res)) {
+					if (isPromiseLike(res)) {
 						res = res.then(() => this.value);
 
 					} else {
@@ -471,7 +473,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 					let
 						res = cb?.();
 
-					if (Object.isPromiseLike(res)) {
+					if (isPromiseLike(res)) {
 						res = res.then(() => this.value);
 						resolve(res);
 
@@ -515,7 +517,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 			const
 				res = fn?.(...args);
 
-			if (Object.isPromiseLike(res)) {
+			if (isPromiseLike(res)) {
 				(<PromiseLike<V>>res).then(resolve, reject);
 
 			} else {
