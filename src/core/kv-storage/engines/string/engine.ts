@@ -130,7 +130,13 @@ export default class StringEngine {
 	 * Returns data in dictionary format
 	 */
 	protected getDataFromRaw(): Dictionary<string> {
-		return this.getRawData().split(stringStorageSeparators.keys).reduce((acc, el) => {
+		const rawData = this.getRawData();
+
+		if (rawData === '') {
+			return {};
+		}
+
+		return rawData.split(stringStorageSeparators.keys).reduce((acc, el) => {
 			const [key, value] = el.split(stringStorageSeparators.values);
 			acc[key] = value;
 			return acc;
