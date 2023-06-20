@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 
 /** @see [[Function.addToPrototype]] */
-extend(Function.prototype, 'addToPrototype', function addToPrototype(
+export const addToPrototype = extend(Function.prototype, 'addToPrototype', function addToPrototype(
 	this: AnyFunction,
 	...args: Array<Dictionary<Function> | Function>
 ): AnyFunction {

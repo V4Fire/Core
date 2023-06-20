@@ -96,7 +96,7 @@ export function toDasherize(
  */
 export function convertToSeparatedStr(str: string, separator: string, stable?: boolean): string {
 	const
-		symbols = [...letters(str)];
+		symbols = [...letters.call(str)];
 
 	let
 		res = '';
