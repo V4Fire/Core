@@ -56,7 +56,7 @@ export default class StringEngine {
 			isForbiddenCharacterUsed = dividersValues.some((el) => key.includes(el) || String(value).includes(el));
 
 		if (isForbiddenCharacterUsed) {
-			throw new TypeError(`Forbidden character used in the cookie storage key: ${key}, value: ${String(value)}`);
+			throw new TypeError(`Forbidden character used in the string storage key: ${key}, value: ${String(value)}`);
 		}
 
 		this.updateData({[key]: String(value)});
