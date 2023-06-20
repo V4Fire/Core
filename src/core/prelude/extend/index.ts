@@ -18,5 +18,9 @@ export default function extend<
 	>(obj: Function | object,
 		name: string,
 		method: AnyFunction | PropertyDescriptor): T {
+	if (obj === globalThis) {
+		obj[name] = method;
+	}
+
 	return method;
 }
