@@ -11,7 +11,3 @@ import StringEngine from 'core/kv-storage/engines/string/engine';
 export const
 	syncSessionStorage = new StringEngine(),
 	asyncSessionStorage = syncSessionStorage;
-
-export const
-	syncLocalStorage = new StringEngine(),
-	asyncLocalStorage = syncLocalStorage;

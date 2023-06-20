@@ -36,7 +36,12 @@ export default class StringEngine {
 	 */
 	get(key: string): CanUndef<Primitive> {
 		const value = this.getDataFromRaw()[key];
-		return value != null ? JSON.parse(value) : value;
+
+		try {
+			return value != null ? JSON.parse(value) : value;
+		} catch {
+			return value;
+		}
 	}
 
 	/**
