@@ -700,3 +700,13 @@ export interface RequestEngine {
 	 */
 	pendingCache?: boolean;
 }
+
+/**
+ * Config for request engines
+ */
+export interface RequestConfig {
+	/**
+	 * If true, requests will be sent even if there is no Internet connection
+	 */
+	workOffline?: boolean;
+}

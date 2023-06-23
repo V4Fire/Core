@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.? (2023-??-??)
+
+#### :rocket: New Feature
+
+* Added the ability to enable sending requests without the Internet connection `core/request`
+
 ## v3.95.1 (2023-04-18)
 
 #### :rocket: New Feature

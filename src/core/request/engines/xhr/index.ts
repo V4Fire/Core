@@ -15,6 +15,8 @@
 import XMLHttpRequest from 'xhr2';
 //#endif
 
+import config from 'config';
+
 import AbortablePromise from 'core/promise/abortable';
 
 import { IS_NODE } from 'core/env';
@@ -82,7 +84,7 @@ const request: RequestEngine = (params) => {
 		const
 			{status} = await AbortablePromise.resolve(isOnline(), p.parent);
 
-		if (!status) {
+		if (!status && !config.request.workOffline) {
 			return reject(new RequestError(RequestError.Offline));
 		}
 

@@ -68,6 +68,10 @@ const config: Config = {
 		cacheTTL: (1).second()
 	},
 
+	request: {
+		workOffline: false
+	},
+
 	kvStorage: {
 		nodePath: './tmp/local'
 	},

@@ -11,6 +11,11 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.? (2023-??-??)
+
+#### :rocket: New Feature
+
+* Added the ability to enable sending requests without the Internet connection `core/request`
 
 ## v3.95.4 (2023-05-25)
 

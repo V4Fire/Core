@@ -15,6 +15,8 @@
 import fetch from 'core/request/engines/fetch/node';
 //#endif
 
+import config from 'config';
+
 import AbortablePromise from 'core/promise/abortable';
 import { isOnline } from 'core/net';
 
@@ -73,7 +75,7 @@ const request: RequestEngine = (params) => {
 		const
 			{status} = await AbortablePromise.resolve(isOnline(), p.parent);
 
-		if (!status) {
+		if (!status && !config.request.workOffline) {
 			return reject(new RequestError(RequestError.Offline));
 		}
 
