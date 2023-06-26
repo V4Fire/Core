@@ -7,11 +7,13 @@ const
 
 const primitiveTypes = ['Number', 'Array', 'Date', 'Object', 'String', 'RegExp', 'Function'];
 const formatPath = (fullPath) => {
-	if (fullPath.endsWith('/index.ts')) {
-		return fullPath.replace('/index.ts', '');
+	const path = fullPath.replace(/.*\/src\//, '');
+
+	if (path.endsWith('/index.ts')) {
+		return path.replace('/index.ts', '');
 	}
 
-	return fullPath.replace('.ts', '');
+	return path.replace('.ts', '');
 };
 
 function extractPreludeInfo() {

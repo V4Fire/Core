@@ -1,583 +1,583 @@
 {
   "Array": {
     "union": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/array",
+      "path": "core/prelude/array",
       "name": "union"
     },
     "concat": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/array",
+      "path": "core/prelude/array",
       "name": "concat"
     }
   },
   "Date": {
     "is": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/compare",
+      "path": "core/prelude/date/compare",
       "name": "is"
     },
     "isPast": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/compare",
+      "path": "core/prelude/date/compare",
       "name": "isPast"
     },
     "isFuture": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/compare",
+      "path": "core/prelude/date/compare",
       "name": "isFuture"
     },
     "isAfter": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/compare",
+      "path": "core/prelude/date/compare",
       "name": "isAfter"
     },
     "isBefore": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/compare",
+      "path": "core/prelude/date/compare",
       "name": "isBefore"
     },
     "isBetween": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/compare",
+      "path": "core/prelude/date/compare",
       "name": "isBetween"
     },
     "clone": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/create",
+      "path": "core/prelude/date/create",
       "name": "clone"
     },
     "create": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/create",
+      "path": "core/prelude/date/create",
       "name": "create"
     },
     "beginningOfDay": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/create",
+      "path": "core/prelude/date/create",
       "name": "beginningOfDay"
     },
     "endOfDay": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/create",
+      "path": "core/prelude/date/create",
       "name": "endOfDay"
     },
     "beginningOfWeek": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/create",
+      "path": "core/prelude/date/create",
       "name": "beginningOfWeek"
     },
     "endOfWeek": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/create",
+      "path": "core/prelude/date/create",
       "name": "endOfWeek"
     },
     "beginningOfMonth": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/create",
+      "path": "core/prelude/date/create",
       "name": "beginningOfMonth"
     },
     "endOfMonth": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/create",
+      "path": "core/prelude/date/create",
       "name": "endOfMonth"
     },
     "daysInMonth": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/create",
+      "path": "core/prelude/date/create",
       "name": "daysInMonth"
     },
     "beginningOfYear": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/create",
+      "path": "core/prelude/date/create",
       "name": "beginningOfYear"
     },
     "endOfYear": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/create",
+      "path": "core/prelude/date/create",
       "name": "endOfYear"
     },
     "format": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/format",
+      "path": "core/prelude/date/format",
       "name": "format"
     },
     "short": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/format",
+      "path": "core/prelude/date/format",
       "name": "short"
     },
     "medium": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/format",
+      "path": "core/prelude/date/format",
       "name": "medium"
     },
     "long": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/format",
+      "path": "core/prelude/date/format",
       "name": "long"
     },
     "toHTMLTimeString": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/format",
+      "path": "core/prelude/date/format",
       "name": "toHTMLTimeString"
     },
     "toHTMLDateString": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/format",
+      "path": "core/prelude/date/format",
       "name": "toHTMLDateString"
     },
     "toHTMLString": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/format",
+      "path": "core/prelude/date/format",
       "name": "toHTMLString"
     },
     "add": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/modify",
+      "path": "core/prelude/date/modify",
       "name": "add"
     },
     "set": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/modify",
+      "path": "core/prelude/date/modify",
       "name": "set"
     },
     "rewind": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/modify",
+      "path": "core/prelude/date/modify",
       "name": "rewind"
     },
     "relative": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/relative",
+      "path": "core/prelude/date/relative",
       "name": "relative"
     },
     "relativeTo": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/date/relative",
+      "path": "core/prelude/date/relative",
       "name": "relativeTo"
     }
   },
   "Function": {
     "compose": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/function/compose",
+      "path": "core/prelude/function/compose",
       "name": "compose"
     },
     "curry": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/function/curry",
+      "path": "core/prelude/function/curry",
       "name": "curry"
     },
     "addToPrototype": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/function/extend",
+      "path": "core/prelude/function/extend",
       "name": "addToPrototype"
     },
     "debounce": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/function/lazy",
+      "path": "core/prelude/function/lazy",
       "name": "debounce"
     },
     "throttle": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/function/lazy",
+      "path": "core/prelude/function/lazy",
       "name": "throttle"
     },
     "once": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/function/memoize",
+      "path": "core/prelude/function/memoize",
       "name": "once"
     },
     "option": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/function/monad",
+      "path": "core/prelude/function/monad",
       "name": "option"
     },
     "result": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/function/monad",
+      "path": "core/prelude/function/monad",
       "name": "result"
     }
   },
   "Object": {
     "Option": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/function/monad",
+      "path": "core/prelude/function/monad",
       "name": "Option"
     },
     "Result": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/function/monad",
+      "path": "core/prelude/function/monad",
       "name": "Result"
     },
     "fastClone": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/clone",
+      "path": "core/prelude/object/clone",
       "name": "fastClone"
     },
     "fastCompare": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/compare",
+      "path": "core/prelude/object/compare",
       "name": "fastCompare"
     },
     "trySerialize": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/convert",
+      "path": "core/prelude/object/convert",
       "name": "trySerialize"
     },
     "parse": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/convert",
+      "path": "core/prelude/object/convert",
       "name": "parse"
     },
     "createDict": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/create",
+      "path": "core/prelude/object/create",
       "name": "createDict"
     },
     "convertEnumToDict": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/create",
+      "path": "core/prelude/object/create",
       "name": "convertEnumToDict"
     },
     "createEnumLike": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/create",
+      "path": "core/prelude/object/create",
       "name": "createEnumLike"
     },
     "fromArray": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/create",
+      "path": "core/prelude/object/create",
       "name": "fromArray"
     },
     "select": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/create",
+      "path": "core/prelude/object/create",
       "name": "select"
     },
     "reject": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/create",
+      "path": "core/prelude/object/create",
       "name": "reject"
     },
     "forEach": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/iterators",
+      "path": "core/prelude/object/iterators",
       "name": "forEach"
     },
     "size": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/metrics",
+      "path": "core/prelude/object/metrics",
       "name": "size"
     },
     "mixin": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/mixin",
+      "path": "core/prelude/object/mixin",
       "name": "mixin"
     },
     "get": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/property",
+      "path": "core/prelude/object/property",
       "name": "get"
     },
     "has": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/property",
+      "path": "core/prelude/object/property",
       "name": "has"
     },
     "hasOwnProperty": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/property",
+      "path": "core/prelude/object/property",
       "name": "hasOwnProperty"
     },
     "defineSymbol": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/property",
+      "path": "core/prelude/object/property",
       "name": "defineSymbol"
     },
     "set": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/property",
+      "path": "core/prelude/object/property",
       "name": "set"
     },
     "delete": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/object/property",
+      "path": "core/prelude/object/property",
       "name": "deleteObj"
     },
     "cast": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "cast"
     },
     "isTruly": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isTruly"
     },
     "isPrimitive": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isPrimitive"
     },
     "isUndef": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isUndef"
     },
     "isNull": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isNull"
     },
     "isNullable": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isNullable"
     },
     "isString": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isString"
     },
     "throw": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "objThrow"
     },
     "isNumber": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isNumber"
     },
     "isBoolean": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isBoolean"
     },
     "isSymbol": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isSymbol"
     },
     "isRegExp": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isRegExp"
     },
     "isDate": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isDate"
     },
     "isArray": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isArray"
     },
     "isArrayLike": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isArrayLike"
     },
     "isMap": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isMap"
     },
     "isWeakMap": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isWeakMap"
     },
     "isSet": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isSet"
     },
     "isWeakSet": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isWeakSet"
     },
     "isDictionary": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isDictionary"
     },
     "isPlainObject": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isPlainObject"
     },
     "unwrapProxy": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "unwrapProxy"
     },
     "isCustomObject": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isCustomObject"
     },
     "isSimpleObject": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isSimpleObject"
     },
     "isFunction": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isFunction"
     },
     "isSimpleFunction": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isSimpleFunction"
     },
     "isGenerator": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isGenerator"
     },
     "isAsyncGenerator": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isAsyncGenerator"
     },
     "isIterator": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isIterator"
     },
     "isIterable": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isIterable"
     },
     "isAsyncIterable": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isAsyncIterable"
     },
     "isIterableIterator": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isIterableIterator"
     },
     "isAsyncIterator": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isAsyncIterator"
     },
     "isAnyIterator": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isAnyIterator"
     },
     "isAnyIterable": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isAnyIterable"
     },
     "isPromise": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isPromise"
     },
     "isPromiseLike": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isPromiseLike"
     },
     "isProxy": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/types",
+      "path": "core/prelude/types",
       "name": "isProxy"
     }
   },
   "Number": {
     "second": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "second"
     },
     "seconds": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "seconds"
     },
     "minute": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "minute"
     },
     "minutes": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "minutes"
     },
     "hour": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "hour"
     },
     "hours": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "hours"
     },
     "day": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "day"
     },
     "days": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "days"
     },
     "week": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "week"
     },
     "weeks": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "weeks"
     },
     "em": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "em"
     },
     "rem": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "rem"
     },
     "px": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "px"
     },
     "per": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "per"
     },
     "vh": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "vh"
     },
     "vw": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "vw"
     },
     "vmin": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "vmin"
     },
     "vmax": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/converters",
+      "path": "core/prelude/number/converters",
       "name": "vmax"
     },
     "pad": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/format",
+      "path": "core/prelude/number/format",
       "name": "pad"
     },
     "format": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/format",
+      "path": "core/prelude/number/format",
       "name": "format"
     },
     "isSafe": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/metrics",
+      "path": "core/prelude/number/metrics",
       "name": "isSafe"
     },
     "isInteger": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/metrics",
+      "path": "core/prelude/number/metrics",
       "name": "isInteger"
     },
     "isFloat": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/metrics",
+      "path": "core/prelude/number/metrics",
       "name": "isFloat"
     },
     "isEven": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/metrics",
+      "path": "core/prelude/number/metrics",
       "name": "isEven"
     },
     "isOdd": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/metrics",
+      "path": "core/prelude/number/metrics",
       "name": "isOdd"
     },
     "isNatural": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/metrics",
+      "path": "core/prelude/number/metrics",
       "name": "isNatural"
     },
     "isPositive": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/metrics",
+      "path": "core/prelude/number/metrics",
       "name": "isPositive"
     },
     "isNegative": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/metrics",
+      "path": "core/prelude/number/metrics",
       "name": "isNegative"
     },
     "isNonNegative": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/metrics",
+      "path": "core/prelude/number/metrics",
       "name": "isNonNegative"
     },
     "isBetweenZeroAndOne": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/metrics",
+      "path": "core/prelude/number/metrics",
       "name": "isBetweenZeroAndOne"
     },
     "isPositiveBetweenZeroAndOne": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/metrics",
+      "path": "core/prelude/number/metrics",
       "name": "isPositiveBetweenZeroAndOne"
     },
     "floor": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/rounding",
+      "path": "core/prelude/number/rounding",
       "name": "floor"
     },
     "round": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/rounding",
+      "path": "core/prelude/number/rounding",
       "name": "round"
     },
     "ceil": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/number/rounding",
+      "path": "core/prelude/number/rounding",
       "name": "ceil"
     }
   },
   "RegExp": {
     "escape": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/regexp",
+      "path": "core/prelude/regexp",
       "name": "escape"
     },
     "addFlags": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/regexp",
+      "path": "core/prelude/regexp",
       "name": "addFlags"
     },
     "removeFlags": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/regexp",
+      "path": "core/prelude/regexp",
       "name": "removeFlags"
     },
     "test": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/regexp",
+      "path": "core/prelude/regexp",
       "name": "test"
     },
     "setFlags": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/regexp",
+      "path": "core/prelude/regexp",
       "name": "setFlags"
     }
   },
   "String": {
     "letters": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/string/iterators",
+      "path": "core/prelude/string/iterators",
       "name": "letters"
     },
     "capitalize": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/string/transformers",
+      "path": "core/prelude/string/transformers",
       "name": "capitalize"
     },
     "camelize": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/string/transformers",
+      "path": "core/prelude/string/transformers",
       "name": "camelize"
     },
     "dasherize": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/string/transformers",
+      "path": "core/prelude/string/transformers",
       "name": "dasherize"
     },
     "underscore": {
-      "path": "/users/kholstinin/projects/core/src/core/prelude/string/transformers",
+      "path": "core/prelude/string/transformers",
       "name": "underscore"
     }
   }

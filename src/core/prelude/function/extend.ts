@@ -8,6 +8,8 @@
 
 import extend from 'core/prelude/extend';
 
+import { isDictionary } from 'core/prelude/types';
+
 /** @see [[Function.addToPrototype]] */
 export const addToPrototype = extend(Function.prototype, 'addToPrototype', function addToPrototype(
 	this: AnyFunction,
@@ -20,7 +22,7 @@ export const addToPrototype = extend(Function.prototype, 'addToPrototype', funct
 		const
 			arg = args[i];
 
-		if (Object.isDictionary(arg)) {
+		if (isDictionary(arg)) {
 			Object.assign(prototype, arg);
 
 		} else {
