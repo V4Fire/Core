@@ -39,6 +39,7 @@ export default class StringEngine {
 
 		try {
 			return value != null ? JSON.parse(value) : value;
+
 		} catch {
 			return value;
 		}
