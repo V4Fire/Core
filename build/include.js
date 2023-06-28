@@ -28,23 +28,23 @@ const
 const IncludeOptions = {};
 
 /**
- * Returns a function to attach modules within node.js process with the support of WebPack "layers".
- * The returned function takes a path to require and takes a caller file's directory (to enable "@super" alias).
- * Also, the function can return a path or source code of the found file if there is provided special flag.
+ * Returns a function, which can import modules within node.js process from the specified directories.
+ * The returned function takes a path to require and optionally takes a caller file's directory (to enable "@super" alias).
+ * Also, the function can return a path or source code of the found file if a special flag is provided.
  *
  * @param {Array<string>} layers - list of layers
  * @returns {function (string, (string|IncludeOptions)?): ?}
  *
  * @example
  * ```js
- * global.include = include(['./', './node_modules/bla']);
+ * global.include = include(['./node_modules/bla', './']);
  *
- * // Searches the first existed file from a list:
+ * // Searches the first existing file from a list:
  * // ./build/i18n
  * // ./node_modules/bla/build/i18n
  * include('build/i18n');
  *
- * // Searches the first existed file from a list:
+ * // Searches the first existing file from a list:
  * // ./node_modules/bla/build/i18n
  * include('@super/build/i18n', __dirname);
  *
@@ -54,7 +54,7 @@ const IncludeOptions = {};
  * // Returns a path to the file
  * include('build/i18n', {return: 'path');
  *
- * // Returns source code of the file
+ * // Returns the source code of the file
  * include('@super/build/i18n', {return: 'source');
  * ```
  */
