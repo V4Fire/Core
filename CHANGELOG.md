@@ -21,6 +21,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Fixed an error when calling `String.capitalize` with an empty string
 
+## v3.XX.X (2023-XX-XX)
+
+#### :rocket: New Feature
+
+* `core/kv-storage` - added a new engine that builds storage based on a string
+
 ## v3.95.4 (2023-05-25)
 
 #### :bug: Bug Fix
