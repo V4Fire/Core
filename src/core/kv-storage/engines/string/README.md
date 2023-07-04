@@ -1,7 +1,10 @@
 # core/kv-storage/engines/string
 
-This module provides an engine for cookie-based "key-value" data storage.
-It allows you to work with your storage as with a regular dictionary, but store data inside in string format.
+This module provides an engine for string-based "key-value" data storage.
+
+## Usage
+
+This storage allows you to work with a standard interface. It is specifically beneficial when your data storage needs are confined to a string format, such as when storing data in cookies.
 
 ## How is data stored inside a string?
 
@@ -9,4 +12,4 @@ When saving, the data is serialized into a string, where special separator chara
 
 ## Restrictions
 
-After receiving the value, the engine tries to parse the value via `JSON.parse`. This means that the strings `'false'`, `'true'` will be converted to boolean.
+Once a value is retrieved, the engine attempts to parse the data using `JSON.parse`. Consequently, strings such as `'false'` and `'true'` are converted into corresponding boolean values. It's important to note this characteristic during data interpretation.
