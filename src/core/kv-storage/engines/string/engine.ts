@@ -72,7 +72,7 @@ export default class StringEngine {
 			isForbiddenCharacterUsed = separators.some((el) => key.includes(el) || String(value).includes(el));
 
 		if (isForbiddenCharacterUsed) {
-			throw new TypeError(`Forbidden character used in the string storage key: ${key}, value: ${String(value)}`);
+			throw new TypeError(`The forbidden character used in string storage keys is "${key}", with value "${String(value)}"`);
 		}
 
 		this.updateData({[key]: String(value)});
@@ -96,7 +96,7 @@ export default class StringEngine {
 				state = this.getDataFromRaw();
 
 			Object.entries(state).forEach(([key, value]) => {
-				if (filter(Object.cast(value), key) === true) {
+				if (filter(String(value), key) === true) {
 					delete state[key];
 				}
 			});
