@@ -65,6 +65,7 @@ export default class StringEngine {
 	 *
 	 * @param key
 	 * @param value
+	 * @throws {TypeError} if forbidden characters are used in the key or value when storing data
 	 */
 	set(key: string, value: string): void {
 		const
