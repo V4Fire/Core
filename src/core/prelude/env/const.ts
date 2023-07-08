@@ -6,6 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/* eslint-disable no-restricted-globals */
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import { toString } from 'core/prelude/types/const';
 
@@ -25,9 +28,17 @@ export const
 /**
  * Link to the global object
  */
-export const
+export const GLOBAL =
+	typeof globalThis === 'object' && isGlobal(globalThis) && globalThis ||
+	typeof window === 'object' && isGlobal(window) && window ||
+	typeof global === 'object' && isGlobal(global) && global ||
+	typeof self === 'object' && isGlobal(self) && self ||
+	(function getGlobalUnstrict() {
+		// eslint-disable-next-line @typescript-eslint/no-invalid-this
+		return this;
+	}()) ||
 	// eslint-disable-next-line no-new-func
-	GLOBAL = Function('return this')();
+	new Function('', 'return this')();
 
 if (typeof globalThis === 'undefined') {
 	GLOBAL.globalThis = GLOBAL;
@@ -52,3 +63,13 @@ export const IS_NODE: boolean = (() => {
 		return false;
 	}
 })();
+
+/**
+ * Checks if the provided value is a global object by confirming the presence of Math,
+ * known to exist in any global JavaScript environment.
+ *
+ * @param obj
+ */
+function isGlobal(obj: any) {
+	return Boolean(obj) && obj.Math === Math;
+}
