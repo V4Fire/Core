@@ -32,6 +32,7 @@ export default class StringEngine {
 	/**
 	 * Replaces serialized storage data with new ones
 	 */
+	// eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
 	protected set serializedData(data: string) {
 		this.data = data;
 	}

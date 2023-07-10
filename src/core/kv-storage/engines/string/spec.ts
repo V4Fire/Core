@@ -6,19 +6,37 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import StringEngine from 'core/kv-storage/engines/string';
+import { defaultDataSeparators as separators } from 'core/kv-storage/engines/string/const';
+
+import * as kv from 'core/kv-storage';
+
 describe('kv-storage/engines/string', () => {
 	const
-		uuid = new Uint8Array([174, 42, 253, 26, 185, 60, 17, 234, 179, 222, 2, 66, 172, 19, 0, 4]);
+		initValue = `foo${separators.record}true${separators.chunk}bar${separators.record}baz`,
+		engine = new StringEngine({data: initValue, separators}),
+		storage = kv.factory(engine);
 
-	it('`generate`', () => {
-		expect(generate()).toBeInstanceOf(Uint8Array);
+	it('`the storage must have access to the initial values`', () => {
+		expect(engine.serializedData).toBe(initValue);
+		expect(storage.get('foo')).toBe(true);
+		expect(storage.get('bar')).toBe('baz');
 	});
 
-	it('`serialize`', () => {
-		expect(serialize(uuid)).toEqual('ae2afd1a-b93c-11ea-b3de-0242ac130004');
+	it('`deleting a value should remove it from the string`', () => {
+		storage.remove('bar');
+		expect(engine.serializedData).toBe(`foo${separators.record}true`);
+		expect(storage.get('bar')).toBe(undefined);
 	});
 
-	it('`parse`', () => {
-		expect(parse('ae2afd1a-b93c-11ea-b3de-0242ac130004')).toEqual(uuid);
+	it('`adding a new value should save it to a string`', () => {
+		storage.set('test', 'value');
+		expect(engine.serializedData).toBe(`foo${separators.record}true${separators.chunk}test${separators.record}"value"`);
+		storage.get('test').toBe('value');
+	});
+
+	it('`сlearing the storage, should clear the string`', () => {
+		storage.clear();
+		expect(engine.serializedData).toBe('');
 	});
 });
