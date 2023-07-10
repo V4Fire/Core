@@ -245,6 +245,22 @@ store.remove('a');
 console.log(store.has('a')); // false
 ```
 
+#### keys
+
+Returns a list of keys that are stored in the storage.
+
+```js
+import StringEngine from 'core/kv-storage/engines/string';
+
+const store = new StringEngine();
+
+store.set('a', '1');
+store.set('b', '2');
+store.set('c', '3');
+
+console.log(store.keys()); // ['a', 'b', 'c']
+```
+
 #### clear
 
 Clears either the entire data storage or records that match the specified filter.

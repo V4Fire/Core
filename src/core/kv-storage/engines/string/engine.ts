@@ -89,6 +89,13 @@ export default class StringEngine {
 	}
 
 	/**
+	 * Returns a list of keys that are stored in the storage
+	 */
+	keys(): string[] {
+		return Object.keys(this.getDataFromRaw());
+	}
+
+	/**
 	 * Clears either the entire data storage or records that match the specified filter
 	 * @param filter
 	 */
@@ -145,7 +152,7 @@ export default class StringEngine {
 	/**
 	 * Returns data parsed as a dictionary from the serialized data string
 	 */
-	protected getDataFromRaw(): Dictionary<string> {
+	protected getDataFromRaw(): StrictDictionary<string> {
 		const {serializedData} = this;
 
 		if (serializedData === '') {
