@@ -16,7 +16,7 @@ import {
 
 } from 'core/kv-storage';
 
-import { syncSessionStorage as stringSyncStorage } from 'core/kv-storage/string';
+import * as stringEngine from 'core/kv-storage/engines/string';
 
 // eslint-disable-next-line import/extensions
 import * as IDBEngine from 'core/kv-storage/engines/fake-indexeddb';
@@ -29,7 +29,8 @@ const kv = {
 	IDBSession: factory(IDBEngine.syncSessionStorage),
 	asyncIDBLocal: factory(IDBEngine.asyncLocalStorage, true),
 	asyncIDBSession: factory(IDBEngine.asyncSessionStorage, true),
-	stringStorage: stringSyncStorage
+	syncSessionString: factory(stringEngine.syncSessionStorage),
+	asyncSessionString: factory(stringEngine.asyncSessionStorage, true)
 };
 
 describe('core/kv-storage', () => {
@@ -38,7 +39,7 @@ describe('core/kv-storage', () => {
 		return (name) => `${prfx}_${name}`;
 	};
 
-	['local', 'session', 'IDBSession', 'stringStorage'].forEach((method) => {
+	['local', 'session', 'IDBSession', 'syncSessionString'].forEach((method) => {
 		const
 			api = kv[method];
 
@@ -132,7 +133,7 @@ describe('core/kv-storage', () => {
 		}
 	});
 
-	['asyncLocal', 'asyncSession', 'asyncIDBLocal', 'asyncIDBSession'].forEach((method) => {
+	['asyncLocal', 'asyncSession', 'asyncIDBLocal', 'asyncIDBSession', 'asyncSessionString'].forEach((method) => {
 		const
 			api = kv[method];
 
