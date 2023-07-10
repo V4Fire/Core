@@ -16,6 +16,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :rocket: New Feature
 
 * Added result hashing for `Object.fastHash` `core/prelude`
+* Added an engine that allows storing data in a single string `core/kv-storage`
 
 #### :bug: Bug Fix
 
@@ -33,8 +34,6 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Fixed the bug with network request having CORS preflight request
 
-<<<<<<< HEAD
-=======
 ## v3.95.2 (2023-04-19)
 
 #### :bug: Bug Fix
