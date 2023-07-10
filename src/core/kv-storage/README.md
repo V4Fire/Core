@@ -5,6 +5,7 @@ indexedDb, SQLite, etc.
 
 ## Supported engines
 
+* `string`
 * `browser-localstorage`
 * `browser-indexeddb`
 * `node-localstorage`

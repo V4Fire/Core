@@ -20,7 +20,7 @@ for await (const val of parser) {
 
 ## API
 
-### constructor
+### Constructor
 
 The instance constructor can take an object with optional parameter.
 

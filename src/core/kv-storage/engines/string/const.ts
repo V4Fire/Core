@@ -6,7 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export const stringStorageSeparators = {
-	keys: '{{#}}',
-	values: '{{.}}'
+import type { DataSeparators } from 'core/kv-storage/engines/string/interface';
+
+export const defaultDataSeparators: DataSeparators = {
+	chunk: '{{#}}',
+	record: '{{.}}'
 };

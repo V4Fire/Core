@@ -13,7 +13,7 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added a new engine that builds storage based on a string
+* Added an engine that allows storing data in a single string
 
 ## v3.95.1 (2023-04-18)
 

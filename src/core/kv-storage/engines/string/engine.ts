@@ -7,19 +7,42 @@
  */
 
 import type { ClearFilter } from 'core/kv-storage/interface';
-import { stringStorageSeparators } from 'core/kv-storage/engines/string/const';
+
+import { defaultDataSeparators } from 'core/kv-storage/engines/string/const';
+import type { StorageOptions, DataSeparators } from 'core/kv-storage/engines/string/interface';
 
 export default class StringEngine {
 	/**
-	 * Raw string with data
+	 * Serialized storage data
 	 */
-	protected stringStorage: string;
+	get serializedData(): string {
+		return this.data;
+	}
 
 	/**
-	 * @param initString - Initial value for storage
+	 * Serialized storage data
 	 */
-	constructor(initString: string = '') {
-		this.stringStorage = initString;
+	protected data: string;
+
+	/**
+	 * Separators for keys and values for serialization into a string
+	 */
+	protected separators: DataSeparators = defaultDataSeparators;
+
+	/**
+	 * Replaces serialized storage data with new ones
+	 */
+	// eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
+	protected set serializedData(data: string) {
+		this.data = data;
+	}
+
+	/**
+	 * @param [opts] - additional options
+	 */
+	constructor(opts: StorageOptions = {}) {
+		this.data = opts.data ?? '';
+		Object.assign(this.separators, opts.separators);
 	}
 
 	/**
@@ -34,30 +57,24 @@ export default class StringEngine {
 	 * Returns a value from the storage by the specified key
 	 * @param key
 	 */
-	get(key: string): CanUndef<Primitive> {
-		const value = this.getDataFromRaw()[key];
-
-		try {
-			return value != null ? JSON.parse(value) : value;
-
-		} catch {
-			return value;
-		}
+	get(key: string): CanUndef<string> {
+		return this.getDataFromRaw()[key];
 	}
 
 	/**
-	 * Saves a value to the storage by the specified key
+	 * Stores a value to the storage by the specified key
 	 *
 	 * @param key
 	 * @param value
+	 * @throws {TypeError} if forbidden characters are used in the key or value when storing data
 	 */
-	set(key: string, value: Primitive): void {
+	set(key: string, value: string): void {
 		const
-			dividersValues = Object.values(stringStorageSeparators),
-			isForbiddenCharacterUsed = dividersValues.some((el) => key.includes(el) || String(value).includes(el));
+			separators = Object.values(this.separators),
+			isForbiddenCharacterUsed = separators.some((el) => key.includes(el) || String(value).includes(el));
 
 		if (isForbiddenCharacterUsed) {
-			throw new TypeError(`Forbidden character used in the string storage key: ${key}, value: ${String(value)}`);
+			throw new TypeError(`The forbidden character used in string storage keys is "${key}", with value "${String(value)}"`);
 		}
 
 		this.updateData({[key]: String(value)});
@@ -72,7 +89,14 @@ export default class StringEngine {
 	}
 
 	/**
-	 * Clears the storage by the specified filter
+	 * Returns a list of keys that are stored in the storage
+	 */
+	keys(): string[] {
+		return Object.keys(this.getDataFromRaw());
+	}
+
+	/**
+	 * Clears either the entire data storage or records that match the specified filter
 	 * @param filter
 	 */
 	clear(filter?: ClearFilter<string>): void {
@@ -81,7 +105,7 @@ export default class StringEngine {
 				state = this.getDataFromRaw();
 
 			Object.entries(state).forEach(([key, value]) => {
-				if (filter(<string>value, key) === true) {
+				if (filter(String(value), key) === true) {
 					delete state[key];
 				}
 			});
@@ -94,22 +118,8 @@ export default class StringEngine {
 	}
 
 	/**
-	 * Returns raw data
-	 */
-	protected getRawData(): string {
-		return this.stringStorage;
-	}
-
-	/**
-	 * Overrides raw data with the passed value
-	 */
-	protected setRawData(value: string): void {
-		this.stringStorage = value;
-	}
-
-	/**
-	 * Updates the data stored in the storage
-	 * @param data - values to update in the storage
+	 * Update the data in the storage with the data passed from the dictionary
+	 * @param data - the dictionary with the data to be added to the storage
 	 */
 	protected updateData(data: Dictionary<CanUndef<string>>): void {
 		const
@@ -128,31 +138,33 @@ export default class StringEngine {
 	}
 
 	/**
-	 * Returns data in dictionary format
+	 * Overwrites the data in the storage with the new data from the passed dictionary
+	 * @param data - the dictionary with the data to be saved in the storage
 	 */
-	protected getDataFromRaw(): Dictionary<string> {
-		const rawData = this.getRawData();
+	protected overwriteData(data: Dictionary<string>): void {
+		const s = this.separators;
 
-		if (rawData === '') {
-			return {};
-		}
-
-		return rawData.split(stringStorageSeparators.keys).reduce((acc, el) => {
-			const [key, value] = el.split(stringStorageSeparators.values);
-			acc[key] = value;
-			return acc;
-		}, {});
+		this.serializedData = Object.entries(data)
+			.map(([key, value]) => `${key}${s.record}${value}`)
+			.join(s.chunk);
 	}
 
 	/**
-	 * Overwrites the storage with the passed data
-	 * @param data
+	 * Returns data parsed as a dictionary from the serialized data string
 	 */
-	protected overwriteData(data: Dictionary<string>): void {
-		const rawCookie = Object.entries(data)
-			.map(([key, value]) => `${key}${stringStorageSeparators.values}${value}`)
-			.join(stringStorageSeparators.keys);
+	protected getDataFromRaw(): StrictDictionary<string> {
+		const {serializedData} = this;
 
-		this.setRawData(rawCookie);
+		if (serializedData === '') {
+			return {};
+		}
+
+		const s = this.separators;
+
+		return serializedData.split(s.chunk).reduce((acc, el) => {
+			const [key, value] = el.split(s.record);
+			acc[key] = value;
+			return acc;
+		}, {});
 	}
 }

@@ -8,6 +8,8 @@
 
 import StringEngine from 'core/kv-storage/engines/string/engine';
 
+export { StringEngine as default };
+
 export const
 	syncSessionStorage = new StringEngine(),
 	asyncSessionStorage = syncSessionStorage;
