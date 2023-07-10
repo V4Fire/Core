@@ -82,7 +82,7 @@ describe('kv-storage/engines/string', () => {
 			storage.set('bar', 1);
 			storage.set('baz', 2);
 
-			storage.clear((el, key) => Object.isNumber(el));
+			storage.clear((el) => Object.isNumber(el));
 			expect(engine.serializedData).toBe(`foo${separators.record}true`);
 
 			storage.clear((el, key) => key === 'foo');
