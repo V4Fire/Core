@@ -119,8 +119,6 @@ module.exports = function init(gulp) {
 			...resolve.rootDependencies.map((el) => `${el}/**/*.@(ts|js)`)
 		];
 
-		debugger;
-
 		const
 			isDep = new RegExp(`(^.*?(?:^|[\\/])(${depsRgxpStr}))(?:$|[\\/])`),
 			enableSourcemaps = process.env.SOURCEMAPS;

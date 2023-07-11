@@ -13,11 +13,10 @@ export default {
 	rootDir: './',
 	testTimeout: 20000,
 	testEnvironment: 'node',
-	bail: 2,
 	reporters: ['default'],
 
-	silent: true,
 	clearMocks: true,
+	silent: true,
 
 	collectCoverage: true,
 	coverageReporters: ['lcov'],
