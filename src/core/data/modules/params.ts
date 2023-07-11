@@ -266,11 +266,11 @@ export default abstract class Provider {
 	 * class Profile extends Provider {
 	 *   // baseURL request methods despite the "upd" is used this URL
 	 *   basePeekURL: 'profile/info'
-	 *   baseUpdURL: 'profile/info/upd'
+	 *   baseUpdateURL: 'profile/info/upd'
 	 * }
 	 * ```
 	 */
-	baseUpdURL?: string;
+	baseUpdateURL?: string;
 
 	/**
 	 * Base part of URL for a request for the "del" method
@@ -280,11 +280,11 @@ export default abstract class Provider {
 	 * class Profile extends Provider {
 	 *   // baseURL request methods despite the "del" is used this URL
 	 *   basePeekURL: 'profile/info'
-	 *   baseDelURL: 'profile/info/del'
+	 *   baseDeleteURL: 'profile/info/del'
 	 * }
 	 * ```
 	 */
-	baseDelURL?: string;
+	baseDeleteURL?: string;
 
 	/**
 	 * List of additional data providers for the "get" method.
@@ -327,16 +327,16 @@ export default abstract class Provider {
 	/**
 	 * Default HTTP request method for the "upd" method
 	 */
-	updMethod: RequestMethod = 'PUT';
+	updateMethod: RequestMethod = 'PUT';
 
 	/**
 	 * Default HTTP request method for the "del" method
 	 */
-	delMethod: RequestMethod = 'DELETE';
+	deleteMethod: RequestMethod = 'DELETE';
 
 	/**
 	 * HTTP request method for all request methods.
-	 * This parameter will override other method parameters, such as "getMethod" or "delMethod".
+	 * This parameter will override other method parameters, such as "getMethod" or "deleteMethod".
 	 */
 	customMethod: CanUndef<RequestMethod>;
 

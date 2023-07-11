@@ -464,7 +464,7 @@ export interface CreateRequestOptions<D = unknown> {
 
 	/**
 	 * A function (or a sequence of functions) takes the current request response data chunk
-	 * and yields a new chunk to respond via an async iterator. If you provide a sequence of functions,
+	 * and yields a new chunk to respond via an asynchronous iterator. If you provide a sequence of functions,
 	 * the first function will pass a result to the next function from the sequence, etc.
 	 * This parameter is used when you're parsing responses in a stream form.
 	 */

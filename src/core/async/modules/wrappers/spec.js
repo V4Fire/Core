@@ -56,9 +56,9 @@ describe('core/async/modules/wrappers', () => {
 			wrappedProvider.get();
 			expect(provider.get).toHaveBeenCalled();
 
-			jest.spyOn(provider, 'upd');
-			wrappedProvider.upd();
-			expect(provider.upd).toHaveBeenCalled();
+			jest.spyOn(provider, 'update');
+			wrappedProvider.update();
+			expect(provider.update).toHaveBeenCalled();
 		});
 
 		it('if a group is not provided should use a class name from the provider', () => {
@@ -82,7 +82,7 @@ describe('core/async/modules/wrappers', () => {
 			await wrappedProvider.get({id: 1});
 			expect($a.request.mock.lastCall[1]).toEqual({group: 'example'});
 
-			await wrappedProvider.upd({id: 1}, {group: 'foo'});
+			await wrappedProvider.update({id: 1}, {group: 'foo'});
 			expect($a.request.mock.lastCall[1]).toEqual({group: 'example:foo'});
 		});
 
@@ -223,7 +223,7 @@ describe('core/async/modules/wrappers', () => {
 				removeListener: () => originalMethods.removeListener = true
 			});
 
-			emitter.off(null);
+			emitter.off(1);
 			emitter.removeEventListener('foo');
 			emitter.removeListener({}, () => null, 'bar', 1);
 

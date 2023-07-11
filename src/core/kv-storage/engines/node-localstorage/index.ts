@@ -8,13 +8,14 @@
 
 import Storage from 'dom-storage';
 import * as fs from 'fs-extra';
-import config from 'config';
 
+import config from 'config';
 import { Cache } from 'core/cache';
 
 export * from 'core/kv-storage/engines/node-localstorage/interface';
 
-const {nodePath} = config.kvStorage;
+const
+	{nodePath} = config.kvStorage;
 
 if (!fs.existsSync(nodePath)) {
 	fs.mkdirpSync(nodePath);

@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2022-??-??)
+
+#### :rocket: New Feature
+
+* Added result hashing for `Object.fastHash`
+
 ## v3.78.0 (2022-03-16)
 
 #### :boom: Breaking Change

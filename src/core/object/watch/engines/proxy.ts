@@ -193,51 +193,103 @@ export function watch<T extends object>(
 	let
 		lastSetKey;
 
-	proxy = new Proxy(unwrappedObj, {
-		get: (target, key) => {
-			switch (key) {
-				case toRootObject:
-					return resolvedRoot;
+	if (Object.isDictionary(unwrappedObj) || Object.isArray(unwrappedObj)) {
+		proxy = new Proxy(unwrappedObj, {
+			get: (target, key) => {
+				switch (key) {
+					case toRootObject:
+						return resolvedRoot;
 
-				case toTopObject:
-					return top;
+					case toTopObject:
+						return top;
 
-				case toOriginalObject:
-					return target;
+					case toOriginalObject:
+						return target;
 
-				case watchHandlers:
-					return handlers;
+					case watchHandlers:
+						return handlers;
 
-				case watchPath:
-					return path;
+					case watchPath:
+						return path;
 
-				default:
+					default:
 					// Do nothing
-			}
+				}
 
-			const
-				val = target[key];
+				const
+					val = target[key];
 
-			if (Object.isPrimitive(val) || resolvedRoot[muteLabel] === true) {
-				return val;
-			}
-
-			const
-				isArray = Object.isArray(target),
-				isCustomObject = isArray || Object.isCustomObject(target);
-
-			if (isArray && !Reflect.has(target, Symbol.isConcatSpreadable)) {
-				Object.defineSymbol(target, Symbol.isConcatSpreadable, true);
-			}
-
-			if (Object.isSymbol(key) || blackListStore.has(key)) {
-				if (isCustomObject) {
+				if (Object.isPrimitive(val) || resolvedRoot[muteLabel] === true) {
 					return val;
 				}
 
-			} else if (isCustomObject) {
+				const
+					isArray = Object.isArray(target),
+					isCustomObject = isArray || Object.isCustomObject(target);
+
+				if (isArray && !Reflect.has(target, Symbol.isConcatSpreadable)) {
+					Object.defineSymbol(target, Symbol.isConcatSpreadable, true);
+				}
+
+				if (Object.isSymbol(key) || blackListStore.has(key)) {
+					if (isCustomObject) {
+						return val;
+					}
+
+				} else if (isCustomObject) {
+					let
+						propFromProto = fromProto,
+						normalizedKey;
+
+					if (isArray && isValueCanBeArrayIndex(key)) {
+						normalizedKey = Number(key);
+
+					} else {
+						normalizedKey = key;
+
+						const
+							desc = Reflect.getOwnPropertyDescriptor(target, key);
+
+						// Readonly non-configurable values can't be wrapped due Proxy API limitations
+						if (desc?.writable === false && desc.configurable === false) {
+							return val;
+						}
+					}
+
+					if (propFromProto || !isArray && !Object.hasOwnProperty(target, key)) {
+						propFromProto = true;
+					}
+
+					const watchOpts = Object.assign(Object.create(opts!), {fromProto: propFromProto});
+					return getProxyValue(val, normalizedKey, path, handlers, resolvedRoot, top, watchOpts);
+				}
+
+				return Object.isFunction(val) ? val.bind(target) : val;
+			},
+
+			set: (target, key, val, receiver) => {
+				if (frozenKeys[key]) {
+					return false;
+				}
+
+				lastSetKey = key;
+				val = unwrap(val) ?? val;
+
+				const
+					isArray = Object.isArray(target),
+					isCustomObj = isArray || Object.isCustomObject(target),
+					set = () => Reflect.set(target, key, val, isCustomObj ? receiver : target);
+
+				const canSetWithoutEmit =
+					Object.isSymbol(key) ||
+					resolvedRoot[muteLabel] === true ||
+					blackListStore.has(key);
+
+				if (canSetWithoutEmit) {
+					return set();
+				}
+
 				let
-					propFromProto = fromProto,
 					normalizedKey;
 
 				if (isArray && isValueCanBeArrayIndex(key)) {
@@ -245,177 +297,130 @@ export function watch<T extends object>(
 
 				} else {
 					normalizedKey = key;
+				}
 
-					const
-						desc = Reflect.getOwnPropertyDescriptor(target, key);
+				let oldVal = Reflect.get(target, normalizedKey, isCustomObj ? receiver : target);
+				oldVal = unwrap(oldVal) ?? oldVal;
 
-					// Readonly non-configurable values can't be wrapped due Proxy API limitations
-					if (desc?.writable === false && desc.configurable === false) {
-						return val;
+				if (oldVal !== val && set()) {
+					if (!opts!.withProto && (fromProto || !isArray && !Object.hasOwnProperty(target, key))) {
+						return true;
 					}
-				}
 
-				if (propFromProto || !isArray && !Object.hasOwnProperty(target, key)) {
-					propFromProto = true;
-				}
+					handlers.forEach((handler) => {
+						const
+							path = resolvedPath.concat(normalizedKey);
 
-				const watchOpts = Object.assign(Object.create(opts!), {fromProto: propFromProto});
-				return getProxyValue(val, normalizedKey, path, handlers, resolvedRoot, top, watchOpts);
-			}
-
-			return Object.isFunction(val) ? val.bind(target) : val;
-		},
-
-		set: (target, key, val, receiver) => {
-			if (frozenKeys[key]) {
-				return false;
-			}
-
-			lastSetKey = key;
-			val = unwrap(val) ?? val;
-
-			const
-				isArray = Object.isArray(target),
-				isCustomObj = isArray || Object.isCustomObject(target),
-				set = () => Reflect.set(target, key, val, isCustomObj ? receiver : target);
-
-			const canSetWithoutEmit =
-				Object.isSymbol(key) ||
-				resolvedRoot[muteLabel] === true ||
-				blackListStore.has(key);
-
-			if (canSetWithoutEmit) {
-				return set();
-			}
-
-			let
-				normalizedKey;
-
-			if (isArray && isValueCanBeArrayIndex(key)) {
-				normalizedKey = Number(key);
-
-			} else {
-				normalizedKey = key;
-			}
-
-			let oldVal = Reflect.get(target, normalizedKey, isCustomObj ? receiver : target);
-			oldVal = unwrap(oldVal) ?? oldVal;
-
-			if (oldVal !== val && set()) {
-				if (!opts!.withProto && (fromProto || !isArray && !Object.hasOwnProperty(target, key))) {
-					return true;
-				}
-
-				handlers.forEach((handler) => {
-					const
-						path = resolvedPath.concat(normalizedKey);
-
-					handler(val, oldVal, {
-						obj: unwrappedObj,
-						root: resolvedRoot,
-						top,
-						fromProto,
-						path
+						handler(val, oldVal, {
+							obj: unwrappedObj,
+							root: resolvedRoot,
+							top,
+							fromProto,
+							path
+						});
 					});
-				});
-			}
-
-			return true;
-		},
-
-		defineProperty: (target: object, key, desc) => {
-			if (frozenKeys[key]) {
-				return false;
-			}
-
-			const
-				define = (desc) => Reflect.defineProperty(target, key, desc);
-
-			if (lastSetKey === key) {
-				lastSetKey = undefined;
-				return define(desc);
-			}
-
-			const canDefineWithoutEmit =
-				Object.isSymbol(key) ||
-				resolvedRoot[muteLabel] === true ||
-				blackListStore.has(key);
-
-			if (canDefineWithoutEmit) {
-				return define(desc);
-			}
-
-			const {
-				configurable,
-				writable
-			} = desc;
-
-			const
-				mergedDesc = {...desc};
-
-			let
-				valToDefine;
-
-			const needRedefineValue =
-				desc.get == null &&
-				desc.set == null &&
-				'value' in desc &&
-				desc.value !== Reflect.get(target, key, proxy);
-
-			if (needRedefineValue) {
-				valToDefine = desc.value;
-				mergedDesc.value = undefined;
-				mergedDesc.configurable = true;
-				mergedDesc.writable = true;
-			}
-
-			const
-				res = define(mergedDesc);
-
-			if (res) {
-				if (valToDefine !== undefined) {
-					Object.cast<Dictionary>(proxy)[key] = valToDefine;
-					define({configurable, writable});
 				}
 
 				return true;
-			}
+			},
 
-			return false;
-		},
+			defineProperty: (target: object, key, desc) => {
+				if (frozenKeys[key]) {
+					return false;
+				}
 
-		deleteProperty: (target, key) => {
-			if (frozenKeys[key]) {
-				return false;
-			}
+				const
+					define = (desc) => Reflect.defineProperty(target, key, desc);
 
-			if (Reflect.deleteProperty(target, key)) {
-				if (resolvedRoot[muteLabel] === true) {
+				if (lastSetKey === key) {
+					lastSetKey = undefined;
+					return define(desc);
+				}
+
+				const canDefineWithoutEmit =
+					Object.isSymbol(key) ||
+					resolvedRoot[muteLabel] === true ||
+					blackListStore.has(key);
+
+				if (canDefineWithoutEmit) {
+					return define(desc);
+				}
+
+				const {
+					configurable,
+					writable
+				} = desc;
+
+				const
+					mergedDesc = {...desc};
+
+				let
+					valToDefine;
+
+				const needRedefineValue =
+					desc.get == null &&
+					desc.set == null &&
+					'value' in desc &&
+					desc.value !== Reflect.get(target, key, proxy);
+
+				if (needRedefineValue) {
+					valToDefine = desc.value;
+					mergedDesc.value = undefined;
+					mergedDesc.configurable = true;
+					mergedDesc.writable = true;
+				}
+
+				const
+					res = define(mergedDesc);
+
+				if (res) {
+					if (valToDefine !== undefined) {
+						Object.cast<Dictionary>(proxy)[key] = valToDefine;
+						define({configurable, writable});
+					}
+
 					return true;
 				}
 
-				if (Object.isDictionary(target) || Object.isMap(target) || Object.isWeakMap(target)) {
-					blackListStore.add(key);
+				return false;
+			},
+
+			deleteProperty: (target, key) => {
+				if (frozenKeys[key]) {
+					return false;
 				}
 
-				return true;
-			}
+				if (Reflect.deleteProperty(target, key)) {
+					if (resolvedRoot[muteLabel] === true) {
+						return true;
+					}
 
-			return false;
-		},
+					if (Object.isDictionary(target) || Object.isMap(target) || Object.isWeakMap(target)) {
+						blackListStore.add(key);
+					}
 
-		has: (target, key) => {
-			if (frozenKeys[key]) {
-				return true;
-			}
+					return true;
+				}
 
-			if (blackListStore.has(key)) {
 				return false;
-			}
+			},
 
-			return Reflect.has(target, key);
-		}
-	});
+			has: (target, key) => {
+				if (frozenKeys[key]) {
+					return true;
+				}
+
+				if (blackListStore.has(key)) {
+					return false;
+				}
+
+				return Reflect.has(target, key);
+			}
+		});
+
+	} else {
+		proxy = unwrappedObj;
+	}
 
 	getOrCreateLabelValueByHandlers(unwrappedObj, blackList, handlers, blackListStore);
 	getOrCreateLabelValueByHandlers(unwrappedObj, toProxyObject, handlers, proxy);

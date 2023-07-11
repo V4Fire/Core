@@ -9,6 +9,16 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2022-??-??)
+
+#### :rocket: New Feature
+
+* Added result hashing for `Object.fastHash`
+
+#### :bug: Bug Fix
+
+* Fixed an error when calling `String.capitalize` with an empty string
+
 ## v3.90.0 (2022-02-09)
 
 #### :boom: Breaking Change

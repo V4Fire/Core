@@ -15,7 +15,7 @@ import type { AsyncOptions, ClearOptionsId, ProxyCb, EventEmitterLike } from 'co
 import type { ClearFilter } from 'core/kv-storage';
 
 export type DataProviderQueryMethodsToReplace = 'get' | 'peek';
-export type DataProviderBodyMethodsToReplace = 'post' | 'add' | 'upd' | 'del';
+export type DataProviderBodyMethodsToReplace = 'post' | 'add' | 'update' | 'delete';
 export type DataProviderMethodsToReplace = DataProviderQueryMethodsToReplace | DataProviderBodyMethodsToReplace;
 
 export type WrappedDataProvider = Overwrite<Provider, {

@@ -45,7 +45,7 @@ extend(String.prototype, 'capitalize', function capitalize(
 	}
 
 	let
-		res: string;
+		res = '';
 
 	if (all) {
 		const
@@ -57,7 +57,7 @@ extend(String.prototype, 'capitalize', function capitalize(
 
 		res = chunks.join(' ');
 
-	} else {
+	} else if (str.length > 0) {
 		res = lower ? str.toLowerCase() : str;
 		res = res[0].toUpperCase() + res.slice(1);
 	}

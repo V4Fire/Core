@@ -9,6 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.??.?? (2023-??-??)
+
+#### :boom: Breaking Change
+
+* Removed `upd` and `del` methods
+* Renamed provider events `upd/del` to `update/delete`
+
 ## v3.83.0 (2022-04-05)
 
 #### :rocket: New Feature

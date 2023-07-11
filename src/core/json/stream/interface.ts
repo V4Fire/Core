@@ -22,7 +22,7 @@ export interface AndPickOptions extends FilterOptions {
 	 *   {user: 'Rob', age: 28}
 	 * ])));
 	 *
-	 * const seq = sequence(
+	 * const seq = seq(
 	 *   assemble(pick(tokens, '0')),
 	 *
 	 *   // 1 refers to `{user: ‘Rob’, age: 28}` because `{user: ‘Bob’, age: 21}` is already picked previously,

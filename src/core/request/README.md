@@ -242,7 +242,7 @@ request('https://foo.com/users', {engine: xhr}).emitter.on('readystatechange', (
 
 #### Parsing response data in a stream form
 
-If the used request engine supports streaming, you can use it via an async iterator.
+If the used request engine supports streaming, you can use it via an asynchronous iterator.
 Notice, you won't switch to another form when you read response as a whole data or in a stream form.
 
 ```js
@@ -844,14 +844,14 @@ request('//users', {
 
 #### streamDecoder
 
-A function (or a sequence of functions) takes the current request response data chunk and yields a new chunk to respond via an async iterator.
+A function (or a sequence of functions) takes the current request response data chunk and yields a new chunk to respond via an asynchronous iterator.
 If you provide a sequence of functions, the first function will pass a result to the next function from the sequence, etc.
 This parameter is used when you're parsing responses in a stream form.
 
 ```js
 import request from 'core/request';
 
-import { sequence } from 'core/iter/combinators';
+import { seq } from 'core/iter/combinators';
 import { pick, andPick, assemble, streamArray } from 'core/json/stream';
 
 /*
@@ -866,7 +866,7 @@ import { pick, andPick, assemble, streamArray } from 'core/json/stream';
  */
 const {stream} = request('//users', {
   responseType: 'json',
-  streamDecoder: (data) => sequence(
+  streamDecoder: (data) => seq(
     assemble(pick(data, 'total')),
     streamArray(andPick(data, 'data'))
   )

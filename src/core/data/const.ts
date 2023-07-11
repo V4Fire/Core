@@ -39,8 +39,8 @@ export const methodProperties = [
 	'getMethod',
 	'peekMethod',
 	'addMethod',
-	'updMethod',
-	'delMethod'
+	'updateMethod',
+	'deleteMethod'
 ];
 
 export const urlProperties = [
@@ -50,6 +50,6 @@ export const urlProperties = [
 	'baseGetURL',
 	'basePeekURL',
 	'baseAddURL',
-	'baseUpdURL',
-	'baseDelURL'
+	'baseUpdateURL',
+	'baseDeleteURL'
 ];

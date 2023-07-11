@@ -346,12 +346,12 @@ The default implementation of a data provider has an association between HTTP re
   /**
    * Default HTTP request method for the "upd" method
    */
-  updMethod: RequestMethod = 'PUT';
+  updateMethod: RequestMethod = 'PUT';
 
   /**
    * Default HTTP request method for the "del" method
    */
-  delMethod: RequestMethod = 'DELETE';
+  deleteMethod: RequestMethod = 'DELETE';
 }
 ```
 
@@ -379,7 +379,7 @@ import Provider, { provider } from 'core/data';
 export default class User extends Provider {
   baseURL = 'user/:id';
   baseAddURL = 'user/add';
-  baseDeLURL = 'user/:id/del';
+  baseDeleteURL = 'user/:id/del';
 }
 ```
 

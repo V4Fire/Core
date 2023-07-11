@@ -9,8 +9,6 @@
  */
 
 import extend from 'core/prelude/extend';
-
-import { deprecate } from 'core/functools';
 import { isNative, toString, nonPrimitiveTypes, READONLY, PROXY } from 'core/prelude/types/const';
 
 /** @see [[ObjectConstructor.cast]] */
@@ -95,13 +93,13 @@ extend(Object, 'isPlainObject', isPlainObject);
 function isPlainObject(value: unknown): boolean {
 	value = Object.unwrapProxy(value);
 
-	if (!value || typeof value !== 'object') {
+	if (value == null || typeof value !== 'object') {
 		return false;
 	}
 
 	const constr = value.constructor;
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-	return !constr || constr === Object;
+	return constr == null || constr === Object || constr.name === 'Object';
 }
 
 /** @see [[ObjectConstructor.isCustomObject]] */
@@ -146,16 +144,24 @@ extend(Object, 'isAsyncGenerator', (value) => typeof value === 'function' && val
 
 /** @see [[ObjectConstructor.isIterator]] */
 extend(Object, 'isIterator', (value) => {
-	if (!value || typeof value !== 'object') {
+	if (value == null || typeof value !== 'object' || !('next' in value)) {
 		return false;
 	}
 
 	return typeof value.next === 'function';
 });
 
+/** @see [[ObjectConstructor.isIterableIterator]] */
+extend(Object, 'isIterableIterator', (value) =>
+	Object.isIterator(value) && Object.isIterable(value));
+
 /** @see [[ObjectConstructor.isAsyncIterator]] */
 extend(Object, 'isAsyncIterator', (value) =>
 	Object.isIterator(value) && Object.isAsyncIterable(value));
+
+/** @see [[ObjectConstructor.isAnyIterator]] */
+extend(Object, 'isAnyIterator', (value) =>
+	Object.isIterator(value) || Object.isAsyncIterator(value));
 
 /** @see [[ObjectConstructor.isIterable]] */
 extend(Object, 'isIterable', (value) => {
@@ -163,9 +169,7 @@ extend(Object, 'isIterable', (value) => {
 		return false;
 	}
 
-	return Boolean(
-		typeof Symbol === 'function' ? value[Symbol.iterator] : typeof value['@@iterator'] === 'function'
-	);
+	return typeof value[Symbol.iterator] === 'function';
 });
 
 /** @see [[ObjectConstructor.isAsyncIterable]] */
@@ -174,27 +178,29 @@ extend(Object, 'isAsyncIterable', (value) => {
 		return false;
 	}
 
-	return Boolean(
-		typeof Symbol === 'function' ? value[Symbol.asyncIterator] : typeof value['@@asyncIterator'] === 'function'
-	);
+	return typeof value[Symbol.asyncIterator] === 'function';
 });
+
+/** @see [[ObjectConstructor.isAnyIterable]] */
+extend(Object, 'isAnyIterable', (value) =>
+	Object.isIterable(value) || Object.isAsyncIterable(value));
 
 /** @see [[ObjectConstructor.isPromise]] */
 extend(Object, 'isPromise', (value) => {
-	if (value) {
-		return typeof value.then === 'function' && typeof value.catch === 'function';
+	if (value == null || typeof value !== 'object' || !('then' in value) || !('catch' in value)) {
+		return false;
 	}
 
-	return false;
+	return typeof value.then === 'function' && typeof value.catch === 'function';
 });
 
 /** @see [[ObjectConstructor.isPromiseLike]] */
 extend(Object, 'isPromiseLike', (value) => {
-	if (value) {
-		return typeof value.then === 'function';
+	if (value == null || typeof value !== 'object' || !('then' in value)) {
+		return false;
 	}
 
-	return false;
+	return typeof value.then === 'function';
 });
 
 /** @see [[ObjectConstructor.isProxy]] */
@@ -228,12 +234,3 @@ Object.isSealed = (value) =>
 
 Object.isFrozen = (value) =>
 	value == null || isFrozen(value) || value[READONLY] === true;
-
-/**
- * @deprecated
- * @see [[ObjectConstructor.isDictionary]]
- */
-extend(Object, 'isObject', deprecate({
-	name: 'isObject',
-	renamedTo: 'isDictionary'
-}, isPlainObject));

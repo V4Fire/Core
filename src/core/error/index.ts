@@ -36,11 +36,9 @@ export default class BaseError extends Error {
 			internalMessage: {value: message},
 			cause: {value: cause},
 			message: {
-				get(): string {
-					return this.format();
-				},
+				get: () => this.format(),
 
-				set(newValue: string): void {
+				set: (newValue: string) => {
 					this.internalMessage = newValue;
 				}
 			}

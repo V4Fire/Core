@@ -70,20 +70,13 @@ export function remove(key: string): void {
 
 extend(globalThis, 'envs', () => {
 	if (Object.isPromise(storage)) {
-		return storage.then((storage) => {
-			console.log(storage);
-			return storage;
-		});
+		return storage;
 	}
 
-	console.log(memoryStorage);
 	return memoryStorage;
 });
 
-extend(globalThis, 'getEnv', (key) => get(key).then((val) => {
-	console.log(val);
-	return val;
-}));
+extend(globalThis, 'getEnv', (key) => get(key));
 
 extend(globalThis, 'setEnv', set);
 extend(globalThis, 'removeEnv', remove);

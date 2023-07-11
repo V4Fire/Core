@@ -7,14 +7,14 @@
  */
 
 import { intoIter } from 'core/iter';
-import { sequence } from 'core/iter/combinators';
+import { seq } from 'core/iter/combinators';
 import { from, pick, andPick, assemble, streamArray } from 'core/json/stream';
 
 describe('core/iter/combinators', () => {
 	describe('sequence', () => {
 		it('sequence of sync iterators', () => {
-			const seq = sequence([1, 2], new Set([3, 4]), [5, 6].values());
-			expect([...seq]).toEqual([1, 2, 3, 4, 5, 6]);
+			const s = seq([1, 2], new Set([3, 4]), [5, 6].values());
+			expect([...s]).toEqual([1, 2, 3, 4, 5, 6]);
 		});
 
 		it('sequence of async iterators', async () => {
@@ -27,7 +27,7 @@ describe('core/iter/combinators', () => {
 				]
 			})));
 
-			const seq = sequence(
+			const s = seq(
 				assemble(pick(tokens, 'total')),
 				streamArray(andPick(tokens, 'data'))
 			);
@@ -35,7 +35,7 @@ describe('core/iter/combinators', () => {
 			const
 				res = [];
 
-			for await (const val of seq) {
+			for await (const val of s) {
 				res.push(val);
 			}
 

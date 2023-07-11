@@ -30,14 +30,24 @@ describe('core/async/modules/base `muteAll/unmuteAll`', () => {
 		$a.muteAll();
 
 		setTimeout(() => {
-			expect(i).toBe(0);
-			$a.unmuteAll();
+			try {
+				expect(i).toBe(0);
+				$a.unmuteAll();
 
-			setTimeout(() => {
-				expect(i).toBeGreaterThanOrEqual(2);
-				$a.clearAll();
-				done();
-			}, 10);
+				setTimeout(() => {
+					try {
+						expect(i).toBeGreaterThanOrEqual(2);
+						$a.clearAll();
+						done();
+
+					} catch (err) {
+						done(err);
+					}
+				}, 5);
+
+			} catch (err) {
+				done(err);
+			}
 		}, 5);
 	});
 
@@ -59,14 +69,24 @@ describe('core/async/modules/base `muteAll/unmuteAll`', () => {
 		$a.muteAll({group: 'foo'});
 
 		setTimeout(() => {
-			expect(i).toBe(1);
-			$a.unmuteAll({group: 'foo'});
+			try {
+				expect(i).toBe(1);
+				$a.unmuteAll({group: 'foo'});
 
-			setTimeout(() => {
-				expect(i).toBeGreaterThanOrEqual(2);
-				$a.clearAll();
-				done();
-			}, 5);
+				setTimeout(() => {
+					try {
+						expect(i).toBeGreaterThanOrEqual(2);
+						$a.clearAll();
+						done();
+
+					} catch (err) {
+						done(err);
+					}
+				}, 5);
+
+			} catch (err) {
+				done(err);
+			}
 		}, 15);
 	});
 
@@ -88,14 +108,24 @@ describe('core/async/modules/base `muteAll/unmuteAll`', () => {
 		$a.muteAll({group: /foo/});
 
 		setTimeout(() => {
-			expect(i).toBe(0);
-			$a.unmuteAll({group: /foo/});
+			try {
+				expect(i).toBe(0);
+				$a.unmuteAll({group: /foo/});
 
-			setTimeout(() => {
-				expect(i).toBeGreaterThanOrEqual(1);
-				$a.clearAll();
-				done();
-			}, 5);
+				setTimeout(() => {
+					try {
+						expect(i).toBeGreaterThanOrEqual(1);
+						$a.clearAll();
+						done();
+
+					} catch (err) {
+						done(err);
+					}
+				}, 5);
+
+			} catch (err) {
+				done(err);
+			}
 		}, 15);
 	});
 
@@ -117,43 +147,24 @@ describe('core/async/modules/base `muteAll/unmuteAll`', () => {
 		$a.muteAll({label: 'foo'});
 
 		setTimeout(() => {
-			expect(i).toBe(1);
-			$a.unmuteAll({label: 'foo'});
+			try {
+				expect(i).toBe(1);
+				$a.unmuteAll({label: 'foo'});
 
-			setTimeout(() => {
-				expect(i).toBeGreaterThanOrEqual(2);
-				$a.clearAll();
-				done();
-			}, 5);
-		}, 15);
-	});
+				setTimeout(() => {
+					try {
+						expect(i).toBeGreaterThanOrEqual(2);
+						$a.clearAll();
+						done();
 
-	it('by a label', (done) => {
-		const
-			$a = new Async();
+					} catch (err) {
+						done(err);
+					}
+				}, 5);
 
-		let
-			i = 0;
-
-		$a.setTimeout(() => {
-			i++;
-		}, 10);
-
-		$a.setInterval(() => {
-			i++;
-		}, 5, {label: 'foo'});
-
-		$a.muteAll({label: 'foo'});
-
-		setTimeout(() => {
-			expect(i).toBe(1);
-			$a.unmuteAll({label: 'foo'});
-
-			setTimeout(() => {
-				expect(i).toBeGreaterThanOrEqual(2);
-				$a.clearAll();
-				done();
-			}, 5);
+			} catch (err) {
+				done(err);
+			}
 		}, 15);
 	});
 
@@ -178,14 +189,24 @@ describe('core/async/modules/base `muteAll/unmuteAll`', () => {
 		$a.muteAll({group: 'foo'});
 
 		setTimeout(() => {
-			expect(i).toBe(0);
-			$a.unmuteAll({group: 'foo'});
+			try {
+				try {
+					expect(i).toBe(0);
+					$a.unmuteAll({group: 'foo'});
 
-			setTimeout(() => {
-				expect(i).toBeGreaterThanOrEqual(1);
-				$a.clearAll();
-				done();
-			}, 5);
+				} catch (err) {
+					done(err);
+				}
+
+				setTimeout(() => {
+					expect(i).toBeGreaterThanOrEqual(1);
+					$a.clearAll();
+					done();
+				}, 5);
+
+			} catch (err) {
+				done(err);
+			}
 		}, 15);
 	});
 
@@ -213,14 +234,24 @@ describe('core/async/modules/base `muteAll/unmuteAll`', () => {
 		});
 
 		setTimeout(() => {
-			expect(i).toBe(1);
-			$a.unmuteAll({group: 'foo', label: 'foo'});
+			try {
+				expect(i).toBe(1);
+				$a.unmuteAll({group: 'foo', label: 'foo'});
 
-			setTimeout(() => {
-				expect(i).toBeGreaterThanOrEqual(2);
-				$a.clearAll();
-				done();
-			}, 5);
+				setTimeout(() => {
+					try {
+						expect(i).toBeGreaterThanOrEqual(2);
+						$a.clearAll();
+						done();
+
+					} catch (err) {
+						done(err);
+					}
+				}, 5);
+
+			} catch (err) {
+				done(err);
+			}
 		}, 15);
 	});
 });
@@ -254,14 +285,24 @@ describe('core/async/modules/base `suspendAll/unsuspendAll`', () => {
 		$e.emit('event');
 
 		setTimeout(() => {
-			expect(i).toBe(0);
-			$a.unsuspendAll();
+			try {
+				expect(i).toBe(0);
+				$a.unsuspendAll();
 
-			setTimeout(() => {
-				expect(i).toBeGreaterThanOrEqual(4);
-				$a.clearAll();
-				done();
-			}, 5);
+				setTimeout(() => {
+					try {
+						expect(i).toBeGreaterThanOrEqual(4);
+						$a.clearAll();
+						done();
+
+					} catch (err) {
+						done(err);
+					}
+				}, 5);
+
+			} catch (err) {
+				done(err);
+			}
 		}, 5);
 	});
 
@@ -289,14 +330,24 @@ describe('core/async/modules/base `suspendAll/unsuspendAll`', () => {
 		$e.emit('event');
 
 		setTimeout(() => {
-			expect(i).toBe(2);
-			$a.unsuspendAll({group: 'foo'});
+			try {
+				expect(i).toBe(2);
+				$a.unsuspendAll({group: 'foo'});
 
-			setTimeout(() => {
-				expect(i).toBe(3);
-				$a.clearAll();
-				done();
-			}, 5);
+				setTimeout(() => {
+					try {
+						expect(i).toBe(3);
+						$a.clearAll();
+						done();
+
+					} catch (err) {
+						done(err);
+					}
+				}, 5);
+
+			} catch (err) {
+				done(err);
+			}
 		}, 15);
 	});
 
@@ -324,14 +375,24 @@ describe('core/async/modules/base `suspendAll/unsuspendAll`', () => {
 		$e.emit('event');
 
 		setTimeout(() => {
-			expect(i).toBe(1);
-			$a.unsuspendAll({group: /foo/});
+			try {
+				expect(i).toBe(1);
+				$a.unsuspendAll({group: /foo/});
 
-			setTimeout(() => {
-				expect(i).toBe(3);
-				$a.clearAll();
-				done();
-			}, 5);
+				setTimeout(() => {
+					try {
+						expect(i).toBe(3);
+						$a.clearAll();
+						done();
+
+					} catch (err) {
+						done(err);
+					}
+				}, 5);
+
+			} catch (err) {
+				done(err);
+			}
 		}, 15);
 	});
 
@@ -359,14 +420,24 @@ describe('core/async/modules/base `suspendAll/unsuspendAll`', () => {
 		$e.emit('event');
 
 		setTimeout(() => {
-			expect(i).toBe(2);
-			$a.unsuspendAll({label: 'foo'});
+			try {
+				expect(i).toBe(2);
+				$a.unsuspendAll({label: 'foo'});
 
-			setTimeout(() => {
-				expect(i).toBe(3);
-				$a.clearAll();
-				done();
-			}, 5);
+				setTimeout(() => {
+					try {
+						expect(i).toBe(3);
+						$a.clearAll();
+						done();
+
+					} catch (err) {
+						done(err);
+					}
+				}, 5);
+
+			} catch (err) {
+				done(err);
+			}
 		}, 15);
 	});
 
@@ -394,14 +465,19 @@ describe('core/async/modules/base `suspendAll/unsuspendAll`', () => {
 		$e.emit('event');
 
 		setTimeout(() => {
-			expect(i).toBe(1);
-			$a.unsuspendAll({group: 'foo'});
+			try {
+				expect(i).toBe(1);
+				$a.unsuspendAll({group: 'foo'});
 
-			setTimeout(() => {
-				expect(i).toBe(3);
-				$a.clearAll();
-				done();
-			}, 5);
+				setTimeout(() => {
+					expect(i).toBe(3);
+					$a.clearAll();
+					done();
+				}, 5);
+
+			} catch (err) {
+				done(err);
+			}
 		}, 15);
 	});
 
@@ -429,14 +505,27 @@ describe('core/async/modules/base `suspendAll/unsuspendAll`', () => {
 		$e.emit('event');
 
 		setTimeout(() => {
-			expect(i).toBe(2);
-			$a.unsuspendAll({group: 'foo', label: 'foo'});
+			try {
+				expect(i).toBe(2);
+				$a.unsuspendAll({
+					group: 'foo',
+					label: 'foo'
+				});
 
-			setTimeout(() => {
-				expect(i).toBe(3);
-				$a.clearAll();
-				done();
-			}, 5);
+				setTimeout(() => {
+					try {
+						expect(i).toBe(3);
+						$a.clearAll();
+						done();
+
+					} catch (err) {
+						done(err);
+					}
+				}, 5);
+
+			} catch (err) {
+				done(err);
+			}
 		}, 15);
 	});
 });

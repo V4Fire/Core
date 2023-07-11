@@ -151,9 +151,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 						emitter :
 
 						p.single && emitter.once ||
-						emitter.addEventListener ||
+						emitter.on ||
 						emitter.addListener ||
-						emitter.on;
+						emitter.addEventListener;
 
 					if (Object.isFunction(on)) {
 						on.call(emitter, event, handler, ...args);
@@ -445,7 +445,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	eventListenerDestructor(event: Event): void {
 		const
 			emitter = <EventEmitterLike>event.emitter,
-			off = emitter.removeEventListener ?? emitter.removeListener ?? emitter.off;
+			off = emitter.off ?? emitter.removeListener ?? emitter.removeEventListener;
 
 		if (Object.isFunction(off)) {
 			off.call(emitter, event.event, event.handler);

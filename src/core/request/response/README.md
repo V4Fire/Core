@@ -33,7 +33,7 @@ There are a few differences between these classes:
 | EventName      | Description                                           | Payload description | Payload |
 |----------------|-------------------------------------------------------|---------------------|---------|
 | `bodyUsed`     | The response body has been read via `decode`          | -                   | -       |
-| `streamUsed`   | The response body has been read via an async iterator | -                   | -       |
+| `streamUsed`   | The response body has been read via an asynchronous iterator | -                   | -       |
 
 ### Constructor options
 
@@ -157,7 +157,7 @@ request('//users', {decoders: [parseProtobuf, normalizeUsers], responseType: 'ar
 
 #### decodeStream
 
-Parses the response body as a stream and yields chunks via an async iterator.
+Parses the response body as a stream and yields chunks via an asynchronous iterator.
 You can't parse the response as a whole data after invoking this method.
 
 A way to parse data chunks is based on the response `Content-Type` header or a passed `responseType`constructor option.
@@ -184,7 +184,7 @@ request('//users', {streamDecoders: [streamArray], responseType: 'json'})
 
 #### jsonStream
 
-Parses the response data stream as a JSON tokens and yields them via an async iterator.
+Parses the response data stream as a JSON tokens and yields them via an asynchronous iterator.
 
 ```js
 import request from 'core/request';
@@ -200,7 +200,7 @@ request('//users', {streamDecoders: [streamArray]})
 
 #### textStream
 
-Parses the response data stream as a text chunks and yields them via an async iterator.
+Parses the response data stream as a text chunks and yields them via an asynchronous iterator.
 
 ```js
 import request from 'core/request';
@@ -215,7 +215,7 @@ request('//users')
 
 #### stream
 
-Parses the response data stream as an ArrayBuffer chunks and yields them via an async iterator.
+Parses the response data stream as an ArrayBuffer chunks and yields them via an asynchronous iterator.
 
 ```js
 import request from 'core/request';

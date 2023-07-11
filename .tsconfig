@@ -1,21 +1,39 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "outDir": "ts_dist",
+
     "target": "es5",
     "module": "commonjs",
-    "downlevelIteration": true,
+
     "esModuleInterop": true,
-    "importHelpers": true,
-    "importsNotUsedAsValues": "error",
+    "downlevelIteration": true,
+
     "lib": ["dom", "esnext"],
-    "outDir": "ts_dist",
-    "forceConsistentCasingInFileNames": true,
-    "disableSizeLimit": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+
+    "allowJs": false,
     "skipLibCheck": false,
+
+    "disableSizeLimit": true,
+    "forceConsistentCasingInFileNames": true,
+
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
-    "experimentalDecorators": true,
-    "noImplicitOverride": true
-  }
+
+    "noImplicitOverride": true,
+    "importsNotUsedAsValues": "error"
+  },
+
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.js"
+  ],
+
+  "files": [
+    "./index.d.ts",
+    "./jest.config.ts"
+  ]
 }

@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2022-??-??)
+
+#### :bug: Bug Fix
+
+* Fixed an error when calling `String.capitalize` with an empty string
+
 ## v3.57.0 (2021-08-31)
 
 #### :bug: Bug Fix

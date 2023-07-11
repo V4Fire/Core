@@ -11,7 +11,7 @@
 import express from 'express';
 import { set, get } from 'core/env';
 
-import { sequence } from 'core/iter/combinators';
+import { seq } from 'core/iter/combinators';
 import { pick, andPick, assemble, streamArray } from 'core/json/stream';
 
 import Provider, { provider } from 'core/data';
@@ -646,7 +646,7 @@ describe('core/request', () => {
 
 				it('parsing JSON from a stream', async () => {
 					const req = request('http://localhost:4000/json/users', {
-						streamDecoder: (data) => sequence(
+						streamDecoder: (data) => seq(
 							assemble(pick(data, 'total')),
 							streamArray(andPick(data, 'data'))
 						)

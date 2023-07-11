@@ -78,7 +78,7 @@ Use this function when you need to combine two or more Pick-s from a one token s
 
 ```js
 import { intoIter } from 'core/iter';
-import { sequence } from 'core/iter/combinators';
+import { seq } from 'core/iter/combinators';
 import { from, pick, andPick, assemble, streamArray } from 'core/json/stream';
 
 const tokens = intoIter(from(JSON.stringify({
@@ -90,7 +90,7 @@ const tokens = intoIter(from(JSON.stringify({
   ]
 })));
 
-const seq = sequence(
+const seq = seq(
   assemble(pick(tokens, 'total')),
   streamArray(andPick(tokens, 'data'))
 );

@@ -392,7 +392,7 @@ export default class Response<
 	}
 
 	/**
-	 * Parses the response body as a stream and yields chunks via an async iterator.
+	 * Parses the response body as a stream and yields chunks via an asynchronous iterator.
 	 * You can't parse the response as a whole data after invoking this method.
 	 *
 	 * A way to parse data chunks is based on the response `Content-Type` header or a passed `responseType`
@@ -477,7 +477,7 @@ export default class Response<
 	}
 
 	/**
-	 * Parses the response data stream as a JSON tokens and yields them via an async iterator
+	 * Parses the response data stream as a JSON tokens and yields them via an asynchronous iterator
 	 */
 	@once
 	jsonStream(): AsyncIterableIterator<Token> {
@@ -586,7 +586,7 @@ export default class Response<
 	}
 
 	/**
-	 * Parses the response data stream as a text chunks and yields them via an async iterator
+	 * Parses the response data stream as a text chunks and yields them via an asynchronous iterator
 	 */
 	@once
 	textStream(): AsyncIterableIterator<string> {
@@ -611,7 +611,7 @@ export default class Response<
 	}
 
 	/**
-	 * Parses the response data stream as an ArrayBuffer chunks and yields them via an async iterator
+	 * Parses the response data stream as an ArrayBuffer chunks and yields them via an asynchronous iterator
 	 */
 	@once
 	stream(): AsyncIterableIterator<ArrayBuffer | undefined> {

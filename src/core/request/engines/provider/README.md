@@ -29,11 +29,11 @@ req('/search')
   });
 
 // You can specify which provider method should be invoked based on the request method
-// (by default will be used mapping from the provider properties, like `addMethod` or `updMethod`)
+// (by default will be used mapping from the provider properties, like `addMethod` or `updateMethod`)
 
 const req2 = request('/search', {
   engine: createProviderEngine(DataProvider, {
-    PATCH: 'upd'
+    PATCH: 'update'
   })
 });
 ```

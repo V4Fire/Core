@@ -39,6 +39,7 @@ const config: Config = {
 			return this[$$.locale];
 		}
 
+		// @ts-ignore (unsafe)
 		return typeof LOCALE !== 'undefined' ? LOCALE : undefined;
 	},
 

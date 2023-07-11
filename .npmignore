@@ -27,9 +27,6 @@ $RECYCLE.BIN
 .LSOverride
 .vscode
 
-# Icon must ends with two \r.
-Icon
-
 # Thumbnails
 ._*
 
@@ -70,3 +67,4 @@ Icon
 /.github
 /assets
 /typedoc.json
+

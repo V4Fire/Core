@@ -467,10 +467,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * }
 	 * ```
 	 */
-	iterable<T>(
-		iterable: Iterable<T> | AsyncIterable<T>,
-		opts?: AsyncOptions
-	): AsyncIterable<T> | AsyncIterable<T> & Iterable<T> {
+	iterable<T>(iterable: AnyIterable<T>, opts?: AsyncOptions): AsyncIterable<T> | AsyncIterable<T> & Iterable<T> {
 		const
 			baseIterator = this.getBaseIterator(iterable);
 
@@ -1082,9 +1079,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * @param [iterable]
 	 */
-	protected getBaseIterator<T>(
-		iterable: Iterable<T> | AsyncIterable<T>
-	): CanUndef<IterableIterator<T> | AsyncIterableIterator<T>> {
+	protected getBaseIterator<T>(iterable: AnyIterable<T>): CanUndef<AnyIterableIterator<T>> {
 		if (Object.isFunction(iterable[Symbol.asyncIterator])) {
 			return iterable[Symbol.asyncIterator]();
 		}

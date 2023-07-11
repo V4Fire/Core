@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2022-??-??)
+
+#### :rocket: New Feature
+
+* Added result hashing for `Object.fastHash` `core/prelude`
+* Added an engine that allows storing data in a single string `core/kv-storage`
+
+#### :bug: Bug Fix
+
+* Fixed an error when calling `String.capitalize` with an empty string
 
 ## v3.95.4 (2023-05-25)
 
@@ -66,6 +76,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Fixed Node.js engine `core/request`
 
+>>>>>>> origin/master
 ## v3.93.0 (2023-03-14)
 
 #### :rocket: New Feature

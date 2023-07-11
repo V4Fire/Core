@@ -49,7 +49,7 @@ export class Descriptor {
 			{descriptor} = this;
 
 		if (descriptor.set != null) {
-			descriptor.set.call(receiver);
+			descriptor.set.call(receiver, value);
 			return true;
 		}
 

@@ -49,7 +49,7 @@ export * from 'core/async/interface';
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * The wrapper takes a link to the "raw" data provider and returns a new object that based
-	 * on the original, but all async methods and properties are wrapped by Async.
+	 * on the original, but all asynchronous methods and properties are wrapped by Async.
 	 * Notice, the wrapped methods can take additional Async parameters, like group or label.
 	 * If you don't provide a group, it will be taken from the provider name.
 	 *
@@ -78,7 +78,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * // So we can use it to clear or suspend requests, etc.
 	 * $a.clearAll({group: 'api.User'})
 	 *
-	 * wrappedProvider.upd({uuid: 1}, {
+	 * wrappedProvider.update({uuid: 1}, {
 	 *   // All wrapped methods can take additional Async parameters as the second argument: `group`, `label` and `join`
 	 *   group: 'bla',
 	 *   label: 'foo',
@@ -112,32 +112,43 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			wrappedProviderGroup = opts?.group ?? provider.providerName;
 
 		for (let i = 0; i < dataProviderMethodsToReplace.length; i++) {
-			const methodName = dataProviderMethodsToReplace[i];
+			const
+				methodName = dataProviderMethodsToReplace[i];
 
-			wrappedProvider[methodName] = <D = unknown>(
-				body?: RequestBody | RequestQuery,
-				opts?: CreateRequestOptions<D> & AsyncOptions
-			) => {
-				const
-					ownParams = Object.reject(opts, asyncOptionsKeys),
-					asyncParams = Object.select(opts, asyncOptionsKeys),
-					group = `${wrappedProviderGroup}${asyncParams.group != null ? `:${asyncParams.group}` : ''}`;
+			Object.defineProperty(wrappedProvider, methodName, {
+				configurable: true,
+				writable: true,
+				value: <D = unknown>(
+					body?: RequestBody | RequestQuery,
+					opts?: CreateRequestOptions<D> & AsyncOptions
+				) => {
+					const
+						ownParams = Object.reject(opts, asyncOptionsKeys),
+						asyncParams = Object.select(opts, asyncOptionsKeys),
+						group = `${wrappedProviderGroup}${asyncParams.group != null ? `:${asyncParams.group}` : ''}`;
 
-				if (isQueryMethod(methodName)) {
-					return this.request(provider[methodName](<RequestQuery>body, ownParams), {
+					if (isQueryMethod(methodName)) {
+						return this.request(provider[methodName](<RequestQuery>body, ownParams), {
+							...asyncParams,
+							group
+						});
+					}
+
+					return this.request(provider[methodName](<RequestBody>body, ownParams), {
 						...asyncParams,
 						group
 					});
 				}
-
-				return this.request(provider[methodName](<RequestBody>body, ownParams), {
-					...asyncParams,
-					group
-				});
-			};
+			});
 		}
 
-		wrappedProvider.emitter = this.wrapEventEmitter(provider.emitter, opts);
+		Object.defineProperty(wrappedProvider, 'emitter', {
+			configurable: true,
+			enumerable: true,
+			writable: true,
+			value: this.wrapEventEmitter(provider.emitter, opts)
+		});
+
 		return wrappedProvider;
 
 		function isQueryMethod(name: DataProviderMethodsToReplace): name is DataProviderQueryMethodsToReplace {
@@ -147,7 +158,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * The wrapper takes a link to the "raw" event emitter and returns a new object that based
-	 * on the original, but all async methods and properties are wrapped by Async.
+	 * on the original, but all asynchronous methods and properties are wrapped by Async.
 	 * Notice, the wrapped methods can take additional Async parameters, like group or label.
 	 * In addition, the wrapper adds new methods, like "on" or "off", to make the emitter API more standard.
 	 *
@@ -190,49 +201,87 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	wrapEventEmitter<T extends EventEmitterLike>(
 		emitter: T,
 		opts?: AsyncOptionsForWrappers
-	): (EventEmitterOverwritten<T> & EventEmitterWrapper) {
-		const wrappedEmitter = Object.create(emitter);
+	): EventEmitterOverwritten<T> & EventEmitterWrapper {
+		const
+			wrappedEmitter = Object.create(emitter);
 
-		wrappedEmitter.on = (event, fn, ...params) => {
-			if (!Object.isFunction(fn)) {
-				throw new TypeError('Wrapped emitters methods `on, addEventListener, addListener` accept only a function as the second parameter');
+		Object.defineProperty(wrappedEmitter, 'on', {
+			configurable: true,
+			writable: true,
+			value: (event, fn, ...params) => {
+				if (!Object.isFunction(fn)) {
+					throw new TypeError('Wrapped emitters methods `on, addEventListener, addListener` accept only a function as the second parameter');
+				}
+
+				return this.on(emitter, event, fn, ...normalizeAdditionalArgs(params));
 			}
+		});
 
-			return this.on(emitter, event, fn, ...normalizeAdditionalArgs(params));
-		};
+		Object.defineProperty(wrappedEmitter, 'addEventListener', {
+			configurable: true,
+			writable: true,
+			value: wrappedEmitter.on
+		});
 
-		wrappedEmitter.addEventListener = wrappedEmitter.on;
-		wrappedEmitter.addListener = wrappedEmitter.on;
+		Object.defineProperty(wrappedEmitter, 'addListener', {
+			configurable: true,
+			writable: true,
+			value: wrappedEmitter.on
+		});
 
-		wrappedEmitter.once =
-			(event, fn, ...params) => this.once(emitter, event, fn, ...normalizeAdditionalArgs(params));
+		Object.defineProperty(wrappedEmitter, 'once', {
+			configurable: true,
+			writable: true,
+			value: (event, fn, ...params) => this.once(emitter, event, fn, ...normalizeAdditionalArgs(params))
+		});
 
-		wrappedEmitter.promisifyOnce =
-			(event, ...params) => this.promisifyOnce(emitter, event, ...normalizeAdditionalArgs(params));
+		Object.defineProperty(wrappedEmitter, 'promisifyOnce', {
+			configurable: true,
+			writable: true,
+			value: (event, ...params) => this.promisifyOnce(emitter, event, ...normalizeAdditionalArgs(params))
+		});
 
 		const wrapOff = (originalMethod) => (link, ...args) => {
-			if (link == null || typeof link !== 'object' || args.length > 0) {
+			if (link != null && typeof link !== 'object' || args.length > 0) {
 				return Object.isFunction(originalMethod) ? originalMethod.call(emitter, link, ...args) : null;
 			}
 
 			return this.off(link);
 		};
 
-		wrappedEmitter.off = wrapOff(emitter.off);
-		wrappedEmitter.removeEventListener = wrapOff(emitter.removeEventListener);
-		wrappedEmitter.removeListener = wrapOff(emitter.removeListener);
+		Object.defineProperty(wrappedEmitter, 'off', {
+			configurable: true,
+			writable: true,
+			value: wrapOff(emitter.off)
+		});
 
-		wrappedEmitter.emit = (event, ...args) => {
-			for (let i = 0; i < emitLikeEvents.length; i++) {
-				const
-					key = emitLikeEvents[i],
-					property = emitter[key];
+		Object.defineProperty(wrappedEmitter, 'removeEventListener', {
+			configurable: true,
+			writable: true,
+			value: wrapOff(emitter.removeEventListener)
+		});
 
-				if (Object.isFunction(property)) {
-					return property.call(emitter, event, ...args);
+		Object.defineProperty(wrappedEmitter, 'removeListener', {
+			configurable: true,
+			writable: true,
+			value: wrapOff(emitter.removeListener)
+		});
+
+		Object.defineProperty(wrappedEmitter, 'emit', {
+			configurable: true,
+			writable: true,
+			value: (event, ...args) => {
+				for (let i = 0; i < emitLikeEvents.length; i++) {
+					const
+						key = emitLikeEvents[i],
+						property = emitter[key];
+
+					if (Object.isFunction(property)) {
+						return property.call(emitter, event, ...args);
+					}
 				}
 			}
-		};
+		});
 
 		return wrappedEmitter;
 
@@ -258,8 +307,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * The wrapper takes a link to the "raw" async storage and returns a new object that based
-	 * on the original, but all async methods and properties are wrapped by Async.
+	 * The wrapper takes a link to the "raw" asynchronous storage and returns a new object that based
+	 * on the original, but all asynchronous methods and properties are wrapped by Async.
 	 * Notice, the wrapped methods can take additional Async parameters, like group or label.
 	 *
 	 * @param storage
@@ -301,42 +350,66 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			globalGroup = opts?.group,
 			wrappedStorage = Object.create(storage);
 
-		wrappedStorage.has = (key, ...args) => {
-			const [asyncOpts, params] = separateArgs(args);
-			return this.promise(storage.has(key, ...params), asyncOpts);
-		};
-
-		wrappedStorage.get = <T = unknown>(key, ...args) => {
-			const [asyncOpts, params] = separateArgs(args);
-			return this.promise(storage.get<T>(key, ...params), asyncOpts);
-		};
-
-		wrappedStorage.set = (key, value, ...args) => {
-			const [asyncOpts, params] = separateArgs(args);
-			return this.promise(storage.set(key, value, ...params), asyncOpts);
-		};
-
-		wrappedStorage.remove = (key, ...args) => {
-			const [asyncOpts, params] = separateArgs(args);
-			return this.promise(storage.remove(key, ...params), asyncOpts);
-		};
-
-		wrappedStorage.clear = <T = unknown>(filter?, ...args) => {
-			if (Object.isPlainObject(filter)) {
-				filter = undefined;
-				args = [filter];
+		Object.defineProperty(wrappedStorage, 'has', {
+			configurable: true,
+			writable: true,
+			value: (key, ...args) => {
+				const [asyncOpts, params] = separateArgs(args);
+				return this.promise(storage.has(key, ...params), asyncOpts);
 			}
+		});
 
-			const [asyncOpts, params] = separateArgs(args);
-			return this.promise(storage.clear<T>(filter, ...params), asyncOpts);
-		};
+		Object.defineProperty(wrappedStorage, 'get', {
+			configurable: true,
+			writable: true,
+			value: (key, ...args) => {
+				const [asyncOpts, params] = separateArgs(args);
+				return this.promise(storage.get<T>(key, ...params), asyncOpts);
+			}
+		});
+
+		Object.defineProperty(wrappedStorage, 'set', {
+			configurable: true,
+			writable: true,
+			value: (key, value, ...args) => {
+				const [asyncOpts, params] = separateArgs(args);
+				return this.promise(storage.set(key, value, ...params), asyncOpts);
+			}
+		});
+
+		Object.defineProperty(wrappedStorage, 'remove', {
+			configurable: true,
+			writable: true,
+			value: (key, ...args) => {
+				const [asyncOpts, params] = separateArgs(args);
+				return this.promise(storage.remove(key, ...params), asyncOpts);
+			}
+		});
+
+		Object.defineProperty(wrappedStorage, 'clear', {
+			configurable: true,
+			writable: true,
+			value: (filter?, ...args) => {
+				if (Object.isPlainObject(filter)) {
+					filter = undefined;
+					args = [filter];
+				}
+
+				const [asyncOpts, params] = separateArgs(args);
+				return this.promise(storage.clear<T>(filter, ...params), asyncOpts);
+			}
+		});
 
 		if ('namespace' in storage) {
-			wrappedStorage.namespace = (name, opts?) => {
-				const [asyncOpts] = separateArgs([opts]);
-				const storageNamespace = storage.namespace(name);
-				return this.wrapStorage(storageNamespace, asyncOpts);
-			};
+			Object.defineProperty(wrappedStorage, 'namespace', {
+				configurable: true,
+				writable: true,
+				value: (name, opts?) => {
+					const [asyncOpts] = separateArgs([opts]);
+					const storageNamespace = storage.namespace(name);
+					return this.wrapStorage(storageNamespace, asyncOpts);
+				}
+			});
 		}
 
 		return wrappedStorage;

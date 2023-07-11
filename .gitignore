@@ -35,9 +35,6 @@ $RECYCLE.BIN
 !.yarn/sdks
 !.yarn/versions
 
-# Icon must ends with two \r.
-Icon
-
 # Thumbnails
 ._*
 

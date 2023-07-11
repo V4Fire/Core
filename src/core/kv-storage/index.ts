@@ -141,7 +141,7 @@ export const namespace = local.namespace.bind(local);
  * Creates a new kv-storage API with the specified engine
  *
  * @param engine
- * @param async - if true, then the storage is implemented async interface
+ * @param async - if true, then the storage is implemented an asynchronous interface
  *
  * @example
  * ```js

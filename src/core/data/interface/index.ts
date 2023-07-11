@@ -158,7 +158,7 @@ export interface Provider {
 	 * @param [opts] - additional request options
 	 * @emits `upd<T>(data: () => AbortablePromise<T>)`
 	 */
-	upd<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D>;
+	update<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D>;
 
 	/**
 	 * Deletes data of the provider by a query.
@@ -168,5 +168,5 @@ export interface Provider {
 	 * @param [opts] - additional request options
 	 * @emits `del<T>(data: () => AbortablePromise<T>)`
 	 */
-	del<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D>;
+	delete<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D>;
 }
