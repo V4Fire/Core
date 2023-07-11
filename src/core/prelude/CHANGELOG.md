@@ -9,17 +9,15 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v4.??.?? (2023-??-??)
-
-#### :house: Internal
-
-* Updated global object definition to be universal for any JS environment `core/prelude/env/const`
-
-## v3.??.?? (2022-??-??)
+## v4.0.0-alpha.6 (2023-07-11)
 
 #### :rocket: New Feature
 
 * Added result hashing for `Object.fastHash`
+
+#### :house: Internal
+
+* Updated global object definition to be universal for any JS environment `core/prelude/env/const`
 
 #### :bug: Bug Fix
 
