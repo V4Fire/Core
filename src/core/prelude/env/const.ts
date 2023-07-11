@@ -33,10 +33,11 @@ export const GLOBAL =
 	typeof window === 'object' && isGlobal(window) && window ||
 	typeof global === 'object' && isGlobal(global) && global ||
 	typeof self === 'object' && isGlobal(self) && self ||
-	(function getGlobalUnstrict() {
-		// eslint-disable-next-line @typescript-eslint/no-invalid-this
+
+	(function getGlobalUnstrict(this: unknown) {
 		return this;
 	}()) ||
+
 	// eslint-disable-next-line no-new-func
 	new Function('', 'return this')();
 
@@ -66,7 +67,7 @@ export const IS_NODE: boolean = (() => {
 
 /**
  * Checks if the provided value is a global object by confirming the presence of Math,
- * known to exist in any global JavaScript environment.
+ * known to exist in any global JS environment
  *
  * @param obj
  */
