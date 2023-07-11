@@ -29,7 +29,8 @@ const IncludeOptions = {};
 
 /**
  * Returns a function, which can import modules within node.js process from the specified directories.
- * The returned function takes a path to require and optionally takes a caller file's directory (to enable "@super" alias).
+ * The returned function takes a path to require and
+ * optionally takes a caller file's directory (to enable "@super" alias).
  * Also, the function can return a path or source code of the found file if a special flag is provided.
  *
  * @param {Array<string>} layers - list of layers

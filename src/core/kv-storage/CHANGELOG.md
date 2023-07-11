@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.XX.X (2023-XX-XX)
+
+#### :rocket: New Feature
+
+* Added an engine that allows storing data in a single string
+
 ## v3.95.1 (2023-04-18)
 
 #### :rocket: New Feature
