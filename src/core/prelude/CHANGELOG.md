@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.??.?? (2023-??-??)
+
+#### :house: Internal
+
+* Updated global object definition to be universal for any JS environment `core/prelude/env/const`
+
 ## v3.??.?? (2022-??-??)
 
 #### :rocket: New Feature
