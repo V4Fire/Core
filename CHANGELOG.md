@@ -11,6 +11,9 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.XX.X (2023-XX-XX)
+
+* Added an engine that allows storing data in a single string `core/kv-storage`
 
 ## v3.95.4 (2023-05-25)
 
