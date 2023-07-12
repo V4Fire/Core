@@ -33,3 +33,24 @@ import { convertIfDate } from 'core/json';
 // true
 console.log(JSON.parse('"2015-10-12"', convertIfDate).is(new Date(2015, 9, 12)));
 ```
+
+### evalWith
+
+Returns a reviver for `JSON.parse`, which interprets JSON as a JS expression in a given context.
+The expression can be in two forms:
+
+1. `call` invokes a function at a specified path with given arguments.
+
+   ```js
+   // ['b-button', 'b-button_focused_true']
+   console.log(
+     JSON.parse('["call", "provide.componentClasses", "b-button", {"focused": true}]', evalWith(myComponent))
+   );
+   ```
+
+2. `get` retrieves the value from a defined path.
+
+   ```js
+   // ['b-button']
+   console.log(JSON.parse('["call", "meta.componentName"]', evalWith(myBButton)));
+   ```

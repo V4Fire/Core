@@ -35,3 +35,57 @@ export function convertIfDate(key: string, value: unknown): unknown {
 
 	return value;
 }
+
+/**
+ * Returns a reviver for `JSON.parse`, which interprets JSON as a JS expression in a given context.
+ * The expression can be in two forms:
+ *
+ * 1. `call` invokes a function at a specified path with given arguments.
+ *
+ *   ```js
+ *   // ['b-button', 'b-button_focused_true']
+ *   console.log(
+ *     JSON.parse('["call", "provide.componentClasses", "b-button", {"focused": true}]', evalWith(myComponent))
+ *   );
+ *   ```
+ *
+ * 2. `get` retrieves the value from a defined path.
+ *
+ *   ```js
+ *   // ['b-button']
+ *   console.log(JSON.parse('["call", "meta.componentName"]', evalWith(myBButton)));
+ *   ```
+ *
+ * @param ctx - the context for interpreting JSON
+ */
+export function evalWith(ctx: object): JSONCb {
+	return (key: string, value: unknown) => {
+		if (key === '' && Object.isArray(value)) {
+			const
+				[expr, path, ...args] = value;
+
+			if (!Object.isString(expr) || !Object.isString(path)) {
+				return value;
+			}
+
+			const
+				pathChunks = path.split('.'),
+				ref = Object.get(ctx, pathChunks);
+
+			switch (expr) {
+				case 'get': return ref;
+
+				case 'call': {
+					if (!Object.isFunction(ref)) {
+						throw new TypeError(`The value at the specified ${path} path is not a function`);
+					}
+
+					const refCtx = pathChunks.length === 1 ? ctx : Object.get(ctx, pathChunks.slice(0, -1));
+					return ref.apply(refCtx, args);
+				}
+
+				default: return value;
+			}
+		}
+	}
+}

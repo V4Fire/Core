@@ -91,5 +91,4 @@ extend(Object, 'parse', (value, reviver?: JSONCb) => {
 			return value;
 		};
 	}
-
 });
