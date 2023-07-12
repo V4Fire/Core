@@ -68,7 +68,7 @@ export function convertIfDate(key: string, value: unknown): unknown {
  */
 export function evalWith(ctx: object): JSONCb {
 	return (key: string, value: unknown) => {
-		if (key === '' && Object.isArray(value)) {
+		if (Object.isArray(value)) {
 			const
 				[expr, path, ...args] = value;
 
@@ -88,18 +88,8 @@ export function evalWith(ctx: object): JSONCb {
 						throw new TypeError(`The value at the specified ${path} path is not a function`);
 					}
 
-					const
-						refCtx = pathChunks.length === 1 ? ctx : Object.get(ctx, pathChunks.slice(0, -1));
-
-					const revivedArgs = args.map((arg) => {
-						if (!Object.isArray(arg) || arg[0] !== 'call' && arg[0] !== 'get') {
-							return arg;
-						}
-
-						return Object.parse(JSON.stringify(arg), evalWith(ctx));
-					});
-
-					return ref.apply(refCtx, revivedArgs);
+					const refCtx = pathChunks.length === 1 ? ctx : Object.get(ctx, pathChunks.slice(0, -1));
+					return ref.apply(refCtx, args);
 				}
 
 				default: return value;
