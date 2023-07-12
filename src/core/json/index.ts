@@ -87,5 +87,7 @@ export function evalWith(ctx: object): JSONCb {
 				default: return value;
 			}
 		}
+
+		return value;
 	}
 }
