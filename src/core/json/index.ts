@@ -53,7 +53,7 @@ export function convertIfDate(key: string, value: unknown): unknown {
  *
  *   ```js
  *   // ['b-button']
- *   console.log(JSON.parse('["call", "meta.componentName"]', evalWith(myBButton)));
+ *   console.log(JSON.parse('["get", "meta.componentName"]', evalWith(myBButton)));
  *   ```
  *
  * Also, the reviver supports nested expression for the `call` arguments. For example:
