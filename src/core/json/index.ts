@@ -56,6 +56,14 @@ export function convertIfDate(key: string, value: unknown): unknown {
  *   console.log(JSON.parse('["call", "meta.componentName"]', evalWith(myBButton)));
  *   ```
  *
+ * Also, the reviver supports nested expression for the `call` arguments. For example:
+ *
+ * ```js
+ * // ['b-button', 'b-button_focused_true']
+ * console.log(
+ *   JSON.parse('["call", "provide.componentClasses", "b-button", ["get", "mods"]]', evalWith(myComponent))
+ * );
+ * ```
  * @param ctx - the context for interpreting JSON
  */
 export function evalWith(ctx: object): JSONCb {
@@ -80,8 +88,18 @@ export function evalWith(ctx: object): JSONCb {
 						throw new TypeError(`The value at the specified ${path} path is not a function`);
 					}
 
-					const refCtx = pathChunks.length === 1 ? ctx : Object.get(ctx, pathChunks.slice(0, -1));
-					return ref.apply(refCtx, args);
+					const
+						refCtx = pathChunks.length === 1 ? ctx : Object.get(ctx, pathChunks.slice(0, -1));
+
+					const revivedArgs = args.map((arg) => {
+						if (!Object.isArray(arg) || arg[0] !== 'call' && arg[0] !== 'get') {
+							return arg;
+						}
+
+						return Object.parse(JSON.stringify(arg), evalWith(ctx));
+					});
+
+					return ref.apply(refCtx, revivedArgs);
 				}
 
 				default: return value;
@@ -89,5 +107,5 @@ export function evalWith(ctx: object): JSONCb {
 		}
 
 		return value;
-	}
+	};
 }
