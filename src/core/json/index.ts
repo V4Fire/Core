@@ -53,14 +53,22 @@ export function convertIfDate(key: string, value: unknown): unknown {
  *
  *   ```js
  *   // ['b-button']
- *   console.log(JSON.parse('["call", "meta.componentName"]', evalWith(myBButton)));
+ *   console.log(JSON.parse('["get", "meta.componentName"]', evalWith(myBButton)));
  *   ```
  *
+ * Also, the reviver supports nested expression for the `call` arguments. For example:
+ *
+ * ```js
+ * // ['b-button', 'b-button_focused_true']
+ * console.log(
+ *   JSON.parse('["call", "provide.componentClasses", "b-button", ["get", "mods"]]', evalWith(myComponent))
+ * );
+ * ```
  * @param ctx - the context for interpreting JSON
  */
 export function evalWith(ctx: object): JSONCb {
 	return (key: string, value: unknown) => {
-		if (key === '' && Object.isArray(value)) {
+		if (Object.isArray(value)) {
 			const
 				[expr, path, ...args] = value;
 
@@ -89,5 +97,5 @@ export function evalWith(ctx: object): JSONCb {
 		}
 
 		return value;
-	}
+	};
 }

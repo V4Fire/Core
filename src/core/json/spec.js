@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { convertIfDate } from 'core/json';
+import { convertIfDate, evalWith } from 'core/json';
 
 describe('core/json', () => {
 	describe('`convertIfDate`', () => {
@@ -40,6 +40,56 @@ describe('core/json', () => {
 			it('with suffix is not parsed as a date', () => {
 				const strWithSuffix = `${isoString}-not-a-date`;
 				expect(JSON.parse(`"${strWithSuffix}"`, convertIfDate)).toEqual(strWithSuffix);
+			});
+		});
+	});
+
+	describe('`evalWith`', () => {
+		const ctx = {
+			a: 1,
+			fn(def) {
+				return def ?? 2;
+			},
+
+			b: {
+				c: 3,
+				nestedFn(def) {
+					return def ?? 4;
+				}
+			}
+		};
+
+		describe('`call` expression', () => {
+			it('default', () => {
+				expect(JSON.parse('["call", "fn"]', evalWith(ctx))).toEqual(2);
+			});
+
+			it('with nested path', () => {
+				expect(JSON.parse('["call", "b.nestedFn"]', evalWith(ctx))).toEqual(4);
+			});
+
+			describe('with args', () => {
+				it('with regular values', () => {
+					expect(JSON.parse('["call", "fn", [10, 20]]', evalWith(ctx))).toEqual([10, 20]);
+				});
+
+				it('with nested `get` expression', () => {
+					expect(JSON.parse('["call", "fn", ["get", "b.c"]]', evalWith(ctx))).toEqual(3);
+				});
+
+				it('with nested `call` expression', () => {
+					expect(JSON.parse('["call", "fn", ["call", "b.nestedFn"]]', evalWith(ctx))).toEqual(4);
+				});
+			});
+		});
+
+		describe('`get` expression', () => {
+			it('default', () => {
+				expect(JSON.parse('["get", "a"]', evalWith(ctx))).toEqual(1);
+			});
+
+			it('with nested path', () => {
+				expect(JSON.parse('["get", "b.c"]', evalWith(ctx))).toEqual(3);
 			});
 		});
 	});
