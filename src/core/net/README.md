@@ -10,9 +10,20 @@ import * as net from 'core/net';
 })();
 ```
 
+## Why is this module needed?
+
+At the moment, the module provides a function to check for an internet connection, which replaces the
+built-in browser API navigator.online() as it doesn't always give the correct result.
+The browser API simply checks if your device is connected to the network. However, it doesn't check for internet access.
+Therefore, for a more accurate check, the module uses periodic lightweight requests to check for internet access.
+
+## Where to use it
+This module can be useful for organizing the work of your PWA application with offline support.
+It allows you to track the availability of the Internet and respond to it by changing the UI.
+
 ## Configuration
 
-To enable online checking you need to add a configuration within your runtime config module (`src/config`).
+You need to add a configuration within your runtime config module (`src/config`).
 
 __config__
 
@@ -47,6 +58,14 @@ extend({
   }
 });
 ```
+
+## About checkURL
+
+The module for checking the availability of the Internet sends a lightweight (`HEAD` or `OPTIONS`) request to the specified URL.
+It is better to specify a publicly available URL to which many requests come and which is always available.
+A good example is the favicon of Google.
+
+If the `checkUrl` is not defined or is `null`, the internet availability check always returns `true`.
 
 ## Events
 
