@@ -463,17 +463,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helpers@npm:7.17.7":
-  version: 7.17.7
-  resolution: "@babel/helpers@npm:7.17.7"
-  dependencies:
-    "@babel/template": ^7.16.7
-    "@babel/traverse": ^7.17.3
-    "@babel/types": ^7.17.0
-  checksum: fdc93714b3eb3b7a179a5133c3d7008f36785af469bb091a2f056f1a893aeedc8654e87c5e04a5cdecb6587e6177839a4b887b832be289689ffe277d08dfd4a7
-  languageName: node
-  linkType: hard
-
 "@babel/helpers@npm:^7.17.2":
   version: 7.22.3
   resolution: "@babel/helpers@npm:7.22.3"
@@ -1487,15 +1476,6 @@ __metadata:
   version: 0.8.0
   resolution: "@babel/regjsgen@npm:0.8.0"
   checksum: 89c338fee774770e5a487382170711014d49a68eb281e74f2b5eac88f38300a4ad545516a7786a8dd5702e9cf009c94c2f582d200f077ac5decd74c56b973730
-  languageName: node
-  linkType: hard
-
-"@babel/runtime@npm:7.17.0":
-  version: 7.17.0
-  resolution: "@babel/runtime@npm:7.17.0"
-  dependencies:
-    regenerator-runtime: ^0.13.4
-  checksum: 1864ac3c6aa061798c706ce858af311f06f6ad6efafc20cca7029fdaa9786c58ccaf5bdb8bd133cb505f27bed7659b65f1503b8da58adbd1eb88f7333644e6ed
   languageName: node
   linkType: hard
 
@@ -3197,12 +3177,10 @@ __metadata:
   dependencies:
     "@babel/core": 7.17.5
     "@babel/helper-module-transforms": 7.16.7
-    "@babel/helpers": 7.17.7
     "@babel/plugin-proposal-decorators": 7.17.2
     "@babel/plugin-transform-runtime": 7.17.0
     "@babel/preset-env": 7.16.11
     "@babel/preset-typescript": 7.16.7
-    "@babel/runtime": 7.17.0
     "@babel/template": 7.16.7
     "@config/config": "npm:config@1.31.0"
     "@pzlr/build-core": 2.13.0
@@ -3269,8 +3247,6 @@ __metadata:
       optional: true
     "@babel/helper-module-transforms":
       optional: true
-    "@babel/helpers":
-      optional: true
     "@babel/plugin-proposal-decorators":
       optional: true
     "@babel/plugin-transform-runtime":
@@ -3278,8 +3254,6 @@ __metadata:
     "@babel/preset-env":
       optional: true
     "@babel/preset-typescript":
-      optional: true
-    "@babel/runtime":
       optional: true
     "@babel/template":
       optional: true
@@ -8795,10 +8769,9 @@ __metadata:
   resolution: "jest-worker@npm:28.1.3"
   dependencies:
     "@types/node": "*"
-    jest-util: ^29.6.1
     merge-stream: ^2.0.0
     supports-color: ^8.0.0
-  checksum: 0af309ea4db17c4c47e84a9246f907960a15577683c005fdeafc8f3c06bc455136f95a6f28fa2a3e924b767eb4dacd9b40915a7707305f88586f099af3ac27a8
+  checksum: e921c9a1b8f0909da9ea07dbf3592f95b653aef3a8bb0cbcd20fc7f9a795a1304adecac31eecb308992c167e8d7e75c522061fec38a5928ace0f9571c90169ca
   languageName: node
   linkType: hard
 
@@ -11080,7 +11053,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regenerator-runtime@npm:^0.13.11, regenerator-runtime@npm:^0.13.4":
+"regenerator-runtime@npm:^0.13.11":
   version: 0.13.11
   resolution: "regenerator-runtime@npm:0.13.11"
   checksum: 27481628d22a1c4e3ff551096a683b424242a216fee44685467307f14d58020af1e19660bf2e26064de946bad7eff28950eae9f8209d55723e2d9351e632bbb4
