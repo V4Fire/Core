@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.97.0 (2023-08-14)
+
+#### :rocket: New Feature
+
+* The standalone version of a library now has `.d.ts` declaration files
+
 ## v3.86.2 (2022-05-18)
 
 #### :bug: Bug Fix
