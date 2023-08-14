@@ -50,6 +50,7 @@ $RECYCLE.BIN
 
 # Build && test
 /dist
+/docs
 /coverage
 /.nyc_output
 
