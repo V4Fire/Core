@@ -5,7 +5,7 @@
   "main": "lib/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.96.0",
+  "version": "3.97.0",
   "author": "kobezzza <kobezzza@gmail.com> (https://github.com/kobezzza)",
   "repository": {
     "type": "git",
@@ -27,6 +27,8 @@
     "build:tsconfig": "node build/build-tsconfig",
     "build:standalone": "gulp build:standalone",
     "watch:standalone": "gulp watch:standalone",
+    "build:decl": "gulp build:standalone-decl",
+    "build:docs": "typedoc",
     "test": "yarn build && yarn test:typescript && yarn test:eslint && yarn test:jest",
     "test:linters": "yarn test:typescript && yarn test:eslint",
     "test:typescript": "node node_modules/@v4fire/typescript-check",
@@ -77,6 +79,7 @@
     "gulp-replace": "1.1.3",
     "gulp-run": "1.7.1",
     "gulp-sourcemaps": "3.0.0",
+    "gulp-typescript": "6.0.0-alpha.1",
     "is-path-inside": "3.0.3",
     "monic": "2.6.1",
     "node-blob": "0.0.2",
@@ -105,9 +108,6 @@
     "jest": "28.1.3",
     "ts-jest": "28.0.8",
     "xhr2": "0.2.1"
-  },
-  "directories": {
-    "doc": "docs"
   },
   "packageManager": "yarn@3.5.0"
 }

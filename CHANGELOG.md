@@ -11,6 +11,14 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.97.0 (2023-08-14)
+
+#### :rocket: New Feature
+
+* The standalone version of a library now has `.d.ts` declaration files
+* Removed `docs` from git index
+* Added command for generate docs `build:docs`
+
 ## v3.96.0 (2023-07-11)
 
 #### :rocket: New Feature
