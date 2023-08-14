@@ -1,0 +1,13 @@
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+import '../../../core/prelude/date/create';
+import '../../../core/prelude/date/compare';
+import '../../../core/prelude/date/modify';
+import '../../../core/prelude/date/other';
+import '../../../core/prelude/date/relative';
+import '../../../core/prelude/date/format';
