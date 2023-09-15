@@ -78,6 +78,11 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	/** @inheritDoc */
 	readonly emitter!: EventEmitter;
 
+	/**
+	 * The parameters with which the provider instance was created
+	 */
+	readonly params!: ProviderOptions;
+
 	/** @inheritDoc */
 	get providerName(): string {
 		return this.constructor[namespace];
@@ -117,6 +122,8 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		requestCache[id] = Object.createDict();
 
 		this.cacheId = id;
+		this.params = opts;
+
 		this.async = new Async(this);
 		this.emitter = new EventEmitter({maxListeners: 1e3, newListener: false});
 
