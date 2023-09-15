@@ -9,7 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v4.??.?? (2023-??-??)
+## v4.0.0-alpha.8 (2023-09-15)
+
+#### :rocket: New Feature
+
+* Added a new property `params`
+
+## v4.0.0-alpha.6 (2023-07-11)
 
 #### :boom: Breaking Change
 

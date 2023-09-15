@@ -11,7 +11,18 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.8 (2023-09-15)
+
+#### :rocket: New Feature
+
+* Added a new property `params` `core/data`
+
 ## v4.0.0-alpha.6 (2023-07-11)
+
+#### :boom: Breaking Change
+
+* Removed `upd` and `del` methods
+* Renamed provider events `upd/del` to `update/delete`
 
 #### :rocket: New Feature
 
@@ -80,7 +91,6 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Fixed Node.js engine `core/request`
 
->>>>>>> origin/master
 ## v3.93.0 (2023-03-14)
 
 #### :rocket: New Feature
