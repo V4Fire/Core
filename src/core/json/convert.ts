@@ -20,7 +20,7 @@ export function expandedStringify(_: string, value: unknown): unknown {
 		case 'Set':
 			return {
 				'__DATA__': `__DATA__:${type}`,
-				[`__DATA__:${type}`]: [...(<Set<unknown>>value)]
+				[`__DATA__:${type}`]: [...(<Set<any>>value)]
 			};
 	}
 
@@ -35,6 +35,8 @@ export function expandedParse(key: string, value: unknown): unknown {
 	if (/^__DATA__:/.test(key)) {
 		switch (key.split(':')[1]) {
 			case 'Function': return Function(`return ${value}`)();
+			case 'Map': return new Map(<Iterable<any>>value);
+			case 'Set': return new Set(<Iterable<any>>value);
 		}
 	}
 
