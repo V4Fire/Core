@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.9 (2023-09-19)
+
+#### :rocket: New Feature
+
+* Added API for serializing custom objects
+
 ## v3.60.5 (2021-10-14)
 
 #### :bug: Bug Fix

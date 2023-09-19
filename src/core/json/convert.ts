@@ -6,25 +6,35 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+const
+	typeRgxp = /^\[object (.*)]$/,
+	isCustomSerialized = /^__DATA__:/;
+
 export function expandedStringify(_: string, value: unknown): unknown {
-	const type = /^\[object (.*)]$/.exec({}.toString.call(value))![1];
+	const
+		type = typeRgxp.exec({}.toString.call(value))![1];
 
 	switch (type) {
+		case 'Date':
+			return customSerialize((<Date>value).valueOf());
+
+		case 'BigInt':
 		case 'Function':
-			return {
-				'__DATA__': `__DATA__:Function`,
-				'__DATA__:Function': (<Function>value).toString()
-			};
+			return customSerialize((<{toString(): string}>value).toString());
 
 		case 'Map':
 		case 'Set':
-			return {
-				'__DATA__': `__DATA__:${type}`,
-				[`__DATA__:${type}`]: [...(<Set<any>>value)]
-			};
+			return customSerialize([...(<Iterable<any>>value)]);
 	}
 
 	return value;
+
+	function customSerialize(value: unknown) {
+		return {
+			'__DATA__': `__DATA__:${type}`,
+			[`__DATA__:${type}`]: value
+		};
+	}
 }
 
 export function expandedParse(key: string, value: unknown): unknown {
@@ -32,8 +42,10 @@ export function expandedParse(key: string, value: unknown): unknown {
 		return value[value['__DATA__']];
 	}
 
-	if (/^__DATA__:/.test(key)) {
+	if (isCustomSerialized.test(key)) {
 		switch (key.split(':')[1]) {
+			case 'Date': return new Date(<number>value);
+			case 'BigInt': return BigInt(<string>value);
 			case 'Function': return Function(`return ${value}`)();
 			case 'Map': return new Map(<Iterable<any>>value);
 			case 'Set': return new Set(<Iterable<any>>value);
