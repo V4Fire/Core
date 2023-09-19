@@ -47,7 +47,7 @@ export default class Parser {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		T extends [...infer A, TokenProcessor<infer R>] ? AsyncGenerator<R> : unknown;
 
-	static async*from(
+	static async *from(
 		source: AnyIterable<string>,
 		...processors: Array<TokenProcessor<unknown>>
 	): AsyncGenerator {

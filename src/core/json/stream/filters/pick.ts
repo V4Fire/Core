@@ -17,7 +17,7 @@ export default class Pick extends Super {
 	}
 
 	/** @inheritDoc */
-	protected*checkToken(chunk: Token): Generator<boolean | Token> {
+	protected *checkToken(chunk: Token): Generator<boolean | Token> {
 		switch (chunk.name) {
 			case 'startObject':
 			case 'startArray':

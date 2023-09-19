@@ -182,7 +182,7 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 	 * Check the specified token for filter satisfaction
 	 * @param token
 	 */
-	protected*check(token: FilterToken): Generator<FilterToken> {
+	protected *check(token: FilterToken): Generator<FilterToken> {
 		const
 			last = this.stack.length - 1;
 
@@ -271,7 +271,7 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 	 * Passes the passed token into an output token stream
 	 * @param token
 	 */
-	protected*pass(token: FilterToken): Generator<FilterToken> {
+	protected *pass(token: FilterToken): Generator<FilterToken> {
 		yield token;
 	}
 
@@ -279,7 +279,7 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 	 * Skips the passed token from an output token stream
 	 */
 	// eslint-disable-next-line require-yield
-	protected*skip(_: FilterToken): Generator<FilterToken> {
+	protected *skip(_: FilterToken): Generator<FilterToken> {
 		return undefined;
 	}
 
@@ -287,7 +287,7 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 	 * Passes the passed object token into an output token stream
 	 * @param token
 	 */
-	protected*passObject(token: FilterToken): Generator<FilterToken> {
+	protected *passObject(token: FilterToken): Generator<FilterToken> {
 		switch (token.name) {
 			case 'startObject':
 			case 'startArray':

@@ -8,7 +8,11 @@
 
 'use strict';
 
-const base = require('@v4fire/linters/.eslintrc');
+const
+	headerPlugin = require('eslint-plugin-header');
+
+const
+	base = require('@v4fire/linters/eslint.config');
 
 const copyrightTemplate = [
 	'!',
@@ -20,6 +24,16 @@ const copyrightTemplate = [
 	' '
 ];
 
-base.rules['header/header'] = [2, 'block', copyrightTemplate];
+base.forEach((item) => {
+	item.ignores = ['**/*spec.js'];
+
+	if (item.plugins) {
+		item.plugins['header'] = headerPlugin;
+	}
+
+	if (item.rules) {
+		item.rules['header/header'] = [2, 'block', copyrightTemplate];
+	}
+});
 
 module.exports = base;

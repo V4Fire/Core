@@ -31,7 +31,7 @@ export default class StreamObject<T = unknown> extends Streamer<StreamedObject<T
 	}
 
 	/** @inheritDoc */
-	protected*push(): Generator<StreamedObject<T>> {
+	protected *push(): Generator<StreamedObject<T>> {
 		const
 			{key, value} = this.assembler;
 

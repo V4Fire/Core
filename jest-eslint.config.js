@@ -14,13 +14,12 @@ module.exports = {
 	...base,
 	testMatch: [
 		'<rootDir>/src/**/*.ts',
-		'<rootDir>/src/**/*.js',
 		'<rootDir>/config/**/*.js',
 		'<rootDir>/build/**/*.js',
 		'<rootDir>/ts-definitions/**/*.ts',
 		'<rootDir>/index.d.ts',
 		'<rootDir>/gulpfile.js',
-		'<rootDir>/.eslintrc.js',
+		'<rootDir>/eslint-config.js',
 		'<rootDir>/jest-eslint.config.js',
 		'<rootDir>/jest-runner-eslint.config.js',
 		'<rootDir>/jest.config.ts'
