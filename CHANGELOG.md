@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.9 (2023-09-19)
+
+#### :rocket: New Feature
+
+* Added API for serializing custom objects `core/json`
+
 ## v4.0.0-alpha.8 (2023-09-15)
 
 #### :rocket: New Feature
