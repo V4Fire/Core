@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.10 (2023-09-29)
+
+#### :nail_care: Polish
+
+* Enhanced error message for missing translations
+
 ## v4.0.0-alpha.6 (2023-07-11)
 
 #### :rocket: New Feature

@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.10 (2023-09-29)
+
+#### :nail_care: Polish
+
+* Enhanced error message in `prelude/i18n` for missing translations
+
 ## v4.0.0-alpha.9 (2023-09-19)
 
 #### :rocket: New Feature
