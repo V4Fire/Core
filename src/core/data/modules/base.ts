@@ -594,6 +594,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 			decoder: merge(decoders[method] ?? decoders['def'], params?.decoder),
 
 			meta: {
+				...params?.meta,
 				provider: this,
 				providerMethod: method,
 				providerParams: params
