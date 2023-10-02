@@ -31,7 +31,7 @@ export function expandedStringify(_: string, value: unknown): unknown {
 
 	function customSerialize(value: unknown) {
 		return {
-			'__DATA__': `__DATA__:${type}`,
+			__DATA__: `__DATA__:${type}`,
 			[`__DATA__:${type}`]: value
 		};
 	}
@@ -43,12 +43,15 @@ export function expandedParse(key: string, value: unknown): unknown {
 	}
 
 	if (isCustomSerialized.test(key)) {
+		const unsafeValue = <any>value;
+
 		switch (key.split(':')[1]) {
-			case 'Date': return new Date(<number>value);
-			case 'BigInt': return BigInt(<string>value);
-			case 'Function': return Function(`return ${value}`)();
-			case 'Map': return new Map(<Iterable<any>>value);
-			case 'Set': return new Set(<Iterable<any>>value);
+			case 'Date': return new Date(unsafeValue);
+			case 'BigInt': return BigInt(unsafeValue);
+			// eslint-disable-next-line no-new-func
+			case 'Function': return Function(`return ${unsafeValue}`)();
+			case 'Map': return new Map(unsafeValue);
+			case 'Set': return new Set(unsafeValue);
 		}
 	}
 
