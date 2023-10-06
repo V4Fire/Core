@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2023-??-??)
+
+#### :house: Internal
+
+* Migrate on `node@20`
+
 ## v3.97.1 (2023-10-02)
 
 #### :nail_care: Polish
