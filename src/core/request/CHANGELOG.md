@@ -9,6 +9,16 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.11 (2023-10-12)
+
+#### :rocket: New Feature
+
+* Now parameters from the main provider are being passed to the engine based on providers
+
+#### :bug: Bug Fix
+
+* Caching should be disabled in SSR
+
 ## v3.93.1 (2023-03-14)
 
 #### :bug: Bug Fix

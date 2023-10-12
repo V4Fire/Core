@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.11 (2023-10-12)
+
+#### :rocket: New Feature
+
+* Now parameters from the main provider are being passed to the engine based on providers `core/request`
+
+#### :bug: Bug Fix
+
+* Caching should be disabled in SSR `core/request`
+
 ## v4.0.0-alpha.10 (2023-09-29)
 
 #### :nail_care: Polish
