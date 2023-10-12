@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+declare const SSR: boolean;
+
 /**
  * Application name
  */
