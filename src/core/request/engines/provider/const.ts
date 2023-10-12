@@ -6,9 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export const deniedProviderParams = [
-	'socket'
-];
+export const deniedProviderParams = ['socket'];
 
 export const availableParams = [
 	'url',
