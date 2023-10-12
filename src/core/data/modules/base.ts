@@ -78,9 +78,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	/** @inheritDoc */
 	readonly emitter!: EventEmitter;
 
-	/**
-	 * The parameters with which the provider instance was created
-	 */
+	/** @inheritDoc */
 	readonly params!: ProviderOptions;
 
 	/** @inheritDoc */

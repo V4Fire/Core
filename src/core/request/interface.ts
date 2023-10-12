@@ -690,6 +690,7 @@ export interface RequestOptions {
 	readonly streamDecoders?: WrappedStreamDecoders;
 	readonly jsonReviver?: JSONCb | false;
 
+	readonly meta?: RequestMeta;
 	readonly headers?: Headers;
 	readonly body?: RequestBody;
 

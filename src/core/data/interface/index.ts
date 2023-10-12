@@ -25,7 +25,7 @@ import type {
 
 } from 'core/request';
 
-import type { ModelMethod } from 'core/data/interface/types';
+import type { ModelMethod, ProviderOptions } from 'core/data/interface/types';
 
 export * from 'core/data/interface/types';
 
@@ -47,6 +47,11 @@ export interface Provider {
 	 * Event emitter to broadcast provider events
 	 */
 	readonly emitter: EventEmitterLike;
+
+	/**
+	 * The parameters with which the provider instance was created
+	 */
+	readonly params: ProviderOptions;
 
 	/**
 	 * @deprecated

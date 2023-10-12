@@ -12,6 +12,7 @@
  */
 
 import AbortablePromise from 'core/promise/abortable';
+
 import { concatURLs } from 'core/url';
 
 import Provider, {
@@ -31,7 +32,7 @@ import Provider, {
 import Response from 'core/request/response';
 import type { RequestEngine, RequestOptions } from 'core/request/interface';
 
-import { availableParams } from 'core/request/engines/provider/const';
+import { availableParams, deniedProviderParams } from 'core/request/engines/provider/const';
 import type { AvailableOptions, MethodsMapping, Meta } from 'core/request/engines/provider/interface';
 
 export * from 'core/request/engines/provider/const';
@@ -232,7 +233,7 @@ function getProviderInstance(src: ExtraProviderConstructor, meta?: Meta): Provid
 		provider = src;
 
 	} else {
-		provider = <Provider>new (<ProviderConstructor>src)();
+		provider = <Provider>new (<ProviderConstructor>src)(Object.reject(meta?.provider?.params, deniedProviderParams));
 	}
 
 	if (meta?.provider != null) {
