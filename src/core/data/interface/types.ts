@@ -76,6 +76,11 @@ export interface ProviderOptions {
 	 * @default `false`
 	 */
 	socket?: boolean;
+
+	/**
+	 * If false, the instance of the data provider will not be cached
+	 */
+	singleton?: boolean;
 }
 
 export interface ExtraProviderParams<D = unknown> {

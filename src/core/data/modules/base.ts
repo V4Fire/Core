@@ -112,12 +112,14 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 			id = this.getCacheKey(opts),
 			cacheVal = instanceCache[id];
 
-		if (cacheVal != null) {
-			return <this>cacheVal;
-		}
+		if (opts.singleton === false) {
+			if (cacheVal != null) {
+				return <this>cacheVal;
+			}
 
-		instanceCache[id] = this;
-		requestCache[id] = Object.createDict();
+			instanceCache[id] = this;
+			requestCache[id] = Object.createDict();
+		}
 
 		this.cacheId = id;
 		this.params = opts;
