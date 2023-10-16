@@ -134,7 +134,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	 * Returns a key to the class instance cache
 	 * @param [paramsForCache]
 	 */
-	getCacheKey(paramsForCache: ProviderOptions = {}): string {
+	getCacheKey(paramsForCache: ProviderOptions = this.params): string {
 		return `${this.providerName}:${Object.fastHash(paramsForCache)}`;
 	}
 
