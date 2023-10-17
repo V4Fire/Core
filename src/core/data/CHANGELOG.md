@@ -9,6 +9,17 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.12 (2023-10-17)
+
+#### :rocket: New Feature
+
+* Added a new option `singleton` for data providers
+* Caching of requests during SSR is allowed
+
+#### :bug: Bug Fix
+
+* By default, the getCacheKey function should take the parameters from the provider
+
 ## v4.0.0-alpha.8 (2023-09-15)
 
 #### :rocket: New Feature

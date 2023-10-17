@@ -11,6 +11,18 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.12 (2023-10-17)
+
+#### :rocket: New Feature
+
+* `core/data`:
+  * Added a new option `singleton` for data providers
+  * Caching of requests during SSR is allowed
+
+#### :bug: Bug Fix
+
+* By default, the getCacheKey function should take the parameters from the provider `core/data`
+
 ## v4.0.0-alpha.11 (2023-10-12)
 
 #### :rocket: New Feature
