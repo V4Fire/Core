@@ -197,10 +197,6 @@ export default class RequestContext<D = unknown> {
 		this.withoutBody = Boolean(methodsWithoutBody[p.method]);
 		this.canCache = p.cacheMethods.includes(p.method) || false;
 
-		if (typeof SSR !== 'undefined' && SSR) {
-			p.cacheStrategy = 'never';
-		}
-
 		let cacheAPI =
 			(
 				Object.isString(p.cacheStrategy) ?
