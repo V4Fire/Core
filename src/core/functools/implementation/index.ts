@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/functools/implementation/README.md]]
- * @packageDocumentation
  */
 
 import { warn, warned, WarnOptions, InlineWarnOptions, WarnedFn } from 'core/functools/warning';
@@ -62,7 +61,7 @@ export function unimplement<T extends Function>(
  * Decorator for `unimplement`
  *
  * @decorator
- * @see [[unimplement]]
+ * {@link unimplement}
  *
  * @example
  * ```js
@@ -80,7 +79,8 @@ export function unimplemented(target: object, key: string | symbol, descriptor: 
  * Decorator for `unimplement`.
  * This overload adds a feature to provide additional options.
  *
- * @see [[unimplement]]
+ * {@link unimplement}
+ *
  * @param [opts] - additional options
  *
  * @example

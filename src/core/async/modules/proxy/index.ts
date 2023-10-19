@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/async/modules/proxy/README.md]]
- * @packageDeclaration
  */
 
 import SyncPromise from 'core/promise/sync';
@@ -145,7 +144,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	clearWorker(opts: ClearProxyOptions<WorkerLikeP>): this;
 	clearWorker(task?: WorkerLikeP | ClearProxyOptions<WorkerLikeP>): this {
-		return this.cancelTask(task, isAsyncOptions<ClearProxyOptions>(task) && task.name || this.namespaces.worker);
+		return this.cancelTask(task,
+			(isAsyncOptions<ClearProxyOptions>(task) && Boolean(task.name)) ? task.name : this.namespaces.worker);
 	}
 
 	/**
@@ -241,7 +241,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	clearProxy(opts: ClearProxyOptions<Function>): this;
 	clearProxy(task?: Function | ClearProxyOptions<Function>): this {
-		return this.cancelTask(task, isAsyncOptions<ClearProxyOptions>(task) && task.name || this.namespaces.proxy);
+		return this.cancelTask(
+			task,
+			(isAsyncOptions<ClearProxyOptions>(task) && Boolean(task.name)) ? task.name : this.namespaces.proxy
+		);
 	}
 
 	/**
@@ -259,7 +262,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		return this.markTask(
 			'muted',
 			task,
-			isAsyncOptions<ClearProxyOptions>(task) && task.name || this.namespaces.proxy
+			(isAsyncOptions<ClearProxyOptions>(task) && Boolean(task.name)) ? task.name : this.namespaces.proxy
 		);
 	}
 
@@ -278,7 +281,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		return this.markTask(
 			'!muted',
 			task,
-			isAsyncOptions<ClearProxyOptions>(task) && task.name || this.namespaces.proxy
+			(isAsyncOptions<ClearProxyOptions>(task) && Boolean(task.name)) ? task.name : this.namespaces.proxy
 		);
 	}
 
@@ -297,7 +300,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		return this.markTask(
 			'paused',
 			task,
-			isAsyncOptions<ClearProxyOptions>(task) && task.name || this.namespaces.proxy
+			(isAsyncOptions<ClearProxyOptions>(task) && Boolean(task.name)) ? task.name : this.namespaces.proxy
 		);
 	}
 
@@ -316,7 +319,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		return this.markTask(
 			'!paused',
 			task,
-			isAsyncOptions<ClearProxyOptions>(task) && task.name || this.namespaces.proxy
+			(isAsyncOptions<ClearProxyOptions>(task) && Boolean(task.name)) ? task.name : this.namespaces.proxy
 		);
 	}
 
@@ -984,7 +987,6 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		}
 
 		if (Object.isFunction(fn)) {
-			// eslint-disable-next-line @typescript-eslint/unbound-method
 			if ('catch' in promise && Object.isFunction(promise.catch)) {
 				promise.catch(() => {
 					// Promise error loopback

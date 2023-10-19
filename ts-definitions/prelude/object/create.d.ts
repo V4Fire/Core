@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/unified-signatures */
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -7,6 +5,8 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+
+/* eslint-disable @typescript-eslint/unified-signatures */
 
 interface ObjectConstructor {
 	/**
@@ -54,7 +54,7 @@ interface ObjectConstructor {
 
 	/**
 	 * @deprecated
-	 * @see ObjectConstructor.createEnumLike
+	 * {@link ObjectConstructor.createEnumLike}
 	 */
 	createMap<D extends object, K extends keyof D>(obj: Nullable<D>):
 		D extends Array<infer E> ? Dictionary<E | number> : D & {[I: string]: K};
@@ -253,6 +253,7 @@ interface ObjectConstructor {
 	 * Returns a curried version of `Object.reject`
 	 * @param condition - whitelist of keys to filter
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	reject<C>(condition: []): <D extends object>(obj: Nullable<D>) => D;
 
 	/**
@@ -421,7 +422,7 @@ interface ObjectFromArrayOptions<T = boolean> {
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectFromArrayOptions.key]]
+	 * {@link ObjectFromArrayOptions.key}
 	 */
 	keyConverter?(i: number, el: unknown): PropertyKey;
 
@@ -435,7 +436,7 @@ interface ObjectFromArrayOptions<T = boolean> {
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectFromArrayOptions.value]]
+	 * {@link ObjectFromArrayOptions.value}
 	 */
 	valueConverter?(el: unknown, i: number): T;
 }

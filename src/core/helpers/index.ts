@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/helpers/README.md]]
- * @packageDocumentation
  */
 
 export * from 'core/helpers/string';

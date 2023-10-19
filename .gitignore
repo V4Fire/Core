@@ -67,3 +67,9 @@ $RECYCLE.BIN
 /tmp
 *.tmp
 *.gz
+
+# Cache
+.eslintcache
+
+# Doc folder
+docs

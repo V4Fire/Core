@@ -19,7 +19,7 @@ export function isAsyncOptions<T extends object = AsyncOptions>(value: unknown):
 
 /**
  * @deprecated
- * @see isAsyncOptions
+ * {@link isAsyncOptions}
  */
 export const isParams = deprecate(
 	{

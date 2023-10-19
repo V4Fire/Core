@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/data/interface/README.md]]
- * @packageDocumentation
  */
 
 import type { EventEmitterLike } from 'core/async';
@@ -55,7 +54,7 @@ export interface Provider {
 
 	/**
 	 * @deprecated
-	 * @see [[Provider.emitter]]
+	 * {@link Provider.emitter}
 	 */
 	readonly event: EventEmitterLike;
 

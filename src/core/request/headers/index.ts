@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/request/headers/README.md]]
- * @packageDocumentation
  */
 
 import { applyQueryForStr } from 'core/request/helpers/interpolation';
@@ -71,7 +70,6 @@ export default class V4Headers {
 			let
 				iter;
 
-			// eslint-disable-next-line @typescript-eslint/unbound-method
 			if (headers instanceof V4Headers || Object.isFunction(headers.entries)) {
 				iter = Object.cast<Headers>(headers).entries();
 

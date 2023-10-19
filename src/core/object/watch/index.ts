@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/unified-signatures */
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -8,9 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/* eslint-disable @typescript-eslint/unified-signatures */
+
 /**
  * [[include:core/object/watch/README.md]]
- * @packageDocumentation
  */
 
 import watchEngine from 'core/object/watch/engines';

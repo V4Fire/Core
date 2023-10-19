@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/log/middlewares/extractor/README.md]]
- * @packageDocumentation
  */
 
 export { ExtractorMiddleware } from 'core/log/middlewares/extractor/extractor';

@@ -1,5 +1,3 @@
-'use strict';
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -7,6 +5,8 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+
+'use strict';
 
 const
 	fs = require('fs'),
@@ -27,7 +27,7 @@ exports.getProjectInfo = function getProjectInfo() {
 
 /**
  * Returns the project disclaimer
- * @param {boolean=} [withVersion]
+ * @param {boolean} [withVersion]
  */
 exports.getHead = function getHead(withVersion) {
 	return fs

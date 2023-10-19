@@ -12,7 +12,7 @@ interface Date {
 	 *
 	 * @param date - another date to compare
 	 * @param [margin] - value of the maximum difference between two dates at which they are considered equal
-	 *   (in milliseconds)
+	 * (in milliseconds)
 	 */
 	is(date: DateCreateValue, margin?: number): boolean;
 
@@ -21,7 +21,7 @@ interface Date {
 	 *
 	 * @param date - another date to compare
 	 * @param [margin] - value of the maximum difference between two dates at which they are considered equal
-	 *   (in milliseconds)
+	 * (in milliseconds)
 	 */
 	isAfter(date: DateCreateValue, margin?: number): boolean;
 
@@ -30,7 +30,7 @@ interface Date {
 	 *
 	 * @param date - another date to compare
 	 * @param [margin] - value of the maximum difference between two dates at which they are considered equal
-	 *   (in milliseconds)
+	 * (in milliseconds)
 	 */
 	isBefore(date: DateCreateValue, margin?: number): boolean;
 
@@ -40,7 +40,7 @@ interface Date {
 	 * @param left - date of the beginning
 	 * @param right - date of the ending
 	 * @param [margin] - value of the maximum difference between two dates at which they are considered equal
-	 *   (in milliseconds)
+	 * (in milliseconds)
 	 */
 	isBetween(left: DateCreateValue, right: DateCreateValue, margin?: number): boolean;
 

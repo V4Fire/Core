@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/queue/README.md]]
- * @packageDocumentation
  */
 
 export * from 'core/queue/interface';

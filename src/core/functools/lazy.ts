@@ -10,7 +10,7 @@
  * Decorator for `Function.prototype.debounce`
  *
  * @decorator
- * @see [[Function.debounce]]
+ * {@link Function.debounce}
  * @param [delay] - delay value (in milliseconds)
  */
 export function debounce(delay?: number): MethodDecorator {
@@ -32,7 +32,7 @@ export function debounce(delay?: number): MethodDecorator {
  * Decorator for `Function.prototype.throttle`
  *
  * @decorator
- * @see [[Function.throttle]]
+ * {@link Function.throttle}
  * @param [delay] - delay value (in milliseconds)
  */
 export function throttle(delay?: number): MethodDecorator {

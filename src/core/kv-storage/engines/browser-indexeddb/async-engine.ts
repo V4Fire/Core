@@ -62,7 +62,6 @@ export default class KVStorageIndexedDBEngine {
 		const
 			store = await this.getStore('readonly');
 
-		// eslint-disable-next-line @typescript-eslint/unbound-method
 		if (Object.isFunction(store.getAllKeys)) {
 			return promisifyRequestToStore(store.getAllKeys());
 		}

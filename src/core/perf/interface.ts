@@ -9,6 +9,8 @@
 import type { GROUPS } from 'core/perf/const';
 import type { PerfTimer } from 'core/perf/timer/impl';
 
+import type { PerfTimerFactory } from 'core/perf/timer/interface';
+
 /**
  * Supported group types
  */
@@ -19,7 +21,7 @@ export interface Perf {
 	 * Returns an instance of the performance timer for a specific group
 	 *
 	 * @param group - group name, that timer should belong to. It appears at the beginning of all time marks namespaces.
-	 * @see [[PerfTimerFactory.getTimer]]
+	 * {@link PerfTimerFactory.getTimer}
 	 */
 	getTimer(group: PerfGroup): PerfTimer;
 
@@ -28,7 +30,7 @@ export interface Perf {
 	 *
 	 * @param group - group name, that timer should belong to. It appears at the beginning of all time marks namespaces.
 	 * @param scope - scope name, that defines the scope. It doesn't appear in any time mark namespaces.
-	 * @see [[PerfTimerFactory.getScopedTimer]]
+	 * {@link PerfTimerFactory.getScopedTimer}
 	 */
 	getScopedTimer(group: PerfGroup, scope: string): PerfTimer;
 }

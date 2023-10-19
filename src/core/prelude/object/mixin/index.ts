@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 import { isContainer, canExtendProto, getType, getSameAs } from 'core/prelude/object/helpers';
 
-/** @see [[ObjectConstructor.mixin]] */
+/** {@link ObjectConstructor.mixin} */
 extend(Object, 'mixin', function mixin(
 	opts: ObjectMixinOptions | boolean,
 	target: unknown,
@@ -37,7 +37,6 @@ extend(Object, 'mixin', function mixin(
 		skipUndefs = 'withUndef' in p ? !p.withUndef : p.skipUndefs !== false,
 		concatArrays = Object.isTruly(p.concatArrays) || p.concatArray === true,
 
-		// eslint-disable-next-line @typescript-eslint/unbound-method
 		concatFn = Object.isFunction(p.concatArrays) ? p.concatArrays : p.concatFn;
 
 	const
@@ -219,10 +218,8 @@ extend(Object, 'mixin', function mixin(
 						configurable: true,
 						enumerable: true,
 
-						// eslint-disable-next-line @typescript-eslint/unbound-method
 						get: propDesc.get,
 
-						// eslint-disable-next-line @typescript-eslint/unbound-method
 						set: propDesc.set
 					});
 

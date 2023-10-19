@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/async/modules/base/README.md]]
- * @packageDocumentation
  */
 
 import { deprecate, deprecated } from 'core/functools';
@@ -44,7 +43,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * @deprecated
-	 * @see Async.namespaces
+	 * {@link Async.namespaces}
 	 */
 	static linkNames: NamespacesDictionary = namespaces;
 
@@ -76,7 +75,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * @deprecated
-	 * @see [[Async.ctx]]
+	 * {@link Async.ctx}
 	 */
 	protected readonly context: CTX;
 
@@ -101,7 +100,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * @deprecated
-	 * @see [[Async.namespaces]]
+	 * {@link Async.namespaces}
 	 */
 	protected get linkNames(): NamespacesDictionary {
 		deprecate({name: 'linkNames', type: 'accessor', renamedTo: 'namespaces'});
@@ -230,7 +229,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * @deprecated
-	 * @see [[Async.getCache]]
+	 * {@link Async.getCache}
 	 */
 	@deprecated({renamedTo: 'getCache'})
 	protected initCache(name: string, promise?: boolean): GlobalCache {
@@ -433,7 +432,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * @deprecated
-	 * @see [[Async.registerTask]]
+	 * {@link Async.registerTask}
 	 */
 	@deprecated({renamedTo: 'registerTask'})
 	protected setAsync<R = unknown>(task: FullAsyncOptions): R | null {
@@ -572,7 +571,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * @deprecated
-	 * @see [[Async.cancelTask]]
+	 * {@link Async.cancelTask}
 	 */
 	@deprecated({renamedTo: 'cancelTask'})
 	protected clearAsync(opts: CanUndef<FullClearOptions | any>, name?: string): this {
@@ -707,7 +706,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * @deprecated
-	 * @see [[Async.markTask]]
+	 * {@link Async.markTask}
 	 */
 	@deprecated({renamedTo: 'markTask'})
 	protected markAsync(label: string, opts: CanUndef<ClearProxyOptions | any>, name?: string): this {

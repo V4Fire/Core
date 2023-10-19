@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/functools/README.md]]
- * @packageDocumentation
  */
 
 export * from 'core/functools/warning';

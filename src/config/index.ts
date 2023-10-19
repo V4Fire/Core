@@ -8,7 +8,6 @@
 
 /**
  * [[include:config/README.md]]
- * @packageDocumentation
  */
 
 import symbolGenerator from 'core/symbol';

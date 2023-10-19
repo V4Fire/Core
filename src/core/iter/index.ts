@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/iter/README.md]]
- * @packageDocumentation
  */
 
 import Range from 'core/range';

@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/async/modules/events/README.md]]
- * @packageDocumentation
  */
 
 import SyncPromise from 'core/promise/sync';
@@ -191,7 +190,6 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				}
 			});
 
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			if (link != null) {
 				links.push(link);
 			}

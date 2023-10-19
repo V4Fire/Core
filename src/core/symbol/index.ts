@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/symbol/README.md]]
- * @packageDocumentation
  */
 
 import { PROXY, READONLY } from 'core/prelude/types/const';

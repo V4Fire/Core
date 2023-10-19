@@ -8,11 +8,9 @@
 
 /**
  * [[include:core/json/stream/assembler/README.md]]
- * @packageDocumentation
  */
 
 import symbolGenerator from 'core/symbol';
-
 import type { Token, TokenProcessor } from 'core/json/stream/parser';
 
 import { NULL } from 'core/json/stream/assembler/const';
@@ -91,7 +89,6 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 		}
 
 		if (opts.numberAsString) {
-			// eslint-disable-next-line @typescript-eslint/unbound-method
 			this.numberValue = this.stringValue;
 		}
 	}

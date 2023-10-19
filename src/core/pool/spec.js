@@ -1,5 +1,3 @@
-/* eslint-disable max-lines, max-lines-per-function */
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -7,6 +5,8 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+
+/* eslint-disable max-lines, max-lines-per-function */
 
 import Pool from 'core/pool';
 

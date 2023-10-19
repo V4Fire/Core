@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/queue/worker/simple/README.md]]
- * @packageDocumentation
  */
 
 import WorkerQueue from 'core/queue/worker/interface';
@@ -19,8 +18,8 @@ export * from 'core/queue/worker/merge/interface';
 /**
  * Implementation of a worker queue data structure
  *
- * @typeparam T - the task element
- * @typeparam V - the worker value
+ * @typeParam T - the task element
+ * @typeParam V - the worker value
  */
 export default class SimpleWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> {
 	override readonly Tasks!: Tasks<Task<T>>;
@@ -85,7 +84,6 @@ export default class SimpleWorkerQueue<T, V = unknown> extends WorkerQueue<T, V>
 		}
 
 		const
-			// eslint-disable-next-line @typescript-eslint/unbound-method
 			{task, promise, resolve} = taskObj;
 
 		const cb = this.deferPerform.bind(this);

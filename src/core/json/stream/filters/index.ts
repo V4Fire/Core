@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/json/stream/filters/README.md]]
- * @packageDocumentation
  */
 
 export { default as AbstractFilter } from 'core/json/stream/filters/abstract-filter';

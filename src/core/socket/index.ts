@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/socket/README.md]]
- * @packageDocumentation
  */
 
 import type { Socket } from 'core/socket/interface';
@@ -18,9 +17,8 @@ export * from 'core/socket/interface';
 
 /**
  * Wrapper for a socket library
- * @param [namespace] - connection namespace
+ * @param [_namespace] - connection namespace
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-export default function socket(namespace: string = ''): CanUndef<Socket> {
+export default function socket(_namespace: string = ''): CanUndef<Socket> {
 	return undefined;
 }

@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/perf/timer/engines/README.md]]
- * @packageDocumentation
  */
 
 import { consoleEngine } from 'core/perf/timer/engines/console';

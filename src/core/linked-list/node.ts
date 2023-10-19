@@ -8,7 +8,7 @@
 
 /**
  * Linked list node
- * @typeparam T - node data
+ * @typeParam T - node data
  */
 export default class Node<T> {
 	/**

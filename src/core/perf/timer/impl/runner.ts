@@ -84,7 +84,7 @@ export default class PerfTimersRunner {
 	 */
 	createTimer(group: PerfGroup): PerfTimer {
 		const makeTimer = (namespace?: string): PerfTimer => ({
-			/** @see [[PerfTimer.start]] */
+			/** {@link PerfTimer.start} */
 			start: (name: string): PerfTimerId => {
 				if (!Object.isTruly(name)) {
 					throw new Error('The metrics name should be defined');
@@ -93,11 +93,11 @@ export default class PerfTimersRunner {
 				return this.start(PerfTimersRunner.combineNamespaces(namespace, name));
 			},
 
-			/** @see [[PerfTimer.finish]] */
+			/** {@link PerfTimer.finish} */
 			finish: (perfTimerId: PerfTimerId, additional?: Dictionary) =>
 				this.finish(perfTimerId, additional),
 
-			/** @see [[PerfTimer.markTimestamp]] */
+			/** {@link PerfTimer.markTimestamp} */
 			markTimestamp: (name: string, additional?: Dictionary) => {
 				if (!Object.isTruly(name)) {
 					throw new Error('The metrics name should be defined');
@@ -106,7 +106,7 @@ export default class PerfTimersRunner {
 				return this.markTimestamp(PerfTimersRunner.combineNamespaces(namespace, name), additional);
 			},
 
-			/** @see [[PerfTimer.namespace]] */
+			/** {@link PerfTimer.namespace} */
 			namespace(ns: string): PerfTimer {
 				if (!Object.isTruly(ns)) {
 					throw new Error('The namespace should be defined');
@@ -119,7 +119,7 @@ export default class PerfTimersRunner {
 		return makeTimer(group);
 	}
 
-	/** @see [[PerfTimer.start]] */
+	/** {@link PerfTimer.start} */
 	protected start(name: string): PerfTimerId {
 		const
 			timestamp = this.getTimestamp();
@@ -141,7 +141,7 @@ export default class PerfTimersRunner {
 		return timerId;
 	}
 
-	/** @see [[PerfTimer.finish]] */
+	/** {@link PerfTimer.finish} */
 	protected finish(perfTimerId: PerfTimerId, additional?: Dictionary): void {
 		const
 			timestamp = this.getTimestamp();
@@ -154,6 +154,7 @@ export default class PerfTimersRunner {
 			measurement = this.idToMeasurement[perfTimerId];
 
 		if (measurement == null) {
+			// eslint-disable-next-line no-console
 			console.warn(`A timer with the id "${perfTimerId}" doesn't exist`);
 			return;
 		}
@@ -166,7 +167,7 @@ export default class PerfTimersRunner {
 		this.engine.sendDelta(measurement.name, duration, additional);
 	}
 
-	/** @see [[PerfTimer.markTimestamp]] */
+	/** {@link PerfTimer.markTimestamp} */
 	protected markTimestamp(name: string, additional?: Dictionary): void {
 		const
 			timestamp = this.getTimestamp();

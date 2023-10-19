@@ -8,6 +8,7 @@
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import symbolGenerator from 'core/symbol';
+import type { RequestResolver } from 'core/request';
 
 import { readonly } from 'core/object/proxy-readonly';
 import { unimplement } from 'core/functools/implementation';
@@ -142,10 +143,9 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 	/**
 	 * Returns an object with authentication parameters
-	 * @param params - additional parameters
+	 * @param _params - additional parameters
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-	getAuthParams(params?: Dictionary): Promise<Dictionary> {
+	getAuthParams(_params?: Dictionary): Promise<Dictionary> {
 		return Promise.resolve({});
 	}
 
@@ -156,12 +156,12 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	 * Also, if the function returns a new string, the string will be appended to the request URL, or
 	 * if the function returns a string that wrapped with an array, the string fully override the original URL.
 	 *
-	 * @see [[RequestResolver]]
-	 * @param url - request URL
-	 * @param params - request parameters
+	 * {@link RequestResolver}
+	 *
+	 * @param _url - request URL
+	 * @param _params - request parameters
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-	resolver<T = unknown>(url: string, params: MiddlewareParams<T>): ResolverResult {
+	resolver<T = unknown>(_url: string, _params: MiddlewareParams<T>): ResolverResult {
 		return undefined;
 	}
 

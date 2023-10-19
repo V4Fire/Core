@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/url/README.md]]
- * @packageDocumentation
  */
 
 export * from 'core/url/const';

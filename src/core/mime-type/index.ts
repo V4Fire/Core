@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/mime-type/README.md]]
- * @packageDocumentation
  */
 
 import { deprecate } from 'core/functools/deprecation';
@@ -30,7 +29,7 @@ export function getDataTypeFromURI(uri: string): CanUndef<DataType> {
 
 /**
  * @deprecated
- * @see [[getDataTypeFromURI]]
+ * {@link getDataTypeFromURI}
  */
 export function getDataTypeFromURL(url: string): CanUndef<DataType> {
 	deprecate({type: 'function', name: 'getDataTypeFromURL', renamedTo: 'getDataTypeFromURI'});

@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/xml/README.md]]
- * @packageDocumentation
  */
 
 import { normalizeRgxp } from 'core/xml/const';

@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/async/README.md]]
- * @packageDocumentation
  */
 
 import Super from 'core/async/modules/wrappers';

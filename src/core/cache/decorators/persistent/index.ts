@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/cache/decorators/persistent/README.md]]
- * @packageDocumentation
  */
 
 import type { AsyncStorageNamespace, SyncStorageNamespace } from 'core/kv-storage';
@@ -22,7 +21,7 @@ export * from 'core/cache/decorators/persistent/interface';
 /**
  * Wraps the specified cache object to add a feature of persistent data storing
  *
- * @typeparam V - value type of the cache object
+ * @typeParam V - value type of the cache object
  *
  * @param cache - cache object to wrap
  * @param storage - storage to save data

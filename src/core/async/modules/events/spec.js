@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core

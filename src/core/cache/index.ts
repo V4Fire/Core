@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/cache/README.md]]
- * @packageDocumentation
  */
 
 export * from 'core/cache/interface';

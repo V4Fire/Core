@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/cache/decorators/helpers/add-emitter/README.md]]
- * @packageDocumentation
  */
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
@@ -59,13 +58,10 @@ const addEmitter: AddEmitter = <T extends Cache<V, K>, V = unknown, K extends st
 	}
 
 	let
-		// eslint-disable-next-line @typescript-eslint/unbound-method
 		originalSet = cacheWithEmitter.set,
 
-		// eslint-disable-next-line @typescript-eslint/unbound-method
 		originalRemove = cacheWithEmitter.remove,
 
-		// eslint-disable-next-line @typescript-eslint/unbound-method
 		originalClear = cacheWithEmitter.clear;
 
 	if (originalSet[eventEmitter] == null) {

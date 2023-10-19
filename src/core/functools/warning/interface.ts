@@ -81,10 +81,10 @@ export interface WarnOptions {
 }
 
 export interface InlineWarnOptions extends WarnOptions {
-	/** @see [[WarnOptions.name]] */
+	/** {@link WarnOptions.name} */
 	name: string;
 
-	/** @see [[WarnOptions.type]] */
+	/** {@link WarnOptions.type} */
 	type: WarnExprType;
 }
 

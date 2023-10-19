@@ -64,7 +64,7 @@ export type PerfPredicate = (ns: string) => boolean;
 
 /**
  * Simple filtering predicates for each group
- * @see PerfGroupFilters
+ * {@link PerfGroupFilters}
  */
 export type PerfPredicates = {
 	[K in PerfGroup]: PerfPredicate;

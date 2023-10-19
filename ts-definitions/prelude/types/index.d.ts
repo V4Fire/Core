@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/* eslint-disable @typescript-eslint/triple-slash-reference */
+
 /// <reference path="./interface/index.d.ts"/>
 
 interface ObjectConstructor {
@@ -320,8 +322,8 @@ interface ObjectConstructor {
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectConstructor.isPlainObject]]
-	 * @see [[ObjectConstructor.isDictionary]]
+	 * {@link ObjectConstructor.isPlainObject}
+	 * {@link ObjectConstructor.isDictionary}
 	 */
 	isObject(value: any): value is Dictionary;
 }

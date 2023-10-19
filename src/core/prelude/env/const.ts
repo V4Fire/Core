@@ -7,7 +7,7 @@
  */
 
 /* eslint-disable no-restricted-globals */
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions, @typescript-eslint/no-unnecessary-condition */
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import { toString } from 'core/prelude/types/const';
@@ -20,7 +20,7 @@ export const
 
 /**
  * @deprecated
- * @see [[emitter]]
+ * {@link emitter}
  */
 export const
 	event = emitter;
@@ -48,7 +48,6 @@ if (typeof globalThis === 'undefined') {
 /**
  * True if the current runtime has window object
  */
-// eslint-disable-next-line no-restricted-globals
 export const HAS_WINDOW: boolean = typeof window === 'object';
 
 /**

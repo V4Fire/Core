@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/data/README.md]]
- * @packageDocumentation
  */
 
 //#set runtime.core/data
@@ -89,7 +88,6 @@ export default class Provider extends DefaultProvider {
 		return res;
 	}
 
-	/** @override */
 	public constructor(opts?: ProviderOptions) {
 		super(opts);
 	}

@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/* eslint-disable @typescript-eslint/triple-slash-reference */
+
 /// <reference path="./interface.d.ts"/>
 /// <reference path="./static.d.ts"/>
 /// <reference path="./proto.d.ts"/>

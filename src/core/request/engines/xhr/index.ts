@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/request/engines/xhr/README.md]]
- * @packageDocumentation
  */
 
 //#if node_js

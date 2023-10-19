@@ -31,7 +31,7 @@ export default class ArrayStreamer<T = unknown> extends Streamer<StreamedArray<T
 	}
 
 	/** @inheritDoc */
-	protected*push(): Generator<StreamedArray<T>> {
+	protected *push(): Generator<StreamedArray<T>> {
 		const
 			{value} = this.assembler;
 

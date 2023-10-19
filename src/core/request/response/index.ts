@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/request/response/README.md]]
- * @packageDocumentation
  */
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
@@ -63,7 +62,7 @@ export const
 
 /**
  * Class to work with server response data
- * @typeparam D - response data type
+ * @typeParam D - response data type
  */
 export default class Response<
 	D extends Nullable<string | JSONLikeValue | ArrayBuffer | Blob | Document | unknown
@@ -292,6 +291,7 @@ export default class Response<
 	/**
 	 * Returns an iterator by the response body.
 	 * Mind, when you parse response via iterator, you won't be able to use other parse methods, like `json` or `text`.
+	 *
 	 * @emits `streamUsed()`
 	 */
 	[Symbol.asyncIterator](): AsyncIterableIterator<RequestResponseChunk> {
@@ -743,7 +743,6 @@ export default class Response<
 
 		return applyDecoders(stream);
 
-		// eslint-disable-next-line @typescript-eslint/require-await
 		function applyDecoders<T>(
 			stream: AnyIterable,
 			currentDecoder: number = 0

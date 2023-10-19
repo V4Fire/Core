@@ -17,14 +17,13 @@ export default class Pick extends Super {
 	}
 
 	/** @inheritDoc */
-	protected*checkToken(chunk: Token): Generator<boolean | Token> {
+	protected *checkToken(chunk: Token): Generator<boolean | Token> {
 		switch (chunk.name) {
 			case 'startObject':
 			case 'startArray':
 				if (this.filter(this.stack, chunk)) {
 					yield chunk;
 
-					// eslint-disable-next-line @typescript-eslint/unbound-method
 					this.processToken = this.passObject;
 					this.depth = 1;
 
@@ -61,7 +60,6 @@ export default class Pick extends Super {
 				if (this.filter(this.stack, chunk)) {
 					yield chunk;
 
-					// eslint-disable-next-line @typescript-eslint/unbound-method
 					this.processToken = this.multiple ? this.check : this.skip;
 
 					return true;

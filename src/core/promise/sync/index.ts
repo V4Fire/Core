@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/promise/sync/README.md]]
- * @packageDocumentation
  */
 
 export { default } from 'core/prelude/structures/sync-promise';

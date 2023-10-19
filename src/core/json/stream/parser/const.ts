@@ -35,7 +35,7 @@ export const parserPatterns = {
 	numberExpSign: /[-+]/y
 };
 
-export const parserStateTypes = {
+export const parserStateTypes = <const>{
 	VALUE: 'value',
 	VALUE1: 'value1',
 	STRING: 'string',
@@ -58,7 +58,7 @@ export const parserStateTypes = {
 	NUMBER_EXP_DIGIT: 'numberExpDigit',
 	EMPTY: '',
 	DONE: 'done'
-} as const;
+};
 
 export const parserExpected = {
 	[parserStateTypes.OBJECT]: parserStateTypes.OBJECT_STOP,

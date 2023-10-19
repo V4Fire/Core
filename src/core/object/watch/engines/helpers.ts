@@ -28,7 +28,7 @@ export function isProxy(value: unknown): value is object {
  * @param value
  */
 export function unwrap(value: unknown): CanUndef<object> {
-	value = value != null && typeof value === 'object' && value[toOriginalObject] || value;
+	value = (value != null && typeof value === 'object' && Boolean(value[toOriginalObject])) ? value[toOriginalObject] : value;
 	return value != null && typeof value === 'object' && !Object.isFrozen(value) ? value : undefined;
 }
 

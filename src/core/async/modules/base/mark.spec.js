@@ -1,5 +1,3 @@
-/* eslint-disable max-lines-per-function */
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core

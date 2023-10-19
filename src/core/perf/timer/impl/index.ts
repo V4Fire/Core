@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/perf/timer/impl/README.md]]
- * @packageDocumentation
  */
 
 export * from 'core/perf/timer/impl/interface';

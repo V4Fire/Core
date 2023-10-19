@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/unified-signatures */
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -7,6 +5,8 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+
+/* eslint-disable @typescript-eslint/unified-signatures */
 
 interface ObjectConstructor {
 	/**
@@ -282,13 +282,13 @@ interface ObjectForEachOptions {
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectForEachOptions.passDescriptor]]
+	 * {@link ObjectForEachOptions.passDescriptor}
 	 */
 	withDescriptor?: boolean;
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectForEachOptions.propsToIterate]]
+	 * {@link ObjectForEachOptions.propsToIterate}
 	 */
 	notOwn?: boolean | -1;
 }

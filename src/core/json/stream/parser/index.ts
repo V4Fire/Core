@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/json/stream/parser/README.md]]
- * @packageDocumentation
  */
 
 import { parserStates } from 'core/json/stream/parser/states';
@@ -45,9 +44,10 @@ export default class Parser {
 		...processors: T
 	): T extends [TokenProcessor<infer R>] ?
 		AsyncGenerator<R> :
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		T extends [...infer A, TokenProcessor<infer R>] ? AsyncGenerator<R> : unknown;
 
-	static async*from(
+	static async *from(
 		source: AnyIterable<string>,
 		...processors: Array<TokenProcessor<unknown>>
 	): AsyncGenerator {

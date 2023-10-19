@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/lazy/README.md]]
- * @packageDocumentation
  */
 
 import type { ObjectScheme, Hooks } from 'core/lazy/interface';

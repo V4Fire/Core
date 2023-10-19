@@ -10,7 +10,7 @@
  * Decorator for `Function.prototype.once`
  *
  * @decorator
- * @see [[Function.once]]
+ * {@link Function.once}
  */
 export function once(target: object, key: string | symbol, descriptor: PropertyDescriptor): void {
 	const

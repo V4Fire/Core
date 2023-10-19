@@ -6,9 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/* eslint-disable jsdoc/no-undefined-types */
+
 /**
  * [[include:core/functools/trait/README.md]]
- * @packageDocumentation
  */
 
 /**
@@ -35,7 +36,7 @@
  *    * The default implementation for `Interface1.bla`.
  *    * As the first parameter, the method is taken a context.
  *    *
- *    * @see Interface1.bla
+ *    * {@link Interface1.bla}
  *    *\/
  *   static bla: AddSelf<iFoo['bla'], Baz> = (self, a) => a + 1;
  * }
@@ -47,7 +48,7 @@
  *     return Object.throw();
  *   };
  *
- *   /** @see Interface2.bla2 *\/
+ *   /** {@link Interface2.bla2} *\/
  *   static bla2: AddSelf<iFoo2['bla2'], Baz> = (self, a) => a.toFixed();
  * }
  *
@@ -97,7 +98,6 @@ export function derive(...traits: Function[]) {
 						Object.isFunction(defMethod.value) && (
 							Object.isFunction(traitMethod.value) ||
 
-							// eslint-disable-next-line @typescript-eslint/unbound-method
 							Object.isFunction(traitMethod.get) || Object.isFunction(traitMethod.set)
 						);
 

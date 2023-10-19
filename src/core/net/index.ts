@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/net/README.md]]
- * @packageDocumentation
  */
 
 import config from 'config';
@@ -109,7 +108,6 @@ export function isOnline(
 
 	//#endif
 
-	// eslint-disable-next-line no-unreachable
 	return Promise.resolve({
 		status: true
 	});

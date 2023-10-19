@@ -8,7 +8,6 @@
 
 /**
  * [[include:core/log/middlewares/extractor/README.md]]
- * @packageDocumentation
  */
 
 import type { LogEvent, LogMiddleware, NextCallback } from 'core/log/middlewares/interface';

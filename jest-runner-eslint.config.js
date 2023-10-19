@@ -8,9 +8,6 @@
 
 'use strict';
 
-const
-	config = include('config/default');
+const base = require('@v4fire/linters/jest-runner-eslint.config');
 
-module.exports = config.createConfig({dirs: [__dirname], mod: null}, {
-	__proto__: config
-});
+module.exports = base;

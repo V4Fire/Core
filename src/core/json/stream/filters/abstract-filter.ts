@@ -154,7 +154,6 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 	 * @param [opts] - additional filter options
 	 */
 	protected constructor(filter: TokenFilter, opts: FilterOptions = {}) {
-		// eslint-disable-next-line @typescript-eslint/unbound-method
 		this.processToken = this.check;
 
 		if (Object.isString(filter)) {
@@ -183,7 +182,7 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 	 * Check the specified token for filter satisfaction
 	 * @param token
 	 */
-	protected*check(token: FilterToken): Generator<FilterToken> {
+	protected *check(token: FilterToken): Generator<FilterToken> {
 		const
 			last = this.stack.length - 1;
 
@@ -272,7 +271,7 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 	 * Passes the passed token into an output token stream
 	 * @param token
 	 */
-	protected*pass(token: FilterToken): Generator<FilterToken> {
+	protected *pass(token: FilterToken): Generator<FilterToken> {
 		yield token;
 	}
 
@@ -280,7 +279,7 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 	 * Skips the passed token from an output token stream
 	 */
 	// eslint-disable-next-line require-yield
-	protected*skip(_: FilterToken): Generator<FilterToken> {
+	protected *skip(_: FilterToken): Generator<FilterToken> {
 		return undefined;
 	}
 
@@ -288,7 +287,7 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 	 * Passes the passed object token into an output token stream
 	 * @param token
 	 */
-	protected*passObject(token: FilterToken): Generator<FilterToken> {
+	protected *passObject(token: FilterToken): Generator<FilterToken> {
 		switch (token.name) {
 			case 'startObject':
 			case 'startArray':
@@ -312,7 +311,6 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 		}
 
 		if (this.depth === 0) {
-			// eslint-disable-next-line @typescript-eslint/unbound-method
 			this.processToken = this.multiple ? this.check : this.skip;
 		}
 	}
@@ -338,7 +336,6 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 		}
 
 		if (this.depth === 0) {
-			// eslint-disable-next-line @typescript-eslint/unbound-method
 			this.processToken = this.multiple ? this.check : this.pass;
 		}
 	}
@@ -367,7 +364,6 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 
 				that.expectedToken = '';
 
-				// eslint-disable-next-line @typescript-eslint/unbound-method
 				that.processToken = that.multiple ? that.check : that.skip;
 
 				if (expectedToken === token.name) {
@@ -401,7 +397,6 @@ export default abstract class AbstractFilter implements TokenProcessor<FilterTok
 
 				that.expectedToken = '';
 
-				// eslint-disable-next-line @typescript-eslint/unbound-method
 				that.processToken = that.multiple ? that.check : that.pass;
 
 				if (expectedToken !== chunk.name) {

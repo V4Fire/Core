@@ -23,7 +23,7 @@ export default class Filter extends Super {
 		super(filter);
 	}
 
-	override*finishTokenProcessing(): Generator<Token> {
+	override *finishTokenProcessing(): Generator<Token> {
 		const
 			{stack, objStack} = this;
 
@@ -92,7 +92,7 @@ export default class Filter extends Super {
 	}
 
 	/** @inheritDoc */
-	protected*checkToken(chunk: Token): Generator<Token> {
+	protected *checkToken(chunk: Token): Generator<Token> {
 		switch (chunk.name) {
 			case 'startObject':
 				if (this.filter(this.stack, chunk)) {
