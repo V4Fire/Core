@@ -8,11 +8,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { createDict } from 'core/prelude/object/create';
+
 export const
-	capitalizeCache = Object.createDict<string>(),
-	camelizeCache = Object.createDict<string>(),
-	dasherizeCache = Object.createDict<string>(),
-	underscoreCache = Object.createDict<string>();
+	capitalizeCache = createDict<string>(),
+	camelizeCache = createDict<string>(),
+	dasherizeCache = createDict<string>(),
+	underscoreCache = createDict<string>();
 
 export const
 	isDigital = /\d/,

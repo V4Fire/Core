@@ -11,12 +11,26 @@ import extend from 'core/prelude/extend';
 import { isGlobal, escapeRgxp, testCache } from 'core/prelude/regexp/const';
 import { createFlagsModifier } from 'core/prelude/regexp/helpers';
 
+import { isString } from 'core/prelude/types';
+
 /** @see [[RegExpConstructor.escape]] */
-extend(RegExp, 'escape', (value: unknown) => String(value).replace(escapeRgxp, '\\$1'));
+export const escape = extend<typeof RegExp.escape>(RegExp, 'escape', (value: unknown) => String(value).replace(escapeRgxp, '\\$1'));
+
+/** @see [[RegExp.addFlags]] */
+export const addFlags = extend<typeof RegExp.addFlags>(RegExp.prototype, 'addFlags', function addFlags(this: RegExp, ...flags: RegExpFlag[]) {
+	const set = new Set([...flags, ...this.flags].flatMap((str) => str.split('')));
+	return new RegExp(this.source, [...set].join(''));
+});
+
+/** @see [[RegExp.removeFlags]] */
+export const removeFlags = extend<typeof RegExp.removeFlags>(RegExp.prototype, 'removeFlags', function addFlags(this: RegExp, ...flags: RegExpFlag[]) {
+	const set = new Set(flags.flatMap((str) => str.split('')));
+	return new RegExp(this.source, this.flags.split('').filter((flag) => !set.has(flag)).join(''));
+});
 
 /** @see [[RegExpConstructor.test]] */
-extend(RegExp, 'test', (rgxp: RegExp | string, str?: string) => {
-	if (Object.isString(rgxp)) {
+export const test = extend<typeof RegExp.test>(RegExp, 'test', (rgxp: RegExp | string, str?: string) => {
+	if (isString(rgxp)) {
 		str = rgxp;
 		return (rgxp) => RegExp.test(rgxp, <string>str);
 	}
@@ -26,7 +40,7 @@ extend(RegExp, 'test', (rgxp: RegExp | string, str?: string) => {
 	}
 
 	if (isGlobal.test(rgxp.flags)) {
-		const testRgxp = testCache[rgxp.source] ?? rgxp.removeFlags('g');
+		const testRgxp = testCache[rgxp.source] ?? removeFlags(rgxp, 'g');
 		testCache[rgxp.source] = testRgxp;
 		return testRgxp.test(str);
 	}
@@ -34,29 +48,19 @@ extend(RegExp, 'test', (rgxp: RegExp | string, str?: string) => {
 	return rgxp.test(str);
 });
 
-/** @see [[RegExp.addFlags]] */
-extend(RegExp.prototype, 'addFlags', function addFlags(this: RegExp, ...flags: RegExpFlag[]) {
-	const set = new Set([...flags, ...this.flags].flatMap((str) => str.split('')));
+/** @see [[RegExp.setFlags]] */
+export const setFlags = extend<typeof RegExp.setFlags>(RegExp.prototype, 'setFlags', function addFlags(this: RegExp, ...flags: RegExpFlag[]) {
+	const set = new Set(flags.flatMap((str) => str.split('')));
 	return new RegExp(this.source, [...set].join(''));
 });
 
+//#if prelude/standalone
 /** @see [[RegExpConstructor.addFlags]] */
 extend(RegExp, 'addFlags', createFlagsModifier('addFlags'));
-
-/** @see [[RegExp.removeFlags]] */
-extend(RegExp.prototype, 'removeFlags', function addFlags(this: RegExp, ...flags: RegExpFlag[]) {
-	const set = new Set(flags.flatMap((str) => str.split('')));
-	return new RegExp(this.source, this.flags.split('').filter((flag) => !set.has(flag)).join(''));
-});
 
 /** @see [[RegExpConstructor.removeFlags]] */
 extend(RegExp, 'removeFlags', createFlagsModifier('removeFlags'));
 
-/** @see [[RegExp.setFlags]] */
-extend(RegExp.prototype, 'setFlags', function addFlags(this: RegExp, ...flags: RegExpFlag[]) {
-	const set = new Set(flags.flatMap((str) => str.split('')));
-	return new RegExp(this.source, [...set].join(''));
-});
-
 /** @see [[RegExpConstructor.setFlags]] */
 extend(RegExp, 'setFlags', createFlagsModifier('setFlags'));
+//#endif

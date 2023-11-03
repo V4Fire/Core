@@ -7,27 +7,29 @@
  */
 
 import extend from 'core/prelude/extend';
-import { Option, Result } from 'core/prelude/structures';
+import { Option as OptionStructure, Result as OptionResult } from 'core/prelude/structures';
+
+import { isFunction } from 'core/prelude/types';
 
 /** @see [[Function.option]] */
-extend(Function.prototype, 'option', function option(this: AnyFunction): AnyFunction {
+export const option = extend(Function.prototype, 'option', function option(this: AnyFunction): AnyFunction {
 	const wrapper = (...args) => {
 		const
 			fst = args[0];
 
 		if (fst == null) {
-			return Option.reject(null);
+			return OptionStructure.reject(null);
 		}
 
-		if (fst instanceof Option || fst instanceof Result) {
+		if (fst instanceof OptionStructure || fst instanceof OptionResult) {
 			return fst.then((value) => wrapper(value, ...args.slice(1)));
 		}
 
 		try {
-			return Option.resolve(this(...args));
+			return OptionStructure.resolve(this(...args));
 
 		} catch (err) {
-			return Option.reject(err);
+			return OptionStructure.reject(err);
 		}
 	};
 
@@ -35,33 +37,33 @@ extend(Function.prototype, 'option', function option(this: AnyFunction): AnyFunc
 });
 
 /** @see [[ObjectConstructor.Option]] */
-extend(Object, 'Option', (value: unknown) => {
+export const Option = extend(Object, 'Option', (value: unknown) => {
 	if (value == null) {
-		return Option.reject(null);
+		return OptionStructure.reject(null);
 	}
 
-	if (Object.isFunction(value)) {
+	if (isFunction(value)) {
 		return value.option();
 	}
 
-	return Option.resolve(value);
+	return OptionStructure.resolve(value);
 });
 
 /** @see [[Function.result]] */
-extend(Function.prototype, 'result', function result(this: AnyFunction): AnyFunction {
+export const result = extend(Function.prototype, 'result', function result(this: AnyFunction): AnyFunction {
 	const wrapper = (...args) => {
 		const
 			fst = args[0];
 
-		if (fst instanceof Option || fst instanceof Result) {
+		if (fst instanceof OptionStructure || fst instanceof OptionResult) {
 			return fst.then((value) => wrapper(value, ...args.slice(1)));
 		}
 
 		try {
-			return Result.resolve(this(...args));
+			return OptionResult.resolve(this(...args));
 
 		} catch (err) {
-			return Result.reject(err);
+			return OptionResult.reject(err);
 		}
 	};
 
@@ -69,14 +71,14 @@ extend(Function.prototype, 'result', function result(this: AnyFunction): AnyFunc
 });
 
 /** @see [[ObjectConstructor.Result]] */
-extend(Object, 'Result', (value: unknown) => {
+export const Result = extend(Object, 'Result', (value: unknown) => {
 	if (value instanceof Error) {
-		return Result.reject(value);
+		return OptionResult.reject(value);
 	}
 
-	if (Object.isFunction(value)) {
+	if (isFunction(value)) {
 		return value.result();
 	}
 
-	return Result.resolve(value);
+	return OptionResult.resolve(value);
 });

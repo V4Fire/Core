@@ -13,6 +13,15 @@ import { locale as defaultLocale } from 'core/prelude/i18n';
 
 import {
 
+	isPlainObject,
+	isNumber,
+	isString,
+	cast
+
+} from 'core/prelude/types';
+
+import {
+
 	globalFormatOpts,
 	defaultFormats,
 
@@ -27,15 +36,15 @@ import {
 import { repeatString } from 'core/prelude/number/helpers';
 
 /** @see [[Number.pad]] */
-extend(Number.prototype, 'pad', function pad(
+export const pad = extend(Number.prototype, 'pad', function pad(
 	this: number,
 	lengthOrOpts: number | NumberPadOptions = 0,
 	opts?: NumberPadOptions
 ): string {
-	opts = {...Object.isPlainObject(lengthOrOpts) ? lengthOrOpts : opts};
+	opts = {...isPlainObject(lengthOrOpts) ? lengthOrOpts : opts};
 
 	if (opts.length == null) {
-		opts.length = Object.isNumber(lengthOrOpts) ? lengthOrOpts : 0;
+		opts.length = isNumber(lengthOrOpts) ? lengthOrOpts : 0;
 	}
 
 	const
@@ -51,18 +60,8 @@ extend(Number.prototype, 'pad', function pad(
 	return str;
 });
 
-/** @see [[NumberConstructor.pad]] */
-extend(Number, 'pad', (value: number | NumberPadOptions, lengthOrOpts: number | NumberPadOptions) => {
-	if (Object.isPlainObject(value)) {
-		const opts = value;
-		return (value) => Number.pad(value, opts);
-	}
-
-	return value.pad(Object.cast(lengthOrOpts));
-});
-
 /** @see [[Number.format]] */
-extend(Number.prototype, 'format', function format(
+export const format = extend(Number.prototype, 'format', function format(
 	this: number,
 	patternOrOpts?: number | string | Intl.NumberFormatOptions,
 	locale: CanUndef<CanArray<string>> = defaultLocale.value
@@ -71,11 +70,11 @@ extend(Number.prototype, 'format', function format(
 		return this.toLocaleString(locale);
 	}
 
-	if (Object.isPlainObject(patternOrOpts)) {
+	if (isPlainObject(patternOrOpts)) {
 		return this.toLocaleString(locale, patternOrOpts);
 	}
 
-	if (Object.isString(patternOrOpts)) {
+	if (isString(patternOrOpts)) {
 		const
 			pattern = patternOrOpts,
 			cacheKey = [locale, pattern].join();
@@ -175,19 +174,20 @@ extend(Number.prototype, 'format', function format(
 	return res;
 });
 
+//#if prelude/standalone
 /** @see [[NumberConstructor.format]] */
 extend(Number, 'format', (
 	value: number | string | Intl.NumberFormatOptions,
 	patternOrOpts?: string | Intl.NumberFormatOptions,
 	locale?: CanArray<string>
 ) => {
-	if (Object.isString(value) || Object.isPlainObject(value)) {
-		locale = Object.cast(patternOrOpts);
+	if (isString(value) || isPlainObject(value)) {
+		locale = cast(patternOrOpts);
 		patternOrOpts = value;
-		return (value) => Number.format(value, Object.cast(patternOrOpts), locale);
+		return (value) => Number.format(value, cast(patternOrOpts), locale);
 	}
 
-	return value.format(Object.cast(patternOrOpts), locale);
+	return value.format(cast(patternOrOpts), locale);
 });
 
 /** @see [[NumberConstructor.getOption]] */
@@ -200,3 +200,14 @@ extend(Number, 'setOption', deprecate(function setOption(key: string, value: str
 	globalFormatOpts.init = true;
 	globalFormatOpts[key] = value;
 }));
+
+/** @see [[NumberConstructor.pad]] */
+extend(Number, 'pad', (value: number | NumberPadOptions, lengthOrOpts: number | NumberPadOptions) => {
+	if (isPlainObject(value)) {
+		const opts = value;
+		return (value) => Number.pad(value, opts);
+	}
+
+	return value.pad(cast(lengthOrOpts));
+});
+//#endif

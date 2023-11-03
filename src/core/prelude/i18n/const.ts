@@ -9,6 +9,8 @@
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import type { Locale } from 'core/prelude/i18n/interface';
 
+import { createDict } from 'core/prelude/object/create';
+
 /**
  * The event emitter to broadcast localization events
  */
@@ -33,7 +35,7 @@ export const locale: Locale = {
 /**
  * A dictionary to map literal pluralization forms to numbers
  */
-export const pluralizeMap = Object.createDict({
+export const pluralizeMap = createDict({
 	none: 0,
 	one: 1,
 	some: 2,

@@ -6,6 +6,16 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import {
+
+	isPlainObject,
+	isString,
+	isNumber,
+	isBoolean
+
+} from 'core/prelude/types';
+import { create } from 'core/prelude/date/create';
+
 /**
  * Factory to create functions to modify date values
  * @param mod
@@ -112,7 +122,7 @@ export function createDateModifier(mod: (val: number, base: number) => number = 
  */
 export function createStaticDateModifier(method: string): AnyFunction {
 	return (date: Date | DateSetParams, units: DateSetParams | boolean, reset?: boolean) => {
-		if (Object.isPlainObject(date) || Object.isBoolean(units)) {
+		if (isPlainObject(date) || isBoolean(units)) {
 			reset = Boolean(units);
 			units = <DateSetParams>date;
 			return (date) => Date[Symbol.for('[[V4_EXTEND_API]]')][method](date, units, reset);
@@ -132,8 +142,8 @@ export function createStaticDateComparator(method: string): AnyFunction {
 		date2: DateCreateValue,
 		margin?: number
 	): boolean | AnyFunction {
-		if (arguments.length < 2 || arguments.length < 3 && Object.isNumber(date1)) {
-			if (Object.isNumber(date1)) {
+		if (arguments.length < 2 || arguments.length < 3 && isNumber(date1)) {
+			if (isNumber(date1)) {
 				margin = date1;
 				date1 = date2;
 			}
@@ -141,7 +151,7 @@ export function createStaticDateComparator(method: string): AnyFunction {
 			return (date2, m) => Date[Symbol.for('[[V4_EXTEND_API]]')][method](date1, date2, margin ?? m);
 		}
 
-		return Date.create(date1)[method](date2, margin);
+		return create(date1)[method](date2, margin);
 	};
 }
 
@@ -151,7 +161,7 @@ export function createStaticDateComparator(method: string): AnyFunction {
  */
 export function createStaticDateFormatter(method: string): AnyFunction {
 	return (date: Date | string | DateHTMLTimeStringOptions, opts?: string | DateHTMLTimeStringOptions) => {
-		if (Object.isString(date) || Object.isPlainObject(date)) {
+		if (isString(date) || isPlainObject(date)) {
 			opts = date;
 			return (date) => Date[Symbol.for('[[V4_EXTEND_API]]')][method](date, opts);
 		}

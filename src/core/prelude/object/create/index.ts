@@ -11,8 +11,25 @@ import extend from 'core/prelude/extend';
 import { deprecate } from 'core/functools';
 import { getSameAs } from 'core/prelude/object/helpers';
 
+import {
+
+	isArray,
+	isWeakSet,
+	isTruly,
+	isFunction,
+	isRegExp,
+	cast,
+	isSet,
+	isIterable,
+	isPrimitive
+
+} from 'core/prelude/types';
+
+import { set } from 'core/prelude/object/property';
+import { forEach } from 'core/prelude/object/iterators';
+
 /** @see [[ObjectConstructor.createDict]] */
-extend(Object, 'createDict', (...objects) => {
+export const createDict = extend<typeof Object.createDict>(Object, 'createDict', (...objects) => {
 	if (objects.length > 0) {
 		return Object.assign(Object.create(null), ...objects);
 	}
@@ -21,9 +38,9 @@ extend(Object, 'createDict', (...objects) => {
 });
 
 /** @see [[ObjectConstructor.convertEnumToDict]] */
-extend(Object, 'convertEnumToDict', (obj) => {
+export const convertEnumToDict = extend(Object, 'convertEnumToDict', (obj) => {
 	const
-		res = Object.createDict();
+		res = createDict();
 
 	if (obj == null) {
 		return res;
@@ -45,24 +62,24 @@ extend(Object, 'convertEnumToDict', (obj) => {
 });
 
 /** @see [[ObjectConstructor.createEnumLike]] */
-extend(Object, 'createEnumLike', createEnumLike);
+export const createEnumLike = extend(Object, 'createEnumLike', createEnumLikeFunc);
 
 /**
  * @deprecated
  * @see [[ObjectConstructor.createEnumLike]]
  */
-extend(Object, 'createMap', deprecate({renamedTo: 'createEnum'}, createEnumLike));
+extend(Object, 'createMap', deprecate({renamedTo: 'createEnum'}, createEnumLikeFunc));
 
 /** @see [[ObjectConstructor.createEnumLike]] */
-export function createEnumLike(obj: Nullable<object>): Dictionary {
+export function createEnumLikeFunc(obj: Nullable<object>): Dictionary {
 	const
-		map = Object.createDict();
+		map = createDict();
 
 	if (obj == null) {
 		return map;
 	}
 
-	if (Object.isArray(obj)) {
+	if (isArray(obj)) {
 		for (let i = 0; i < obj.length; i++) {
 			const el = obj[i];
 			map[i] = el;
@@ -87,12 +104,12 @@ export function createEnumLike(obj: Nullable<object>): Dictionary {
 }
 
 /** @see [[ObjectConstructor.fromArray]] */
-extend(Object, 'fromArray', (
+export const fromArray = extend(Object, 'fromArray', (
 	arr: Nullable<unknown[]>,
 	opts?: ObjectFromArrayOptions
 ) => {
 	const
-		map = Object.createDict();
+		map = createDict();
 
 	if (arr == null) {
 		return map;
@@ -126,13 +143,13 @@ extend(Object, 'fromArray', (
 });
 
 /** @see [[ObjectConstructor.select]] */
-extend(Object, 'select', selectReject(true));
+export const select = extend(Object, 'select', selectReject(true));
 
 /** @see [[ObjectConstructor.reject]] */
-extend(Object, 'reject', selectReject(false));
+export const reject = extend(Object, 'reject', selectReject(false));
 
 /**
- * Factory to create Object.select/reject functions
+ * Factory to create select/reject functions
  * @param select
  */
 export function selectReject(select: boolean): AnyFunction {
@@ -141,7 +158,7 @@ export function selectReject(select: boolean): AnyFunction {
 		condition: Iterable<unknown> | Dictionary | RegExp | Function
 	): unknown {
 		if (arguments.length === 1) {
-			condition = Object.cast(obj);
+			condition = cast(obj);
 			return (obj) => wrapper(obj, condition);
 		}
 
@@ -155,32 +172,32 @@ export function selectReject(select: boolean): AnyFunction {
 		const
 			filter = new Set();
 
-		if (!Object.isRegExp(condition) && !Object.isFunction(condition)) {
-			if (Object.isPrimitive(condition)) {
+		if (!isRegExp(condition) && !isFunction(condition)) {
+			if (isPrimitive(condition)) {
 				filter.add(condition);
 
-			} else if (Object.isIterable(condition)) {
-				Object.forEach(condition, (el) => {
+			} else if (isIterable(condition)) {
+				forEach(condition, (el) => {
 					filter.add(el);
 				});
 
 			} else {
-				Object.forEach(condition, (el, key) => {
-					if (Object.isTruly(el)) {
+				forEach(condition, (el, key) => {
+					if (isTruly(el)) {
 						filter.add(key);
 					}
 				});
 			}
 		}
 
-		Object.forEach(obj, (el, key) => {
+		forEach(obj, (el, key) => {
 			let
 				test: boolean;
 
-			if (Object.isFunction(condition)) {
-				test = Object.isTruly(condition(key, el));
+			if (isFunction(condition)) {
+				test = isTruly(condition(key, el));
 
-			} else if (Object.isRegExp(condition)) {
+			} else if (isRegExp(condition)) {
 				test = condition.test(String(key));
 
 			} else {
@@ -188,14 +205,14 @@ export function selectReject(select: boolean): AnyFunction {
 			}
 
 			if (select ? test : !test) {
-				if (Object.isArray(res)) {
+				if (isArray(res)) {
 					res.push(el);
 
-				} else if (Object.isSet(res) || Object.isWeakSet(res)) {
+				} else if (isSet(res) || isWeakSet(res)) {
 					res.add(<object>key);
 
 				} else {
-					Object.set(res, [key], el);
+					set(res, [key], el);
 				}
 			}
 		});

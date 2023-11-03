@@ -6,9 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { createDict } from 'core/prelude/object/create';
+
 export const
 	isGlobal = /g/,
 	escapeRgxp = /([\\/'*+?|()[\]{}.^$-])/g;
 
 export const
-	testCache = Object.createDict<RegExp>();
+	testCache = createDict<RegExp>();

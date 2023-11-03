@@ -9,14 +9,29 @@
 import extend from 'core/prelude/extend';
 import { funcCache } from 'core/prelude/object/const';
 
+import {
+
+	unwrapProxy,
+	cast,
+	isMap,
+	isSet,
+	isArray,
+	isRegExp,
+	isDictionary,
+	isDate,
+	isTruly,
+	isFunction
+
+} from 'core/prelude/types';
+
 /** @see [[ObjectConstructor.fastCompare]] */
-extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): boolean | AnyFunction {
+export const fastCompare = extend<typeof Object.fastCompare>(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): boolean | AnyFunction {
 	if (arguments.length < 2) {
-		return (b) => Object.fastCompare(a, b);
+		return (b) => fastCompare(a, b);
 	}
 
-	a = Object.unwrapProxy(a);
-	b = Object.unwrapProxy(b);
+	a = unwrapProxy(a);
+	b = unwrapProxy(b);
 
 	const
 		isEqual = a === b;
@@ -38,36 +53,36 @@ extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): bool
 	}
 
 	const
-		objA = Object.cast<object>(a),
-		objB = Object.cast<object>(b);
+		objA = cast<object>(a),
+		objB = cast<object>(b);
 
 	if (objA.constructor !== objB.constructor) {
 		return false;
 	}
 
-	if (Object.isRegExp(a)) {
+	if (isRegExp(a)) {
 		return a.toString() === objB.toString();
 	}
 
-	if (Object.isDate(a)) {
+	if (isDate(a)) {
 		return a.valueOf() === objB.valueOf();
 	}
 
 	const
-		isArr = Object.isArray(a),
-		isMap = !isArr && Object.isMap(a),
-		isSet = !isMap && Object.isSet(a);
+		isValArr = isArray(a),
+		isValMap = !isValArr && isMap(a),
+		isValSet = !isValMap && isSet(a);
 
-	const cantJSONCompare = !isArr && !Object.isDictionary(a) && (
-		!Object.isFunction(objA['toJSON']) ||
-		!Object.isFunction(objB['toJSON'])
+	const cantJSONCompare = !isValArr && !isDictionary(a) && (
+		!isFunction(objA['toJSON']) ||
+		!isFunction(objB['toJSON'])
 	);
 
 	if (cantJSONCompare) {
-		if ((isMap || isSet)) {
+		if ((isValMap || isValSet)) {
 			const
-				setA = Object.cast<Set<unknown>>(a),
-				setB = Object.cast<Set<unknown>>(b);
+				setA = cast<Set<unknown>>(a),
+				setB = cast<Set<unknown>>(b);
 
 			if (setA.size !== setB.size) {
 				return false;
@@ -86,7 +101,8 @@ extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): bool
 					aVal = aEl.value,
 					bVal = bEl.value;
 
-				if (!Object.fastCompare(aVal[0], bVal[0]) || !Object.fastCompare(aVal[1], bVal[1])) {
+				// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+				if (!fastCompare(aVal[0], bVal[0]) || !fastCompare(aVal[1], bVal[1])) {
 					return false;
 				}
 			}
@@ -101,11 +117,11 @@ extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): bool
 		length1,
 		length2;
 
-	if (isArr) {
+	if (isValArr) {
 		length1 = objA['length'];
 		length2 = objB['length'];
 
-	} else if (isMap || isSet) {
+	} else if (isValMap || isValSet) {
 		length1 = objA['size'];
 		length2 = objB['size'];
 
@@ -129,7 +145,7 @@ extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): bool
 /** @see [[ObjectConstructor.fastHash]] */
 extend(Object, 'fastHash', (obj) => {
 	const res = JSON.stringify(obj, createSerializer(obj, undefined, funcCache));
-	return cyrb53(Object.isTruly(res) ? res : 'null');
+	return cyrb53(isTruly(res) ? res : 'null');
 
 	/* eslint-disable no-bitwise */
 
@@ -171,7 +187,7 @@ export function createSerializer(
 	return (key, value) => {
 		if (value == null) {
 			init = true;
-			return Object.unwrapProxy(value);
+			return unwrapProxy(value);
 		}
 
 		const
@@ -198,9 +214,9 @@ export function createSerializer(
 		}
 
 		if (isObj && (value instanceof Map || value instanceof Set)) {
-			return [...Object.unwrapProxy(value).entries()];
+			return [...unwrapProxy(value).entries()];
 		}
 
-		return Object.unwrapProxy(value);
+		return unwrapProxy(value);
 	};
 }

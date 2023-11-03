@@ -11,46 +11,15 @@ import { locale as defaultLocale } from 'core/prelude/i18n';
 import { formatCache, formatAliases, boolAliases, defaultFormats } from 'core/prelude/date/const';
 import { createStaticDateFormatter } from 'core/prelude/date/helpers';
 
-/** @see [[Date.short]] */
-extend(Date.prototype, 'short', function short(
-	this: Date,
-	locale: CanUndef<CanArray<string>> = defaultLocale.value
-): string {
-	return this.format('d:numeric;M:numeric;Y:numeric', locale);
-});
-
-/** @see [[DateConstructor.short]] */
-extend(Date, 'short', createStaticDateFormatter('short'));
-
-/** @see [[Date.medium]] */
-extend(Date.prototype, 'medium', function medium(
-	this: Date,
-	locale: CanUndef<CanArray<string>> = defaultLocale.value
-): string {
-	return this.format('d:numeric;M:long;Y:numeric', locale);
-});
-
-/** @see [[DateConstructor.medium]] */
-extend(Date, 'medium', createStaticDateFormatter('medium'));
-
-/** @see [[Date.long]] */
-extend(Date.prototype, 'long', function long(
-	this: Date,
-	locale: CanUndef<CanArray<string>> = defaultLocale.value
-): string {
-	return this.format('d:numeric;M:long;Y:numeric;h:2-digit;m:2-digit;s:2-digit', locale);
-});
-
-/** @see [[DateConstructor.long]] */
-extend(Date, 'long', createStaticDateFormatter('long'));
+import { isPlainObject, isFunction } from 'core/prelude/types';
 
 /** @see [[Date.format]] */
-extend(Date.prototype, 'format', function format(
+export const format = extend<Date['format']>(Date.prototype, 'format', function format(
 	this: Date,
 	patternOrOpts: string | Intl.DateTimeFormatOptions,
 	locale: CanUndef<CanArray<string>> = defaultLocale.value
 ): string {
-	if (Object.isPlainObject(patternOrOpts)) {
+	if (isPlainObject(patternOrOpts)) {
 		return this.toLocaleString(locale, patternOrOpts);
 	}
 
@@ -86,7 +55,7 @@ extend(Date.prototype, 'format', function format(
 			if (formatKeyAlias != null) {
 				formatKey = formatKeyAlias;
 
-				if (Object.isFunction(formatKey)) {
+				if (isFunction(formatKey)) {
 					formatKey = formatKey(this);
 
 					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -113,42 +82,32 @@ extend(Date.prototype, 'format', function format(
 	return formatter.format(this);
 });
 
-/** @see [[DateConstructor.format]] */
-extend(Date, 'format', (
-	date: Date | string | Intl.NumberFormatOptions,
-	patternOrOpts?: string | Intl.NumberFormatOptions,
-	locale?: CanArray<string>
-) => {
-	if (Object.isString(date) || Object.isPlainObject(date)) {
-		locale = Object.cast(patternOrOpts);
-		patternOrOpts = date;
-		return (date) => Date.format(date, Object.cast(patternOrOpts), locale);
-	}
-
-	return date.format(Object.cast(patternOrOpts), locale);
-});
-
-/** @see [[Date.toHTMLDateString]] */
-extend(Date.prototype, 'toHTMLDateString', function toHTMLDateString(
+/** @see [[Date.short]] */
+export const short = extend<typeof Date.short>(Date.prototype, 'short', function short(
 	this: Date,
-	opts: DateHTMLDateStringOptions = {}
+	locale: CanUndef<CanArray<string>> = defaultLocale.value
 ): string {
-	const
-		s = (v) => String(v).padStart(2, '0'),
-		needMonth = opts.month !== false;
-
-	return [
-		this.getFullYear(),
-		needMonth ? s(this.getMonth() + 1) : '01',
-		needMonth && opts.date !== false ? s(this.getDate()) : '01'
-	].join('-');
+	return format.call(this, 'd:numeric;M:numeric;Y:numeric', locale);
 });
 
-/** @see [[DateConstructor.toHTMLDateString]] */
-extend(Date, 'toHTMLDateString', createStaticDateFormatter('toHTMLDateString'));
+/** @see [[Date.medium]] */
+export const medium = extend<typeof Date.medium>(Date.prototype, 'medium', function medium(
+	this: Date,
+	locale: CanUndef<CanArray<string>> = defaultLocale.value
+): string {
+	return format.call(this, 'd:numeric;M:long;Y:numeric', locale);
+});
+
+/** @see [[Date.long]] */
+export const long = extend<typeof Date.long>(Date.prototype, 'long', function long(
+	this: Date,
+	locale: CanUndef<CanArray<string>> = defaultLocale.value
+): string {
+	return format.call(this, 'd:numeric;M:long;Y:numeric;h:2-digit;m:2-digit;s:2-digit', locale);
+});
 
 /** @see [[Date.toHTMLTimeString]] */
-extend(Date.prototype, 'toHTMLTimeString', function toHTMLTimeString(
+export const toHTMLTimeString = extend<typeof Date.toHTMLTimeString>(Date.prototype, 'toHTMLTimeString', function toHTMLTimeString(
 	this: Date,
 	opts: DateHTMLTimeStringOptions = {}
 ): string {
@@ -176,13 +135,58 @@ extend(Date.prototype, 'toHTMLTimeString', function toHTMLTimeString(
 	return res.join(':');
 });
 
-/** @see [[DateConstructor.toHTMLTimeString]] */
-extend(Date, 'toHTMLTimeString', createStaticDateFormatter('toHTMLTimeString'));
+/** @see [[Date.toHTMLDateString]] */
+export const toHTMLDateString = extend<typeof Date.toHTMLDateString>(Date.prototype, 'toHTMLDateString', function toHTMLDateString(
+	this: Date,
+	opts: DateHTMLDateStringOptions = {}
+): string {
+	const
+		s = (v) => String(v).padStart(2, '0'),
+		needMonth = opts.month !== false;
+
+	return [
+		this.getFullYear(),
+		needMonth ? s(this.getMonth() + 1) : '01',
+		needMonth && opts.date !== false ? s(this.getDate()) : '01'
+	].join('-');
+});
 
 /** @see [[Date.toHTMLString]] */
-extend(Date.prototype, 'toHTMLString', function toHTMLString(this: Date, opts: DateHTMLStringOptions): string {
-	return `${this.toHTMLDateString(opts)}T${this.toHTMLTimeString(opts)}`;
+export const toHTMLString = extend(Date.prototype, 'toHTMLString', function toHTMLString(this: Date, opts: DateHTMLStringOptions): string {
+	return `${toHTMLDateString(this, opts)}T${toHTMLTimeString(this, opts)}`;
 });
+
+//#if prelude/standalone
+/** @see [[DateConstructor.format]] */
+extend(Date, 'format', (
+	date: Date | string | Intl.NumberFormatOptions,
+	patternOrOpts?: string | Intl.NumberFormatOptions,
+	locale?: CanArray<string>
+) => {
+	if (Object.isString(date) || Object.isPlainObject(date)) {
+		locale = Object.cast(patternOrOpts);
+		patternOrOpts = date;
+		return (date) => format.call(date, Object.cast(patternOrOpts), locale);
+	}
+
+	return date.format(Object.cast(patternOrOpts), locale);
+});
+
+/** @see [[DateConstructor.toHTMLDateString]] */
+extend(Date, 'toHTMLDateString', createStaticDateFormatter('toHTMLDateString'));
+
+/** @see [[DateConstructor.long]] */
+extend(Date, 'long', createStaticDateFormatter('long'));
+
+/** @see [[DateConstructor.medium]] */
+extend(Date, 'medium', createStaticDateFormatter('medium'));
+
+/** @see [[DateConstructor.short]] */
+extend(Date, 'short', createStaticDateFormatter('short'));
 
 /** @see [[DateConstructor.toHTMLString]] */
 extend(Date, 'toHTMLString', createStaticDateFormatter('toHTMLString'));
+
+/** @see [[DateConstructor.toHTMLTimeString]] */
+extend(Date, 'toHTMLTimeString', createStaticDateFormatter('toHTMLTimeString'));
+//#endif

@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 
 /** @see [[Function.once]] */
-extend(Function.prototype, 'once', function once(this: AnyFunction): AnyFunction {
+export const once = extend(Function.prototype, 'once', function once(this: AnyFunction): AnyFunction {
 	const
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		fn = this;
@@ -29,5 +29,7 @@ extend(Function.prototype, 'once', function once(this: AnyFunction): AnyFunction
 	};
 });
 
+//#if prelude/standalone
 /** @see [[FunctionConstructor.once]] */
 extend(Function, 'once', (fn: AnyFunction) => fn.once());
+//#endif

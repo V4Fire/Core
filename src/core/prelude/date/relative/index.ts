@@ -8,27 +8,16 @@
 
 import extend from 'core/prelude/extend';
 
+import { create } from 'core/prelude/date/create';
+
 /** @see [[Date.relative]] */
-extend(Date.prototype, 'relative', function relative(this: Date): DateRelative {
+export const relative = extend(Date.prototype, 'relative', function relative(this: Date): DateRelative {
 	return getRelative(this, new Date());
 });
 
-/** @see [[DateConstructor.relative]] */
-extend(Date, 'relative', (date: DateCreateValue) => Date.create(date).relative());
-
 /** @see [[Date.relativeTo]] */
-extend(Date.prototype, 'relativeTo', function relativeTo(this: Date, date: DateCreateValue): DateRelative {
+export const relativeTo = extend(Date.prototype, 'relativeTo', function relativeTo(this: Date, date: DateCreateValue): DateRelative {
 	return getRelative(this, date);
-});
-
-/** @see [[DateConstructor.relativeTo]] */
-extend(Date, 'relativeTo', function relativeTo(from: DateCreateValue, to: DateCreateValue): DateRelative | AnyFunction {
-	if (arguments.length === 1) {
-		const d = Date.create(from);
-		return (date2) => d.relativeTo(date2);
-	}
-
-	return Date.create(from).relativeTo(to);
 });
 
 /**
@@ -39,7 +28,7 @@ extend(Date, 'relativeTo', function relativeTo(from: DateCreateValue, to: DateCr
  */
 export function getRelative(from: DateCreateValue, to: DateCreateValue): DateRelative {
 	const
-		diff = Date.create(to).valueOf() - Date.create(from).valueOf();
+		diff = create(to).valueOf() - create(from).valueOf();
 
 	const intervals = [
 		{type: 'milliseconds', bound: 1e3},
@@ -74,3 +63,18 @@ export function getRelative(from: DateCreateValue, to: DateCreateValue): DateRel
 		diff
 	};
 }
+
+//#if prelude/standalone
+/** @see [[DateConstructor.relativeTo]] */
+extend(Date, 'relativeTo', function relativeTo(from: DateCreateValue, to: DateCreateValue): DateRelative | AnyFunction {
+	if (arguments.length === 1) {
+		const d = Date.create(from);
+		return (date2) => d.relativeTo(date2);
+	}
+
+	return Date.create(from).relativeTo(to);
+});
+
+/** @see [[DateConstructor.relative]] */
+extend(Date, 'relative', (date: DateCreateValue) => Date.create(date).relative());
+//#endif

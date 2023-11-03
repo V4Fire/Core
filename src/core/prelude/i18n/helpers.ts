@@ -14,6 +14,8 @@ import langPacs, { Translation, PluralTranslation } from 'lang';
 import { locale, pluralizeMap } from 'core/prelude/i18n/const';
 import type { PluralizationCount } from 'core/prelude/i18n/interface';
 
+import { isArray, isString, isNumber } from 'core/prelude/types';
+
 /** @see [[i18n]] */
 extend(globalThis, 'i18n', i18nFactory);
 
@@ -38,19 +40,19 @@ export function i18nFactory(
 ): (key: string, params?: I18nParams) => string {
 	const
 		resolvedLocale = customLocale ?? locale.value,
-		keysetNames = Object.isArray(keysetNameOrNames) ? keysetNameOrNames : [keysetNameOrNames];
+		keysetNames = isArray(keysetNameOrNames) ? keysetNameOrNames : [keysetNameOrNames];
 
 	if (resolvedLocale == null) {
 		throw new ReferenceError('The locale for internationalization is not defined');
 	}
 
 	return function i18n(value: string | TemplateStringsArray, params?: I18nParams) {
-		if (Object.isArray(value) && value.length !== 1) {
+		if (isArray(value) && value.length !== 1) {
 			throw new SyntaxError('Using i18n with template literals is allowed only without variables');
 		}
 
 		const
-			key = Object.isString(value) ? value : value[0],
+			key = isString(value) ? value : value[0],
 			correctKeyset = keysetNames.find((keysetName) => langPacs[resolvedLocale]?.[keysetName]?.[key]),
 			translateValue = langPacs[resolvedLocale]?.[correctKeyset ?? '']?.[key];
 
@@ -91,7 +93,7 @@ export function i18nFactory(
  */
 export function resolveTemplate(value: Translation, params?: I18nParams): string {
 	const
-		template = Object.isArray(value) ? pluralizeText(value, params?.count) : value;
+		template = isArray(value) ? pluralizeText(value, params?.count) : value;
 
 	return template.replace(/{([^}]+)}/g, (_, key) => {
 		if (params?.[key] == null) {
@@ -124,10 +126,10 @@ export function resolveTemplate(value: Translation, params?: I18nParams): string
 export function pluralizeText(pluralTranslation: PluralTranslation, count: CanUndef<PluralizationCount>): string {
 	let normalizedCount;
 
-	if (Object.isNumber(count)) {
+	if (isNumber(count)) {
 		normalizedCount = count;
 
-	} else if (Object.isString(count)) {
+	} else if (isString(count)) {
 		if (count in pluralizeMap) {
 			normalizedCount = pluralizeMap[count];
 		}
