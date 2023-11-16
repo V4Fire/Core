@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.?? (2023-??-??)
+
+#### :boom: Breaking Change
+
+* Removed `i18n` function from global scope
+
 ## v4.0.0-alpha.12 (2023-10-17)
 
 #### :rocket: New Feature

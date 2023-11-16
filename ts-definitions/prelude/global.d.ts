@@ -45,6 +45,8 @@ declare function Any(obj: any): any;
  */
 declare function stderr(err: any): void;
 
+type i18n = (key: string | TemplateStringsArray, params?: I18nParams) => string;
+
 /**
  * Creates a function to internationalize strings in an application based on the given locale and keyset.
  * Keyset allows you to share the same keys in different contexts.
@@ -58,9 +60,9 @@ declare function stderr(err: any): void;
  * @param [customLocale] - the locale used to search for translations (the default is taken from
  *   the application settings)
  */
-declare function i18n(
+type i18nFactory = (
 	keysetNameOrNames: CanArray<string>, customLocale?: Language
-): (key: string | TemplateStringsArray, params?: I18nParams) => string;
+) => i18n;
 
 /**
  * Parameters for the internationalization function

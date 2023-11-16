@@ -7,15 +7,11 @@
  */
 
 import log from 'core/log';
-import extend from 'core/prelude/extend';
 
 import langPacs, { Translation, PluralTranslation } from 'lang';
 
 import { locale, pluralizeMap } from 'core/prelude/i18n/const';
 import type { PluralizationCount } from 'core/prelude/i18n/interface';
-
-/** @see [[i18n]] */
-extend(globalThis, 'i18n', i18nFactory);
 
 const
 	logger = log.namespace('i18n');
@@ -35,7 +31,7 @@ const
  */
 export function i18nFactory(
 	keysetNameOrNames: string | string[], customLocale?: Language
-): (key: string, params?: I18nParams) => string {
+): (key: string | TemplateStringsArray, params?: I18nParams) => string {
 	const
 		resolvedLocale = customLocale ?? locale.value,
 		keysetNames = Object.isArray(keysetNameOrNames) ? keysetNameOrNames : [keysetNameOrNames];
