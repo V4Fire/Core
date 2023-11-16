@@ -142,10 +142,10 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 	/**
 	 * Returns an object with authentication parameters
-	 * @param params - additional parameters
+	 * @param _params - additional parameters
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-	getAuthParams(params?: Dictionary): Promise<Dictionary> {
+	getAuthParams(_params: unknown): Promise<Dictionary> {
 		return Promise.resolve({});
 	}
 
