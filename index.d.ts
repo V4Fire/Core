@@ -892,7 +892,7 @@ interface ObjectConstructor {
 	size(obj: any): number;
 
 	/**
-	 * Returns true if an object size/length is 0
+	 * Returns true if size/length of the specified object is 0
 	 * @param obj
 	 */
 	isEmpty(obj: any): boolean;
