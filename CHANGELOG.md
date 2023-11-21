@@ -15,7 +15,8 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :house: Internal
 
-* Migrate on `node@20`
+* Migrate on `node@18`
+* Migrate on `yarn@4`
 
 ## v3.97.1 (2023-10-02)
 
