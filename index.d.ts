@@ -892,6 +892,12 @@ interface ObjectConstructor {
 	size(obj: any): number;
 
 	/**
+	 * Returns true if an object size/length is 0
+	 * @param obj
+	 */
+	isEmpty(obj: any): boolean;
+
+	/**
 	 * Iterates over the specified dictionary
 	 *
 	 * @param obj - object to iterate
