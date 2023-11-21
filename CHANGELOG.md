@@ -11,11 +11,18 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.**.* (2023-11-21)
+## v3.??.?? (2023-??-??)
 
 #### :rocket: New Feature
 
 * Added `Object.isEmpty`
+
+## v3.??.?? (2023-??-??)
+
+#### :house: Internal
+
+* Migrated to `node@18`
+* Migrated to `yarn@4`
 
 ## v3.97.1 (2023-10-02)
 
