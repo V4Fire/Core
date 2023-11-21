@@ -106,7 +106,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	wrapDataProvider<
 		P extends Provider,
 		W extends WrappedDataProvider
-	>(provider: P, opts?: AsyncOptionsForWrappers):W {
+	>(provider: P, opts?: AsyncOptionsForWrappers): W {
 		const
 			wrappedProvider: W = Object.create(provider),
 			wrappedProviderGroup = opts?.group ?? provider.providerName;

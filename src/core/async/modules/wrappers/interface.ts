@@ -98,7 +98,7 @@ export interface ReadonlyEventEmitterWrapper<CTX extends object = Async> {
 }
 
 export interface EventEmitterWrapper<CTX extends object = Async> extends ReadonlyEventEmitterWrapper<CTX> {
-	emit(event: string, ...args: unknown[]): boolean;
+	emit(event: string, ...args: unknown[]): void;
 }
 
 type MapNotPrimitive<T, A> = T extends Primitive ? T : T & A;
