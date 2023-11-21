@@ -109,5 +109,5 @@
     "ts-jest": "29.1.1",
     "xhr2": "0.2.1"
   },
-  "packageManager": "yarn@3.5.0"
+  "packageManager": "yarn@4.0.2"
 }
