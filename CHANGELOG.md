@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.**.* (2023-11-21)
+
+#### :rocket: New Feature
+
+* Added `Object.isEmpty`
+
 ## v3.97.1 (2023-10-02)
 
 #### :nail_care: Polish
