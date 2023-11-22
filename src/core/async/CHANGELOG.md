@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.14 (2023-11-22)
+
+#### :house: Internal
+
+* Fixed TS types of the EventEmitter wrapper
+
 ## v3.66.0 (2021-11-26)
 
 #### :rocket: New Feature
