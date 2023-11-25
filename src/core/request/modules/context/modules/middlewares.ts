@@ -39,7 +39,10 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 		if (canCache) {
 			promise = promise.then(
-				(res) => res,
+				(res) => {
+					void pendingCache.remove(cacheKey);
+					return res;
+				},
 
 				(reason) => {
 					void pendingCache.remove(cacheKey);
@@ -72,7 +75,6 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	saveCache(requestResponse: RequestResponseObject<D>): Promise<RequestResponseObject<D>> {
 		const {
 			cacheKey,
-			pendingCache,
 			cache
 		} = this;
 
@@ -84,7 +86,6 @@ export default class RequestContext<D = unknown> extends Super<D> {
 							resolve(requestResponse);
 
 							if (caches.has(cache)) {
-								void pendingCache.remove(cacheKey);
 								void cache.set(cacheKey, data);
 							}
 						})
