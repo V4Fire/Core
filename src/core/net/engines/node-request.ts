@@ -8,6 +8,8 @@
 
 import got from 'got';
 import config from 'config';
+
+import { IS_SSR } from 'core/env';
 import { state } from 'core/net/const';
 
 const
@@ -20,6 +22,10 @@ const
  * This engine checks the connection by using a request for some data from the internet.
  */
 export async function isOnline(): Promise<boolean | null> {
+	if (IS_SSR) {
+		return true;
+	}
+
 	const
 		url = online.checkURL;
 
