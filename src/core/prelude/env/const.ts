@@ -65,6 +65,8 @@ export const IS_NODE: boolean = (() => {
 	}
 })();
 
+export const IS_SSR: boolean = Boolean(typeof SSR !== 'undefined' && SSR);
+
 /**
  * Checks if the provided value is a global object by confirming the presence of Math,
  * known to exist in any global JS environment
