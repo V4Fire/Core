@@ -8,6 +8,8 @@
 
 import type AbortablePromise from 'core/promise/abortable';
 import type { ControllablePromise } from 'core/promise';
+
+import { IS_SSR } from 'core/env';
 import type { AbstractCache } from 'core/cache';
 
 import symbolGenerator from 'core/symbol';
@@ -197,7 +199,9 @@ export default class RequestContext<D = unknown> {
 		this.withoutBody = Boolean(methodsWithoutBody[p.method]);
 		this.canCache = p.cacheMethods.includes(p.method) || false;
 
-		let cacheAPI =
+		let cacheAPI = IS_SSR ?
+			cache.forever :
+
 			(
 				Object.isString(p.cacheStrategy) ?
 					cache[p.cacheStrategy] :
@@ -205,6 +209,11 @@ export default class RequestContext<D = unknown> {
 			) ??
 
 			cache.never;
+
+		if (IS_SSR) {
+			delete p.cacheTTL;
+			delete p.offlineCache;
+		}
 
 		this.isReady = (async () => {
 			// eslint-disable-next-line require-atomic-updates
