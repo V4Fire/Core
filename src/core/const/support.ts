@@ -25,4 +25,3 @@ export const proxy = (() => {
 		return false;
 	}
 })();
-
