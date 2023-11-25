@@ -367,11 +367,11 @@ function request<D = unknown>(
 				} else {
 					resultPromise = createEngineRequest().then(wrapSuccessResponse);
 				}
+
+				resultPromise.then(ctx.saveCache.bind(ctx));
 			}
 
 			resultPromise
-				.then(ctx.saveCache.bind(ctx))
-
 				.then(async ({response, data}) => {
 					if (response.bodyUsed === true) {
 						log(`request:response:${path}`, await data, {
