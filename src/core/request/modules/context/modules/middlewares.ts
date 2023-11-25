@@ -23,30 +23,31 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	 * @param promise
 	 */
 	wrapRequest(promise: RequestResponse<D>): RequestResponse<D> {
-		const
-			key = this.cacheKey,
-			cache = this.pendingCache,
-			cacheVal = key != null ? cache.get(key) : null;
+		const {
+			cacheKey,
+			pendingCache
+		} = this;
+
+		const cacheVal = cacheKey != null ?
+			pendingCache.get(cacheKey) :
+			null;
 
 		const canCache =
-			key != null &&
+			cacheKey != null &&
 			isControllablePromise(cacheVal) &&
 			this.params.engine.pendingCache !== false;
 
 		if (canCache) {
 			promise = promise.then(
-				(v) => {
-					void cache.remove(key);
-					return v;
-				},
+				(res) => res,
 
-				(r) => {
-					void cache.remove(key);
-					throw r;
+				(reason) => {
+					void pendingCache.remove(cacheKey);
+					throw reason;
 				},
 
 				() => {
-					void cache.remove(key);
+					void pendingCache.remove(cacheKey);
 				}
 			);
 
@@ -58,7 +59,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 				// Loopback
 			});
 
-			void cache.set(key, pendingRequest);
+			void pendingCache.set(cacheKey, pendingRequest);
 		}
 
 		return promise;
@@ -66,21 +67,25 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 	/**
 	 * Middleware to cache a response object
-	 * @param resObj - response object
+	 * @param requestResponse
 	 */
-	saveCache(resObj: RequestResponseObject<D>): Promise<RequestResponseObject<D>> {
-		const
-			key = this.cacheKey;
+	saveCache(requestResponse: RequestResponseObject<D>): Promise<RequestResponseObject<D>> {
+		const {
+			cacheKey,
+			pendingCache,
+			cache
+		} = this;
 
 		return new SyncPromise((resolve, reject) => {
-			if (key != null) {
-				const save = () => {
-					resObj.data
+			if (cacheKey != null) {
+				const saveCache = () => {
+					requestResponse.data
 						.then((data) => {
-							resolve(resObj);
+							resolve(requestResponse);
 
-							if (caches.has(this.cache)) {
-								void this.cache.set(key, data);
+							if (caches.has(cache)) {
+								void pendingCache.remove(cacheKey);
+								void cache.set(cacheKey, data);
 							}
 						})
 
@@ -88,32 +93,32 @@ export default class RequestContext<D = unknown> extends Super<D> {
 				};
 
 				const
-					{response} = resObj;
+					{response} = requestResponse;
 
 				if (response.bodyUsed) {
-					save();
+					saveCache();
 
 				} else if (!response.streamUsed) {
 					const
 						{emitter} = response;
 
-					const saveAndClear = () => {
-						save();
+					const saveCacheAndClear = () => {
+						saveCache();
 
 						// eslint-disable-next-line @typescript-eslint/no-use-before-define
 						emitter.off('bodyUsed', clear);
 					};
 
 					const clear = () => {
-						resolve(resObj);
-						emitter.off('bodyUsed', saveAndClear);
+						resolve(requestResponse);
+						emitter.off('bodyUsed', saveCacheAndClear);
 					};
 
-					emitter.once('bodyUsed', saveAndClear);
+					emitter.once('bodyUsed', saveCacheAndClear);
 					emitter.once('streamUsed', clear);
 				}
 
-				caches.add(this.cache);
+				caches.add(cache);
 			}
 		});
 	}
@@ -134,7 +139,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			});
 
 		let
-			customData;
+			customData: Nullable<Promise<D>>;
 
 		return {
 			ctx: this,
