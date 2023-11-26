@@ -46,6 +46,11 @@ if (typeof globalThis === 'undefined') {
 }
 
 /**
+ * True if the runtime is running in SSR mode
+ */
+export const IS_SSR = Boolean(typeof SSR !== 'undefined' && SSR);
+
+/**
  * True if the current runtime has window object
  */
 // eslint-disable-next-line no-restricted-globals
@@ -64,8 +69,6 @@ export const IS_NODE: boolean = (() => {
 		return false;
 	}
 })();
-
-export const IS_SSR = Boolean(typeof SSR !== 'undefined' && SSR);
 
 /**
  * Checks if the provided value is a global object by confirming the presence of Math,
