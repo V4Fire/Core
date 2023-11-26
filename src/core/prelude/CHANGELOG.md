@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.15 (2023-11-26)
+
+#### :rocket: New Feature
+
+* Added a constant to determine if SSR is enabled
+
 ## v4.0.0-alpha.10 (2023-09-29)
 
 #### :nail_care: Polish

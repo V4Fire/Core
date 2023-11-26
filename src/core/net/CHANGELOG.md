@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.15 (2023-11-26)
+
+#### :bug: Bug Fix
+
+* Do not check online during SSR
+
 ## v3.95.3 (2023-05-22)
 
 #### :bug: Bug Fix

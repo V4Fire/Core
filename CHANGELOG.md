@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.15 (2023-11-26)
+
+#### :rocket: New Feature
+
+* Added a constant to determine if SSR is enabled `core/env`
+
+#### :bug: Bug Fix
+
+* Do not check online during SSR `core/net`
+
 ## v4.0.0-alpha.14 (2023-11-22)
 
 #### :house: Internal
