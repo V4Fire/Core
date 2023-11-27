@@ -893,7 +893,32 @@ interface ObjectConstructor {
 
 	/**
 	 * Returns true if size/length of the specified object is 0
+	 *
 	 * @param obj
+	 *
+	 * @example
+	 * ```js
+	 * // true
+	 * Object.isEmpty({});
+	 *
+	 * // false
+	 * Object.isEmpty({a: 1});
+	 *
+	 * // true
+	 * Object.isEmpty(new Set());
+	 *
+	 * // false
+	 * Object.isEmpty(new Set([1, 2]));
+	 *
+	 * // false
+	 * Object.isEmpty(1);
+	 *
+	 * // true
+	 * Object.isEmpty(0);
+	 * Object.isEmpty(NaN);
+	 * Object.isEmpty(null);
+	 * Object.isEmpty(undefined);
+	 * ```
 	 */
 	isEmpty(obj: any): boolean;
 
