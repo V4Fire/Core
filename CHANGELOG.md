@@ -23,6 +23,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v4.0.0-alpha.14 (2023-11-22)
 
+#### :rocket: New Feature
+
+* Added `Object.isEmpty`
+
+## v3.??.?? (2023-??-??)
+
 #### :house: Internal
 
 * Fixed TS types of the EventEmitter wrapper `core/async`
