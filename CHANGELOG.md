@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* Fixed caching for providers with `singleton = false` option
+* Fixed cache initialization for providers
 
 ## v4.0.0-alpha.15 (2023-11-26)
 

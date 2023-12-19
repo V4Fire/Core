@@ -13,7 +13,7 @@ Changelog
 
 #### :bug: Bug Fix
 
-* Fixed caching for providers with `singleton = false` option
+* Fixed cache initialization for providers
 
 ## v4.0.0-alpha.12 (2023-10-17)
 
