@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.16 (2023-12-19)
+
+#### :bug: Bug Fix
+
+* Fixed caching for providers with `singleton = false` option
+
 ## v4.0.0-alpha.12 (2023-10-17)
 
 #### :rocket: New Feature
