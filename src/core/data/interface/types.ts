@@ -78,7 +78,9 @@ export interface ProviderOptions {
 	socket?: boolean;
 
 	/**
-	 * If false, the instance of the data provider will not be cached
+	 * By default, all instances of data providers are created as singletons
+	 * to enable efficient caching between consumers.
+	 * Setting this option to false will disable this behavior.
 	 */
 	singleton?: boolean;
 }
