@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.16 (2023-12-19)
+
+#### :bug: Bug Fix
+
+* Fixed cache initialization for providers
+
 ## v4.0.0-alpha.15 (2023-11-26)
 
 #### :rocket: New Feature
