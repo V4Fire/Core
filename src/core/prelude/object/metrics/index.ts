@@ -47,3 +47,6 @@ extend(Object, 'size', (obj: unknown) => {
 
 	return 0;
 });
+
+/** @see [[ObjectConstructor.isEmpty]] */
+extend(Object, 'isEmpty', (obj: unknown) => Object.size(obj) === 0);
