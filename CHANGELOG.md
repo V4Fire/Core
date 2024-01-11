@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.17 (2024-01-11)
+
+#### :rocket: New Feature
+
+* Added `Object.isEmpty`
+
 ## v4.0.0-alpha.16 (2023-12-19)
 
 #### :bug: Bug Fix
@@ -26,12 +32,6 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :bug: Bug Fix
 
 * Do not check online during SSR `core/net`
-
-## v4.0.0-alpha.14 (2023-11-22)
-
-#### :rocket: New Feature
-
-* Added `Object.isEmpty`
 
 ## v3.??.?? (2023-??-??)
 
