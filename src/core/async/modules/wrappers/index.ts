@@ -250,7 +250,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 		const wrapOff = (originalMethod) => (link, ...args) => {
 			if (link != null && typeof link !== 'object' || args.length > 0) {
-				args = args.map((val) => links.get(val));
+				args = args.map((val) => links.get(val) ?? val);
 				return Object.isFunction(originalMethod) ? originalMethod.call(emitter, link, ...args) : null;
 			}
 
