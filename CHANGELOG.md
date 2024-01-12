@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.19 (2024-01-12)
+
+#### :bug: Bug Fix
+
+* Quickfix for `v4.0.0-alpha.18`
+
 ## v4.0.0-alpha.18 (2024-01-12)
 
 #### :bug: Bug Fix

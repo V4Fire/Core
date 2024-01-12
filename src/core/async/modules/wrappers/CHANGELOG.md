@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.19 (2024-01-12)
+
+#### :bug: Bug Fix
+
+* Quickfix for `v4.0.0-alpha.18`
+
 ## v4.0.0-alpha.18 (2024-01-12)
 
 #### :bug: Bug Fix
