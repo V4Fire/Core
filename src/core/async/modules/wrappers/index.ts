@@ -203,7 +203,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		opts?: AsyncOptionsForWrappers
 	): EventEmitterOverwritten<T> & EventEmitterWrapper {
 		const
-			wrappedEmitter = Object.create(emitter);
+			wrappedEmitter = Object.create(emitter),
+			links = new WeakMap<Function, Function>();
 
 		Object.defineProperty(wrappedEmitter, 'on', {
 			configurable: true,
@@ -213,7 +214,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 					throw new TypeError('Wrapped emitters methods `on, addEventListener, addListener` accept only a function as the second parameter');
 				}
 
-				return this.on(emitter, event, fn, ...normalizeAdditionalArgs(params));
+				const link = Object.cast<Nullable<{handler: Function}>>(
+					this.on(emitter, event, fn, ...normalizeAdditionalArgs(params))
+				);
+
+				if (link != null) {
+					links.set(fn, link.handler);
+				}
 			}
 		});
 
@@ -243,6 +250,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 		const wrapOff = (originalMethod) => (link, ...args) => {
 			if (link != null && typeof link !== 'object' || args.length > 0) {
+				args = args.map((val) => links.get(val));
 				return Object.isFunction(originalMethod) ? originalMethod.call(emitter, link, ...args) : null;
 			}
 
