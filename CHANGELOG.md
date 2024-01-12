@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.18 (2024-01-12)
+
+#### :bug: Bug Fix
+
+* Fixed memory leak when using wrappers over event emitters `core/async`
+
 ## v4.0.0-alpha.17 (2024-01-11)
 
 #### :rocket: New Feature
@@ -33,7 +39,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Do not check online during SSR `core/net`
 
-## v3.??.?? (2023-??-??)
+## v4.0.0-alpha.14 (2023-11-22)
 
 #### :house: Internal
 

@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.18 (2024-01-12)
+
+#### :bug: Bug Fix
+
+* Fixed memory leak when using wrappers over event emitters
+
 ## v4.0.0-alpha.14 (2023-11-22)
 
 #### :house: Internal
