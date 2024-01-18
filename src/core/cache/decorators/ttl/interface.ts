@@ -9,10 +9,15 @@
 import type { CacheWithEmitter } from 'core/cache/decorators/helpers/add-emitter/interface';
 
 export interface TTLCache<
+	K = unknown,
 	V = unknown,
-	K = string,
-	T extends CacheWithEmitter<V, K> = CacheWithEmitter<V, K>
-> extends CacheWithEmitter<V, K> {
+	T extends CacheWithEmitter<K, V> = CacheWithEmitter<K, V>
+> extends CacheWithEmitter<K, V> {
+	/**
+	 * Collection of cache's timers
+	 */
+	ttlTimers: Map<K, [number | NodeJS.Timeout, Promise<CanUndef<V>>]>;
+
 	/**
 	 * Saves a value to the cache by the specified key
 	 *
