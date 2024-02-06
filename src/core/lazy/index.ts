@@ -25,7 +25,6 @@ const
  * Therefore, when these more efficient solutions become accessible, they should be preferred over the use of `disposeLazy`.
  *
  * @param context - the context object to be removed from the lazy storage
- * @returns - boolean Indicates whether the context was successfully removed. Returns `true` if the context was present and removed, `false` otherwise
  */
 export function disposeLazy(context: object): boolean {
 	return lazyContexts.delete(context);
