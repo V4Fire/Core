@@ -49,7 +49,7 @@ export function makeLazy<T extends ClassConstructor | AnyFunction>(
 		T extends (...args: infer A) => infer R ? {(...args: A): R; new (...args: A): R} & R : never {
 
 	const
-		lazyActions: Function[] = [];
+		actions: Function[] = [];
 
 	const mergedScheme = {
 		...getSchemeFromProto(constructor.prototype),
@@ -76,7 +76,7 @@ export function makeLazy<T extends ClassConstructor | AnyFunction>(
 			lazyContexts.push(ctx);
 		}
 
-		lazyActions.forEach((fn) => {
+		actions.forEach((fn) => {
 			fn.call(ctx);
 		});
 
@@ -121,7 +121,7 @@ export function makeLazy<T extends ClassConstructor | AnyFunction>(
 						configurable: true,
 
 						get: () => (...args) => {
-							lazyActions.push(function method(this: object) {
+							actions.push(function method(this: object) {
 								const
 									obj = Object.get<Nullable<object>>(this, breadcrumbs);
 
@@ -142,7 +142,7 @@ export function makeLazy<T extends ClassConstructor | AnyFunction>(
 						},
 
 						set: (fn) => {
-							lazyActions.push(function setter(this: object) {
+							actions.push(function setter(this: object) {
 								Object.set(this, fullPath, fn);
 								return fn;
 							});
@@ -185,7 +185,7 @@ export function makeLazy<T extends ClassConstructor | AnyFunction>(
 						},
 
 						set: (val) => {
-							lazyActions.push(function setter(this: object) {
+							actions.push(function setter(this: object) {
 								Object.set(this, fullPath, val);
 								return val;
 							});
