@@ -10,7 +10,7 @@ all accumulated actions will be executed.
 ### With a function that returns an object
 
 ```js
-import makeLazy from 'core/lazy';
+import { makeLazy } from 'core/lazy';
 
 function createUser(name, age) {
   return {
@@ -52,7 +52,7 @@ const user = lazyUser('Bob', 10);
 ### With a class
 
 ```js
-import makeLazy from 'core/lazy';
+import { makeLazy } from 'core/lazy';
 
 class User {
   constructor(name, age) {
@@ -111,7 +111,7 @@ like getting or setting a property value or method invoking. These handlers take
 Other arguments depend on the hook type.
 
 ```js
-import makeLazy from 'core/lazy';
+import { makeLazy } from 'core/lazy';
 
 class RenderEngine {
   component(name, opts) {
@@ -183,3 +183,60 @@ LazyRenderEngine.component('newAwesomeComponent', {
   render: () => { /* ... */ }
 });
 ```
+
+## Dispose lazy object
+
+To ensure an object is no longer lazy, you must call the `disposeLazy` function.
+This function requires a context as its input, which, upon invocation, will cease to be lazy.
+
+```js
+import { makeLazy, disposeLazy } from 'core/lazy';
+
+class User {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+
+    this.config = {
+      errorHandler() {
+        console.log('Boom!');
+      }
+    };
+  }
+
+  showInfo() {
+    console.log(`Name: ${this.name}; Age: ${this.age}`);
+  }
+
+  destroy() {
+    // ...
+  }
+}
+
+const LazyUser = makeLazy(
+  User,
+
+  // Declaring only properties.
+  // All methods are taken automatically from the class prototype.
+  {
+    config: {
+      attr: {},
+      errorHandler: Function
+    }
+  }
+);
+
+// User is now lazy and stored into lazy contexts.
+const user = new LazyUser('Bob', 23);
+
+// ...
+
+// User is no longer needed.
+user.destroy();
+disposeLazy(user);
+```
+
+It's crucial to understand that the lazy module maintains a strong reference to the context it creates.
+That is, when the lazy object's constructor is called, its context is preserved inside the makeLazy function.
+To properly clear this and prevent memory leaks, `disposeLazy` must be invoked.
+Therefore, it is imperative to remember to clean up the lazy state.

@@ -13,6 +13,20 @@
 
 import type { ObjectScheme, Hooks } from 'core/lazy/interface';
 
+const
+	lazyContexts: Set<object> = new Set(),
+	lazyActions: Function[] = [];
+
+/**
+ * Removes the specified context from the lazy contexts storage, thereby discontinuing its laziness
+ *
+ * @param context - the context object to be removed from the lazy storage
+ * @returns - boolean Indicates whether the context was successfully removed. Returns `true` if the context was present and removed, `false` otherwise
+ */
+export function disposeLazy(context: object): boolean {
+	return lazyContexts.delete(context);
+}
+
 /**
  * Creates a new function based on the passed function or class and returns it.
  * The new function accumulates all method and properties actions into a queue.
@@ -22,7 +36,7 @@ import type { ObjectScheme, Hooks } from 'core/lazy/interface';
  * @param [scheme] - additional scheme of the structure to create
  * @param [hooks] - dictionary of hook handlers
  */
-export default function makeLazy<T extends ClassConstructor | AnyFunction>(
+export function makeLazy<T extends ClassConstructor | AnyFunction>(
 	constructor: T,
 	scheme?: ObjectScheme,
 	hooks?: Hooks<T extends ClassConstructor ? InstanceType<T> : T extends (...args: infer A) => infer R ? R : object>
@@ -30,10 +44,6 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 	T extends ClassConstructor ?
 		T & InstanceType<T> :
 		T extends (...args: infer A) => infer R ? {(...args: A): R; new (...args: A): R} & R : never {
-
-	const
-		contexts: object[] = [],
-		actions: Function[] = [];
 
 	const mergedScheme = {
 		...getSchemeFromProto(constructor.prototype),
@@ -57,10 +67,10 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 		}
 
 		if (hooks != null) {
-			contexts.push(ctx);
+			lazyContexts.add(ctx);
 		}
 
-		actions.forEach((fn) => {
+		lazyActions.forEach((fn) => {
 			fn.call(ctx);
 		});
 
@@ -105,7 +115,7 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 						configurable: true,
 
 						get: () => (...args) => {
-							actions.push(function method(this: object) {
+							lazyActions.push(function method(this: object) {
 								const
 									obj = Object.get<Nullable<object>>(this, breadcrumbs);
 
@@ -120,19 +130,19 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 								return obj[key](...args);
 							});
 
-							if (contexts.length > 0 && hooks?.call != null) {
-								return hooks.call[fullPath.join('.')]?.(Object.cast(contexts), ...args);
+							if (lazyContexts.size > 0 && hooks?.call != null) {
+								return hooks.call[fullPath.join('.')]?.(Object.cast(lazyContexts), ...args);
 							}
 						},
 
 						set: (fn) => {
-							actions.push(function setter(this: object) {
+							lazyActions.push(function setter(this: object) {
 								Object.set(this, fullPath, fn);
 								return fn;
 							});
 
-							if (contexts.length > 0 && hooks?.set != null) {
-								hooks.set[fullPath.join('.')]?.(Object.cast(contexts), fn);
+							if (lazyContexts.size > 0 && hooks?.set != null) {
+								hooks.set[fullPath.join('.')]?.(Object.cast(lazyContexts), fn);
 							}
 						}
 					});
@@ -161,21 +171,21 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 							const
 								path = fullPath.join('.');
 
-							if (contexts.length > 0 && hooks?.get?.[path] != null) {
-								return hooks.get[path]!(Object.cast(contexts));
+							if (lazyContexts.size > 0 && hooks?.get?.[path] != null) {
+								return hooks.get[path]!(Object.cast(lazyContexts));
 							}
 
 							return proxy[store];
 						},
 
 						set: (val) => {
-							actions.push(function setter(this: object) {
+							lazyActions.push(function setter(this: object) {
 								Object.set(this, fullPath, val);
 								return val;
 							});
 
-							if (contexts.length > 0 && hooks?.set != null) {
-								hooks.set[fullPath.join('.')]?.(Object.cast(contexts), val);
+							if (lazyContexts.size > 0 && hooks?.set != null) {
+								hooks.set[fullPath.join('.')]?.(Object.cast(lazyContexts), val);
 							}
 
 							if (
