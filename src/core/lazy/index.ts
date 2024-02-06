@@ -20,6 +20,11 @@ const
 /**
  * Removes the specified context from the lazy contexts storage, thereby discontinuing its laziness
  *
+ * > There are better methods available, such as not maintaining a strong reference.
+ * However, these alternatives are not viable until we adopt TypeScript 5.x.x or make use of `WeakRef`.
+ * The use of `WeakRef` is currently avoided due to its poor support in browser environments.
+ * Therefore, when these more efficient solutions become accessible, they should be preferred over the use of `disposeLazy`.
+ *
  * @param context - the context object to be removed from the lazy storage
  * @returns - boolean Indicates whether the context was successfully removed. Returns `true` if the context was present and removed, `false` otherwise
  */
