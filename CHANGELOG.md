@@ -15,7 +15,6 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :boom: Breaking Change
 
-* The contexts with which the `makeLazy` function hooks were called are now not an `Array`, but a `Set` `core/lazy`
 * `core/lazy` no longer has a default export `core/lazy`
 
 #### :bug: Bug Fix

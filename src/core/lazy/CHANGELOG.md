@@ -13,7 +13,6 @@ Changelog
 
 #### :boom: Breaking Change
 
-* The contexts with which the `makeLazy` function hooks were called are now not an `Array`, but a `Set`
 * `core/lazy` no longer has a default export
 
 #### :bug: Bug Fix
