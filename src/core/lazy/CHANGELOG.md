@@ -9,6 +9,16 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.?? (2024-??-??)
+
+#### :boom: Breaking Change
+
+* `core/lazy` no longer has a default export
+
+#### :bug: Bug Fix
+
+* Added the `disposeLazy` function which clears the `makeLazy` module of the passed context to avoid memory leaks
+
 ## v3.86.1 (2022-04-26)
 
 #### :house: Internal

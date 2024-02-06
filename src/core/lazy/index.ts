@@ -13,6 +13,24 @@
 
 import type { ObjectScheme, Hooks } from 'core/lazy/interface';
 
+let
+	lazyContexts: object[] = [];
+
+/**
+ * Removes the specified context from the lazy contexts storage, thereby discontinuing its laziness
+ *
+ * > There are better methods available, such as not maintaining a strong reference.
+ * However, these alternatives are not viable until we adopt TypeScript 5.x.x or make use of `WeakRef`.
+ * The use of `WeakRef` is currently avoided due to its poor support in browser environments.
+ * Therefore, when these more efficient solutions become accessible,
+ * they should be preferred over the use of `disposeLazy`.
+ *
+ * @param context - the context object to be removed from the lazy storage
+ */
+export function disposeLazy(context: object): void {
+	lazyContexts = lazyContexts.filter((currentContext) => currentContext !== context);
+}
+
 /**
  * Creates a new function based on the passed function or class and returns it.
  * The new function accumulates all method and properties actions into a queue.
@@ -22,7 +40,7 @@ import type { ObjectScheme, Hooks } from 'core/lazy/interface';
  * @param [scheme] - additional scheme of the structure to create
  * @param [hooks] - dictionary of hook handlers
  */
-export default function makeLazy<T extends ClassConstructor | AnyFunction>(
+export function makeLazy<T extends ClassConstructor | AnyFunction>(
 	constructor: T,
 	scheme?: ObjectScheme,
 	hooks?: Hooks<T extends ClassConstructor ? InstanceType<T> : T extends (...args: infer A) => infer R ? R : object>
@@ -32,7 +50,6 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 		T extends (...args: infer A) => infer R ? {(...args: A): R; new (...args: A): R} & R : never {
 
 	const
-		contexts: object[] = [],
 		actions: Function[] = [];
 
 	const mergedScheme = {
@@ -57,7 +74,7 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 		}
 
 		if (hooks != null) {
-			contexts.push(ctx);
+			lazyContexts.push(ctx);
 		}
 
 		actions.forEach((fn) => {
@@ -120,8 +137,8 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 								return obj[key](...args);
 							});
 
-							if (contexts.length > 0 && hooks?.call != null) {
-								return hooks.call[fullPath.join('.')]?.(Object.cast(contexts), ...args);
+							if (lazyContexts.length > 0 && hooks?.call != null) {
+								return hooks.call[fullPath.join('.')]?.(Object.cast(lazyContexts), ...args);
 							}
 						},
 
@@ -131,8 +148,8 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 								return fn;
 							});
 
-							if (contexts.length > 0 && hooks?.set != null) {
-								hooks.set[fullPath.join('.')]?.(Object.cast(contexts), fn);
+							if (lazyContexts.length > 0 && hooks?.set != null) {
+								hooks.set[fullPath.join('.')]?.(Object.cast(lazyContexts), fn);
 							}
 						}
 					});
@@ -161,8 +178,8 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 							const
 								path = fullPath.join('.');
 
-							if (contexts.length > 0 && hooks?.get?.[path] != null) {
-								return hooks.get[path]!(Object.cast(contexts));
+							if (lazyContexts.length > 0 && hooks?.get?.[path] != null) {
+								return hooks.get[path]!(Object.cast(lazyContexts));
 							}
 
 							return proxy[store];
@@ -174,8 +191,8 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 								return val;
 							});
 
-							if (contexts.length > 0 && hooks?.set != null) {
-								hooks.set[fullPath.join('.')]?.(Object.cast(contexts), val);
+							if (lazyContexts.length > 0 && hooks?.set != null) {
+								hooks.set[fullPath.join('.')]?.(Object.cast(lazyContexts), val);
 							}
 
 							if (

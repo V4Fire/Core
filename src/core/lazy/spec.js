@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import makeLazy from 'core/lazy';
+import { makeLazy } from 'core/lazy';
 
 describe('core/lazy', () => {
 	it('should create a structure based on the passed function', () => {
