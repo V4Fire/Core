@@ -9,6 +9,17 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.?? (2024-??-??)
+
+#### :boom: Breaking Change
+
+* The contexts with which the `makeLazy` function hooks were called are now not an `Array`, but a `Set` `core/lazy`
+* `core/lazy` no longer has a default export `core/lazy`
+
+#### :bug: Bug Fix
+
+* Added the `disposeLazy` function which clears the `makeLazy` module of the passed context to avoid memory leaks `core/lazy`
+
 ## v3.86.1 (2022-04-26)
 
 #### :house: Internal
