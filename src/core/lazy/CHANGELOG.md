@@ -13,12 +13,12 @@ Changelog
 
 #### :boom: Breaking Change
 
-* The contexts with which the `makeLazy` function hooks were called are now not an `Array`, but a `Set` `core/lazy`
-* `core/lazy` no longer has a default export `core/lazy`
+* The contexts with which the `makeLazy` function hooks were called are now not an `Array`, but a `Set`
+* `core/lazy` no longer has a default export
 
 #### :bug: Bug Fix
 
-* Added the `disposeLazy` function which clears the `makeLazy` module of the passed context to avoid memory leaks `core/lazy`
+* Added the `disposeLazy` function which clears the `makeLazy` module of the passed context to avoid memory leaks
 
 ## v3.86.1 (2022-04-26)
 
