@@ -119,6 +119,11 @@ export interface Provider {
 	dropCache(): void;
 
 	/**
+	 * Destroys the current provider
+	 */
+	destroy(): void;
+
+	/**
 	 * Requests the provider for data by a query.
 	 * This method is similar for a GET request.
 	 *

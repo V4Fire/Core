@@ -163,6 +163,7 @@ export default interface Provider {
   url(value: string): Provider;
 
   dropCache(): void;
+  destroy(): void;
 
   get<T = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<T>): RequestResponse;
 
@@ -218,9 +219,11 @@ myProvider.base('https://google.com').url('bla/baz').get('foo');
 
 6. `dropCache` — a method that drops any request cache.
 
-7. `peek` — a request that logically is similar to the checking of API accessibility. It uses `HEAD` by default.
+7. `destroy` — a method that destroys the provider.
 
-8. `post` — a request that sends to a server some data without any logical representation. It uses `POST` by default.
+8. `peek` — a request that logically is similar to the checking of API accessibility. It uses `HEAD` by default.
+
+9. `post` — a request that sends to a server some data without any logical representation. It uses `POST` by default.
 
 ## Default implementation
 

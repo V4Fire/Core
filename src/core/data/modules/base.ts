@@ -138,7 +138,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	 * @param [paramsForCache]
 	 */
 	getCacheKey(paramsForCache: ProviderOptions = this.params): string {
-		return `${this.providerName}:${Object.fastHash(paramsForCache)}`;
+		return `${this.providerName}:${paramsForCache.id}:${Object.fastHash(paramsForCache)}`;
 	}
 
 	/**
@@ -279,18 +279,25 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		const
 			cache = requestCache[this.cacheId];
 
-		if (cache) {
-			for (let keys = Object.keys(cache), i = 0; i < keys.length; i++) {
-				const
-					obj = cache[keys[i]];
-
-				if (obj) {
-					obj.dropCache();
-				}
-			}
+		if (cache != null) {
+			Object.values(cache).forEach((cache) => {
+				cache?.dropCache();
+			});
 		}
 
 		requestCache[this.cacheId] = Object.createDict();
+	}
+
+	/** @inheritDoc */
+	destroy(): void {
+		this.dropCache();
+
+		this.async.clearAll().locked = true;
+		this.emitter.removeAllListeners();
+
+		delete instanceCache[this.cacheId];
+		delete connectCache[this.cacheId];
+		delete requestCache[this.cacheId];
 	}
 
 	/** @inheritDoc */
