@@ -72,6 +72,11 @@ export type ModelMethod =
 
 export interface ProviderOptions {
 	/**
+	 * Provider identifier
+	 */
+	id?: string;
+
+	/**
 	 * If true, then the provider is connected to a socket server
 	 * @default `false`
 	 */
