@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.21 (2024-02-12)
+
+#### :rocket: New Feature
+
+* Added a method to destroy the created provider
+
 ## v4.0.0-alpha.16 (2023-12-19)
 
 #### :bug: Bug Fix

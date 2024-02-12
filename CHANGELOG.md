@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.21 (2024-02-12)
+
+#### :rocket: New Feature
+
+* Added a method to destroy the created provider `core/data`
+
 ## v4.0.0-alpha.20 (2024-02-06)
 
 #### :boom: Breaking Change
