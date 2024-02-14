@@ -9,6 +9,7 @@
 import StringEngine from 'core/kv-storage/engines/string/engine';
 
 export { StringEngine as default };
+export * from 'core/kv-storage/engines/string/interface';
 
 export const
 	syncSessionStorage = new StringEngine(),

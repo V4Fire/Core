@@ -11,6 +11,8 @@ import { Cache } from 'core/cache';
 import syncLocalEngine from 'core/kv-storage/engines/browser-indexeddb/sync-engine';
 import AsyncLocalEngine from 'core/kv-storage/engines/browser-indexeddb/async-engine';
 
+export * from 'core/kv-storage/engines/browser-indexeddb/interface';
+
 const
 	asyncLocalEngine = new AsyncLocalEngine(),
 	sessionEngine = new Cache();
