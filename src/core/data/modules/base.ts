@@ -286,6 +286,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		}
 
 		requestCache[this.cacheId] = Object.createDict();
+		this.async.terminateWorker({group: 'extraProvidersCache'});
 	}
 
 	/** @inheritDoc */
@@ -358,6 +359,10 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 				} else {
 					providerInstance = ProviderLink;
 				}
+
+				this.async.worker(() => {
+					providerInstance.dropCache();
+				}, {group: 'extraProvidersCache'});
 
 				const
 					req = providerInstance.get(el.query ?? query, el.request);
