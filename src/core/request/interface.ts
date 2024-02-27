@@ -142,7 +142,14 @@ export interface RequestResponseObject<D = unknown> {
 	[Symbol.asyncIterator](): AsyncIterableIterator<RequestResponseChunk>;
 
 	cache?: CacheType;
-	dropCache(): void;
+
+	/**
+	 * Drops the request cache
+	 *
+	 * @param [recursive] - if true, then the `dropCache` operation will be propagated recursively,
+	 *   for example, if an engine based on a data provider is used
+	 */
+	dropCache(recursive?: boolean): void;
 }
 
 export type RequestResponse<D = unknown> = AbortablePromise<RequestResponseObject<D>>;
@@ -709,4 +716,12 @@ export interface RequestEngine {
 	 * @default `true`
 	 */
 	pendingCache?: boolean;
+
+	/**
+	 * Drops the request cache
+	 *
+	 * @param [recursive] - if true, then the `dropCache` operation will be propagated recursively,
+	 *   for example, if an engine based on a data provider is used
+	 */
+	dropCache?(recursive?: boolean): void;
 }

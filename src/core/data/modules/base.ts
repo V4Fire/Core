@@ -275,13 +275,13 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	}
 
 	/** @inheritDoc */
-	dropCache(): void {
+	dropCache(recursive?: boolean): void {
 		const
 			cache = requestCache[this.cacheId];
 
 		if (cache != null) {
 			Object.values(cache).forEach((cache) => {
-				cache?.dropCache();
+				cache?.dropCache(recursive);
 			});
 		}
 
@@ -291,7 +291,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 	/** @inheritDoc */
 	destroy(): void {
-		this.dropCache();
+		this.dropCache(true);
 
 		this.async.clearAll().locked = true;
 		this.emitter.removeAllListeners();
@@ -361,7 +361,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 				}
 
 				this.async.worker(() => {
-					providerInstance.dropCache();
+					providerInstance.dropCache(true);
 				}, {group: 'extraProvidersCache'});
 
 				const

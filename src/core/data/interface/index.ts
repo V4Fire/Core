@@ -115,8 +115,11 @@ export interface Provider {
 
 	/**
 	 * Drops the request cache of the current provider
+	 *
+	 * @param [recursive] - if true, then the `dropCache` operation will be propagated recursively,
+	 *   for example, if an engine based on a data provider is used
 	 */
-	dropCache(): void;
+	dropCache(recursive?: boolean): void;
 
 	/**
 	 * Destroys the current provider

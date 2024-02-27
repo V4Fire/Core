@@ -213,7 +213,7 @@ interface RequestResponseObject<D = unknown> {
   cache?: CacheType;
 
   // A method to drop cache of the request
-  dropCache(): void;
+  dropCache(recursive?: boolean): void;
 }
 ```
 

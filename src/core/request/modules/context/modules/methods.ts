@@ -207,13 +207,20 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 	/**
 	 * Drops the request cache
+	 *
+	 * @param [recursive] - if true, then the `dropCache` operation will be propagated recursively,
+	 *   for example, if an engine based on a data provider is used
 	 */
-	dropCache(): void {
+	dropCache(recursive?: boolean): void {
 		const
 			key = this.cacheKey;
 
 		if (key != null) {
 			this.cache.remove(key);
+		}
+
+		if (recursive) {
+			this.params.engine.dropCache?.(recursive);
 		}
 	}
 }

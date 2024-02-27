@@ -68,6 +68,15 @@ export default function createProviderEngine(
 			p = Object.cast<AvailableOptions>(Object.select(params, availableParams)),
 			provider = getProviderInstance(src, p.meta);
 
+		Object.defineProperty(dataProviderEngine, 'dropCache', {
+			configurable: true,
+			enumerable: true,
+			writable: true,
+			value(recursive?: boolean) {
+				provider.dropCache(recursive);
+			}
+		});
+
 		const defaultRequestMethods = providerMethodProperties.reduceRight((carry, key) => {
 			const
 				method = provider[key];
