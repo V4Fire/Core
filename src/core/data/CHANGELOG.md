@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.22 (2024-02-27)
+
+#### :rocket: New Feature
+
+* Added a `recursive` parameter to the `dropCache` method for recursive cache clearing to prevent memory leaks during SSR
+
 ## v4.0.0-alpha.21 (2024-02-12)
 
 #### :rocket: New Feature

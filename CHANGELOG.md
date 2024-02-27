@@ -11,6 +11,14 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.22 (2024-02-27)
+
+#### :rocket: New Feature
+
+* Added a `recursive` parameter to the `dropCache` method for recursive cache clearing to prevent memory leaks during SSR:
+  * `core/data`
+  * `core/request`
+
 ## v4.0.0-alpha.21 (2024-02-12)
 
 #### :rocket: New Feature
