@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.23 (2024-03-01)
+
+#### :bug: Bug Fix
+
+* Return event object from the `on` method of the wrapped emitter `modules/wrappers`
+
 ## v4.0.0-alpha.18 (2024-01-12)
 
 #### :bug: Bug Fix
