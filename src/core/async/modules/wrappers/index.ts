@@ -221,6 +221,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				if (link != null) {
 					links.set(fn, link.handler);
 				}
+
+				return link;
 			}
 		});
 

@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.23 (2024-03-01)
+
+#### :bug: Bug Fix
+
+* Return event object from the `on` method of the wrapped emitter `core/async/modules/wrappers`
+
 ## v4.0.0-alpha.22 (2024-02-27)
 
 #### :rocket: New Feature
