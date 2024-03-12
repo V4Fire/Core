@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.24 (2024-03-12)
+
+#### :bug: Bug Fix
+
+* The error that caused the application process to never finish during SSR has been fixed
+
 ## v4.0.0-alpha.15 (2023-11-26)
 
 #### :bug: Bug Fix

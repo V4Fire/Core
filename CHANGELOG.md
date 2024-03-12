@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.24 (2024-03-12)
+
+#### :bug: Bug Fix
+
+* The error that caused the application process to never finish during SSR has been fixed `core/net`
+
 ## v4.0.0-alpha.23 (2024-03-01)
 
 #### :bug: Bug Fix
