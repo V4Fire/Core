@@ -83,7 +83,11 @@ export function isOnline(
 		}
 
 		if (online.cacheTTL != null) {
-			setTimeout(() => cache = undefined, online.cacheTTL);
+			const timer = setTimeout(() => cache = undefined, online.cacheTTL);
+
+			if (IS_NODE) {
+				timer.unref();
+			}
 		}
 
 		if (prevStatus === undefined || state.status !== prevStatus) {
@@ -157,6 +161,10 @@ export async function syncStatusWithStorage(): Promise<void> {
 			storageSyncTimer = undefined;
 			syncStatusWithStorage().catch(stderr);
 		}, online.lastDateSyncInterval);
+
+		if (IS_NODE) {
+			storageSyncTimer.unref();
+		}
 	}
 }
 
