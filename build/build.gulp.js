@@ -127,6 +127,7 @@ module.exports = function init(gulp) {
 				base: './',
 				since: gulp.lastRun(`build:${opts.type}`)
 			})
+
 			.pipe($.if(enableSourcemaps, $.sourcemaps.init()))
 			.pipe($.plumber())
 
