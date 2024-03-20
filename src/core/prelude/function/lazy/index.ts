@@ -12,22 +12,30 @@ import extend from 'core/prelude/extend';
 extend(Function.prototype, 'debounce', function debounce(this: AnyFunction, delay: number = 250): AnyFunction {
 	const
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		fn = this;
+		fn = this,
+		map = new Map();
 
 	let
 		timer;
 
 	return function wrapper(this: unknown, ...args: unknown[]): void {
 		const
-			cb = () => fn.apply(this, args);
+			cb = () => fn.apply(this, args),
+			componentId = this?.componentId;
 
 		if (delay === 0) {
-			clearImmediate(timer);
-			timer = setImmediate(cb);
+			clearImmediate(map.get(componentId));
+			map.set(componentId, setImmediate(() => {
+				cb();
+				map.delete(componentId);
+			}));
 
 		} else {
-			clearTimeout(timer);
-			timer = setTimeout(cb, delay);
+			clearTimeout(map.get(componentId));
+			map.set(componentId, setTimeout(() => {
+				cb();
+				map.delete(componentId);
+			}, delay));
 		}
 	};
 });
