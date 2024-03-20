@@ -13,28 +13,29 @@ extend(Function.prototype, 'debounce', function debounce(this: AnyFunction, dela
 	const
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		fn = this,
-		map = new Map();
+		map = new WeakMap();
 
 	let
-		timer;
+		context = {};
 
 	return function wrapper(this: unknown, ...args: unknown[]): void {
 		const
-			cb = () => fn.apply(this, args),
-			componentId = this?.componentId;
+			cb = () => fn.apply(this, args);
+
+		context = this || context;
 
 		if (delay === 0) {
-			clearImmediate(map.get(componentId));
-			map.set(componentId, setImmediate(() => {
+			clearImmediate(map.get(context));
+			map.set(context, setImmediate(() => {
 				cb();
-				map.delete(componentId);
+				map.delete(context);
 			}));
 
 		} else {
-			clearTimeout(map.get(componentId));
-			map.set(componentId, setTimeout(() => {
+			clearTimeout(map.get(context));
+			map.set(context, setTimeout(() => {
 				cb();
-				map.delete(componentId);
+				map.delete(context);
 			}, delay));
 		}
 	};
