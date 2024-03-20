@@ -22,7 +22,7 @@ extend(Function.prototype, 'debounce', function debounce(this: AnyFunction, dela
 		const
 			cb = () => fn.apply(this, args);
 
-		context = this || context;
+		context = this as any || context;
 
 		if (delay === 0) {
 			clearImmediate(map.get(context));
