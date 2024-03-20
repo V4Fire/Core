@@ -16,27 +16,33 @@ extend(Function.prototype, 'debounce', function debounce(this: AnyFunction, dela
 		map = new WeakMap();
 
 	let
-		context = {};
+		context = {},
+		timer;
 
 	return function wrapper(this: unknown, ...args: unknown[]): void {
 		const
 			cb = () => fn.apply(this, args);
 
-		context = this as any || context;
+		context = <any>this || context;
+		timer = map.get(context);
 
 		if (delay === 0) {
-			clearImmediate(map.get(context));
-			map.set(context, setImmediate(() => {
+			clearImmediate(timer);
+			timer = setImmediate(() => {
 				cb();
 				map.delete(context);
-			}));
+			});
+
+			map.set(context, timer);
 
 		} else {
-			clearTimeout(map.get(context));
-			map.set(context, setTimeout(() => {
+			clearTimeout(timer);
+			timer = setTimeout(() => {
 				cb();
 				map.delete(context);
-			}, delay));
+			}, delay);
+
+			map.set(context, timer);
 		}
 	};
 });
