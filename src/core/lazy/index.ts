@@ -11,7 +11,6 @@
  * @packageDocumentation
  */
 
-import { IS_SSR } from 'core/env';
 import type { ObjectScheme, Hooks } from 'core/lazy/interface';
 
 let
