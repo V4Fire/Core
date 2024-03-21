@@ -11,6 +11,7 @@
  * @packageDocumentation
  */
 
+import { IS_SSR } from 'core/env';
 import type { ObjectScheme, Hooks } from 'core/lazy/interface';
 
 let
@@ -73,7 +74,7 @@ export function makeLazy<T extends ClassConstructor | AnyFunction>(
 			ctx = constructor.call(this, ...args);
 		}
 
-		if (hooks != null) {
+		if (!IS_SSR && hooks != null) {
 			lazyContexts.push(ctx);
 		}
 
