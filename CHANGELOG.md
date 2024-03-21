@@ -11,11 +11,17 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v4.0.0-alpha.25 (2024-03-18)
+## v4.0.0-alpha.26 (2024-03-21)
 
 #### :rocket: New Feature
 
  * The standalone version of a library now has `.d.ts` declaration files
+
+## v4.0.0-alpha.25 (2024-03-20)
+
+#### :bug: Bug Fix
+
+* Fixed a memory leak `core/data`
 
 ## v4.0.0-alpha.24 (2024-03-12)
 
