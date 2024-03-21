@@ -67,6 +67,12 @@ module.exports = function init(gulp) {
 	gulp.task('build:standalone', gulp.series([
 		gulp.parallel(['build:tsconfig', 'clean:standalone']),
 		buildStandalone,
+		buildDeclStandalone,
+		replaceTscAliases
+	]));
+
+	gulp.task('build:standalone-decl', gulp.series([
+		buildDeclStandalone,
 		replaceTscAliases
 	]));
 
@@ -109,41 +115,19 @@ module.exports = function init(gulp) {
 		opts = {type: 'server', ...opts};
 
 		const
-			isPathInside = require('is-path-inside');
-
-		const
-			tsConfig = fs.readJSONSync(src.rel(`./${opts.type}.tsconfig.json`));
-
-		filesToBuild = [
-			...tsConfig.include || [],
-			...resolve.rootDependencies.map((el) => `${el}/**/*.@(ts|js)`)
-		];
-
-		const
-			isDep = new RegExp(`(^.*?(?:^|[\\/])(${depsRgxpStr}))(?:$|[\\/])`),
+			tsConfig = fs.readJSONSync(src.rel(`./${opts.type}.tsconfig.json`)),
 			enableSourcemaps = process.env.SOURCEMAPS;
 
 		const
 			requireInitializer = `/* istanbul ignore next */(${h.redefineRequire.toString()})();\n`,
 			insertRequireInitializer = h.prependCode(requireInitializer);
 
-		function dest(file) {
-			const
-				depDecl = isDep.exec(file.path);
-
-			if (depDecl) {
-				file.base = resolve.rootDependencies
-					.find((el) => isPathInside(fs.realpathSync(el), fs.realpathSync(depDecl[1])));
-
-				return src.lib(depDecl[2]);
-			}
-
-			file.base = src.src();
-			return src[`${opts.type}Output`]();
-		}
-
 		return gulp
-			.src(filesToBuild, {base: './', since: gulp.lastRun(`build:${opts.type}`)})
+			.src(getFilesToBuild(tsConfig), {
+				base: './',
+				since: gulp.lastRun(`build:${opts.type}`)
+			})
+
 			.pipe($.if(enableSourcemaps, $.sourcemaps.init()))
 			.pipe($.plumber())
 
@@ -168,11 +152,55 @@ module.exports = function init(gulp) {
 			)
 
 			.pipe($.if(enableSourcemaps, $.sourcemaps.write('.')))
-			.pipe(gulp.dest(dest));
+			.pipe(gulp.dest((file) => dest(file, opts)));
 	}
 
 	function buildStandalone() {
 		return baseBuild({type: 'standalone'});
+	}
+
+	function buildDeclStandalone(opts) {
+		opts = {type: 'standalone', ...opts};
+
+		const
+			tsConfig = fs.readJSONSync(src.rel(`./${opts.type}.tsconfig.json`)),
+			tsProject = $.typescript.createProject(`${opts.type}.tsconfig.json`);
+
+		const tsResult = gulp
+			.src(getFilesToBuild(tsConfig))
+			.pipe($.plumber())
+			.pipe(tsProject());
+
+		return tsResult.dts.pipe(gulp.dest('lib'));
+	}
+
+	function dest(file, opts) {
+		const
+			isPathInside = require('is-path-inside');
+
+		const
+			isDep = new RegExp(`(^.*?(?:^|[\\/])(${depsRgxpStr}))(?:$|[\\/])`),
+			depDecl = isDep.exec(file.path);
+
+		if (depDecl) {
+			file.base = resolve.rootDependencies
+				.find((el) => isPathInside(fs.realpathSync(el), fs.realpathSync(depDecl[1])));
+
+			return src.lib(depDecl[2]);
+		}
+
+		file.base = src.src();
+		return src[`${opts.type}Output`]();
+	}
+
+	function getFilesToBuild(tsConfig) {
+		filesToBuild = [
+			...tsConfig.include || [],
+			...resolve.rootDependencies.map((el) => `${el}/**/*.@(ts|js)`),
+			'!src/**/*.spec.js'
+		];
+
+		return filesToBuild;
 	}
 
 	function replaceTscAliases() {
