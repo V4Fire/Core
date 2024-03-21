@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.27 (2024-03-21)
+
+#### :bug: Bug Fix
+
+* Fixed a memory leak `core/lazy`
+
 ## v4.0.0-alpha.26 (2024-03-21)
 
 #### :rocket: New Feature

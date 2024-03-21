@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.27 (2024-03-21)
+
+#### :bug: Bug Fix
+
+* Fixed a memory leak
+
 ## v4.0.0-alpha.20 (2024-02-06)
 
 #### :boom: Breaking Change
