@@ -10,42 +10,35 @@ import extend from 'core/prelude/extend';
 
 /** @see [[Function.debounce]] */
 extend(Function.prototype, 'debounce', function debounce(this: AnyFunction, delay: number = 250): AnyFunction {
-	const
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		fn = this,
-		map = new WeakMap();
-
-	let
-		context = {},
-		timer;
-
-	return function wrapper(this: unknown, ...args: unknown[]): void {
 		const
-			cb = () => fn.apply(this, args);
+			// eslint-disable-next-line @typescript-eslint/no-this-alias
+			fn = this,
+			map = new WeakMap();
 
-		context = <any>this || context;
-		timer = map.get(context);
+		return function wrapper(this: unknown, ...args: any[]): void {
+			const context = this === undefined ? {} : <any>this;
 
-		if (delay === 0) {
-			clearImmediate(timer);
-			timer = setImmediate(() => {
-				cb();
-				map.delete(context);
-			});
+			const cb = () => fn.apply(context, args);
+
+			let timer = map.get(context);
+			if (delay === 0) {
+				clearImmediate(timer);
+				timer = setImmediate(() => {
+					cb();
+					map.delete(context);
+				});
+
+			} else {
+				clearTimeout(timer);
+				timer = setTimeout(() => {
+					cb();
+					map.delete(context);
+				}, delay);
+			}
 
 			map.set(context, timer);
-
-		} else {
-			clearTimeout(timer);
-			timer = setTimeout(() => {
-				cb();
-				map.delete(context);
-			}, delay);
-
-			map.set(context, timer);
-		}
-	};
-});
+		};
+	});
 
 /** @see [[FunctionConstructor.debounce]] */
 extend(Function, 'debounce', (fn: AnyFunction | number, delay?: number) => {
