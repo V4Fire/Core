@@ -3,6 +3,14 @@
 
   "compilerOptions": {
     "allowJs": true,
-    "target": "es6"
-  }
+    "target": "es6",
+    "declaration": true
+  },
+
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.js"
+  ],
+
+  "files": []
 }
