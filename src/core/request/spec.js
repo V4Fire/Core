@@ -21,7 +21,6 @@ import { defaultRequestOpts } from 'core/request/const';
 import Response from 'core/request/response';
 import Headers from 'core/request/headers';
 
-import nodeEngine from 'core/request/engines/node';
 import fetchEngine from 'core/request/engines/fetch';
 import xhrEngine from 'core/request/engines/xhr';
 import createProviderEngine from 'core/request/engines/provider';
@@ -39,7 +38,6 @@ const
 
 describe('core/request', () => {
 	const engines = new Map([
-		['node', nodeEngine],
 		['fetch', fetchEngine],
 		['xhr', xhrEngine],
 		['provider', createProviderEngine('Provider')],

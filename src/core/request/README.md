@@ -21,7 +21,6 @@ request('https://foo.com', {
 * `xhr`
 * `fetch`
 * `browser` (the engine uses `fetch` when it's possible, otherwise `xhr`)
-* `node` (the engine uses [Got](https://www.npmjs.com/package/got) as a request library)
 * `provider` (the engine based on `core/data` providers)
 
 ## API
