@@ -74,7 +74,7 @@ export function makeLazy<T extends ClassConstructor | AnyFunction>(
 			ctx = constructor.call(this, ...args);
 		}
 
-		if (!IS_SSR && hooks != null) {
+		if (hooks != null) {
 			lazyContexts.push(ctx);
 		}
 
