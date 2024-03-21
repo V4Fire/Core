@@ -11,6 +11,10 @@
  * @packageDocumentation
  */
 
+//#if node_js
+import fetch from 'core/request/engines/fetch/node';
+//#endif
+
 import AbortablePromise from 'core/promise/abortable';
 import { isOnline } from 'core/net';
 
