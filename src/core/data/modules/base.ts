@@ -299,6 +299,10 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		delete instanceCache[this.cacheId];
 		delete connectCache[this.cacheId];
 		delete requestCache[this.cacheId];
+
+		Object.keys(this.params).forEach((key, _, data) => {
+			delete data[key];
+		});
 	}
 
 	/** @inheritDoc */

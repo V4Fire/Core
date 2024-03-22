@@ -6,7 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import got from 'got';
 import config from 'config';
 
 import { IS_SSR } from 'core/env';
@@ -51,7 +50,11 @@ export async function isOnline(): Promise<boolean | null> {
 		checkOnline();
 
 		function checkOnline() {
-			got(`${url}?_=${Date.now()}`, {throwHttpErrors: false, method: 'OPTIONS'}).then(() => {
+			fetch(`${url}?_=${Date.now()}`, {method: 'OPTIONS'}).then((response) => {
+				if (!response.ok) {
+					throw new Error('Retry');
+				}
+
 				if (timer != null) {
 					clearTimeout(timer);
 				}
