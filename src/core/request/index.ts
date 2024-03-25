@@ -410,7 +410,8 @@ function request<D = unknown>(
 				}
 
 				let
-					customData;
+					customData,
+					destroyed = false;
 
 				const res = {
 					ctx,
@@ -433,7 +434,11 @@ function request<D = unknown>(
 
 					dropCache: ctx.dropCache.bind(ctx),
 
-					destroy(): void {
+					destroy: () => {
+						if (destroyed) {
+							return;
+						}
+
 						ctx.destroy();
 						emitter.removeAllListeners();
 
@@ -462,6 +467,8 @@ function request<D = unknown>(
 						Object.keys(errDetails).forEach((key) => {
 							delete errDetails[key];
 						});
+
+						destroyed = true;
 					}
 				};
 

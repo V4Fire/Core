@@ -166,6 +166,11 @@ export default class RequestContext<D = unknown> {
 	protected cacheTimeoutId?: number;
 
 	/**
+	 * True if the instance is destroyed
+	 */
+	protected destroyed: boolean = false;
+
+	/**
 	 * @param [params] - request parameters
 	 */
 	constructor(params?: NormalizedCreateRequestOptions<D>) {
