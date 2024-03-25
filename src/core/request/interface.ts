@@ -150,6 +150,11 @@ export interface RequestResponseObject<D = unknown> {
 	 *   for example, if an engine based on a data provider is used
 	 */
 	dropCache(recursive?: boolean): void;
+
+	/**
+	 * Destroys the request context
+	 */
+	destroy(): void;
 }
 
 export type RequestResponse<D = unknown> = AbortablePromise<RequestResponseObject<D>>;
@@ -724,4 +729,9 @@ export interface RequestEngine {
 	 *   for example, if an engine based on a data provider is used
 	 */
 	dropCache?(recursive?: boolean): void;
+
+	/**
+	 * Destroys the request engine
+	 */
+	destroy?(): void;
 }
