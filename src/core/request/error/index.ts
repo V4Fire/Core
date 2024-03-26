@@ -54,27 +54,36 @@ export default class RequestError<D = undefined> extends BaseError {
 	/**
 	 * Error details
 	 */
-	readonly details: Details<D>;
+	readonly details: WeakRef<Details<D>>;
 
 	/**
 	 * @param type - error type
-	 * @param details - error details
+	 * @param [details] - error details
 	 */
-	constructor(type: string, details?: Details<D>) {
+	constructor(type: string, details: Details<D> = {}) {
 		super();
 
 		this.type = type;
-		this.details = details ?? {};
+
+		if (typeof WeakRef === 'function') {
+			this.details = new WeakRef<Details<D>>(details);
+
+		} else {
+			this.details = {
+				[Symbol.toStringTag]: 'WeakRef',
+				deref: () => details
+			};
+		}
 	}
 
 	protected override format(): string {
 		const
-			d = this.details;
+			d = this.details.deref();
 
 		const parts = [
-			d.request?.method,
-			d.request?.path,
-			d.response?.status
+			d?.request?.method,
+			d?.request?.path,
+			d?.response?.status
 		];
 
 		const

@@ -131,7 +131,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	 * @param value
 	 */
 	wrapAsResponse(value: Response<D> | ResponseTypeValue): RequestResponseObject<D> {
-		const response = value instanceof Response ?
+		let response = value instanceof Response ?
 			value :
 
 			new Response<D>(value, {
@@ -175,9 +175,21 @@ export default class RequestContext<D = unknown> extends Super<D> {
 				Object.set(res, 'ctx', null);
 
 				response.destroy();
+				response = Object.cast(null);
+				Object.set(res, 'response', response);
+
 				customData = undefined;
+				Object.delete(res, 'data');
+
+				Object.defineProperty(res, 'stream', {
+					configurable: true,
+					enumerable: true,
+					get: () => Promise.resolve({done: true, value: undefined})
+				});
 
 				res.dropCache = () => undefined;
+				res[Symbol.asyncIterator] = () => Promise.resolve({done: true, value: undefined});
+
 				destroyed = true;
 			}
 		};
