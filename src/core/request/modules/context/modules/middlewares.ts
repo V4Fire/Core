@@ -131,7 +131,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	 * @param value
 	 */
 	wrapAsResponse(value: Response<D> | ResponseTypeValue): RequestResponseObject<D> {
-		let response = value instanceof Response ?
+		const response = value instanceof Response ?
 			value :
 
 			new Response<D>(value, {
