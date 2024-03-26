@@ -52,6 +52,7 @@ import type {
 	JSONLikeValue
 
 } from 'core/request/response/interface';
+import Func = jest.Func;
 
 export * from 'core/request/headers';
 
@@ -672,6 +673,17 @@ export default class Response<
 		this.parent?.abort();
 		this.emitter.removeAllListeners();
 
+		if (Object.isFunction(this.body)) {
+			this.body.clearOnce();
+
+			Object.defineProperty(this.body, Symbol.asyncIterator, {
+				configurable: true,
+				enumerable: false,
+				writable: false,
+				value: () => Promise.resolve({done: true, value: undefined})
+			});
+		}
+
 		Object.set(this, 'body', null);
 		Object.set(this, 'decoders', []);
 		Object.set(this, 'streamDecoders', []);
@@ -681,6 +693,8 @@ export default class Response<
 		Object.delete(this, 'parent');
 
 		['json', 'formData', 'document', 'text', 'blob', 'arrayBuffer', 'decode'].forEach((key) => {
+			(<Function>this[key]).clearOnce();
+
 			Object.defineProperty(this, key, {
 				configurable: true,
 				enumerable: false,
@@ -690,6 +704,8 @@ export default class Response<
 		});
 
 		['jsonStream', 'textStream', 'stream', 'decodeStream', Symbol.asyncIterator].forEach((key) => {
+			(<Function>this[key]).clearOnce();
+
 			Object.defineProperty(this, key, {
 				configurable: true,
 				enumerable: false,

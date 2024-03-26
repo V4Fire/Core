@@ -15,6 +15,11 @@ interface Function {
 	once<T>(this: T): T;
 
 	/**
+	 * Clears the cache of the memoized function
+	 */
+	clearOnce(this: Function): void;
+
+	/**
 	 * Returns a new function that allows to invoke the target function only with the specified delay.
 	 * The next invocation of the function will cancel the previous.
 	 *
