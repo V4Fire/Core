@@ -174,21 +174,10 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 				Object.set(res, 'ctx', null);
 
-				response = Object.cast(null);
-				Object.set(res, 'response', null);
-
+				response.destroy();
 				customData = undefined;
-				Object.delete(res, 'data');
-
-				Object.defineProperty(res, 'stream', {
-					configurable: true,
-					enumerable: true,
-					get: () => Promise.resolve({done: true, value: undefined})
-				});
 
 				res.dropCache = () => undefined;
-				res[Symbol.asyncIterator] = () => Promise.resolve({done: true, value: undefined});
-
 				destroyed = true;
 			}
 		};

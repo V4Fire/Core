@@ -445,20 +445,10 @@ function request<D = unknown>(
 						ctx = Object.cast(null);
 						Object.set(res, 'ctx', null);
 
-						response = Object.cast(null);
-						Object.set(res, 'response', null);
-
+						response.destroy();
 						customData = undefined;
-						Object.delete(res, 'data');
-
-						Object.defineProperty(res, 'stream', {
-							configurable: true,
-							enumerable: true,
-							get: () => Promise.resolve({done: true, value: undefined})
-						});
 
 						res.dropCache = () => undefined;
-						res[Symbol.asyncIterator] = () => Promise.resolve({done: true, value: undefined});
 
 						Object.keys(middlewareParams).forEach((key) => {
 							delete middlewareParams[key];
