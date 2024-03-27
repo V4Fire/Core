@@ -238,7 +238,7 @@ export default class Response<
 		this.headers = Object.freeze(new Headers(p.headers));
 
 		if (Object.isFunction(body)) {
-			this.body = body.once();
+			this.body = () => Object.set(this, 'body', body());
 			this.body[Symbol.asyncIterator] = body[Symbol.asyncIterator].bind(body);
 
 		} else {
@@ -767,12 +767,9 @@ export default class Response<
 			}
 
 			if (Object.isArray(data) || Object.isPlainObject(data)) {
-				const
-					originalData = data;
-
 				Object.defineProperty(data, 'valueOf', {
 					configurable: true,
-					value: () => Object.fastClone(originalData, {freezable: false})
+					value: fastClone(data)
 				});
 
 				data = Object.freeze(data);
@@ -930,4 +927,8 @@ export default class Response<
 				}, this.parent);
 			});
 	}
+}
+
+function fastClone<T>(data: T): () => T {
+	return () => Object.fastClone(data, {freezable: false});
 }
