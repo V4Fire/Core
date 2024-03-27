@@ -18,12 +18,12 @@ extend(Function.prototype, 'once', function once(this: AnyFunction): AnyFunction
 		called = false,
 		res;
 
-	Object.defineProperty(wrapper, 'clearOnce', {
+	Object.defineProperty(wrapper, 'cancelOnce', {
 		configurable: true,
 		enumerable: false,
 		writable: true,
 		value: () => {
-			called = false;
+			called = true;
 			res = undefined;
 		}
 	});
@@ -41,11 +41,11 @@ extend(Function.prototype, 'once', function once(this: AnyFunction): AnyFunction
 	}
 });
 
-/** @see [[Function.clearOnce]] */
-extend(Function.prototype, 'clearOnce', () => undefined);
+/** @see [[Function.cancelOnce]] */
+extend(Function.prototype, 'cancelOnce', () => undefined);
 
 /** @see [[FunctionConstructor.once]] */
 extend(Function, 'once', (fn: AnyFunction) => fn.once());
 
-/** @see [[FunctionConstructor.clearOnce]] */
-extend(Function, 'clearOnce', (fn: AnyFunction) => fn.clearOnce());
+/** @see [[FunctionConstructor.cancelOnce]] */
+extend(Function, 'cancelOnce', (fn: AnyFunction) => fn.cancelOnce());

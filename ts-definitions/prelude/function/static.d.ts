@@ -30,9 +30,9 @@ interface FunctionConstructor {
 	once<T extends AnyFunction>(fn: T): T;
 
 	/**
-	 * Clears the cache of the memoized function
+	 * Cancels the memoization of the function result
 	 */
-	clearOnce(this: Function): void;
+	cancelOnce(this: Function): void;
 
 	/**
 	 * Returns a new function that allows to invoke a function, which it takes, only with the specified delay.
