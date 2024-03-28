@@ -1,4 +1,4 @@
-# core/request/engines/node
+# core/request/engines/fetch
 
 This module provides a function that creates a request engine for node.js scripts.
 
@@ -11,7 +11,7 @@ This module provides a function that creates a request engine for node.js script
 ## Example
 
 ```js
-import nodeEngine from 'core/request/engines/node';
+import nodeEngine from 'core/request/engines/fetch';
 
 req('/search', {engine: nodeEngine}).then(({response}) => {
   console.log(response.decode());

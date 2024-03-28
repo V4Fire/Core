@@ -21,7 +21,7 @@ import { defaultRequestOpts } from 'core/request/const';
 import Response from 'core/request/response';
 import Headers from 'core/request/headers';
 
-import nodeEngine from 'core/request/engines/node';
+import nodeEngine from 'core/request/engines/fetch';
 import fetchEngine from 'core/request/engines/fetch';
 import xhrEngine from 'core/request/engines/xhr';
 import createProviderEngine from 'core/request/engines/provider';

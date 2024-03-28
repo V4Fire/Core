@@ -7,7 +7,7 @@
  */
 
 /**
- * [[include:core/request/engines/node/README.md]]
+ * [[include:core/request/engines/fetch/README.md]]
  * @packageDocumentation
  */
 
@@ -21,7 +21,7 @@ import RequestError from 'core/request/error';
 import StreamBuffer from 'core/request/modules/stream-buffer';
 
 import { convertDataToSend } from 'core/request/engines/helpers';
-import { writeableStreamMethods } from 'core/request/engines/node/const';
+import { writeableStreamMethods } from 'core/request/engines/fetch/const';
 import type { RequestEngine, RequestResponseChunk } from 'core/request/interface';
 
 /**
