@@ -9,6 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+
+## v3.**.* (2024-**-**)
+
+#### :bug: Bug Fix
+
+* Fixed the bug with `debounce` decorator: conflicts between debounced methods across instances of identical classes or components
+
 ## v3.95.4 (2023-05-25)
 
 #### :bug: Bug Fix

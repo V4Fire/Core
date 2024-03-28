@@ -12,23 +12,35 @@ import extend from 'core/prelude/extend';
 extend(Function.prototype, 'debounce', function debounce(this: AnyFunction, delay: number = 250): AnyFunction {
 	const
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		fn = this;
+		fn = this,
+		map = new WeakMap();
 
 	let
+		context = {},
 		timer;
-
-	return function wrapper(this: unknown, ...args: unknown[]): void {
+	return function wrapper(this: unknown, ...args: any[]): void {
 		const
 			cb = () => fn.apply(this, args);
 
+		context = this == null ? context : <any>this;
+
+		timer = map.get(context);
 		if (delay === 0) {
 			clearImmediate(timer);
-			timer = setImmediate(cb);
+			timer = setImmediate(() => {
+				cb();
+				map.delete(context);
+			});
 
 		} else {
 			clearTimeout(timer);
-			timer = setTimeout(cb, delay);
+			timer = setTimeout(() => {
+				cb();
+				map.delete(context);
+			}, delay);
 		}
+
+		map.set(context, timer);
 	};
 });
 
