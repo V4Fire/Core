@@ -15,7 +15,7 @@ let transport;
 
 if (IS_NODE) {
 	//#if node_js
-	transport = require('core/request/engines/node').default;
+	transport = require('core/request/engines/fetch').default;
 	//#endif
 
 } else {
