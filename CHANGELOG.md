@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+# v4.0.0-alpha.?? (2024-??-??)
+
+#### :bug: Bug Fix
+
+* Fixed `providerOptions` inheritance by ExtraProviders `core/data`
+
 ## v4.0.0-alpha.28 (2024-03-21)
 
 #### :bug: Bug Fix
