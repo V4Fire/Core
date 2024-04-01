@@ -198,11 +198,13 @@ describe('core/request', () => {
 					err = e;
 				}
 
+				const errDetails = err.details.deref();
+
 				expect(err).toBeInstanceOf(RequestError);
 				expect(err.type).toBe(RequestError.InvalidStatus);
 				expect(err.message).toBe('[invalidStatus] POST http://localhost:4000/json 201');
-				expect(err.details.request.method).toBe('POST');
-				expect(err.details.response.status).toBe(201);
+				expect(errDetails.request.method).toBe('POST');
+				expect(errDetails.response.status).toBe(201);
 			});
 
 			it('json `post` with encoders/decoders', async () => {
@@ -404,11 +406,13 @@ describe('core/request', () => {
 					err = e;
 				}
 
+				const errDetails = err.details.deref();
+
 				expect(err).toBeInstanceOf(RequestError);
 				expect(err.type).toBe(RequestError.InvalidStatus);
 				expect(err.message).toBe('[invalidStatus] GET http://localhost:4000/bla 404');
-				expect(err.details.request.method).toBe('GET');
-				expect(err.details.response.status).toBe(404);
+				expect(errDetails.request.method).toBe('GET');
+				expect(errDetails.response.status).toBe(404);
 			});
 
 			it('aborting of a request', async () => {
@@ -424,11 +428,13 @@ describe('core/request', () => {
 					err = e;
 				}
 
+				const errDetails = err.details.deref();
+
 				expect(err).toBeInstanceOf(RequestError);
 				expect(err.type).toBe(RequestError.Abort);
 				expect(err.message).toBe('[abort] GET http://localhost:4000/json/1');
-				expect(err.details.request.method).toBe('GET');
-				expect(err.details.response).toBeUndefined();
+				expect(errDetails.request.method).toBe('GET');
+				expect(errDetails.response).toBeUndefined();
 			});
 
 			it('request with a low timeout', async () => {
@@ -445,7 +451,7 @@ describe('core/request', () => {
 				expect(err).toBeInstanceOf(RequestError);
 				expect(err.type).toBe(RequestError.Timeout);
 				expect(err.message).toBe('[timeout] GET http://localhost:4000/delayed');
-				expect(err.details.response).toBeUndefined();
+				expect(err.details.deref().response).toBeUndefined();
 			});
 
 			it('request with a high timeout', async () => {
@@ -688,7 +694,7 @@ describe('core/request', () => {
 					.reduce((acc, time, i) => acc.concat(time - firstRequest - i * delayMS), []);
 
 				expect(firstRequest - startTime).toBeLessThan(delayMS);
-				requestDelays.forEach((time) => expect(time).toBeGreaterThanOrEqual(delayMS));
+				requestDelays.forEach((time) => expect(time / 5).toBeGreaterThanOrEqual(delayMS));
 			}
 
 			async function convertStreamToBase64(stream) {
