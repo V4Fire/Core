@@ -136,7 +136,7 @@ describe('core/request/engine/provider', () => {
 			expect(req).toBe(undefined);
 
 		} catch(err) {
-			expect(err.details.response.status).toBe(404);
+			expect(err.details.deref().response.status).toBe(404);
 		}
 
 		const req = await dataProvider.get();

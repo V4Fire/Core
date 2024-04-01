@@ -505,15 +505,17 @@ describe('core/request', () => {
 					err = e;
 				}
 
+				const errDetails = err.details.deref();
+
 				const
-					body = await err.details.response.json();
+					body = await errDetails.response.json();
 
 				expect(err).toBeInstanceOf(RequestError);
 				expect(err.type).toBe(RequestError.InvalidStatus);
 				expect(err.message).toBe('[invalidStatus] GET http://localhost:4000/retry/bad 500');
 
-				expect(err.details.request.method).toBe('GET');
-				expect(err.details.response.status).toBe(500);
+				expect(errDetails.request.method).toBe('GET');
+				expect(errDetails.response.status).toBe(500);
 
 				expect(body.tryNumber).toEqual(3);
 			});
