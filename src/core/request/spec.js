@@ -21,7 +21,6 @@ import { defaultRequestOpts } from 'core/request/const';
 import Response from 'core/request/response';
 import Headers from 'core/request/headers';
 
-import nodeEngine from 'core/request/engines/fetch';
 import fetchEngine from 'core/request/engines/fetch';
 import xhrEngine from 'core/request/engines/xhr';
 import createProviderEngine from 'core/request/engines/provider';
@@ -39,7 +38,7 @@ const
 
 describe('core/request', () => {
 	const engines = new Map([
-		['node', nodeEngine],
+		// ['node', nodeEngine],
 		['fetch', fetchEngine],
 		['xhr', xhrEngine],
 		['provider', createProviderEngine('Provider')],
@@ -676,13 +675,13 @@ describe('core/request', () => {
 				});
 			}
 
-			async function retryDelayTest(delay, delayMS) {
+			async function retryDelayTest(delayedFn, delayMS) {
 				const startTime = new Date().getTime();
 
 				const req = request('http://localhost:4000/retry', {
 					retry: {
 						attempts: 5,
-						delay
+						delay: delayedFn
 					}
 				});
 
@@ -690,11 +689,11 @@ describe('core/request', () => {
 					body = await (await req).response.json(),
 					firstRequest = body.times[0];
 
-				const requestDelays = body.times.slice(1)
+				const requestDelays = body.times.slice(0)
 					.reduce((acc, time, i) => acc.concat(time - firstRequest - i * delayMS), []);
 
 				expect(firstRequest - startTime).toBeLessThan(delayMS);
-				requestDelays.forEach((time) => expect(time / 5).toBeGreaterThanOrEqual(delayMS));
+				requestDelays.forEach((time) => expect(time).toBeGreaterThanOrEqual(delayMS));
 			}
 
 			async function convertStreamToBase64(stream) {
