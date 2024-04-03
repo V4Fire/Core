@@ -238,7 +238,7 @@ export default class Response<
 		this.headers = Object.freeze(new Headers(p.headers));
 
 		if (Object.isFunction(body)) {
-			this.body = () => Object.set(this, 'body', body());
+			this.body = body.once();
 			this.body[Symbol.asyncIterator] = body[Symbol.asyncIterator].bind(body);
 
 		} else {
