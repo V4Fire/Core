@@ -40,7 +40,7 @@ export class RequestErrorDetailsExtractor implements ErrorDetailsExtractor<Reque
 	/** @inheritDoc */
 	extract(error: RequestError): unknown {
 		const
-			d = error.details;
+			d = error.details.deref() ?? {};
 
 		return {
 			url: d.request?.url,
