@@ -312,7 +312,7 @@ function request<D = unknown>(
 
 					return req.catch((err) => {
 						if (err instanceof RequestError) {
-							Object.assign(err.details, errDetails);
+							Object.assign(err.details.deref() ?? {}, errDetails);
 						}
 
 						return Promise.reject(err);
