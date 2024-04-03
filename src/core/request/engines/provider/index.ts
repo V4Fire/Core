@@ -77,6 +77,17 @@ export default function createProviderEngine(
 			}
 		});
 
+		Object.defineProperty(dataProviderEngine, 'destroy', {
+			configurable: true,
+			enumerable: true,
+			writable: true,
+			value() {
+				provider.destroy();
+				delete dataProviderEngine['destroy'];
+				delete dataProviderEngine['dropCache'];
+			}
+		});
+
 		const defaultRequestMethods = providerMethodProperties.reduceRight((carry, key) => {
 			const
 				method = provider[key];

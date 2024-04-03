@@ -18,7 +18,19 @@ extend(Function.prototype, 'once', function once(this: AnyFunction): AnyFunction
 		called = false,
 		res;
 
-	return function wrapper(this: unknown, ...args: unknown[]): unknown {
+	Object.defineProperty(wrapper, 'cancelOnce', {
+		configurable: true,
+		enumerable: false,
+		writable: true,
+		value: () => {
+			called = true;
+			res = undefined;
+		}
+	});
+
+	return wrapper;
+
+	function wrapper(this: unknown, ...args: unknown[]): unknown {
 		if (called) {
 			return res;
 		}
@@ -26,8 +38,14 @@ extend(Function.prototype, 'once', function once(this: AnyFunction): AnyFunction
 		res = fn.apply(this, args);
 		called = true;
 		return res;
-	};
+	}
 });
+
+/** @see [[Function.cancelOnce]] */
+extend(Function.prototype, 'cancelOnce', () => undefined);
 
 /** @see [[FunctionConstructor.once]] */
 extend(Function, 'once', (fn: AnyFunction) => fn.once());
+
+/** @see [[FunctionConstructor.cancelOnce]] */
+extend(Function, 'cancelOnce', (fn: AnyFunction) => fn.cancelOnce());

@@ -169,8 +169,10 @@ function request<D = unknown>(
 			eventBuffer.clear();
 		});
 
+		let
+			ctx = RequestContext.decorateContext(baseCtx, path, resolver, ...args);
+
 		const
-			ctx = RequestContext.decorateContext(baseCtx, path, resolver, ...args),
 			requestParams = ctx.params;
 
 		const middlewareParams = {
@@ -408,9 +410,10 @@ function request<D = unknown>(
 				}
 
 				let
-					customData;
+					customData,
+					destroyed = false;
 
-				return {
+				const res = {
 					ctx,
 					response,
 
@@ -429,8 +432,48 @@ function request<D = unknown>(
 					emitter,
 					[Symbol.asyncIterator]: response[Symbol.asyncIterator].bind(response),
 
-					dropCache: ctx.dropCache.bind(ctx)
+					dropCache: ctx.dropCache.bind(ctx),
+
+					destroy: () => {
+						if (destroyed) {
+							return;
+						}
+
+						ctx.destroy();
+						emitter.removeAllListeners();
+
+						ctx = Object.cast(null);
+						Object.set(res, 'ctx', ctx);
+
+						response.destroy();
+						response = Object.cast(null);
+						Object.set(res, 'response', response);
+
+						customData = undefined;
+						Object.delete(res, 'data');
+
+						Object.defineProperty(res, 'stream', {
+							configurable: true,
+							enumerable: true,
+							get: () => Promise.resolve({done: true, value: undefined})
+						});
+
+						res.dropCache = () => undefined;
+						res[Symbol.asyncIterator] = () => Promise.resolve({done: true, value: undefined});
+
+						Object.keys(middlewareParams).forEach((key) => {
+							delete middlewareParams[key];
+						});
+
+						Object.keys(errDetails).forEach((key) => {
+							delete errDetails[key];
+						});
+
+						destroyed = true;
+					}
 				};
+
+				return res;
 			}
 		});
 

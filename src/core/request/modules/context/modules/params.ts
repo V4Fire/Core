@@ -166,6 +166,11 @@ export default class RequestContext<D = unknown> {
 	protected cacheTimeoutId?: number;
 
 	/**
+	 * True if the instance is destroyed
+	 */
+	protected destroyed: boolean = false;
+
+	/**
 	 * @param [params] - request parameters
 	 */
 	constructor(params?: NormalizedCreateRequestOptions<D>) {
@@ -199,19 +204,16 @@ export default class RequestContext<D = unknown> {
 		this.withoutBody = Boolean(methodsWithoutBody[p.method]);
 		this.canCache = p.cacheMethods.includes(p.method) || false;
 
-		let cacheAPI = IS_SSR ?
-			cache.forever :
-
+		let cacheAPI =
 			(
 				Object.isString(p.cacheStrategy) ?
 					cache[p.cacheStrategy] :
 					p.cacheStrategy
 			) ??
 
-			cache.never;
+			(IS_SSR ? cache.forever : cache.never);
 
 		if (IS_SSR) {
-			delete p.cacheTTL;
 			delete p.offlineCache;
 		}
 

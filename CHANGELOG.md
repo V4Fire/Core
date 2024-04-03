@@ -11,12 +11,37 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v4.0.0-alpha.?? (2024-??-??)
+# v4.0.0-alpha.?? (2024-??-??)
 
 #### :bug: Bug Fix
 
+* Fixed `providerOptions` inheritance by ExtraProviders `core/data`
 * Fixed the bug with the `debounce` decorator:
   conflicts between debounced methods across instances of identical classes or components have been resolved `core/functools`
+
+## v4.0.0-alpha.28 (2024-03-21)
+
+#### :bug: Bug Fix
+
+* Revert `v4.0.0-alpha.27`
+
+## v4.0.0-alpha.27 (2024-03-21)
+
+#### :bug: Bug Fix
+
+* Fixed a memory leak `core/lazy`
+
+## v4.0.0-alpha.26 (2024-03-21)
+
+#### :rocket: New Feature
+
+ * The standalone version of a library now has `.d.ts` declaration files
+
+## v4.0.0-alpha.25 (2024-03-20)
+
+#### :bug: Bug Fix
+
+* Fixed a memory leak `core/data`
 
 ## v4.0.0-alpha.24 (2024-03-12)
 
