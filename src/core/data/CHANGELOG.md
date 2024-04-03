@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.?? (2024-??-??)
+
+#### :bug: Bug Fix
+
+* Fixed `providerOptions` inheritance by ExtraProviders
+
 ## v4.0.0-alpha.25 (2024-03-20)
 
 #### :bug: Bug Fix

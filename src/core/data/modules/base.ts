@@ -362,10 +362,10 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 						throw new Error(`Provider "${ProviderLink}" is not defined`);
 					}
 
-					providerInstance = new ProviderConstructor(el.providerOptions);
+					providerInstance = new ProviderConstructor({...this.params, ...el.providerOptions});
 
 				} else if (Object.isSimpleFunction(ProviderLink)) {
-					providerInstance = new ProviderLink(el.providerOptions);
+					providerInstance = new ProviderLink({...this.params, ...el.providerOptions});
 
 				} else {
 					providerInstance = ProviderLink;
