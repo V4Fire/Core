@@ -16,6 +16,8 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :bug: Bug Fix
 
 * Fixed `providerOptions` inheritance by ExtraProviders `core/data`
+* Fixed the bug with the `debounce` decorator:
+  conflicts between debounced methods across instances of identical classes or components have been resolved `core/functools`
 
 ## v4.0.0-alpha.28 (2024-03-21)
 
