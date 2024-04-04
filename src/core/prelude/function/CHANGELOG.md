@@ -13,8 +13,8 @@ Changelog
 
 #### :boom: Breaking Change
 
-* Drop API support with rest parameters in the `addToPrototype`
-  * Migration Guide: `Foo.addToPrototype(bar, baz)` -> `Foo.addToPrototype({bar, baz})`
+* Dropped API support with rest parameters in the `addToPrototype` `core/prelude/function/extend`.
+  Migration Guide: `Foo.addToPrototype(bar, baz)` -> `Foo.addToPrototype({bar, baz})`.
 
 ## v3.27.8 (2020-11-05)
 

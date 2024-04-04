@@ -11,12 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-# v4.0.0-alpha.?? (2024-??-??)
+## v4.0.0-alpha.29 (2024-04-04)
 
 #### :boom: Breaking Change
 
-* Drop API support with rest parameters in the `addToPrototype` `core/prelude/function/extend`
-  * Migration Guide: `Foo.addToPrototype(bar, baz)` -> `Foo.addToPrototype({bar, baz})`
+* Dropped API support with rest parameters in the `addToPrototype` `core/prelude/function/extend`.
+  Migration Guide: `Foo.addToPrototype(bar, baz)` -> `Foo.addToPrototype({bar, baz})`.
 
 #### :bug: Bug Fix
 
