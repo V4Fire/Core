@@ -53,7 +53,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			}
 
 			return v;
-		}
+		};
 
 		const
 			api = <{[K in keyof RequestAPI]: Nullable<string>}>({...this.params.api});
