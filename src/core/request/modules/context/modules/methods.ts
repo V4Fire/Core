@@ -223,4 +223,22 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			this.params.engine.dropCache?.(recursive);
 		}
 	}
+
+	/**
+	 * Destroys the request context
+	 */
+	destroy(): void {
+		if (this.destroyed) {
+			return;
+		}
+
+		this.dropCache(true);
+		this.params.engine.destroy?.();
+
+		Object.keys(this.params).forEach((key) => {
+			delete this.params[key];
+		});
+
+		this.destroyed = true;
+	}
 }

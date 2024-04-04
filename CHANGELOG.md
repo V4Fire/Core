@@ -11,12 +11,18 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v4.0.0-alpha.?? (2024-03-??)
+# v4.0.0-alpha.?? (2024-??-??)
 
 #### :boom: Breaking Change
 
 * Drop API support with rest parameters in the `addToPrototype` `core/prelude/function/extend`
   * Migration Guide: `Foo.addToPrototype(bar, baz)` -> `Foo.addToPrototype({bar, baz})`
+
+#### :bug: Bug Fix
+
+* Fixed `providerOptions` inheritance by ExtraProviders `core/data`
+* Fixed the bug with the `debounce` decorator:
+  conflicts between debounced methods across instances of identical classes or components have been resolved `core/functools`
 
 ## v4.0.0-alpha.28 (2024-03-21)
 

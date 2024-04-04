@@ -666,6 +666,62 @@ export default class Response<
 	}
 
 	/**
+	 * Destroys the instance
+	 */
+	destroy(): void {
+		this.parent?.abort();
+		this.emitter.removeAllListeners();
+
+		if (Object.isFunction(this.body)) {
+			this.body.cancelOnce();
+
+			Object.defineProperty(this.body, Symbol.asyncIterator, {
+				configurable: true,
+				enumerable: false,
+				writable: false,
+				value: () => Promise.resolve({done: true, value: undefined})
+			});
+		}
+
+		Object.set(this, 'body', null);
+		Object.set(this, 'decoders', []);
+		Object.set(this, 'streamDecoders', []);
+		Object.set(this, 'headers', new Headers());
+
+		Object.delete(this, 'jsonReviver');
+		Object.delete(this, 'parent');
+
+		['json', 'formData', 'document', 'text', 'blob', 'arrayBuffer', 'decode'].forEach((key) => {
+			(<Function>this[key]).cancelOnce();
+
+			Object.defineProperty(this, key, {
+				configurable: true,
+				enumerable: false,
+				writable: false,
+				value: () => AbortablePromise.reject(new Error('This instance is destroyed'))
+			});
+		});
+
+		['jsonStream', 'textStream', 'stream', 'decodeStream', Symbol.asyncIterator].forEach((key) => {
+			(<Function>this[key]).cancelOnce();
+
+			Object.defineProperty(this, key, {
+				configurable: true,
+				enumerable: false,
+				writable: false,
+				value: () => Promise.resolve({done: true, value: undefined})
+			});
+		});
+
+		Object.defineProperty(this, 'clone', {
+			configurable: true,
+			enumerable: false,
+			writable: false,
+			value: () => new Response(null)
+		});
+	}
+
+	/**
 	 * Reads the response body or throws an exception if reading is impossible
 	 * @emits `bodyUsed()`
 	 */
@@ -711,12 +767,9 @@ export default class Response<
 			}
 
 			if (Object.isArray(data) || Object.isPlainObject(data)) {
-				const
-					originalData = data;
-
 				Object.defineProperty(data, 'valueOf', {
 					configurable: true,
-					value: () => Object.fastClone(originalData, {freezable: false})
+					value: fastClone(data)
 				});
 
 				data = Object.freeze(data);
@@ -874,4 +927,8 @@ export default class Response<
 				}, this.parent);
 			});
 	}
+}
+
+function fastClone<T>(data: T): () => T {
+	return () => Object.fastClone(data, {freezable: false});
 }

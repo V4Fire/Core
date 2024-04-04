@@ -15,6 +15,11 @@ interface Function {
 	once<T>(this: T): T;
 
 	/**
+	 * Cancels the memoization of the function result
+	 */
+	cancelOnce(this: Function): void;
+
+	/**
 	 * Returns a new function that allows to invoke the target function only with the specified delay.
 	 * The next invocation of the function will cancel the previous.
 	 *

@@ -12,23 +12,36 @@ import extend from 'core/prelude/extend';
 extend(Function.prototype, 'debounce', function debounce(this: AnyFunction, delay: number = 250): AnyFunction {
 	const
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		fn = this;
+		fn = this,
+		map = new WeakMap();
 
 	let
-		timer;
+		context = {},
+		timer: number | NodeJS.Timer | NodeJS.Immediate;
 
-	return function wrapper(this: unknown, ...args: unknown[]): void {
+	return function wrapper(this: unknown, ...args: any[]): void {
 		const
 			cb = () => fn.apply(this, args);
 
+		context = this == null ? context : <any>this;
+		timer = map.get(context);
+
 		if (delay === 0) {
-			clearImmediate(timer);
-			timer = setImmediate(cb);
+			clearImmediate(Object.cast(timer));
+			timer = setImmediate(() => {
+				cb();
+				map.delete(context);
+			});
 
 		} else {
-			clearTimeout(timer);
-			timer = setTimeout(cb, delay);
+			clearTimeout(Object.cast(timer));
+			timer = setTimeout(() => {
+				cb();
+				map.delete(context);
+			}, delay);
 		}
+
+		map.set(context, timer);
 	};
 });
 
@@ -36,7 +49,7 @@ extend(Function.prototype, 'debounce', function debounce(this: AnyFunction, dela
 extend(Function, 'debounce', (fn: AnyFunction | number, delay?: number) => {
 	if (Object.isNumber(fn)) {
 		delay = fn;
-		return (fn) => Function.debounce(fn, delay);
+		return (fn: AnyFunction) => Function.debounce(fn, delay);
 	}
 
 	return fn.debounce(delay);
@@ -64,8 +77,8 @@ extend(Function.prototype, 'throttle', function throttle(
 		fn = this;
 
 	let
-		lastArgs,
-		timer;
+		lastArgs: unknown[],
+		timer: CanUndef<number | NodeJS.Timer | NodeJS.Immediate>;
 
 	return function wrapper(this: unknown, ...args: unknown[]): void {
 		lastArgs = args;
@@ -95,7 +108,7 @@ extend(Function.prototype, 'throttle', function throttle(
 extend(Function, 'throttle', (fn: AnyFunction | number, delayOrOpts?: number | ThrottleOptions) => {
 	if (!Object.isFunction(fn)) {
 		delayOrOpts = fn;
-		return (fn) => Function.throttle(fn, Object.cast(delayOrOpts));
+		return (fn: AnyFunction) => Function.throttle(fn, Object.cast(delayOrOpts));
 	}
 
 	return fn.throttle(Object.cast(delayOrOpts));

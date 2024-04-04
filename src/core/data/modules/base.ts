@@ -291,7 +291,14 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 	/** @inheritDoc */
 	destroy(): void {
-		this.dropCache(true);
+		const
+			cache = requestCache[this.cacheId];
+
+		if (cache != null) {
+			Object.values(cache).forEach((cache) => {
+				cache?.destroy();
+			});
+		}
 
 		this.async.clearAll().locked = true;
 		this.emitter.removeAllListeners();
@@ -355,10 +362,10 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 						throw new Error(`Provider "${ProviderLink}" is not defined`);
 					}
 
-					providerInstance = new ProviderConstructor(el.providerOptions);
+					providerInstance = new ProviderConstructor({...this.params, ...el.providerOptions});
 
 				} else if (Object.isSimpleFunction(ProviderLink)) {
-					providerInstance = new ProviderLink(el.providerOptions);
+					providerInstance = new ProviderLink({...this.params, ...el.providerOptions});
 
 				} else {
 					providerInstance = ProviderLink;
@@ -367,6 +374,10 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 				this.async.worker(() => {
 					providerInstance.dropCache(true);
 				}, {group: 'extraProvidersCache'});
+
+				this.async.worker(() => {
+					providerInstance.destroy();
+				});
 
 				const
 					req = providerInstance.get(el.query ?? query, el.request);
