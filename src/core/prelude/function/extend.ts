@@ -13,10 +13,6 @@ extend(Function.prototype, 'addToPrototype', function addToPrototype(
 	this: AnyFunction,
 	methods: Dictionary<Function>
 ): AnyFunction {
-	const
-		{prototype} = this;
-
-	Object.assign(prototype, methods);
-
+	Object.assign(this.prototype, methods);
 	return this;
 });
