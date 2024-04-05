@@ -587,13 +587,7 @@ export interface RetryOptions<D = unknown> {
 	delay?(attempt: number, error: RequestError<D>): number | Promise<void> | false;
 }
 
-export type RequestAPIValue<T = string> = Nullable<T> | ((params: RequestContextParams) => Nullable<T>);
-
-export interface RequestContextParams {
-	ctx: RequestContext;
-	opts: RequestContext['params'];
-	globalOpts: GlobalOptions;
-}
+export type RequestAPIValue<T = string> = Nullable<T> | ((params: MiddlewareParams) => Nullable<T>);
 
 /**
  * A map of API parameters.
