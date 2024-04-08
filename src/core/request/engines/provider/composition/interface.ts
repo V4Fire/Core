@@ -15,8 +15,8 @@ export interface ProviderWrapper {
 }
 
 export interface CompositionProviderParams {
-	providerWrapper: ProviderWrapper,
-	providerOptions?: ProviderOptions
+	providerWrapper: ProviderWrapper;
+	providerOptions?: ProviderOptions;
 }
 
 export interface CompositionProvider {

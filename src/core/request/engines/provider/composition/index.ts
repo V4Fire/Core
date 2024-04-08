@@ -79,12 +79,12 @@ export function providerCompositionEngine(providers: CompositionProvider[]): Req
 					boundedProviders.forEach((provider) => provider.destroy(...args));
 					boundedProviders.clear();
 					originalDestroy(...args);
-				}
+				};
 
 				provider.dropCache = (...args) => {
 					boundedProviders.forEach((provider) => provider.dropCache(...args));
 					originalDropCache(...args);
-				}
+				};
 
 				isWrapped = true;
 				return provider;
@@ -99,7 +99,14 @@ export function providerCompositionEngine(providers: CompositionProvider[]): Req
 					wrapProvider(self);
 				}
 
-				const promise = composedProvider.request(options, params, {providerWrapper: boundProvider, providerOptions: selfOptions})
+				const promise = composedProvider.request(
+					options,
+					params,
+					{
+						providerWrapper: boundProvider,
+						providerOptions: selfOptions
+					}
+				)
 					.then(async (result) => {
 						const
 							data = await result.data;
