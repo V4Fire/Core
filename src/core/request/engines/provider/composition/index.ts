@@ -29,12 +29,17 @@ export function providerCompositionEngine(providers: CompositionProvider[]): Req
 				results = {},
 				promises = <Array<Promise<unknown>>>[];
 
-			let
-				isWrapped = false;
+			const
+				self = params.opts.meta.provider,
+				selfOptions = self instanceof Provider ? self.params : undefined;
+
+			if (self instanceof Provider) {
+				wrapSelf(self);
+			}
 
 			for (const provider of providers) {
 				const
-					requestFilter = provider.requestFilter?.(options, params);
+					requestFilter = provider.requestFilter?.(options, params, self?.params);
 
 				if (requestFilter === false) {
 					continue;
@@ -91,19 +96,10 @@ export function providerCompositionEngine(providers: CompositionProvider[]): Req
 					originalDropCache(...args);
 				};
 
-				isWrapped = true;
 				return provider;
 			}
 
 			function createRequest(composedProvider: CompositionProvider): Promise<void> {
-				const
-					self = params.opts.meta.provider,
-					selfOptions = self instanceof Provider ? self.params : undefined;
-
-				if (self instanceof Provider && !isWrapped) {
-					wrapSelf(self);
-				}
-
 				const promise = composedProvider.request(
 					options,
 					params,

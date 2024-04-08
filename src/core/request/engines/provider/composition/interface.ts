@@ -86,8 +86,13 @@ export interface CompositionProvider {
 	 *
 	 * @param options
 	 * @param params
+	 * @param [providerOptions]
 	 */
-	requestFilter?(options: RequestOptions, params: MiddlewareParams): CanPromise<boolean>;
+	requestFilter?(
+		options: RequestOptions,
+		params: MiddlewareParams,
+		providerOptions?: ProviderOptions
+	): CanPromise<boolean>;
 
 	/**
 	 * If true, when there is an error in this request, the provider request will be terminated.
