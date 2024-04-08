@@ -45,7 +45,7 @@ interface Function {
 	 */
 	throttle<T extends AnyFunction>(this: T, opts: ThrottleOptions): AnyFunction<Parameters<T>, void>;
 
-	addToPrototype<T extends Function>(this: T, ...args: Array<Dictionary<Function> | Function>): T;
+	addToPrototype<T extends Function>(this: T, methods: Dictionary<Function>): T;
 
 	/**
 	 * Returns a new function based on the target that wraps the returning value into the Either structure.
