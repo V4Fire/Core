@@ -1,6 +1,6 @@
 # core/request/engines/provider/composition
 
-Этот модуль предоставляет движок для провайдер который позволяет реализовать композицию провайдеров.
+This module provides an engine for a provider that allows for the composition of providers.
 
 ## Example
 
