@@ -10,35 +10,55 @@ import type Provider from 'core/data';
 import type { ProviderOptions } from 'core/data';
 import type { RequestOptions, RequestResponseObject, MiddlewareParams } from 'core/request';
 
+/**
+ * A wrapper function for providers used inside the {@link CompositionProvider.request} function.
+ * It should wrap each provider you use inside the {@link CompositionProvider.request} function.
+ */
 export interface ProviderWrapper {
 	(provider: Provider): Provider;
 }
 
 export interface CompositionProviderParams {
+	/** {@link ProviderWrapper} */
 	providerWrapper: ProviderWrapper;
+
+	/**
+	 * Options passed with the provider constructor.
+	 */
 	providerOptions?: ProviderOptions;
 }
 
 export interface CompositionProvider {
 	/**
-	 * Запрос который необходимо выполнить.
+	 * A function that will be called when the get method or other provider methods are called,
+	 * takes several arguments: request options, request parameters, provider constructor parameters,
+	 * and a wrapper function for your providers.
 	 *
-	 * @param options
+	 * Let's dive deeper into the wrapper function and why it is needed.
+	 * Each provider that you use in the request function should be wrapped with this wrapper.
+	 * Thanks to this wrapper, when the destroy/dropCache methods are called on MyCompositionProvider,
+	 * these same methods will be called on all providers that were wrapped.
+	 * Otherwise, a memory leak may occur.
+	 *
+	 * @param requestOptions
 	 * @param requestParams
+	 * @param params
 	 *
 	 * @example
 	 *
 	 * ```typescript
-	 * export class CompositionProviderTest extends Edadeal {
-	 *  static override request: typeof Edadeal.request = Edadeal.request({
+	 * export class MyCompositionProvider extends Provider {
+	 *  static override request: typeof Provider.request = Provider.request({
 	 *    engine: providerCompositionEngine([
 	 *      {
-	 *        request: (_, params) => new Banners().get(Object.get(params, 'opts.query.bannersQuery')),
-	 *        writeResultInto: 'banners'
+	 *        request: (_, params, {providerWrapper}) =>
+	 *          providerWrapper(new Banners()).get(Object.get(params, 'opts.query.bannersQuery')),
+	 *        as: 'banners'
 	 *      },
 	 *      {
-	 *        request: (_, params) => new Cards().get(Object.get(params, 'opts.query.cardsQuery')),
-	 *        writeResultInto: 'content'
+	 *        request: (_, params, {providerWrapper}) =>
+	 *          providerWrapper(new Cards()).get(Object.get(params, 'opts.query.cardsQuery')),
+	 *        as: 'content'
 	 *      }
 	 *    ])
 	 *  });
@@ -46,21 +66,23 @@ export interface CompositionProvider {
 	 * ```
 	 */
 	request(
-		options: RequestOptions,
+		requestOptions: RequestOptions,
 		requestParams: MiddlewareParams,
 		params: CompositionProviderParams
 	): Promise<RequestResponseObject>;
 
 	/**
-	 * В какие поля результирующего объекта будет записан ответ данного запроса.
+	 * In which fields of the resulting object the response of this request will be stored.
 	 */
 	as: string;
 
 	/**
-	 * Если функция вернула false, то запрос не будет создан.
+	 * Function that will be called before the request is initiated.
 	 *
-	 * Если функция вернула promise, то будет выполнено ожидание разрешения этого промиса,
-	 * и в случае если он разрешится с false, запрос не будет создан.
+	 * If the function returns false, the request will not be created.
+	 *
+	 * If the function returns a promise, it will wait for the resolution of this promise,
+	 * and if it resolves to false, the request will not be created.
 	 *
 	 * @param options
 	 * @param params
@@ -68,7 +90,8 @@ export interface CompositionProvider {
 	requestFilter?(options: RequestOptions, params: MiddlewareParams): CanPromise<boolean>;
 
 	/**
-	 * Если true, то при ошибки данного запроса будет выкинута ошибка всего запроса.
+	 * If true, when there is an error in this request, the provider request will be terminated.
+	 * If false / undefined, request errors will be ignored.
 	 */
 	failCompositionOnError?: boolean;
 }

@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/request/engines/provider/composition/README.md]]
+ * @packageDocumentation
+ */
+
 import Provider from 'core/data';
 import AbortablePromise from 'core/promise/abortable';
 import { RequestOptions, Response, RequestEngine, MiddlewareParams } from 'core/request';
@@ -70,7 +75,7 @@ export function providerCompositionEngine(providers: CompositionProvider[]): Req
 				return provider;
 			}
 
-			function wrapProvider(provider: Provider): Provider {
+			function wrapSelf(provider: Provider): Provider {
 				const
 					originalDestroy = provider.destroy.bind(provider),
 					originalDropCache = provider.dropCache.bind(provider);
@@ -96,7 +101,7 @@ export function providerCompositionEngine(providers: CompositionProvider[]): Req
 					selfOptions = self instanceof Provider ? self.params : undefined;
 
 				if (self instanceof Provider && !isWrapped) {
-					wrapProvider(self);
+					wrapSelf(self);
 				}
 
 				const promise = composedProvider.request(
