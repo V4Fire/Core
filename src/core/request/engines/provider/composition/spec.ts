@@ -117,7 +117,7 @@ describe('core/request/engines/provider/compositor', () => {
 				await dp.get();
 
 			} catch (err) {
-				const details = err.details;
+				const {details} = err;
 
 				return {
 					status: details.response.status,
