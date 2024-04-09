@@ -9,6 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.?? (2024-03-??)
+
+#### :boom: Breaking Change
+
+* Dropped API support with rest parameters in the `addToPrototype` `core/prelude/function/extend`.
+  Migration Guide: `Foo.addToPrototype(bar, baz)` -> `Foo.addToPrototype({bar, baz})`.
+
 ## v3.27.8 (2020-11-05)
 
 #### :bug: Bug Fix

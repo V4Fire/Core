@@ -11,22 +11,8 @@ import extend from 'core/prelude/extend';
 /** @see [[Function.addToPrototype]] */
 extend(Function.prototype, 'addToPrototype', function addToPrototype(
 	this: AnyFunction,
-	...args: Array<Dictionary<Function> | Function>
+	methods: Dictionary<Function>
 ): AnyFunction {
-	const
-		{prototype} = this;
-
-	for (let i = 0; i < args.length; i++) {
-		const
-			arg = args[i];
-
-		if (Object.isDictionary(arg)) {
-			Object.assign(prototype, arg);
-
-		} else {
-			prototype[arg.name] = arg;
-		}
-	}
-
+	Object.assign(this.prototype, methods);
 	return this;
 });
