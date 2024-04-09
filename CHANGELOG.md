@@ -15,7 +15,8 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :boom: Breaking Change
 
-* Support for the `Got` library based query engine has been removed. Now, built-in fetch is used with Node.js.
+* Support for the `Got` library based query engine has been removed.
+  Now, built-in fetch is used with Node.js. `core/request`
 
 #### :rocket: New Feature
 
