@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.?? (2024-04-??)
+
+#### :rocket: New Feature
+
+* Now `MiddlewareParams` are being passed to the `RequestAPIValue` function
+
 ## v4.0.0-alpha.22 (2024-02-27)
 
 #### :rocket: New Feature

@@ -43,8 +43,14 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			join?: boolean;
 		}
 
+		const params = {
+			ctx: this,
+			globalOpts,
+			opts: this.params
+		};
+
 		const
-			compute = (v) => Object.isFunction(v) ? v() : v,
+			compute = (v) => Object.isFunction(v) ? v(params) : v,
 			api = <{[K in keyof RequestAPI]: Nullable<string>}>({...this.params.api});
 
 		for (let keys = Object.keys(api), i = 0; i < keys.length; i++) {
