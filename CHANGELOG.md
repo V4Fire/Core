@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
-* Now `RequestAPIParams` are being passed to the `RequestAPIValue` function
+* Now `MiddlewareParams` are being passed to the `RequestAPIValue` function `core/request`
 
 # v4.0.0-alpha.?? (2024-??-??)
 

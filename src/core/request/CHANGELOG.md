@@ -13,7 +13,7 @@ Changelog
 
 #### :rocket: New Feature
 
-* Now `RequestAPIParams` are being passed to the `RequestAPIValue` function
+* Now `MiddlewareParams` are being passed to the `RequestAPIValue` function
 
 ## v4.0.0-alpha.22 (2024-02-27)
 
