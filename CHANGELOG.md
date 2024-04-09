@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.?? (2024-04-??)
+
+#### :rocket: New Feature
+
+* Now `RequestAPIParams` are being passed to the `RequestAPIValue` function
+
 # v4.0.0-alpha.?? (2024-??-??)
 
 #### :bug: Bug Fix
