@@ -20,6 +20,10 @@ import type { CompositionProvider } from 'core/request/engines/provider/composit
 
 export * from 'core/request/engines/provider/composition/interface';
 
+/**
+ * Creates an engine that allows you to create a composition of requests
+ * @param providers
+ */
 export function providerCompositionEngine(providers: CompositionProvider[]): RequestEngine {
 	const
 		boundedProviders = new Set<Provider>();
