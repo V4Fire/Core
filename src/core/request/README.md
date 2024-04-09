@@ -540,6 +540,18 @@ These parameters apply if the original request URL is not absolute, and they can
 base API URL depending on the runtime environment. If you define the base API URL via
 `config#api` or `globalOpts.api`, these parameters will be mapped on it.
 
+Each field in the API parameters can either be a string or a function. If a function is provided, it will receive the `RequestAPIParams` as an argument.
+
+```js
+import request from 'core/request';
+
+request('/users', {
+  api: {
+    url: (params) => params.opts.query.foo != null ? 'https://foo.bla.com' : 'https://bla.com'
+  }
+}).data.then(console.log);
+```
+
 ```js
 import request from 'core/request';
 
@@ -549,7 +561,7 @@ import request from 'core/request';
 request('/users', {
   api: {
     protocol: 'https',
-    domain2: () => IS_PROD ? 'foo' : 'foo-stage',
+    domain2: (params) => IS_PROD ? 'foo' : 'foo-stage',
     zone: 'com'
   }
 }).data.then(console.log);
@@ -560,7 +572,7 @@ request('/users', {
 
 request('/users', {
   api: {
-    domain2: () => IS_PROD ? 'foo' : 'foo-stage',
+    domain2: (params) => IS_PROD ? 'foo' : 'foo-stage',
   }
 }).data.then(console.log);
 ```
