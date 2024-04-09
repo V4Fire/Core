@@ -9,7 +9,11 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v4.0.0-alpha.?? (2024-04-??)
+## v4.0.0-alpha.30 (2024-04-09)
+
+#### :boom: Breaking Change
+
+* Support for the `Got` library based query engine has been removed. Now, built-in fetch is used with Node.js.
 
 #### :rocket: New Feature
 

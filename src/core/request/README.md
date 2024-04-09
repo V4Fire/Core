@@ -18,10 +18,9 @@ request('https://foo.com', {
 
 ## Supported engines
 
-* `xhr`
+* `xhr` (the engine works only in a browser environment)
 * `fetch`
 * `browser` (the engine uses `fetch` when it's possible, otherwise `xhr`)
-* `node` (the engine uses [Got](https://www.npmjs.com/package/got) as a request library)
 * `provider` (the engine based on `core/data` providers)
 
 ## API
