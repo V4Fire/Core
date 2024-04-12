@@ -7,6 +7,6 @@
  */
 export * from '../../../../core/perf/timer/engines/interface';
 declare const engines: {
-    console: import("./interface").PerfTimerEngine;
+    console: import("../../../../core/perf/timer/engines/interface").PerfTimerEngine;
 };
 export default engines;

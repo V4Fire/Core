@@ -5,10 +5,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-/**
- * [[include:core/request/error/README.md]]
- * @packageDocumentation
- */
 import BaseError from '../../../core/error';
 import type { Details } from '../../../core/request/error/interface';
 export * from '../../../core/request/error/interface';
@@ -44,10 +40,10 @@ export default class RequestError<D = undefined> extends BaseError {
     /**
      * Error details
      */
-    readonly details: Details<D>;
+    readonly details: WeakRef<Details<D>>;
     /**
      * @param type - error type
-     * @param details - error details
+     * @param [details] - error details
      */
     constructor(type: string, details?: Details<D>);
     protected format(): string;
