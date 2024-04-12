@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.?? (2024-04-??)
+
+#### :house: Internal
+
+* Use `WeakRef` for `RequestError` details only in node environment
+
 ## v3.86.4 (2022-07-05)
 
 #### :bug: Bug Fix

@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.?? (2024-04-??)
+
+#### :house: Internal
+
+* Use `WeakRef` for `RequestError` details only in node environment `core/request/error`
+
 ## v4.0.0-alpha.30 (2024-04-09)
 
 #### :boom: Breaking Change
