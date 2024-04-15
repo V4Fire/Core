@@ -19,6 +19,28 @@ jobs:
 
       - run: yarn install
 
-      - run: yarn npm publish
+      - uses: actions/github-script@v7
+        name: Extract tag
+        id: extract-tag
+        with:
+          result-encoding: string
+          script: |
+            const { version } = require('${{ github.workspace }}/package.json');
+            const semver = require('semver');
+
+            const DEFAULT_TAG = 'latest';
+
+            const parsedVersion = semver.parse(version);
+            if (parsedVersion == null) {
+              return DEFAULT_TAG;
+            }
+            const { prerelease } = parsedVersion;
+            if (prerelease.length === 0) {
+              return DEFAULT_TAG;
+            }
+            const tag = prerelease[0];
+            return typeof tag === 'string' ? tag : DEFAULT_TAG;
+
+      - run: yarn npm publish --tag "${{ steps.extract-tag.outputs.result }}"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
