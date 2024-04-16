@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.?? (2024-??-??)
+
+#### :bug: Bug Fix
+
+* Fixed type generation for standalone build
+
 ## v4.0.0-alpha.30 (2024-04-09)
 
 #### :boom: Breaking Change
