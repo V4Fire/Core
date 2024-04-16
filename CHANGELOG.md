@@ -17,6 +17,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Fixed type generation for standalone build
 
+## v4.0.0-alpha.31 (2024-04-12)
+
+#### :house: Internal
+
+* Use `WeakRef` for `RequestError` details only in node environment `core/request/error`
+
 ## v4.0.0-alpha.30 (2024-04-09)
 
 #### :boom: Breaking Change

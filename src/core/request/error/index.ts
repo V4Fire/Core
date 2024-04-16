@@ -11,6 +11,8 @@
  * @packageDocumentation
  */
 
+import { IS_NODE } from 'core/env';
+
 import BaseError from 'core/error';
 import type { Details } from 'core/request/error/interface';
 
@@ -65,7 +67,7 @@ export default class RequestError<D = undefined> extends BaseError {
 
 		this.type = type;
 
-		if (typeof WeakRef === 'function') {
+		if (typeof WeakRef === 'function' && IS_NODE) {
 			this.details = new WeakRef<Details<D>>(details);
 
 		} else {
