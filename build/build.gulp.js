@@ -196,6 +196,7 @@ module.exports = function init(gulp) {
 	function getFilesToBuild(tsConfig) {
 		filesToBuild = [
 			...tsConfig.include || [],
+			...tsConfig.files || [],
 			...resolve.rootDependencies.map((el) => `${el}/**/*.@(ts|js)`),
 			'!src/**/*.spec.js'
 		];

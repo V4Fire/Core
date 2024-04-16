@@ -5,4 +5,7 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-export declare const errorsToIgnore: any;
+export declare const errorsToIgnore: Pick<{
+    clearAsync: boolean;
+    abort: boolean;
+}, "abort" | "clearAsync">;

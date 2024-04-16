@@ -12,7 +12,7 @@ export declare const defaultResponseOpts: {
     redirected: boolean;
     status: number;
     statusText: string;
-    okStatuses: Range<import("../../../core/range").RangeValue>;
+    okStatuses: Range<200 | 299>;
     responseType: ResponseType;
     headers: {};
 };

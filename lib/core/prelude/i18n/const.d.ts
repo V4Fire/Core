@@ -23,4 +23,9 @@ export declare const locale: Locale;
 /**
  * A dictionary to map literal pluralization forms to numbers
  */
-export declare const pluralizeMap: any;
+export declare const pluralizeMap: Pick<{
+    none: number;
+    one: number;
+    some: number;
+    many: number;
+}, "some" | "none" | "one" | "many">;
