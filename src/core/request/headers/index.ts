@@ -81,7 +81,14 @@ export default class V4Headers {
 
 			for (const [name, value] of iter) {
 				if (value != null) {
-					this.set(name, value);
+
+					const prevValue = this.get(name);
+					if (prevValue != null) {
+						const newValue = [prevValue, value].join(', ');
+						this.set(name, newValue);
+					} else {
+						this.set(name, value);
+					}
 				}
 			}
 		}
