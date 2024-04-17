@@ -861,9 +861,9 @@ function createServer() {
 	});
 
 	serverApp.get('/cookies', (req, res) => {
-		res.cookie('a=b');
-		res.cookie('c=d');
-		res.cookie('e=f');
+		res.cookie('a', 'b');
+		res.cookie('c', 'd');
+		res.cookie('e', 'f');
 
 		res.send('');
 	});
