@@ -603,6 +603,13 @@ describe('core/request', () => {
 				expect(chunkLengths.every((len) => len > 0)).toBe(true);
 			});
 
+			it('many same headers in response', async () => {
+				const req = await request('http://localhost:4000/cookies');
+
+				const cookies = 'a=b; Path=/, c=d; Path=/, e=f; Path=/';
+				expect(req.response.headers.get('set-cookie')).toBe(cookies);
+			});
+
 			if (name === 'xhr') {
 				describe('listening XHR events', () => {
 					it('`progress`', async () => {
@@ -851,6 +858,14 @@ function createServer() {
 
 	serverApp.get('/redirect', (req, res) => {
 		res.redirect('http://localhost:4000/json/1');
+	});
+
+	serverApp.get('/cookies', (req, res) => {
+		res.cookie('a=b');
+		res.cookie('c=d');
+		res.cookie('e=f');
+
+		res.send('');
 	});
 
 	return serverApp.listen(4000);
