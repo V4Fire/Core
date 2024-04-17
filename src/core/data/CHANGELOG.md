@@ -9,6 +9,10 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+#### :bug: Bug Fix
+
+* Fixed unnecessary nesting when data is received from the cache
+
 ## v4.0.0-alpha.29 (2024-04-04)
 
 #### :bug: Bug Fix
