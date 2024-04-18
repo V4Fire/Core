@@ -85,8 +85,7 @@ export default class V4Headers {
 					const prevValue = this.get(name);
 
 					if (prevValue != null) {
-						const newValue = [prevValue, value].join(', ');
-						this.set(name, newValue);
+						this.append(name, value);
 
 					} else {
 						this.set(name, value);
