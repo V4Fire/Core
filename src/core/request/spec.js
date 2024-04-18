@@ -603,13 +603,6 @@ describe('core/request', () => {
 				expect(chunkLengths.every((len) => len > 0)).toBe(true);
 			});
 
-			it('many same headers in response', async () => {
-				const req = await request('http://localhost:4000/cookies');
-
-				const cookies = 'a=b; Path=/, c=d; Path=/, e=f; Path=/';
-				expect(req.response.headers.get('set-cookie')).toBe(cookies);
-			});
-
 			if (name === 'xhr') {
 				describe('listening XHR events', () => {
 					it('`progress`', async () => {
@@ -683,6 +676,13 @@ describe('core/request', () => {
 						{index: 1, value: {name: 'Ben', age: 45}},
 						{index: 2, value: {name: 'Rob', age: 32}}
 					]);
+				});
+
+				it('many cookie headers in response', async () => {
+					const req = await request('http://localhost:4000/cookies');
+
+					const cookies = 'a=b; Path=/, c=d; Path=/, e=f; Path=/';
+					expect(req.response.headers.get('set-cookie')).toBe(cookies);
 				});
 			}
 
