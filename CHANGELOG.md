@@ -11,6 +11,13 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.33 (2024-04-19)
+
+#### :bug: Bug Fix
+
+* Now, the custom `Headers` class uses the `append` method
+  to construct a new set of headers based on the built-in Headers in the Fetch API implementation `core/request/headers`
+
 ## v4.0.0-alpha.32 (2024-04-16)
 
 #### :bug: Bug Fix

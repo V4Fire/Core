@@ -9,12 +9,6 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v4.0.0-?? (2024-04-??)
-
-#### :bug: Breaking Change
-
-* Now, the custom `Headers` class utilizes the `append` method to construct a new set of headers based on the built-in Headers in the Fetch API implementation
-
 ## v4.0.0-alpha.30 (2024-04-09)
 
 #### :boom: Breaking Change
