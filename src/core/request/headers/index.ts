@@ -82,7 +82,6 @@ export default class V4Headers {
 			for (const [name, value] of iter) {
 				if (value != null) {
 					this.append(name, value);
-
 				}
 			}
 		}
