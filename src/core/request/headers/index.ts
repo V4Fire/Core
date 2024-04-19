@@ -81,16 +81,8 @@ export default class V4Headers {
 
 			for (const [name, value] of iter) {
 				if (value != null) {
+					this.append(name, value);
 
-					const prevValue = this.get(name);
-
-					if (prevValue != null) {
-						this.append(name, value);
-
-					} else {
-						this.set(name, value);
-
-					}
 				}
 			}
 		}
