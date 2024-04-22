@@ -23,11 +23,6 @@ export * from 'core/prelude/i18n/const';
 export * from 'core/prelude/i18n/helpers';
 export * from 'core/prelude/i18n/interface';
 
-const consts = {
-	locale,
-	region
-};
-
 (['locale', 'region'] as const).forEach((type) => {
 	if (IS_NODE) {
 		setI18NParam(type, config[type]);
@@ -56,8 +51,12 @@ function setI18NParam(type: 'locale', value: CanUndef<Language>, def?: boolean):
 function setI18NParam(type: 'region', value: CanUndef<Region>, def?: boolean): CanUndef<Region>;
 function setI18NParam(type: 'locale' | 'region', value: CanUndef<Language | Region>, def?: boolean): CanUndef<Language | Region>;
 function setI18NParam(type: 'locale' | 'region', value: CanUndef<Language | Region>, def?: boolean): CanUndef<Language | Region> {
-	const element = consts[type];
-	const oldVal = element[type];
+	const element = {
+		locale,
+		region
+	}[type];
+
+	const oldVal = element.value;
 
 	if (value === oldVal) {
 		return;
