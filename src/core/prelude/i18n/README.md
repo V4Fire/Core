@@ -153,7 +153,7 @@ interface Locale {
 The default application region.
 
 ```typescript
-interface Locale {
+interface Region {
   /**
    * The region value
    */
