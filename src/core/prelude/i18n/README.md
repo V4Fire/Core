@@ -142,7 +142,7 @@ interface Locale {
   value: CanUndef<Language>;
 
   /**
-   * True if the region is default
+   * True if the locale is default
    */
   isDefault: boolean;
 }
