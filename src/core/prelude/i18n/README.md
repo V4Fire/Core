@@ -142,9 +142,9 @@ interface Locale {
   value: CanUndef<Language>;
 
   /**
-   * True if the locale is already defined
+   * True if the region is default
    */
-  isDefined: boolean;
+  isDefault: boolean;
 }
 ```
 
@@ -162,7 +162,7 @@ interface Locale {
   /**
    * True if the region is default
    */
-  isDefined: boolean;
+  isDefault: boolean;
 }
 ```
 
