@@ -75,6 +75,22 @@ module.exports = config.createConfig(
 		}),
 
 		/**
+		 * Default application region
+		 *
+		 * @cli region
+		 * @env REGION
+		 *
+		 * @type {string}
+		 */
+		region: o('region', {
+			env: true,
+			coerce(value) {
+				globalThis['REGION'] = value;
+				return value;
+			}
+		}),
+
+		/**
 		 * Application environment (prod, stage, etc.)
 		 *
 		 * @cli environment
