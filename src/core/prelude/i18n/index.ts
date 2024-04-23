@@ -47,10 +47,10 @@ export * from 'core/prelude/i18n/interface';
  * @param [def] - if true, the param is marked as default
  * @emits `setLocale(value: string, oldValue?: string) | setRegion(value: string, oldValue?: string)`
  */
-function setI18NParam(type: 'locale', value: CanUndef<Language>, def?: boolean): CanUndef<Language>;
-function setI18NParam(type: 'region', value: CanUndef<Region>, def?: boolean): CanUndef<Region>;
-function setI18NParam(type: 'locale' | 'region', value: CanUndef<Language | Region>, def?: boolean): CanUndef<Language | Region>;
-function setI18NParam(type: 'locale' | 'region', value: CanUndef<Language | Region>, def?: boolean): CanUndef<Language | Region> {
+export function setI18NParam(type: 'locale', value: CanUndef<Language>, def?: boolean): CanUndef<Language>;
+export function setI18NParam(type: 'region', value: CanUndef<Region>, def?: boolean): CanUndef<Region>;
+export function setI18NParam(type: 'locale' | 'region', value: CanUndef<Language | Region>, def?: boolean): CanUndef<Language | Region>;
+export function setI18NParam(type: 'locale' | 'region', value: CanUndef<Language | Region>, def?: boolean): CanUndef<Language | Region> {
 	const element = {
 		locale,
 		region
