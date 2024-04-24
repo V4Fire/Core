@@ -39,12 +39,23 @@ const config: Config = {
 			return this[$$.locale];
 		}
 
-		// @ts-ignore (unsafe)
 		return typeof LOCALE !== 'undefined' ? LOCALE : undefined;
 	},
 
 	set locale(value: CanUndef<Language>) {
 		this[$$.locale] = value;
+	},
+
+	get region() {
+		if ($$.region in this) {
+			return this[$$.region];
+		}
+
+		return typeof REGION !== 'undefined' ? REGION : undefined;
+	},
+
+	set region(value: CanUndef<Region>) {
+		this[$$.region] = value;
 	},
 
 	get api() {
