@@ -20,7 +20,7 @@ export interface Locale {
 	isDefault: boolean;
 }
 
-export interface RegionStorage {
+export interface RegionStore {
 	/**
 	 * The region value
 	 */
