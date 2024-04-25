@@ -99,6 +99,10 @@ type Language =
 	'no' | 'sv' | 'pt' |
 	'ar' | 'sw';
 
+/**
+ * ISO 3166-1
+ * @see https://en.wikipedia.org/wiki/ISO_3166-1
+ */
 type Region =
 	'AD' | 'AE' | 'AF' | 'AG' | 'AI' | 'AL' | 'AM' |
 	'AO' | 'AQ' | 'AR' | 'AS' | 'AT' | 'AU' | 'AW' |
