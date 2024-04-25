@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.99.0 (2024-04-25)
+
+#### :rocket: New Feature
+
+* Added `Region` support in internationalization module.
+
 ## v3.97.1 (2023-10-02)
 
 #### :nail_care: Polish
