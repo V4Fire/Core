@@ -9,6 +9,14 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.?? (2024-05-??)
+
+#### :bug: Bug Fix
+
+* Add logic that checks whether the passed instance is of the native class `Headers` or `V4Headers`:
+	- If it's `Headers`, adds new header items using the `set` method;
+	- If it's `V4Headers`, appends the items using the `append` method.
+
 ## v4.0.0-alpha.33 (2024-04-19)
 
 #### :bug: Bug Fix
