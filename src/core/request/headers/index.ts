@@ -85,8 +85,10 @@ export default class V4Headers {
 				if (value != null) {
 					if (isNative) {
 						this.append(name, value);
+
 					} else {
 						this.set(name, value);
+
 					}
 				}
 			}

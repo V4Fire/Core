@@ -14,8 +14,8 @@ Changelog
 #### :bug: Bug Fix
 
 * Add logic that checks whether the passed instance is of the native class `Headers` or `V4Headers`:
-	- If it's `Headers`, adds new header items using the `set` method;
-	- If it's `V4Headers`, appends the items using the `append` method.
+	- If it's `Headers`, adds new header items using the `append` method;
+	- If it's `V4Headers`, appends the items using the `set` method.
 
 ## v4.0.0-alpha.33 (2024-04-19)
 
