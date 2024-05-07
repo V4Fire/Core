@@ -681,7 +681,7 @@ describe('core/request', () => {
 				it('many cookie headers in response', async () => {
 					const req = await request('http://localhost:4000/cookies');
 
-					const cookies = 'a=b; Path=/, c=d; Path=/, e=f; Path=/';
+					const cookies = 'a=b; Path=/,c=d; Path=/,e=f; Path=/';
 					expect(req.response.headers.get('set-cookie')).toBe(cookies);
 				});
 			}
