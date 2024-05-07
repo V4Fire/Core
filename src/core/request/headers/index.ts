@@ -169,7 +169,7 @@ export default class V4Headers {
 
 		const
 			currentVal = this[normalizedName],
-			newVal = currentVal != null ? `${currentVal}, ${this.normalizeHeaderValue(value)}` : value;
+			newVal = currentVal != null ? `${currentVal},${this.normalizeHeaderValue(value)}` : value;
 
 		this.set(name, newVal);
 	}

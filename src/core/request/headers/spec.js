@@ -6,48 +6,60 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Headers from 'core/request/headers';
+import V4Headers from 'core/request/headers';
 
 describe('core/request/headers', () => {
 	describe('`constructor`', () => {
 		it('creating headers from a dictionary', () => {
-			const headers = new Headers({
+			const headers = new V4Headers({
 				'Content-Language': ['en', 'ru'],
 				'Cache-Control': 'no-cache'
 			});
 
-			expect(headers.get('Content-Language')).toBe('en, ru');
+			expect(headers.get('Content-Language')).toBe('en,ru');
 			expect(headers.get('Cache-Control')).toBe('no-cache');
 		});
 
 		it('creating headers from another Headers', () => {
-			const headers = new Headers(new Headers({
+			const headers = new V4Headers(new V4Headers({
 				'Content-Language': ['en', 'ru'],
 				'Cache-Control': 'no-cache'
 			}));
 
-			expect(headers.get('Content-Language')).toBe('en, ru');
+			expect(headers.get('Content-Language')).toBe('en,ru');
 			expect(headers.get('Cache-Control')).toBe('no-cache');
 		});
 
 		it('creating headers from a string', () => {
-			const headers = new Headers(`
+			const headers = new V4Headers(`
 				Content-Language: en,ru
 				Cache-control: no-cache
 			`);
 
-			expect(headers.get('Content-Language')).toBe('en, ru');
+			expect(headers.get('Content-Language')).toBe('en,ru');
 			expect(headers.get('Cache-Control')).toBe('no-cache');
 		});
 
 		it('creating headers from a string with multiline values', () => {
-			const headers = new Headers(`
+			const headers = new V4Headers(`
 				Content-Language: en,
 				                  ru
 				Cache-control: no-cache
 			`);
 
-			expect(headers.get('Content-Language')).toBe('en, ru');
+			expect(headers.get('Content-Language')).toBe('en,ru');
+			expect(headers.get('Cache-Control')).toBe('no-cache');
+		});
+
+		it('creating headers from an instance of native class Headers', () => {
+			const nativeHeaders = new Headers({
+				'Content-Language': ['en', 'ru'],
+				'Cache-Control': 'no-cache'
+			});
+
+			const headers = new V4Headers(nativeHeaders);
+
+			expect(headers.get('Content-Language')).toBe('en,ru');
 			expect(headers.get('Cache-Control')).toBe('no-cache');
 		});
 	});
@@ -55,7 +67,7 @@ describe('core/request/headers', () => {
 	describe('crud operations', () => {
 		describe('with a dictionary', () => {
 			it('getting a header value', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Cache-Control': 'no-cache'
 				});
 
@@ -64,14 +76,14 @@ describe('core/request/headers', () => {
 
 			it('setting a header value', () => {
 				const
-					headers = new Headers();
+					headers = new V4Headers();
 
 				headers['cache-control'] = 'no-cache';
 				expect(headers.has('Cache-Control')).toBe(true);
 			});
 
 			it('deleting a header value', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Cache-Control': 'no-cache'
 				});
 
@@ -80,7 +92,7 @@ describe('core/request/headers', () => {
 			});
 
 			it('getting headers keys', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Content-Language': ['en', 'ru']
 				});
 
@@ -89,7 +101,7 @@ describe('core/request/headers', () => {
 			});
 
 			it('freezing headers', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Cache-Control': 'no-cache'
 				});
 
@@ -113,7 +125,7 @@ describe('core/request/headers', () => {
 
 		describe('using API', () => {
 			it('getting a header value', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Cache-Control': 'no-cache'
 				});
 
@@ -123,7 +135,7 @@ describe('core/request/headers', () => {
 
 			it('setting a header value', () => {
 				const
-					headers = new Headers();
+					headers = new V4Headers();
 
 				headers.set('cache-control', 'no-cache');
 				expect(headers.get('Cache-Control')).toBe('no-cache');
@@ -131,14 +143,14 @@ describe('core/request/headers', () => {
 
 			it('setting a header value with normalizing', () => {
 				const
-					headers = new Headers();
+					headers = new V4Headers();
 
 				headers.set('cache-control', '  no-cache  ');
 				expect(headers.get('Cache-Control')).toBe('no-cache');
 			});
 
 			it('setting a header value that is already exists', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Cache-Control': 'no-cache'
 				});
 
@@ -147,25 +159,25 @@ describe('core/request/headers', () => {
 			});
 
 			it('setting a header multiple value that is already exists', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Content-Language': 'en'
 				});
 
 				headers.set('Content-Language', ['ru', 'jp']);
-				expect(headers.get('Content-Language')).toBe('ru, jp');
+				expect(headers.get('Content-Language')).toBe('ru,jp');
 			});
 
 			it('appending a header multiple value with normalizing', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Content-Language': 'en'
 				});
 
 				headers.append('Content-Language', ['ru ', '  jp  ']);
-				expect(headers.get('Content-Language')).toBe('en, ru, jp');
+				expect(headers.get('Content-Language')).toBe('en,ru,jp');
 			});
 
 			it('deleting a header value', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Content-Language': ['en', 'ru']
 				});
 
@@ -177,7 +189,7 @@ describe('core/request/headers', () => {
 			});
 
 			it('freezing headers', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Cache-Control': 'no-cache'
 				});
 
@@ -201,7 +213,7 @@ describe('core/request/headers', () => {
 
 		describe('iterators', () => {
 			it('`keys`', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Content-Language': ['en', 'ru']
 				});
 
@@ -210,34 +222,34 @@ describe('core/request/headers', () => {
 			});
 
 			it('`values`', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Content-Language': ['en', 'ru']
 				});
 
 				headers.set('Cache-Control', 'no-cache');
-				expect([...headers.values()]).toEqual(['en, ru', 'no-cache']);
+				expect([...headers.values()]).toEqual(['en,ru', 'no-cache']);
 			});
 
 			it('`entries`', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Content-Language': ['en', 'ru']
 				});
 
 				headers.set('Cache-Control', 'no-cache');
 				expect([...headers.entries()]).toEqual([
-					['content-language', 'en, ru'],
+					['content-language', 'en,ru'],
 					['cache-control', 'no-cache']
 				]);
 			});
 
 			it('`default iterator`', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Content-Language': ['en', 'ru']
 				});
 
 				headers.set('Cache-Control', 'no-cache');
 				expect([...headers]).toEqual([
-					['content-language', 'en, ru'],
+					['content-language', 'en,ru'],
 					['cache-control', 'no-cache']
 				]);
 			});
