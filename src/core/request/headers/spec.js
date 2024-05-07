@@ -53,13 +53,16 @@ describe('core/request/headers', () => {
 
 		it('creating headers from an instance of native class Headers', () => {
 			const nativeHeaders = new Headers({
-				'Content-Language': ['en', 'ru'],
+				'Content-Language': 'ru',
+				'content-language': 'es',
+				'CONTENT-LANGUAGE': 'fr',
 				'Cache-Control': 'no-cache'
 			});
 
+			console.log(nativeHeaders);
 			const headers = new V4Headers(nativeHeaders);
 
-			expect(headers.get('Content-Language')).toBe('en,ru');
+			expect(headers.get('Content-Language')).toBe('ru, es, fr');
 			expect(headers.get('Cache-Control')).toBe('no-cache');
 		});
 	});
