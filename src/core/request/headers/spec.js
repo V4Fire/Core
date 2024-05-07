@@ -59,7 +59,6 @@ describe('core/request/headers', () => {
 				'Cache-Control': 'no-cache'
 			});
 
-			console.log(nativeHeaders);
 			const headers = new V4Headers(nativeHeaders);
 
 			expect(headers.get('Content-Language')).toBe('ru, es, fr');
