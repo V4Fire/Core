@@ -232,6 +232,6 @@ export default class V4Headers {
 	 * @param value
 	 */
 	protected normalizeHeaderValue(value: unknown): string {
-		return applyQueryForStr(String(value != null ? value : '').trim().replace(/,([^ ])/g, ', $1'), this[requestQuery]);
+		return applyQueryForStr(String(value != null ? value : '').trim(), this[requestQuery]);
 	}
 }

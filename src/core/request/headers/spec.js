@@ -62,7 +62,7 @@ describe('core/request/headers', () => {
 
 			const headers = new V4Headers(nativeHeaders);
 
-			expect(headers.get('Content-Language')).toBe('en, be, ru, es, fr');
+			expect(headers.get('Content-Language')).toBe('en,be, ru, es, fr');
 			expect(headers.get('Cache-Control')).toBe('no-cache');
 		});
 	});
