@@ -171,7 +171,7 @@ export default class V4Headers {
 
 		const
 			currentVal = this[normalizedName],
-			newVal = currentVal != null ? `${currentVal},${this.normalizeHeaderValue(value)}` : value;
+			newVal = currentVal != null ? `${currentVal}, ${this.normalizeHeaderValue(value)}` : value;
 
 		this.set(name, newVal);
 	}
@@ -232,6 +232,6 @@ export default class V4Headers {
 	 * @param value
 	 */
 	protected normalizeHeaderValue(value: unknown): string {
-		return applyQueryForStr(String(value != null ? value : '').trim(), this[requestQuery]);
+		return applyQueryForStr(String(value != null ? value : '').trim().replace(/,([^ ])/g, ', $1'), this[requestQuery]);
 	}
 }

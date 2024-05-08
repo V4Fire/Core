@@ -16,7 +16,7 @@ describe('core/request/headers', () => {
 				'Cache-Control': 'no-cache'
 			});
 
-			expect(headers.get('Content-Language')).toBe('en,ru');
+			expect(headers.get('Content-Language')).toBe('en, ru');
 			expect(headers.get('Cache-Control')).toBe('no-cache');
 		});
 
@@ -26,7 +26,7 @@ describe('core/request/headers', () => {
 				'Cache-Control': 'no-cache'
 			}));
 
-			expect(headers.get('Content-Language')).toBe('en,ru');
+			expect(headers.get('Content-Language')).toBe('en, ru');
 			expect(headers.get('Cache-Control')).toBe('no-cache');
 		});
 
@@ -36,7 +36,7 @@ describe('core/request/headers', () => {
 				Cache-control: no-cache
 			`);
 
-			expect(headers.get('Content-Language')).toBe('en,ru');
+			expect(headers.get('Content-Language')).toBe('en, ru');
 			expect(headers.get('Cache-Control')).toBe('no-cache');
 		});
 
@@ -47,12 +47,13 @@ describe('core/request/headers', () => {
 				Cache-control: no-cache
 			`);
 
-			expect(headers.get('Content-Language')).toBe('en,ru');
+			expect(headers.get('Content-Language')).toBe('en, ru');
 			expect(headers.get('Cache-Control')).toBe('no-cache');
 		});
 
 		it('creating headers from an instance of native class Headers', () => {
 			const nativeHeaders = new Headers({
+				'content-Language': ['en', 'be'],
 				'Content-Language': 'ru',
 				'content-language': 'es',
 				'CONTENT-LANGUAGE': 'fr',
@@ -61,7 +62,7 @@ describe('core/request/headers', () => {
 
 			const headers = new V4Headers(nativeHeaders);
 
-			expect(headers.get('Content-Language')).toBe('ru, es, fr');
+			expect(headers.get('Content-Language')).toBe('en, be, ru, es, fr');
 			expect(headers.get('Cache-Control')).toBe('no-cache');
 		});
 	});
@@ -166,7 +167,7 @@ describe('core/request/headers', () => {
 				});
 
 				headers.set('Content-Language', ['ru', 'jp']);
-				expect(headers.get('Content-Language')).toBe('ru,jp');
+				expect(headers.get('Content-Language')).toBe('ru, jp');
 			});
 
 			it('appending a header multiple value with normalizing', () => {
@@ -175,7 +176,7 @@ describe('core/request/headers', () => {
 				});
 
 				headers.append('Content-Language', ['ru ', '  jp  ']);
-				expect(headers.get('Content-Language')).toBe('en,ru,jp');
+				expect(headers.get('Content-Language')).toBe('en, ru, jp');
 			});
 
 			it('deleting a header value', () => {
@@ -229,7 +230,7 @@ describe('core/request/headers', () => {
 				});
 
 				headers.set('Cache-Control', 'no-cache');
-				expect([...headers.values()]).toEqual(['en,ru', 'no-cache']);
+				expect([...headers.values()]).toEqual(['en, ru', 'no-cache']);
 			});
 
 			it('`entries`', () => {
@@ -239,7 +240,7 @@ describe('core/request/headers', () => {
 
 				headers.set('Cache-Control', 'no-cache');
 				expect([...headers.entries()]).toEqual([
-					['content-language', 'en,ru'],
+					['content-language', 'en, ru'],
 					['cache-control', 'no-cache']
 				]);
 			});
@@ -251,7 +252,7 @@ describe('core/request/headers', () => {
 
 				headers.set('Cache-Control', 'no-cache');
 				expect([...headers]).toEqual([
-					['content-language', 'en,ru'],
+					['content-language', 'en, ru'],
 					['cache-control', 'no-cache']
 				]);
 			});

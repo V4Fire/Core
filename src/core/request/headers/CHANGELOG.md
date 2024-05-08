@@ -14,7 +14,7 @@ Changelog
 #### :bug: Bug Fix
 
 * Add logic that checks whether the passed instance is of the native class `Headers` or `V4Headers`
-to avoid duplicate headers:
+to avoid overwriting header values, add new values to headers that accept multiple values:
 	- If it's `Headers`, adds new header items using the `append` method;
 	- If it's `V4Headers`, appends the items using the `set` method.
 
