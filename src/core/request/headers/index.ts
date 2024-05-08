@@ -79,11 +79,11 @@ export default class V4Headers {
 				iter = Object.entries(headers);
 			}
 
-			const isNative = !(headers instanceof V4Headers) && Object.isFunction(headers.entries);
+			const isNativeHeaders = !(headers instanceof V4Headers) && Object.isFunction(headers.entries);
 
 			for (const [name, value] of iter) {
 				if (value != null) {
-					if (isNative) {
+					if (isNativeHeaders) {
 						this.append(name, value);
 
 					} else {
