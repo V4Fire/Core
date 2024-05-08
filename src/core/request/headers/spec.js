@@ -62,6 +62,11 @@ describe('core/request/headers', () => {
 
 			const headers = new V4Headers(nativeHeaders);
 
+			// The native Headers object converts the entire value to a string type,
+			// so the value ['en', 'be'] is converted to 'en,be' without a space.
+			// However, when all header values are sequentially collapsed, they
+			// will be separated by spaces. The values 'en,be', 'ru', 'es', and 'fr'
+			// will be collapsed as 'en,be, ru, es, fr'.
 			expect(headers.get('Content-Language')).toBe('en,be, ru, es, fr');
 			expect(headers.get('Cache-Control')).toBe('no-cache');
 		});
