@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.?? (2024-05-??)
+
+#### :bug: Bug Fix
+
+* Fixed an issue where a internal property `blackList` was being written to the target object `core/object/watch`
+
 ## v4.0.0-alpha.35 (2024-05-13)
 
 #### :bug: Bug Fix

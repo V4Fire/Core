@@ -9,7 +9,6 @@
 import {
 
 	muteLabel,
-	blackList,
 
 	toProxyObject,
 	toRootObject,
@@ -46,6 +45,8 @@ import type {
 	InternalWatchOptions
 
 } from 'core/object/watch/interface';
+
+const globalProxyBlackList = new WeakMap<WatchHandlersSet, Set<string|symbol>>();
 
 /**
  * Watches for changes of the specified object by using Proxy objects
@@ -188,7 +189,7 @@ export function watch<T extends object>(
 	});
 
 	const
-		blackListStore = new Set();
+		blackListStore = new Set<string|symbol>();
 
 	let
 		lastSetKey;
@@ -422,7 +423,7 @@ export function watch<T extends object>(
 		proxy = unwrappedObj;
 	}
 
-	getOrCreateLabelValueByHandlers(unwrappedObj, blackList, handlers, blackListStore);
+	globalProxyBlackList.set(handlers, blackListStore);
 	getOrCreateLabelValueByHandlers(unwrappedObj, toProxyObject, handlers, proxy);
 
 	return returnProxy(unwrappedObj, proxy);
@@ -463,7 +464,7 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 	);
 
 	const
-		blackListStore = getOrCreateLabelValueByHandlers<Set<unknown>>(unwrappedObj, blackList, handlers),
+		blackListStore = globalProxyBlackList.get(handlers),
 		type = getProxyType(ref);
 
 	switch (type) {
@@ -518,7 +519,7 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 	);
 
 	const
-		blackListStore = getOrCreateLabelValueByHandlers<Set<unknown>>(unwrappedObj, blackList, handlers),
+		blackListStore = globalProxyBlackList.get(handlers),
 		type = getProxyType(ref);
 
 	switch (type) {
