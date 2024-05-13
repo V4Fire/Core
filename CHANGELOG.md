@@ -11,6 +11,15 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.35 (2024-05-13)
+
+#### :bug: Bug Fix
+
+* Added logic that checks whether the passed instance is of the native `Headers` class or `V4Headers`.
+  To avoid overwriting response header values, we use the `append` method when handling the native Headers object
+  received from the response, while retaining the original practice of setting headers with the `set` method when
+  constructing request headers `core/request/headers`
+
 ## v4.0.0-alpha.34 (2024-05-06)
 
 #### :rocket: New Feature
