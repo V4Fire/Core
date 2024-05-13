@@ -68,28 +68,31 @@ export default class V4Headers {
 			}
 
 		} else if (headers != null) {
-			let
-				iter;
-
 			// eslint-disable-next-line @typescript-eslint/unbound-method
-			if (headers instanceof V4Headers || Object.isFunction(headers.entries)) {
+			const isIterable = Object.isFunction(headers.entries);
+
+			let
+				iter: IterableIterator<[string, Nullable<string>]>;
+
+			if (headers instanceof V4Headers || isIterable) {
 				iter = Object.cast<Headers>(headers).entries();
 
 			} else {
-				iter = Object.entries(headers);
+				iter = Object.entries(headers).values();
 			}
 
-			const isNativeHeaders = !(headers instanceof V4Headers) && Object.isFunction(headers.entries);
+			const isNativeHeaders = !(headers instanceof V4Headers) && isIterable;
 
 			for (const [name, value] of iter) {
-				if (value != null) {
-					if (isNativeHeaders) {
-						this.append(name, value);
+				if (value == null) {
+					continue;
+				}
 
-					} else {
-						this.set(name, value);
+				if (isNativeHeaders) {
+					this.append(name, value);
 
-					}
+				} else {
+					this.set(name, value);
 				}
 			}
 		}
