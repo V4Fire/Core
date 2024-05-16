@@ -46,7 +46,8 @@ import type {
 
 } from 'core/object/watch/interface';
 
-const globalProxyBlackList = new WeakMap<WatchHandlersSet, Set<string|symbol>>();
+const
+	globalProxyBlackList = new WeakMap<WatchHandlersSet, Set<string|symbol>>();
 
 /**
  * Watches for changes of the specified object by using Proxy objects

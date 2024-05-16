@@ -13,7 +13,7 @@ Changelog
 
 #### :bug: Bug Fix
 
-* Fixed an issue where a internal property `blackList` was being written to the target object
+* Fixed an issue where an internal property, blackList, was being written to the target object
 
 ## v3.87.1 (2022-08-15)
 
