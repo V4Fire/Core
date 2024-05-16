@@ -16,6 +16,16 @@ export interface Locale {
      */
     isDefault: boolean;
 }
+export interface RegionStore {
+    /**
+     * The region value
+     */
+    value: CanUndef<Region>;
+    /**
+     * True if the region is default
+     */
+    isDefault: boolean;
+}
 export interface LocaleKVStorage {
     get: SyncStorage['get'];
     /**
