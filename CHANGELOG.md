@@ -11,6 +11,17 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.30 (2024-04-09)
+
+#### :boom: Breaking Change
+
+* Support for the `Got` library based query engine has been removed.
+  Now, built-in fetch is used with Node.js. `core/request`
+
+#### :rocket: New Feature
+
+* Now `MiddlewareParams` are being passed to the `RequestAPIValue` function `core/request`
+
 ## v4.0.0-alpha.29 (2024-04-04)
 
 #### :boom: Breaking Change

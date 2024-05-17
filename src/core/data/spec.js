@@ -14,12 +14,12 @@ import Provider, { provider, providers } from 'core/data';
 describe('core/data', () => {
 	let server;
 
-	beforeEach(() => {
+	beforeAll((done) => {
 		if (server) {
 			server.close();
 		}
 
-		server = createServer();
+		server = createServer(done);
 	});
 
 	afterAll((done) => {
@@ -147,7 +147,7 @@ describe('core/data', () => {
 	});
 });
 
-function createServer() {
+function createServer(cb) {
 	const serverApp = express();
 	serverApp.use(express.json());
 
@@ -176,5 +176,5 @@ function createServer() {
 		}
 	});
 
-	return serverApp.listen(3000);
+	return serverApp.listen(3000, cb);
 }

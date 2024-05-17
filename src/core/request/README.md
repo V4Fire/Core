@@ -18,10 +18,9 @@ request('https://foo.com', {
 
 ## Supported engines
 
-* `xhr`
+* `xhr` (the engine works only in a browser environment)
 * `fetch`
 * `browser` (the engine uses `fetch` when it's possible, otherwise `xhr`)
-* `node` (the engine uses [Got](https://www.npmjs.com/package/got) as a request library)
 * `provider` (the engine based on `core/data` providers)
 
 ## API
@@ -537,8 +536,27 @@ export interface RetryOptions<D = unknown> {
 A map of API parameters.
 
 These parameters apply if the original request URL is not absolute, and they can be used to customize the
-base API URL depending on the runtime environment. If you define the base API URL via
-`config#api` or `globalOpts.api`, these parameters will be mapped on it.
+base API URL depending on the runtime environment.
+If you define the base API URL via `config#api` or `globalOpts.api`, these parameters will be mapped on it.
+
+Each field in the API parameters can either be a string or a function.
+If a function is provided, it will receive the `MiddlewareParams` as an argument.
+
+```typescript
+import request from 'core/request';
+
+interface MiddlewareParams<D = unknown> {
+  ctx: RequestContext<D>;
+  opts: NormalizedCreateRequestOptions<D>;
+  globalOpts: GlobalOptions;
+}
+
+request('/users', {
+  api: {
+    url: (params) => params.opts.query.foo != null ? 'https://foo.bla.com' : 'https://bla.com'
+  }
+}).data.then(console.log);
+```
 
 ```js
 import request from 'core/request';
@@ -549,7 +567,7 @@ import request from 'core/request';
 request('/users', {
   api: {
     protocol: 'https',
-    domain2: () => IS_PROD ? 'foo' : 'foo-stage',
+    domain2: (params) => IS_PROD ? 'foo' : 'foo-stage',
     zone: 'com'
   }
 }).data.then(console.log);
@@ -560,7 +578,7 @@ request('/users', {
 
 request('/users', {
   api: {
-    domain2: () => IS_PROD ? 'foo' : 'foo-stage',
+    domain2: (params) => IS_PROD ? 'foo' : 'foo-stage',
   }
 }).data.then(console.log);
 ```
