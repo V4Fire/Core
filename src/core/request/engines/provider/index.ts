@@ -35,7 +35,7 @@ import type { RequestEngine, RequestOptions } from 'core/request/interface';
 import { availableParams, deniedProviderParams } from 'core/request/engines/provider/const';
 import type { AvailableOptions, MethodsMapping, Meta } from 'core/request/engines/provider/interface';
 
-export * from 'core/request/engines/provider/composition';
+export * from 'core/request/engines/composition';
 
 export * from 'core/request/engines/provider/const';
 export * from 'core/request/engines/provider/interface';

@@ -9,7 +9,7 @@
 /** @type {import('ts-jest').InitialOptionsTsJest} */
 export default {
 	projects: ['<rootDir>'],
-	testMatch: ['<rootDir>/dist/server/**/*[sS]pec.js', '<rootDir>/src/**/*[sS]pec.ts'],
+	testMatch: ['<rootDir>/dist/server/**/*[sS]pec.js', '<rootDir>/src/**/*[sS]pec.ts', '<rootDir>/src/**/?(*.)+(spec).[jt]s?(x)'],
 	rootDir: './',
 	testTimeout: 20000,
 	testEnvironment: 'node',

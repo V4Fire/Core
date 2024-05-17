@@ -8,19 +8,14 @@
 
 import type Provider from 'core/data';
 import type { ProviderOptions } from 'core/data';
-import type { RequestOptions, RequestResponseObject, MiddlewareParams } from 'core/request';
+import type { RequestOptions, RequestResponseObject, MiddlewareParams, RequestPromise, RequestEngine } from 'core/request';
 
-/**
- * A wrapper function for providers used inside the {@link CompositionProvider.request} function.
- * It should wrap each provider you use inside the {@link CompositionProvider.request} function.
- */
-export interface ProviderWrapper {
-	(provider: Provider): Provider;
-}
-
-export interface CompositionProviderParams {
-	/** {@link ProviderWrapper} */
-	providerWrapper: ProviderWrapper;
+export interface CompositionEngineParams {
+	/**
+	 * A wrapper function for providers used inside the {@link CompositionRequests.request} function.
+	 * It should wrap each provider you use inside the {@link CompositionRequests.request} function.
+	 */
+	boundRequest<T extends Provider | RequestPromise | RequestResponseObject>(request: T): T;
 
 	/**
 	 * Options passed with the provider constructor.
@@ -28,7 +23,21 @@ export interface CompositionProviderParams {
 	providerOptions?: ProviderOptions;
 }
 
-export interface CompositionProvider {
+export interface CompositionEngineOpts {
+	/**
+   * If true, the engine will change its behavior and will now wait for the completion
+   * of all requests, regardless of whether they completed with an error or not.
+   *
+   * In case the requests that have the failCompositionOnError flag set completed
+   * with an error, all these errors will be aggregated into {@link AggregateError} and given
+   * to the user.
+	 *
+	 * @default false
+	 */
+	aggregateErrors?: boolean;
+}
+
+export interface CompositionRequests {
 	/**
 	 * A function that will be called when the get method or other provider methods are called,
 	 * takes several arguments: request options, request parameters, provider constructor parameters,
@@ -68,7 +77,7 @@ export interface CompositionProvider {
 	request(
 		requestOptions: RequestOptions,
 		requestParams: MiddlewareParams,
-		params: CompositionProviderParams
+		params: CompositionEngineParams
 	): Promise<RequestResponseObject>;
 
 	/**
@@ -86,12 +95,10 @@ export interface CompositionProvider {
 	 *
 	 * @param options
 	 * @param params
-	 * @param [providerOptions]
 	 */
 	requestFilter?(
 		options: RequestOptions,
-		params: MiddlewareParams,
-		providerOptions?: ProviderOptions
+		params: MiddlewareParams
 	): CanPromise<boolean>;
 
 	/**
@@ -99,4 +106,9 @@ export interface CompositionProvider {
 	 * If false / undefined, request errors will be ignored.
 	 */
 	failCompositionOnError?: boolean;
+}
+
+export interface CompositionRequestEngine extends RequestEngine {
+	boundedRequests: Map<string, RequestResponseObject>;
+	boundedProviders: Set<Provider>;
 }
