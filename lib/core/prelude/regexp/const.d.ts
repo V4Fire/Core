@@ -6,4 +6,4 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 export declare const isGlobal: RegExp, escapeRgxp: RegExp;
-export declare const testCache: any;
+export declare const testCache: Dictionary<RegExp>;

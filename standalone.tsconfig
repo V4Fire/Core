@@ -8,9 +8,10 @@
   },
 
   "include": [
-    "./src/**/*.ts",
-    "./src/**/*.js"
+    "./src/**/*.ts"
   ],
 
-  "files": []
+  "files": [
+    "index.d.ts"
+  ]
 }

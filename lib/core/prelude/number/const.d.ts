@@ -5,9 +5,21 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-export declare const formatCache: any;
+export declare const formatCache: Dictionary<Intl.NumberFormat>;
 export declare const decPartRgxp: RegExp;
-export declare const globalFormatOpts: any;
-export declare const formatAliases: any;
-export declare const boolAliases: any;
-export declare const defaultFormats: any;
+export declare const globalFormatOpts: Pick<{
+    init: boolean;
+    decimal: string;
+    thousands: string;
+}, "decimal" | "init" | "thousands">;
+export declare const formatAliases: Pick<{
+    $: string;
+    $d: string;
+    '%': string;
+    '.': string;
+}, "." | "$" | "$d" | "%">;
+export declare const boolAliases: Pick<{
+    '+': boolean;
+    '-': boolean;
+}, "-" | "+">;
+export declare const defaultFormats: Pick<Intl.NumberFormatOptions, keyof Intl.NumberFormatOptions>;

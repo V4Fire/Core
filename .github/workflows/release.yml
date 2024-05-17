@@ -1,0 +1,49 @@
+name: Release to npm
+
+on:
+  release:
+    types: ["published"]
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          registry-url: "https://registry.npmjs.org"
+          cache: "yarn"
+
+      - run: yarn install
+
+      - uses: actions/github-script@v7
+        name: Extract tag
+        id: extract-tag
+        with:
+          result-encoding: string
+          script: |
+            const {version} = require('${{ github.workspace }}/package.json');
+            const semver = require('semver');
+
+            const DEFAULT_TAG = 'latest';
+            const parsedVersion = semver.parse(version);
+
+            if (parsedVersion == null) {
+              return DEFAULT_TAG;
+            }
+
+            const {prerelease} = parsedVersion;
+
+            if (prerelease.length === 0) {
+              return DEFAULT_TAG;
+            }
+
+            const tag = prerelease[0];
+            return typeof tag === 'string' ? tag : DEFAULT_TAG;
+
+      - run: yarn npm publish --tag "${{ steps.extract-tag.outputs.result }}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

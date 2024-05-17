@@ -7,7 +7,7 @@
  */
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
-import type { Locale } from 'core/prelude/i18n/interface';
+import type { Locale, RegionStore } from 'core/prelude/i18n/interface';
 
 /**
  * The event emitter to broadcast localization events
@@ -26,6 +26,14 @@ export const
  * The default application language
  */
 export const locale: Locale = {
+	value: undefined,
+	isDefault: false
+};
+
+/**
+ * The default application region
+ */
+export const region: RegionStore = {
 	value: undefined,
 	isDefault: false
 };

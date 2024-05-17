@@ -5,7 +5,7 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-import type { WrapParams, WrapResult } from '../../../../core/object/watch/wrap/interface';
+import type { WrapParams, WrapResult, StructureWrappers } from '../../../../core/object/watch/wrap/interface';
 export declare const iterators: {
     keys: {
         type: string;
@@ -45,4 +45,4 @@ export declare const weakSetMethods: {
     add: (target: WeakMap<any, any>, opts: WrapParams, value: unknown) => Nullable<WrapResult>;
     delete: (target: Map<unknown, unknown> | Set<unknown>, opts: WrapParams, key: unknown) => Nullable<WrapResult>;
 };
-export declare const structureWrappers: any;
+export declare const structureWrappers: Pick<StructureWrappers, keyof StructureWrappers>;

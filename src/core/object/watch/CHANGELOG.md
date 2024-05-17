@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.36 (2024-05-16)
+
+#### :bug: Bug Fix
+
+* Fixed an issue where an internal property, blackList, was being written to the target object
+
 ## v3.87.1 (2022-08-15)
 
 #### :bug: Bug Fix

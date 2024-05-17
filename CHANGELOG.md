@@ -11,6 +11,46 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.36 (2024-05-16)
+
+#### :bug: Bug Fix
+
+* Fixed an issue where an internal property, blackList, was being written to the target object `core/object/watch`
+
+## v4.0.0-alpha.35 (2024-05-13)
+
+#### :bug: Bug Fix
+
+* Added logic that checks whether the passed instance is of the native `Headers` class or `V4Headers`.
+  To avoid overwriting response header values, we use the `append` method when handling the native Headers object
+  received from the response, while retaining the original practice of setting headers with the `set` method when
+  constructing request headers `core/request/headers`
+
+## v4.0.0-alpha.34 (2024-05-06)
+
+#### :rocket: New Feature
+
+* Added support for specifying a region for i18n `core/prelude`
+
+## v4.0.0-alpha.33 (2024-04-19)
+
+#### :bug: Bug Fix
+
+* Now, the custom `Headers` class uses the `append` method
+  to construct a new set of headers based on the built-in Headers in the Fetch API implementation `core/request/headers`
+
+## v4.0.0-alpha.32 (2024-04-16)
+
+#### :bug: Bug Fix
+
+* Fixed type generation for standalone build
+
+## v4.0.0-alpha.31 (2024-04-12)
+
+#### :house: Internal
+
+* Use `WeakRef` for `RequestError` details only in node environment `core/request/error`
+
 ## v4.0.0-alpha.30 (2024-04-09)
 
 #### :boom: Breaking Change

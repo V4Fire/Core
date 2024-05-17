@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.34 (2024-05-06)
+
+#### :rocket: New Feature
+
+* Added support for specifying a region for i18n
+
 ## v4.0.0-alpha.15 (2023-11-26)
 
 #### :rocket: New Feature

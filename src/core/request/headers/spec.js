@@ -6,12 +6,12 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Headers from 'core/request/headers';
+import V4Headers from 'core/request/headers';
 
 describe('core/request/headers', () => {
 	describe('`constructor`', () => {
 		it('creating headers from a dictionary', () => {
-			const headers = new Headers({
+			const headers = new V4Headers({
 				'Content-Language': ['en', 'ru'],
 				'Cache-Control': 'no-cache'
 			});
@@ -21,7 +21,7 @@ describe('core/request/headers', () => {
 		});
 
 		it('creating headers from another Headers', () => {
-			const headers = new Headers(new Headers({
+			const headers = new V4Headers(new V4Headers({
 				'Content-Language': ['en', 'ru'],
 				'Cache-Control': 'no-cache'
 			}));
@@ -31,7 +31,7 @@ describe('core/request/headers', () => {
 		});
 
 		it('creating headers from a string', () => {
-			const headers = new Headers(`
+			const headers = new V4Headers(`
 				Content-Language: en,ru
 				Cache-control: no-cache
 			`);
@@ -41,7 +41,7 @@ describe('core/request/headers', () => {
 		});
 
 		it('creating headers from a string with multiline values', () => {
-			const headers = new Headers(`
+			const headers = new V4Headers(`
 				Content-Language: en,
 				                  ru
 				Cache-control: no-cache
@@ -50,12 +50,31 @@ describe('core/request/headers', () => {
 			expect(headers.get('Content-Language')).toBe('en, ru');
 			expect(headers.get('Cache-Control')).toBe('no-cache');
 		});
+
+		it('creating headers from an instance of native class Headers', () => {
+			const nativeHeaders = new Headers({
+				'content-Language': ['en', 'be'],
+				'Content-Language': 'ru',
+				'content-language': 'es',
+				'CONTENT-LANGUAGE': 'fr',
+				'Cache-Control': 'no-cache'
+			});
+
+			const headers = new V4Headers(nativeHeaders);
+
+			// The native Headers object converts the entire value to a string type,
+			// so the value ['en', 'be'] is converted to 'en,be' without a space.
+			// However, when all header values are sequentially collapsed, they will be separated by spaces.
+			// The values 'en,be', 'ru', 'es', and 'fr' will be collapsed as 'en,be, ru, es, fr'.
+			expect(headers.get('Content-Language')).toBe('en,be, ru, es, fr');
+			expect(headers.get('Cache-Control')).toBe('no-cache');
+		});
 	});
 
 	describe('crud operations', () => {
 		describe('with a dictionary', () => {
 			it('getting a header value', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Cache-Control': 'no-cache'
 				});
 
@@ -64,14 +83,14 @@ describe('core/request/headers', () => {
 
 			it('setting a header value', () => {
 				const
-					headers = new Headers();
+					headers = new V4Headers();
 
 				headers['cache-control'] = 'no-cache';
 				expect(headers.has('Cache-Control')).toBe(true);
 			});
 
 			it('deleting a header value', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Cache-Control': 'no-cache'
 				});
 
@@ -80,7 +99,7 @@ describe('core/request/headers', () => {
 			});
 
 			it('getting headers keys', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Content-Language': ['en', 'ru']
 				});
 
@@ -89,7 +108,7 @@ describe('core/request/headers', () => {
 			});
 
 			it('freezing headers', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Cache-Control': 'no-cache'
 				});
 
@@ -113,7 +132,7 @@ describe('core/request/headers', () => {
 
 		describe('using API', () => {
 			it('getting a header value', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Cache-Control': 'no-cache'
 				});
 
@@ -123,7 +142,7 @@ describe('core/request/headers', () => {
 
 			it('setting a header value', () => {
 				const
-					headers = new Headers();
+					headers = new V4Headers();
 
 				headers.set('cache-control', 'no-cache');
 				expect(headers.get('Cache-Control')).toBe('no-cache');
@@ -131,14 +150,14 @@ describe('core/request/headers', () => {
 
 			it('setting a header value with normalizing', () => {
 				const
-					headers = new Headers();
+					headers = new V4Headers();
 
 				headers.set('cache-control', '  no-cache  ');
 				expect(headers.get('Cache-Control')).toBe('no-cache');
 			});
 
 			it('setting a header value that is already exists', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Cache-Control': 'no-cache'
 				});
 
@@ -147,7 +166,7 @@ describe('core/request/headers', () => {
 			});
 
 			it('setting a header multiple value that is already exists', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Content-Language': 'en'
 				});
 
@@ -156,7 +175,7 @@ describe('core/request/headers', () => {
 			});
 
 			it('appending a header multiple value with normalizing', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Content-Language': 'en'
 				});
 
@@ -165,7 +184,7 @@ describe('core/request/headers', () => {
 			});
 
 			it('deleting a header value', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Content-Language': ['en', 'ru']
 				});
 
@@ -177,7 +196,7 @@ describe('core/request/headers', () => {
 			});
 
 			it('freezing headers', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Cache-Control': 'no-cache'
 				});
 
@@ -201,7 +220,7 @@ describe('core/request/headers', () => {
 
 		describe('iterators', () => {
 			it('`keys`', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Content-Language': ['en', 'ru']
 				});
 
@@ -210,7 +229,7 @@ describe('core/request/headers', () => {
 			});
 
 			it('`values`', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Content-Language': ['en', 'ru']
 				});
 
@@ -219,7 +238,7 @@ describe('core/request/headers', () => {
 			});
 
 			it('`entries`', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Content-Language': ['en', 'ru']
 				});
 
@@ -231,7 +250,7 @@ describe('core/request/headers', () => {
 			});
 
 			it('`default iterator`', () => {
-				const headers = new Headers({
+				const headers = new V4Headers({
 					'Content-Language': ['en', 'ru']
 				});
 
