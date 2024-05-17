@@ -93,6 +93,8 @@ export interface CompositionRequests {
     failCompositionOnError?: boolean;
 }
 export interface CompositionRequestEngine extends RequestEngine {
+    dropCache: NonNullable<RequestEngine['dropCache']>;
+    destroy: NonNullable<RequestEngine['destroy']>;
     boundedRequests: Map<string, RequestResponseObject>;
     boundedProviders: Set<Provider>;
 }
