@@ -37,7 +37,7 @@ describe('core/request/engines/composition', () => {
 			spy = jest.spyOn(requestResponseObject, 'destroy');
 
 		expect(spy).toHaveBeenCalledTimes(0);
-		engine.destroy?.();
+		engine.destroy();
 
 		expect(engine.boundedRequests.size).toBe(0);
 		expect(spy).toHaveBeenCalledTimes(1);
@@ -60,7 +60,7 @@ describe('core/request/engines/composition', () => {
 			spy = jest.spyOn(requestResponseObject, 'dropCache');
 
 		expect(spy).toHaveBeenCalledTimes(0);
-		engine.dropCache?.();
+		engine.dropCache();
 
 		expect(spy).toHaveBeenCalledTimes(1);
 	});
