@@ -1,3 +1,19 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [core/request/engines/composition](#corerequestenginescomposition)
+  - [Usage](#usage)
+    - [Creating a Request Composition](#creating-a-request-composition)
+    - [Using the `requestFilter` Property](#using-the-requestfilter-property)
+    - [Handling Request Errors](#handling-request-errors)
+    - [Using as a Provider Request Engine](#using-as-a-provider-request-engine)
+      - [Basic Usage](#basic-usage)
+      - [Making a POST Request](#making-a-post-request)
+      - [Passing constructor parameters of a provider to child providers](#passing-constructor-parameters-of-a-provider-to-child-providers)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # core/request/engines/composition
 
 This module provides an API (engine) for creating a composition of requests.
@@ -28,6 +44,10 @@ const r = request({engine: compositionEngine([
 
 const data = await r('').data; // {val1: data, val2: data}
 ```
+
+Here, you can notice the use of a function called `boundRequest`. What is it? This function establishes a connection between the request and the engine,
+allowing the engine to implement cache flushing and destruction of requests created within the engine.
+`boundRequest` can accept `RequestPromise`, `RequestResponseObject`, and `Provider` as input.
 
 It is possible to use other approaches, for example, creating a simple function that will make several requests, and there is no arguing with you.
 But as mentioned in the module description, first and foremost, this engine is needed to expand the capabilities of data providers.
