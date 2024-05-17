@@ -269,9 +269,9 @@ describe('core/request/engines/provider/compositor', () => {
 		const dp = new CompositionProviderOptions1({remoteState: {state: 1}});
 
 		expect(await dp.get().data).toEqual({
-      request1: {test: 1},
-      request2: {test: 2}
-    });
+			request1: {test: 1},
+			request2: {test: 2}
+		});
 
 		expect(args1).toMatchObject({
 			boundRequest: expect.any(Function),

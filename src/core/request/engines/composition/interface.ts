@@ -12,7 +12,7 @@ import type { RequestOptions, RequestResponseObject, MiddlewareParams, RequestPr
 
 export interface CompositionEngineParams {
 	/**
-	 * A wrapper function for providers used inside the {@link CompositionRequests.request} function.
+	 * A wrapper function for requests/providers used inside the {@link CompositionRequests.request} function.
 	 * It should wrap each provider you use inside the {@link CompositionRequests.request} function.
 	 */
 	boundRequest<T extends Provider | RequestPromise | RequestResponseObject>(request: T): T;
@@ -44,7 +44,7 @@ export interface CompositionRequests {
 	 * and a wrapper function for your providers.
 	 *
 	 * Let's dive deeper into the wrapper function and why it is needed.
-	 * Each provider that you use in the request function should be wrapped with this wrapper.
+	 * Each request/provider that you use in the request function should be wrapped with this wrapper.
 	 * Thanks to this wrapper, when the destroy/dropCache methods are called on MyCompositionProvider,
 	 * these same methods will be called on all providers that were wrapped.
 	 * Otherwise, a memory leak may occur.
