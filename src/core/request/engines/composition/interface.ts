@@ -109,6 +109,9 @@ export interface CompositionRequests {
 }
 
 export interface CompositionRequestEngine extends RequestEngine {
+	dropCache: NonNullable<RequestEngine['dropCache']>;
+	destroy: NonNullable<RequestEngine['destroy']>;
+
 	boundedRequests: Map<string, RequestResponseObject>;
 	boundedProviders: Set<Provider>;
 }

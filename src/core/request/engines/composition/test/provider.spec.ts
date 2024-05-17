@@ -115,8 +115,8 @@ describe('core/request/engines/provider/compositor', () => {
 			dropCache2 = jest.spyOn(provider2, 'dropCache');
 
 		const
-			request1 = (opts, params, {boundRequest: boundRequest}) => boundRequest(provider1).get(),
-			request2 = (opts, params, {boundRequest: boundRequest}) => boundRequest(provider2).get();
+			request1 = (opts, params, {boundRequest}) => boundRequest(provider1).get(),
+			request2 = (opts, params, {boundRequest}) => boundRequest(provider2).get();
 
 		@provider
 		class CompositionProviderDropCache extends Provider {
@@ -236,16 +236,16 @@ describe('core/request/engines/provider/compositor', () => {
 		}
 
 		let
-			providerCtorArgs1,
-			providerCtorArgs2;
+			args1,
+			args2;
 
 		const request1 = (opts, params, args) => {
-			providerCtorArgs1 = args.providerOptions;
+			args1 = args;
 			return args.boundRequest(new TestProviderOptions1()).get();
 		};
 
 		const request2 = (opts, params, args) => {
-			providerCtorArgs2 = args;
+			args2 = args;
 			return args.boundRequest(new TestProviderOptions2()).get();
 		};
 
@@ -273,7 +273,7 @@ describe('core/request/engines/provider/compositor', () => {
       request2: {test: 2}
     });
 
-		expect(providerCtorArgs1).toMatchObject({
+		expect(args1).toMatchObject({
 			boundRequest: expect.any(Function),
 			providerOptions: {
 				remoteState: {
@@ -282,7 +282,7 @@ describe('core/request/engines/provider/compositor', () => {
 			}
 		});
 
-		expect(providerCtorArgs2).toMatchObject({
+		expect(args2).toMatchObject({
 			boundRequest: expect.any(Function),
 			providerOptions: {
 				remoteState: {
@@ -293,11 +293,11 @@ describe('core/request/engines/provider/compositor', () => {
 	});
 
 	it('should properly cache provider instances', async () => {
-		server.handles.json1.responseOnce(200, {test: 1}).responseOnce(200, {test: 2});
+		server.handles.json1.responseOnce(200, {test: 1}).response(200, {test: 2});
 		server.handles.json2.responseOnce(200, {foo: 2}).responseOnce(200, {foo: 3}).responseOnce(200, {foo: 4});
 
 		@provider
-		class TestProviderDecoder1 extends Provider {
+		class TestProviderInstance1 extends Provider {
 			static override request: Provider['request'] = Provider.request({
 				cacheStrategy: 'queue'
 			});
@@ -306,7 +306,7 @@ describe('core/request/engines/provider/compositor', () => {
 		}
 
 		@provider
-		class TestProviderDecoder2 extends Provider {
+		class TestProviderInstance2 extends Provider {
 			static override request: Provider['request'] = Provider.request({
 				cacheStrategy: 'queue'
 			});
@@ -317,8 +317,8 @@ describe('core/request/engines/provider/compositor', () => {
 		let i = 2;
 
 		const
-			request1 = (opts, params, {boundRequest}) => boundRequest(new TestProviderDecoder1()).get({query: 1}),
-			request2 = (opts, params, {boundRequest}) => boundRequest(new TestProviderDecoder2()).get({notQuery: i++});
+			request1 = (opts, params, {boundRequest}) => boundRequest(new TestProviderInstance1()).get({query: 1}),
+			request2 = (opts, params, {boundRequest}) => boundRequest(new TestProviderInstance2()).get({notQuery: i++});
 
 		const engine = compositionEngine([
 			{

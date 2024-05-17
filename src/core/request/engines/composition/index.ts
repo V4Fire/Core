@@ -34,11 +34,23 @@ export function compositionEngine(
 		boundedProviders = new Set<Provider>(),
 		boundedRequests = new Map<string, RequestResponseObject>();
 
+	const
+		providersWithEngine = new WeakSet();
+
 	const engine: CompositionRequestEngine = (options: RequestOptions, params: MiddlewareParams) =>
 		new AbortablePromise((resolve, reject) => {
 			const
 				result = {},
 				promises = <Array<Promise<unknown>>>[];
+
+			const
+				context = params.opts.meta.provider ?? params.ctx,
+				providerParams = context instanceof Provider ? context.params : undefined;
+
+			if (context instanceof Provider && !providersWithEngine.has(context)) {
+				context.dropCache = (...args) => engine.dropCache(...args);
+				context.destroy = (...args) => engine.destroy(...args);
+			}
 
 			for (const provider of requests) {
 				const
@@ -100,10 +112,6 @@ export function compositionEngine(
 				resolve(response);
 			}, reject);
 
-			const
-				context = params.opts.meta.provider ?? params.ctx,
-				providerParams = context instanceof Provider ? context.params : undefined;
-
 			function boundRequest<T extends Provider | RequestResponseObject | RequestPromise>(request: T): T {
 				if (request instanceof Provider) {
 					boundedProviders.add(request);
@@ -156,7 +164,7 @@ export function compositionEngine(
 						const
 							data = await requestResponseObject.data;
 
-						result[composedProvider.as] = data;
+						Object.set(result, composedProvider.as, data);
 					})
 
 					.catch((err) => {
