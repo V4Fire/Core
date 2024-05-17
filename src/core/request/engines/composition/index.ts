@@ -7,7 +7,7 @@
  */
 
 /**
- * [[include:core/request/engines/provider/composition/README.md]]
+ * [[include:core/request/engines/composition/README.md]]
  * @packageDocumentation
  */
 
