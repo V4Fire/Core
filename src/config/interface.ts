@@ -24,6 +24,11 @@ export interface Config {
 	locale: CanUndef<Language>;
 
 	/**
+	 * Default system region
+	 */
+	region: CanUndef<Region>;
+
+	/**
 	 * Base API URL: primary service domain
 	 */
 	api: CanUndef<string>;

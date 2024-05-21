@@ -11,13 +11,17 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.99.0 (2024-04-25)
+
+#### :rocket: New Feature
+
+* Added `Region` support in `core/prelude/i18n` module.
+
 ## v3.98.0 (2024-01-11)
 
 #### :rocket: New Feature
 
 * Added `Object.isEmpty`
-
-## v3.??.?? (2023-??-??)
 
 #### :house: Internal
 

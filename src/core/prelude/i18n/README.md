@@ -142,28 +142,44 @@ interface Locale {
   value: CanUndef<Language>;
 
   /**
-   * True if the locale is already defined
+   * True if the locale is default
    */
-  isDefined: boolean;
+  isDefault: boolean;
+}
+```
+
+#### region
+
+The default application region.
+
+```typescript
+interface Region {
+  /**
+   * The region value
+   */
+  value: CanUndef<Region>;
 
   /**
-   * The locale initialization promise
+   * True if the region is default
    */
-  isInitialized: Promise<void>;
+  isDefault: boolean;
 }
 ```
 
 ### Functions
 
-#### setLocale
+#### setI18NParam
 
-Sets a new application language.
+Sets a new application i18n param.
 
 ```js
-import { setLocale } from 'core/prelide/i18n';
+import { setI18NParam } from 'core/prelide/i18n';
 
 // Set Russian as default language
-setLocale('ru', true);
+setI18NParam('locale', 'ru', true);
+
+// Set Russia as default region
+setI18NParam('region', 'RU', true);
 ```
 
 #### i18n
