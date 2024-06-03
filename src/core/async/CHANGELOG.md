@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.?? (2024-??-??)
+
+#### :bug: Bug Fix
+
+* Fixed an issue with clearing `nextTick`
+
 ## v4.0.0-alpha.23 (2024-03-01)
 
 #### :bug: Bug Fix

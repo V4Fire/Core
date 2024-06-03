@@ -94,6 +94,13 @@ export default class Async<CTX extends object = Async<any>> {
      * @param name
      * @param [promise] - if true, the namespace is marked as promisified
      */
+    protected resolveTaskName(name: string, promise?: boolean): string;
+    /**
+     * Returns a cache object by the specified name
+     *
+     * @param name
+     * @param [promise] - if true, the namespace is marked as promisified
+     */
     protected getCache(name: string, promise?: boolean): GlobalCache;
     /**
      * @deprecated
