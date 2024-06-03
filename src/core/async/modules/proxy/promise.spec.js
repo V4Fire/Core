@@ -76,6 +76,26 @@ describe('core/async/modules/proxy `promise`', () => {
 		expect(i).toEqual(0);
 	});
 
+	it('clearing promises via clearAll', async () => {
+		let i = 0;
+
+		$a.promise(new Promise((resolve) => setTimeout(resolve, 50)));
+
+		$a.sleep(50).next(() => {
+			i++;
+		});
+
+		$a.nextTick().next(() => {
+			i++;
+		});
+
+		$a.clearAll();
+
+		await $a.sleep(100);
+
+		expect(i).toEqual(0);
+	});
+
 	describe('suspendPromise/unsuspendPromise`', () => {
 		it('suspending a promise by id', async () => {
 			let i = 0;
