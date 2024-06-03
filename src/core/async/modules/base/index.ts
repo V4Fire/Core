@@ -121,9 +121,8 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [opts] - additional options for the operation
 	 */
 	clearAll(opts?: ClearOptions): this {
-		for (let o = this.usedNamespaces.values(), el = o.next(); !el.done; el = o.next()) {
+		this.usedNamespaces.forEach((key) => {
 			const
-				key = el.value,
 				alias = `clear-${this.namespaces[key]}`.camelize(false);
 
 			if (Object.isFunction(this[alias])) {
@@ -132,7 +131,7 @@ export default class Async<CTX extends object = Async<any>> {
 			} else if (!isPromisifyNamespace.test(key)) {
 				throw new ReferenceError(`The method "${alias}" is not defined`);
 			}
-		}
+		});
 
 		return this;
 	}
@@ -142,15 +141,14 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [opts] - additional options for the operation
 	 */
 	muteAll(opts?: ClearOptions): this {
-		for (let o = this.usedNamespaces.values(), el = o.next(); !el.done; el = o.next()) {
+		this.usedNamespaces.forEach((key) => {
 			const
-				key = el.value,
 				alias = `mute-${this.namespaces[key]}`.camelize(false);
 
 			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
 				this[alias](opts);
 			}
-		}
+		});
 
 		return this;
 	}
@@ -160,15 +158,14 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [opts] - additional options for the operation
 	 */
 	unmuteAll(opts?: ClearOptions): this {
-		for (let o = this.usedNamespaces.values(), el = o.next(); !el.done; el = o.next()) {
+		this.usedNamespaces.forEach((key) => {
 			const
-				key = el.value,
 				alias = `unmute-${this.namespaces[key]}`.camelize(false);
 
 			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
 				this[alias](opts);
 			}
-		}
+		});
 
 		return this;
 	}
@@ -178,15 +175,14 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [opts] - additional options for the operation
 	 */
 	suspendAll(opts?: ClearOptions): this {
-		for (let o = this.usedNamespaces.values(), el = o.next(); !el.done; el = o.next()) {
+		this.usedNamespaces.forEach((key) => {
 			const
-				key = el.value,
 				alias = `suspend-${this.namespaces[key]}`.camelize(false);
 
 			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
 				this[alias](opts);
 			}
-		}
+		});
 
 		return this;
 	}
@@ -196,15 +192,14 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [opts] - additional options for the operation
 	 */
 	unsuspendAll(opts?: ClearOptions): this {
-		for (let o = this.usedNamespaces.values(), el = o.next(); !el.done; el = o.next()) {
+		this.usedNamespaces.forEach((key) => {
 			const
-				key = el.value,
 				alias = `unsuspend-${this.namespaces[key]}`.camelize(false);
 
 			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
 				this[alias](opts);
 			}
-		}
+		});
 
 		return this;
 	}
@@ -280,12 +275,11 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (labelCache != null && task.join === true) {
 			const
-				mergeHandlers = Array.concat([], task.onMerge),
 				link = links.get(labelCache);
 
-			for (let i = 0; i < mergeHandlers.length; i++) {
-				mergeHandlers[i].call(ctx, link);
-			}
+			Array.concat([], task.onMerge).forEach((handler) => {
+				handler.call(ctx, link);
+			});
 
 			return labelCache;
 		}
@@ -304,12 +298,9 @@ export default class Async<CTX extends object = Async<any>> {
 					link = links.get(taskId);
 
 				if (link?.muted === true) {
-					const
-						mutedCallHandlers = Array.concat([], task.onMutedCall);
-
-					for (let i = 0; i < mutedCallHandlers.length; i++) {
-						mutedCallHandlers[i].call(ctx, link);
-					}
+					Array.concat([], task.onMutedCall).forEach((handler) => {
+						handler.call(ctx, link);
+					});
 				}
 
 				if (!link || link.muted) {
@@ -330,17 +321,14 @@ export default class Async<CTX extends object = Async<any>> {
 						fns = link.onComplete;
 
 					if (Object.isArray(fns)) {
-						for (let j = 0; j < fns.length; j++) {
-							const
-								fn = fns[j];
-
+						fns.forEach((fn) => {
 							if (Object.isFunction(fn)) {
 								fn.apply(ctx, args);
 
 							} else {
 								fn[i].apply(ctx, args);
 							}
-						}
+						});
 					}
 				};
 
@@ -471,18 +459,11 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (p.group != null) {
 			if (Object.isRegExp(p.group)) {
-				const
-					obj = baseCache.groups,
-					keys = Object.keys(obj);
-
-				for (let i = 0; i < keys.length; i++) {
-					const
-						group = keys[i];
-
-					if (p.group.test(group)) {
+				Object.keys(baseCache.groups).forEach((group) => {
+					if ((<RegExp>p.group).test(group)) {
 						this.cancelTask({...p, group, reason: 'rgxp'});
 					}
-				}
+				});
 
 				return this;
 			}
@@ -548,13 +529,11 @@ export default class Async<CTX extends object = Async<any>> {
 					type: 'clearAsync'
 				};
 
-				const
-					clearHandlers = link.onClear,
-					{clearFn} = link;
+				link.onClear.forEach((handler) => {
+					handler.call(this.ctx, ctx);
+				});
 
-				for (let i = 0; i < clearHandlers.length; i++) {
-					clearHandlers[i].call(this.ctx, ctx);
-				}
+				const {clearFn} = link;
 
 				if (clearFn != null && !p.preventDefault) {
 					clearFn(link.id, ctx);
@@ -562,9 +541,9 @@ export default class Async<CTX extends object = Async<any>> {
 			}
 
 		} else {
-			for (let o = links.values(), el = o.next(); !el.done; el = o.next()) {
-				this.cancelTask({...p, id: el.value.id});
-			}
+			links.forEach((link) => {
+				this.cancelTask({...p, id: link.id});
+			});
 		}
 
 		return this;
@@ -611,18 +590,11 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (p.group != null) {
 			if (Object.isRegExp(p.group)) {
-				const
-					obj = baseCache.groups,
-					keys = Object.keys(obj);
-
-				for (let i = 0; i < keys.length; i++) {
-					const
-						group = keys[i];
-
-					if (p.group.test(group)) {
+				Object.keys(baseCache.groups).forEach((group) => {
+					if ((<RegExp>p.group).test(group)) {
 						this.markTask(label, {...p, group, reason: 'rgxp'});
 					}
-				}
+				});
 
 				return this;
 			}
@@ -677,9 +649,7 @@ export default class Async<CTX extends object = Async<any>> {
 				}
 
 				if (label === '!paused') {
-					for (let o = link.queue, i = 0; i < o.length; i++) {
-						o[i]();
-					}
+					link.queue.forEach((fn) => fn());
 
 					link.muted = false;
 					link.paused = false;
@@ -694,12 +664,9 @@ export default class Async<CTX extends object = Async<any>> {
 			}
 
 		} else {
-			const
-				values = links.values();
-
-			for (let el = values.next(); !el.done; el = values.next()) {
-				this.markTask(label, {...p, id: el.value.id});
-			}
+			links.forEach((link) => {
+				this.markTask(label, {...p, id: link.id});
+			});
 		}
 
 		return this;

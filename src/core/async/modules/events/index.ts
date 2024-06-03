@@ -111,10 +111,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			links: IdObject[] = [],
 			multipleEvent = events.length > 1;
 
-		for (let i = 0; i < events.length; i++) {
-			const
-				event = events[i];
-
+		events.forEach((event) => {
 			const link = this.registerTask<IdObject>({
 				...p,
 
@@ -195,7 +192,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			if (link != null) {
 				links.push(link);
 			}
-		}
+		});
 
 		return events.length <= 1 ? links[0] ?? null : links;
 	}
@@ -360,9 +357,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	clearEventListener(opts: StrictClearOptionsId<EventId>): this;
 	clearEventListener(task?: EventId | StrictClearOptionsId<EventId>): this {
 		if (Object.isArray(task)) {
-			for (let i = 0; i < task.length; i++) {
-				this.clearEventListener(<EventId>task[i]);
-			}
+			task.forEach((task) => {
+				this.clearEventListener(task);
+			});
 
 			return this;
 		}
