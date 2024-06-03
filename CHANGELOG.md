@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.?? (2024-??-??)
+
+#### :bug: Bug Fix
+
+* Fixed an issue with clearing `nextTick` `core/async`
+
 ## v4.0.0-alpha.36 (2024-05-16)
 
 #### :bug: Bug Fix
