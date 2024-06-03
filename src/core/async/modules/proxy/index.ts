@@ -723,9 +723,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 						handlers = Array.concat([], opts?.onMutedResolve);
 
 					if (handlers.length > 0) {
-						for (let i = 0; i < handlers.length; i++) {
-							handlers[i].call(ctx, wrappedResolve, proxyReject);
-						}
+						handlers.forEach((handler) => {
+							handler.call(ctx, wrappedResolve, proxyReject);
+						});
 
 					} else {
 						reject({
@@ -836,15 +836,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			.cancelTask(task, nm ?? nms.promise);
 
 		if (nm == null) {
-			for (let keys = Object.keys(nms), i = 0; i < keys.length; i++) {
-				const
-					key = keys[i],
-					nm = nms[key];
-
-				if (nm != null && isPromisifyNamespace.test(key)) {
-					this.cancelTask(task, nm);
+			Object.entries(nms).forEach(([key, nm]) => {
+				if (Object.isString(nm) && isPromisifyNamespace.test(key)) {
+					this.cancelTask(task, Object.cast(nm));
 				}
-			}
+			});
 		}
 
 		return this;
@@ -1053,15 +1049,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			.markTask(label, task, nm ?? nms.promise);
 
 		if (nm == null) {
-			for (let keys = Object.keys(nms), i = 0; i < keys.length; i++) {
-				const
-					key = keys[i],
-					nm = nms[key];
-
-				if (nm != null && isPromisifyNamespace.test(key)) {
+			Object.entries(nms).forEach(([key, nm]) => {
+				if (Object.isString(nm) && isPromisifyNamespace.test(key)) {
 					this.markTask(label, task, nm);
 				}
-			}
+			});
 		}
 
 		return this;

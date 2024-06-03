@@ -241,7 +241,7 @@ export default class Async<CTX extends object = Async<any>> {
 			return null;
 		}
 
-		this.usedNamespaces.add(task.name);
+		this.usedNamespaces.add(task.promise ? 'promise' : task.name);
 
 		const
 			{ctx} = this;
