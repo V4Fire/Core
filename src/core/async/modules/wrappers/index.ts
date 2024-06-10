@@ -111,10 +111,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			wrappedProvider: W = Object.create(provider),
 			wrappedProviderGroup = opts?.group ?? provider.providerName;
 
-		for (let i = 0; i < dataProviderMethodsToReplace.length; i++) {
-			const
-				methodName = dataProviderMethodsToReplace[i];
-
+		dataProviderMethodsToReplace.forEach((methodName) => {
 			Object.defineProperty(wrappedProvider, methodName, {
 				configurable: true,
 				writable: true,
@@ -140,7 +137,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 					});
 				}
 			});
-		}
+		});
 
 		Object.defineProperty(wrappedProvider, 'emitter', {
 			configurable: true,

@@ -102,12 +102,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			periodic: opts?.single === false,
 
 			onMerge(...args: unknown[]): void {
-				const
-					handlers = Array.concat([], opts?.onMerge);
-
-				for (let i = 0; i < handlers.length; i++) {
-					handlers[i].apply(this, args);
-				}
+				Array.concat([], opts?.onMerge).forEach((handler) => {
+					handler.apply(this, args);
+				});
 
 				clearFn(worker);
 			}
@@ -726,9 +723,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 						handlers = Array.concat([], opts?.onMutedResolve);
 
 					if (handlers.length > 0) {
-						for (let i = 0; i < handlers.length; i++) {
-							handlers[i].call(ctx, wrappedResolve, proxyReject);
-						}
+						handlers.forEach((handler) => {
+							handler.call(ctx, wrappedResolve, proxyReject);
+						});
 
 					} else {
 						reject({
@@ -768,9 +765,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 						const exec = () => {
 							reject(err);
 
-							for (let i = 0; i < handlers.length; i++) {
-								handlers[i][1].call(ctx, err);
-							}
+							handlers.forEach((handler) => {
+								handler[1].call(ctx, err);
+							});
 						};
 
 						if (task.paused === true) {
@@ -839,15 +836,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			.cancelTask(task, nm ?? nms.promise);
 
 		if (nm == null) {
-			for (let keys = Object.keys(nms), i = 0; i < keys.length; i++) {
-				const
-					key = keys[i],
-					nm = nms[key];
-
-				if (nm != null && isPromisifyNamespace.test(key)) {
-					this.cancelTask(task, nm);
+			Object.entries(nms).forEach(([key, nm]) => {
+				if (Object.isString(nm) && isPromisifyNamespace.test(key)) {
+					this.cancelTask(task, Object.cast(nm));
 				}
-			}
+			});
 		}
 
 		return this;
@@ -1012,12 +1005,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			if (replacedBy != null && obj.join === 'replace' && obj.link.onClear.length < MAX_PROMISE_DEPTH) {
 				replacedBy.onComplete.push([resolve, reject]);
 
-				const
-					onClear = Array.concat([], obj.link.onClear, reject);
-
-				for (let i = 0; i < onClear.length; i++) {
-					replacedBy.onClear.push(onClear[i]);
-				}
+				Array.concat([], obj.link.onClear, reject).forEach((onClear) => {
+					replacedBy.onClear.push(onClear);
+				});
 
 			} else {
 				reject(obj);
@@ -1059,15 +1049,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			.markTask(label, task, nm ?? nms.promise);
 
 		if (nm == null) {
-			for (let keys = Object.keys(nms), i = 0; i < keys.length; i++) {
-				const
-					key = keys[i],
-					nm = nms[key];
-
-				if (nm != null && isPromisifyNamespace.test(key)) {
+			Object.entries(nms).forEach(([key, nm]) => {
+				if (Object.isString(nm) && isPromisifyNamespace.test(key)) {
 					this.markTask(label, task, nm);
 				}
-			}
+			});
 		}
 
 		return this;
