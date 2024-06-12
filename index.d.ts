@@ -214,6 +214,7 @@ type JSONLikeValue =
 type CanPromise<T> = T | Promise<T>;
 type CanPromiseLike<T> = T | PromiseLike<T>;
 type CanArray<T> = T | T[];
+type CanIterable<T> = T | Iterable<T>;
 
 type CanUndef<T> = T | undefined;
 type Nullable<T> = T | null | undefined;
