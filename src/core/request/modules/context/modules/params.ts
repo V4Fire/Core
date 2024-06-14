@@ -76,12 +76,12 @@ export default class RequestContext<D = unknown> {
 	/**
 	 * Storage to cache the resolved request
 	 */
-	readonly cache!: AbstractCache<Nullable<D>>;
+	readonly cache!: AbstractCache<string, Nullable<D>>;
 
 	/**
 	 * Storage to cache the request while it is pending a response
 	 */
-	readonly pendingCache: AbstractCache<
+	readonly pendingCache: AbstractCache<string,
 		ControllablePromise<RequestResponse<D>> | RequestResponse<D>
 	> = Object.cast(pendingCache);
 

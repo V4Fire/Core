@@ -227,3 +227,29 @@ cache.clear();
 
 console.log(cache.has('foo1')); // true
 ```
+
+### clone
+
+Makes a new copy of the current cache and returns it.
+
+```js
+import SimpleCache from 'core/cache/simple';
+
+const
+  cache = new SimpleCache(),
+  obj = {foo: 'bar'};
+
+cache.set('foo1', 'bar1');
+cache.set('foo2', obj);
+
+const
+  clonedCache = cache.clone();
+
+console.log(cache !== clonedCache); // true
+
+console.log(clonedCache.has('foo1')); // true
+console.log(clonedCache.has('foo2')); // true
+console.log(clonedCache.has('foo5')); // false
+
+console.log(cache.get('foo2') === clonedCache.get('foo2')); // true
+```
