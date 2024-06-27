@@ -274,7 +274,7 @@ export interface CreateRequestOptions<D = unknown> {
 	 * Also, you can pass a range of codes.
 	 *
 	 * @default `[statusCodes.NO_CONTENT, statusCodes.NOT_MODIFIED]
-	 * 		.concat(new Range<number>(100, 199).toArray(1))`
+	 *   .concat(new Range<number>(100, 199).toArray(1))`
 	 */
 	noContentStatuses?: Statuses;
 

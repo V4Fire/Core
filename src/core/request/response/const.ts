@@ -10,7 +10,6 @@ import Range from 'core/range';
 import statusCodes from 'core/status-codes';
 import type { ResponseType } from 'core/request';
 
-
 /**
  * Status codes that cannot contain any content according to the HTTP standard
  *
@@ -21,7 +20,6 @@ import type { ResponseType } from 'core/request';
 export const noContentStatusCodes: number[] =
 	[statusCodes.NO_CONTENT, statusCodes.NOT_MODIFIED]
 		.concat(new Range<number>(100, 199).toArray(1));
-
 
 export const defaultResponseOpts = {
 	url: '',
