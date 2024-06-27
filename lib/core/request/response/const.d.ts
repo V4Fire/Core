@@ -7,15 +7,6 @@
  */
 import Range from '../../../core/range';
 import type { ResponseType } from '../../../core/request';
-export declare const defaultResponseOpts: {
-    url: string;
-    redirected: boolean;
-    status: number;
-    statusText: string;
-    okStatuses: Range<200 | 299>;
-    responseType: ResponseType;
-    headers: {};
-};
 /**
  * Status codes that cannot contain any content according to the HTTP standard
  *
@@ -24,3 +15,13 @@ export declare const defaultResponseOpts: {
  * 304 - https://tools.ietf.org/html/rfc7232#section-4.1
  */
 export declare const noContentStatusCodes: number[];
+export declare const defaultResponseOpts: {
+    url: string;
+    redirected: boolean;
+    status: number;
+    statusText: string;
+    okStatuses: Range<200 | 299>;
+    noContentStatuses: number[];
+    responseType: ResponseType;
+    headers: {};
+};

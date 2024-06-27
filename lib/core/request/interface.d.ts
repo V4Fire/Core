@@ -25,7 +25,7 @@ export declare type CacheType = 'memory' | 'offline';
 export declare type RequestQuery = Dictionary | unknown[] | string;
 export declare type RequestBody = string | number | boolean | Dictionary | FormData | ArrayBuffer | Blob;
 export declare type NormalizedRequestBody = Exclude<RequestBody, number | boolean | Dictionary>;
-export declare type OkStatuses = Range<number> | StatusCodes | StatusCodes[];
+export declare type Statuses = Range<number> | StatusCodes | StatusCodes[];
 export interface GlobalOptions {
     api?: Nullable<string>;
     meta: Dictionary;
@@ -204,7 +204,15 @@ export interface CreateRequestOptions<D = unknown> {
      *
      * @default `new Range(200, 299)`
      */
-    okStatuses?: OkStatuses;
+    okStatuses?: Statuses;
+    /**
+     * A list of status codes (or a single code) that match response with no content.
+     * Also, you can pass a range of codes.
+     *
+     * @default `[statusCodes.NO_CONTENT, statusCodes.NOT_MODIFIED]
+     *   .concat(new Range<number>(100, 199).toArray(1))`
+     */
+    noContentStatuses?: Statuses;
     /**
      * Value in milliseconds for a request timeout
      */
@@ -569,7 +577,8 @@ export interface RequestOptions {
     readonly emitter: EventEmitter;
     readonly parent: AbortablePromise;
     readonly timeout?: number;
-    readonly okStatuses?: OkStatuses;
+    readonly okStatuses?: Statuses;
+    readonly noContentStatuses?: Statuses;
     readonly contentType?: string;
     readonly responseType?: ResponseType;
     readonly forceResponseType?: boolean;
