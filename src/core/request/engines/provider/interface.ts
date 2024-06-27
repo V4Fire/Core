@@ -41,7 +41,7 @@ export interface AvailableOptions {
 	timeout?: number;
 	contentType?: string;
 	okStatuses?: Statuses;
-
+	noContentStatuses?: Statuses;
 	meta: Meta;
 	important?: boolean;
 

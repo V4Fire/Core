@@ -681,6 +681,7 @@ export interface RequestOptions {
 
 	readonly timeout?: number;
 	readonly okStatuses?: Statuses;
+	readonly noContentStatuses?: Statuses;
 
 	readonly contentType?: string;
 	readonly responseType?: ResponseType;
