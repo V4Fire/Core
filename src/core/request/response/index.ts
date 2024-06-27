@@ -649,7 +649,7 @@ export default class Response<
 	@once
 	arrayBuffer(): AbortablePromise<ArrayBuffer> {
 		return this.readBody().then((body) => {
-			if (body == null) {
+			if (body == null || body === '') {
 				return new ArrayBuffer(0);
 			}
 
@@ -725,7 +725,7 @@ export default class Response<
 	 * Reads the response body or throws an exception if reading is impossible
 	 * @emits `bodyUsed()`
 	 */
-	protected readBody(): AbortablePromise<ResponseTypeValue> {
+	protected async readBody(): AbortablePromise<ResponseTypeValue> {
 		if (this.streamUsed) {
 			throw new Error("The response can't be read because it's already consuming as a stream");
 		}
@@ -733,6 +733,10 @@ export default class Response<
 		if (!this.bodyUsed) {
 			this.bodyUsed = true;
 			this.emitter.emit('bodyUsed');
+		}
+
+		if (this.body instanceof Promise) {
+			return AbortablePromise.resolveAndCall(await this.body, this.parent);
 		}
 
 		return AbortablePromise.resolveAndCall(this.body, this.parent);
