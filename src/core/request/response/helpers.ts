@@ -12,5 +12,5 @@ export function statusesContainStatus(statuses: Statuses, statusCode: StatusCode
 
 	return statuses instanceof Range ?
 		statuses.contains(statusCode) :
-		Array.concat([], <number>statuses).includes(statusCode);
+		Array.concat(<StatusCodes[]>[], statuses).includes(statusCode);
 }
