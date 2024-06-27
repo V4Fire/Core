@@ -9,8 +9,13 @@ import Range from 'core/range';
  * @param statusCode
  */
 export function statusesContainStatus(statuses: Statuses, statusCode: StatusCodes): boolean {
+	if (statuses instanceof Range) {
+		return statuses.contains(statusCode);
+	}
 
-	return statuses instanceof Range ?
-		statuses.contains(statusCode) :
-		Array.concat(<StatusCodes[]>[], statuses).includes(statusCode);
+	if (Object.isArray(statuses)) {
+		return statuses.includes(statusCode);
+	}
+
+	return statuses === statusCode;
 }
