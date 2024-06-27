@@ -474,7 +474,7 @@ describe('core/request', () => {
 				}
 
 				for (const status of customEmptyBodyStatuses) {
-					it(`response with ${status} status included in custom noContentStatuses`, async () => {
+					it(`response with ${status} status included in custom no-content statuses`, async () => {
 						const req = await request(`http://localhost:4000/octet/${status}`, {
 							okStatuses: status,
 							noContentStatuses: status
