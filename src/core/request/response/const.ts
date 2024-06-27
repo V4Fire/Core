@@ -16,6 +16,8 @@ import type { ResponseType } from 'core/request';
  * 1xx - https://tools.ietf.org/html/rfc7231#section-6.2
  * 204 - https://tools.ietf.org/html/rfc7231#section-6.3.5
  * 304 - https://tools.ietf.org/html/rfc7232#section-4.1
+ *
+ * TODO: https://github.com/V4Fire/Core/issues/421
  */
 export const noContentStatusCodes: number[] =
 	[statusCodes.NO_CONTENT, statusCodes.NOT_MODIFIED]
