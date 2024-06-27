@@ -11,7 +11,7 @@ import type { Provider, ModelMethod } from 'core/data';
 
 import type {
 
-	OkStatuses,
+	Statuses,
 
 	RequestBody,
 	RequestMethod,
@@ -40,7 +40,7 @@ export interface AvailableOptions {
 
 	timeout?: number;
 	contentType?: string;
-	okStatuses?: OkStatuses;
+	okStatuses?: Statuses;
 
 	meta: Meta;
 	important?: boolean;

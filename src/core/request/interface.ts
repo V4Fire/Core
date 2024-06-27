@@ -65,7 +65,7 @@ export type NormalizedRequestBody = Exclude<
 	number | boolean | Dictionary
 >;
 
-export type OkStatuses =
+export type Statuses =
 	Range<number> |
 	StatusCodes |
 	StatusCodes[];
@@ -267,7 +267,16 @@ export interface CreateRequestOptions<D = unknown> {
 	 *
 	 * @default `new Range(200, 299)`
 	 */
-	okStatuses?: OkStatuses;
+	okStatuses?: Statuses;
+
+	/**
+	 * A list of status codes (or a single code) that match response with no content.
+	 * Also, you can pass a range of codes.
+	 *
+	 * @default `[statusCodes.NO_CONTENT, statusCodes.NOT_MODIFIED]
+	 * 		.concat(new Range<number>(100, 199).toArray(1))`
+	 */
+	noContentStatuses?: Statuses;
 
 	/**
 	 * Value in milliseconds for a request timeout
@@ -671,7 +680,7 @@ export interface RequestOptions {
 	readonly parent: AbortablePromise;
 
 	readonly timeout?: number;
-	readonly okStatuses?: OkStatuses;
+	readonly okStatuses?: Statuses;
 
 	readonly contentType?: string;
 	readonly responseType?: ResponseType;

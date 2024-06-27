@@ -13,7 +13,7 @@ import type { DataType } from 'core/mime-type';
 
 import type {
 
-	OkStatuses,
+	Statuses,
 
 	WrappedDecoder,
 	WrappedDecoders,
@@ -76,7 +76,8 @@ export interface ResponseOptions {
 
 	status?: StatusCodes;
 	statusText?: string;
-	okStatuses?: OkStatuses;
+	okStatuses?: Statuses;
+	noContentStatuses?: Statuses;
 
 	responseType?: ResponseType;
 	forceResponseType?: boolean;
