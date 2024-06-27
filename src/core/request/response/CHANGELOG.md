@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v?.?.? (2024-06-27)
+
+#### :rocket: New Feature
+
+* Added a new option `noContentStatuses`
+
 ## v3.93.0 (2023-03-14)
 
 #### :rocket: New Feature
