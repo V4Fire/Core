@@ -140,11 +140,11 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			});
 
 		let
-			customData: Nullable<Promise<D>>;
+			customData: Nullable<Promise<D>>,
+			destroyed = false;
 
 		const res = {
 			ctx: this,
-			destroyed: false,
 			response,
 
 			get data() {
@@ -165,7 +165,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			dropCache: this.dropCache.bind(this),
 
 			destroy: () => {
-				if (res.destroyed) {
+				if (destroyed) {
 					return;
 				}
 
@@ -190,7 +190,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 				res.dropCache = () => undefined;
 				res[Symbol.asyncIterator] = () => Promise.resolve({done: true, value: undefined});
 
-				res.destroyed = true;
+				destroyed = true;
 			}
 		};
 
