@@ -38,8 +38,6 @@ export function createServer() {
 
 			calls.push(req);
 
-			console.log(req.url);
-
 			if (isResponder) {
 				requests.push({
 					resolver: () => res.status(statusCode).json(body),

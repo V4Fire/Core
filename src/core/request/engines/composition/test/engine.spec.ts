@@ -42,6 +42,7 @@ describe('core/request/engines/composition with request', () => {
 
 			expect(spy).toHaveBeenCalledTimes(1);
 		} catch (err) {
+			console.log('error engine spec');
 			console.log(err);
 		}
 
