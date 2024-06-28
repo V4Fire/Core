@@ -13,6 +13,7 @@ import Provider, { DecodersMap, provider } from 'core/data';
 
 import { compositionEngine } from 'core/request/engines/composition';
 import { createServer } from 'core/request/engines/composition/test/server';
+import type { CompositionRequestOptions } from 'core/request/engines/provider';
 
 describe('core/request/engines/provider/compositor', () => {
 	let server: ReturnType<typeof createServer>;
@@ -44,8 +45,8 @@ describe('core/request/engines/provider/compositor', () => {
 		}
 
 		const
-			request1 = (opts, params, {boundRequest}) => boundRequest(new TestProviderDecoder1()).get({query: 1}),
-			request2 = (opts, params, {boundRequest}) => boundRequest(new TestProviderDecoder2()).get({notQuery: 2});
+			request1 = () => new TestProviderDecoder1().get({query: 1}),
+			request2 = () => new TestProviderDecoder2().get({notQuery: 2});
 
 		@provider
 		class CompositionProviderDecoder extends Provider {
@@ -111,12 +112,8 @@ describe('core/request/engines/provider/compositor', () => {
 			provider2 = new TestProviderDropCache2();
 
 		const
-			dropCache1 = jest.spyOn(provider1, 'dropCache'),
-			dropCache2 = jest.spyOn(provider2, 'dropCache');
-
-		const
-			request1 = (opts, params, {boundRequest}) => boundRequest(provider1).get(),
-			request2 = (opts, params, {boundRequest}) => boundRequest(provider2).get();
+			request1 = () => provider1.get(),
+			request2 = () => provider2.get();
 
 		@provider
 		class CompositionProviderDropCache extends Provider {
@@ -147,9 +144,6 @@ describe('core/request/engines/provider/compositor', () => {
 			request1: {json1: 'json1'},
 			request2: {json2: 'json2'}
 		});
-
-		expect(dropCache1).toBeCalledTimes(1);
-		expect(dropCache2).toBeCalledTimes(1);
 	});
 
 	it('should call the destructor for each provider', async () => {
@@ -185,8 +179,8 @@ describe('core/request/engines/provider/compositor', () => {
 			destroy2 = jest.spyOn(provider2, 'destroy');
 
 		const
-			request1 = (opts, params, {boundRequest}) => boundRequest(provider1).get(),
-			request2 = (opts, params, {boundRequest}) => boundRequest(provider2).get();
+			request1 = () => provider1.get(),
+			request2 = () => provider2.get();
 
 		const engine = compositionEngine([
 			{
@@ -218,7 +212,6 @@ describe('core/request/engines/provider/compositor', () => {
 
 		expect(destroy1).toBeCalledTimes(1);
 		expect(destroy2).toBeCalledTimes(1);
-		expect(engine.boundedProviders.size).toBe(0);
 	});
 
 	it('should provide the constructor options of the Provider to the request', async () => {
@@ -239,14 +232,14 @@ describe('core/request/engines/provider/compositor', () => {
 			args1,
 			args2;
 
-		const request1 = (opts, params, args) => {
-			args1 = args;
-			return args.boundRequest(new TestProviderOptions1()).get();
+		const request1 = (arg: CompositionRequestOptions) => {
+			args1 = arg.providerOptions;
+			return new TestProviderOptions1().get();
 		};
 
-		const request2 = (opts, params, args) => {
-			args2 = args;
-			return args.boundRequest(new TestProviderOptions2()).get();
+		const request2 = (arg: CompositionRequestOptions) => {
+			args2 = arg.providerOptions;
+			return new TestProviderOptions2().get();
 		};
 
 		@provider
@@ -274,20 +267,14 @@ describe('core/request/engines/provider/compositor', () => {
 		});
 
 		expect(args1).toMatchObject({
-			boundRequest: expect.any(Function),
-			providerOptions: {
-				remoteState: {
-					state: 1
-				}
+			remoteState: {
+				state: 1
 			}
 		});
 
 		expect(args2).toMatchObject({
-			boundRequest: expect.any(Function),
-			providerOptions: {
-				remoteState: {
-					state: 1
-				}
+			remoteState: {
+				state: 1
 			}
 		});
 	});
@@ -317,8 +304,8 @@ describe('core/request/engines/provider/compositor', () => {
 		let i = 2;
 
 		const
-			request1 = (opts, params, {boundRequest}) => boundRequest(new TestProviderInstance1()).get({query: 1}),
-			request2 = (opts, params, {boundRequest}) => boundRequest(new TestProviderInstance2()).get({notQuery: i++});
+			request1 = () => new TestProviderInstance1().get({query: 1}),
+			request2 = () => new TestProviderInstance2().get({notQuery: i++});
 
 		const engine = compositionEngine([
 			{
@@ -348,6 +335,5 @@ describe('core/request/engines/provider/compositor', () => {
 		expect(data1).toEqual({val1: {test: 1}, val2: {foo: 2}});
 		expect(data2).toEqual({val1: {test: 1}, val2: {foo: 3}});
 		expect(data3).toEqual({val1: {test: 1}, val2: {foo: 4}});
-		expect(engine.boundedProviders.size).toBe(2);
 	});
 });

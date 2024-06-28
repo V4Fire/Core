@@ -11,187 +11,230 @@
  * @packageDocumentation
  */
 
-import Provider from 'core/data';
 import AbortablePromise from 'core/promise/abortable';
-import { RequestOptions, Response, MiddlewareParams, RequestResponseObject, RequestPromise } from 'core/request';
-import type { StatusCodes } from 'core/status-codes';
+import { RequestOptions, Response, MiddlewareParams, RequestResponseObject } from 'core/request';
 
-import type { CompositionEngineOpts, CompositionRequestEngine, CompositionRequests } from 'core/request/engines/composition/interface';
+import type { CompositionEngineOpts, CompositionRequestEngine, CompositionRequest, CompositionRequestOptions } from 'core/request/engines/composition/interface';
+import Async from 'core/async';
+import { SyncPromise } from 'core/prelude/structures';
+import type { BoundedCompositionEngineRequest } from 'core/request/engines/provider';
+import type { StatusCodes } from 'core/status-codes';
+import type { Provider } from 'core/data';
 
 export * from 'core/request/engines/composition/interface';
 
 /**
- * Creates an engine that allows you to create a composition of requests
+ * Creates a new composition engine to process composition requests.
  *
- * @param requests
- * @param opts
+ * @param compositionRequests - An array of composition requests.
+ * @param [engineOptions] - Optional settings for the composition engine.
  */
 export function compositionEngine(
-	requests: CompositionRequests[],
-	opts?: CompositionEngineOpts
+	compositionRequests: CompositionRequest[],
+	engineOptions?: CompositionEngineOpts
 ): CompositionRequestEngine {
 	const
-		boundedProviders = new Set<Provider>(),
-		boundedRequests = new Map<string, RequestResponseObject>();
+		async: Async = new Async();
 
-	const
-		providersWithEngine = new WeakSet();
+	const engine: CompositionRequestEngine = (requestOptions: RequestOptions, params: MiddlewareParams) => {
+		const options = {
+			boundRequest: boundRequest.bind(null, async),
+			options: requestOptions,
+			params,
+			providerOptions: requestOptions.meta?.provider?.params,
+			engineOptions,
+			compositionRequests
+		};
 
-	const engine: CompositionRequestEngine = (options: RequestOptions, params: MiddlewareParams) =>
-		new AbortablePromise((resolve, reject) => {
-			const
-				result = {},
-				promises = <Array<Promise<unknown>>>[];
+		return new AbortablePromise((resolve, reject) => {
+			const promises = compositionRequests.map((r) => SyncPromise.resolve(r.requestFilter?.(options))
+				.then((filterValue) => {
+					if (filterValue === false) {
+						return;
+					}
 
-			const
-				context = params.opts.meta.provider ?? params.ctx,
-				providerParams = context instanceof Provider ? context.params : undefined;
-
-			if (context instanceof Provider && !providersWithEngine.has(context)) {
-				context.dropCache = (...args) => engine.dropCache(...args);
-				context.destroy = (...args) => engine.destroy(...args);
-			}
-
-			for (const provider of requests) {
-				const
-					requestFilter = provider.requestFilter?.(options, params);
-
-				if (requestFilter === false) {
-					continue;
-
-				} else if (Object.isPromise(requestFilter)) {
-					const promise = requestFilter.then((value) => {
-						if (value === false) {
-							return;
-						}
-
-						return createRequest(provider);
-					});
-
-					promises.push(promise);
-
-				} else {
-					promises.push(createRequest(provider));
-				}
-			}
-
-			const resultPromise = (() => {
-				if (opts?.aggregateErrors) {
-					return Promise.allSettled(promises)
-						.then((results) => {
-							const errors = <object[]>[];
-
-							results.forEach((res, index) => {
-								const
-									{failCompositionOnError} = requests[index];
-
-								if (res.status === 'rejected' && failCompositionOnError) {
-									errors.push(res.reason);
-								}
-							});
-
-							if (errors.length > 0) {
-								throw new AggregateError(errors);
+					return r.request(options)
+						.then(boundRequest.bind(null, async))
+						.then((request) => isRequestResponseObject(request) ? request.data : request)
+						.catch((err) => {
+							if (r.failCompositionOnError) {
+								throw err;
 							}
 						});
-				}
+				}));
 
-				return Promise.all(promises);
-			})();
-
-			resultPromise.then(() => {
-				const response = new Response(result, {
-					parent: options.parent,
-					important: options.important,
-					responseType: 'json',
-					okStatuses: options.okStatuses,
+			gatherDataFromRequests(promises, options).then((data) => {
+				resolve(new Response(data, {
+					parent: requestOptions.parent,
+					important: requestOptions.important,
+					responseType: 'object',
+					okStatuses: requestOptions.okStatuses,
 					status: Object.cast<StatusCodes>(200),
-					decoder: options.decoders
-				});
+					decoder: requestOptions.decoders
+				}));
+			}).catch(reject);
 
-				resolve(response);
-			}, reject);
+			// Sets up a handler to call dropCache/destroy on the provider
+			// that uses the requestEngine.
+			// This is necessary to invoke the corresponding methods on the engine.
+			const {provider} = params.opts.meta;
 
-			function boundRequest<T extends Provider | RequestResponseObject | RequestPromise>(request: T): T {
-				if (request instanceof Provider) {
-					boundedProviders.add(request);
+			if (provider) {
+				async.on(provider.emitter, 'dropCache', (...args) => {
+					engine.dropCache(...args);
+				}, {label: 'dropCacheListener'});
 
-					const forkedDestroy = request.destroy.bind(request);
-
-					request.destroy = (...args) => {
-						boundedProviders.delete(request);
-						forkedDestroy(...args);
-					};
-
-					return request;
-				}
-
-				const wrapRequestResponseObject = (r: RequestResponseObject) => {
-					const
-						{cacheKey} = r.ctx;
-
-					if (cacheKey != null && !r.destroyed) {
-						boundedRequests.set(cacheKey, r);
-
-						const forkedDestroy = r.destroy;
-
-						r.destroy = (...args) => {
-							boundedRequests.delete(cacheKey);
-							forkedDestroy(...args);
-						};
-					}
-
-					return r;
-				};
-
-				if (Object.isPromise(request)) {
-					return <T>request.then((requestResponseObj) => wrapRequestResponseObject(requestResponseObj));
-				}
-
-				return <T>wrapRequestResponseObject(request);
+				async.on(provider.emitter, 'destroy', () => {
+					engine.destroy();
+				}, {label: 'destroyListener'});
 			}
-
-			function createRequest(composedProvider: CompositionRequests): Promise<void> {
-				const promise = composedProvider.request(
-					options,
-					params,
-					{
-						boundRequest,
-						providerOptions: providerParams
-					}
-				)
-					.then(async (requestResponseObject) => {
-						const
-							data = await requestResponseObject.data;
-
-						Object.set(result, composedProvider.as, data);
-					})
-
-					.catch((err) => {
-						if (composedProvider.failCompositionOnError) {
-							throw err;
-						}
-					});
-
-				return promise;
-			}
-	});
-
-	engine.dropCache = (recursive) => {
-		boundedRequests.forEach((request) => request.dropCache(recursive));
-		boundedProviders.forEach((request) => request.dropCache(recursive));
+		});
 	};
 
-	engine.destroy = () => {
-		boundedRequests.forEach((request) => request.destroy());
-		boundedProviders.forEach((request) => request.destroy());
-
-		boundedRequests.clear();
-		boundedProviders.clear();
-	};
-
-	engine.boundedRequests = boundedRequests;
-	engine.boundedProviders = boundedProviders;
+	engine.dropCache = () => async.clearAll({group: 'cache'});
+	engine.destroy = () => async.clearAll();
+	engine.async = async;
 
 	return engine;
+}
+
+/**
+ * Binds a request object with engine for cache dropping and destroy.
+ *
+ * @param async - Async instance for handling asynchronous operations.
+ * @param requestObject - The request object to bind.
+ */
+function boundRequest<T extends unknown>(
+	async: Async,
+	requestObject: T
+): T {
+	if (isRequestLikeObject(requestObject)) {
+		// If the request is made using a provider method,
+		// calling destroy/dropCache on the RequestResponseObject
+		// is not identical to calling dropCache/destroy on the provider that
+		// created this RequestResponseObject.
+		// Therefore, we extract the provider from the object and
+		// call the methods as necessary.
+		const provider = tryGetProvider(requestObject);
+
+		if (requestObject.dropCache != null) {
+			async.worker(() => {
+				provider?.dropCache(true);
+				requestObject.dropCache?.(true);
+
+			}, {group: 'cache'});
+		}
+
+		if (requestObject.destroy != null) {
+			async.worker(() => {
+				provider?.destroy();
+				requestObject.destroy?.();
+			});
+		}
+	}
+
+	return requestObject;
+}
+
+/**
+ * Gathers data from multiple requests and returns accumulated results.
+ *
+ * @param promises - An array of promises representing individual requests.
+ * @param options - Options related to composition requests.
+ */
+async function gatherDataFromRequests(
+	promises: Array<Promise<unknown>>,
+	options: CompositionRequestOptions
+): Promise<Dictionary> {
+	const accumulator = {};
+
+	if (options.engineOptions?.aggregateErrors) {
+		await Promise.allSettled(promises)
+			.then((results) => {
+				const
+					errors = <object[]>[];
+
+				results.forEach((res, index) => {
+					const
+						{failCompositionOnError} = options.compositionRequests[index];
+
+					if (res.status === 'rejected' && failCompositionOnError) {
+						errors.push(res.reason);
+					}
+
+					if (res.status === 'fulfilled') {
+						accumulateData(accumulator, res.value, options.compositionRequests[index]);
+					}
+				});
+
+				if (errors.length > 0) {
+					throw new AggregateError(errors);
+				}
+
+				return accumulator;
+			});
+	}
+
+	(await Promise.all(promises))
+		.forEach((value, index) => accumulateData(accumulator, value, options.compositionRequests[index]));
+
+	return accumulator;
+}
+
+function accumulateData(
+	accumulator: Dictionary,
+	data: unknown,
+	compositionRequest: CompositionRequest
+): Dictionary {
+	const
+		{as} = compositionRequest;
+
+	if (as === 'spread') {
+		return Object.assign(accumulator, data);
+	}
+
+	accumulator[as] = data;
+	return accumulator;
+}
+
+/**
+ * Checks if the provided argument is of type BoundedCompositionEngineRequest.
+ *
+ * This function will return true if the argument is an object and has either a 'dropCache' or 'destroy' property.
+ *
+ * @param something - The value to be checked.
+ * @returns True if the argument is a BoundedCompositionEngineRequest, otherwise false.
+ */
+
+function isRequestLikeObject(something: unknown): something is BoundedCompositionEngineRequest {
+	return Object.isPlainObject(something) &&
+		(
+			'dropCache' in something ||
+			'destroy' in something
+		);
+}
+
+/**
+ * Checks if the provided argument is of type `RequestResponseObject`.
+ *
+ * This function returns true if the argument is like a request object and also contains `data`
+ * and `response` properties.
+ *
+ * @param something
+ */
+function isRequestResponseObject(something: unknown): something is RequestResponseObject {
+	return isRequestLikeObject(something) && 'data' in something && 'response' in something;
+}
+
+/**
+ * Attempts to retrieve a Provider object from an input object.
+ *
+ * This function will return the 'provider' property if it exists under 'ctx.params.meta' of the provided object.
+ * If the input is not an object or the 'provider' property is not found, it returns undefined.
+ *
+ * @param from - The input object from which the provider should be retrieved.
+ * @returns The Provider object if found, otherwise undefined.
+ */
+function tryGetProvider(from: unknown): CanUndef<Provider> {
+	return (Object.isPlainObject(from) && Object.get<Provider>(from, 'ctx.params.meta.provider')) || undefined;
 }

@@ -10,6 +10,7 @@
     - [Using as a Provider Request Engine](#using-as-a-provider-request-engine)
       - [Basic Usage](#basic-usage)
       - [Making a POST Request](#making-a-post-request)
+      - [Spread Data Into Result](#spread-data-into-result)
       - [Passing constructor parameters of a provider to child providers](#passing-constructor-parameters-of-a-provider-to-child-providers)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -33,21 +34,17 @@ import { compositionEngine } from 'core/request/engines/composition';
 
 const r = request({engine: compositionEngine([
   {
-    request: (opts, params, {boundRequest}) => boundRequest(request('http://locahost:5555/json/1')),
+    request: () => request('http://locahost:5555/json/1'),
     as: 'val1'
   },
   {
-    request: (opts, params, {boundRequest}) => boundRequest(request('http://locahost:5555/json/2')),
+    request: () => request('http://locahost:5555/json/2'),
     as: 'val2'
   },
 ])});
 
 const data = await r('').data; // {val1: data, val2: data}
 ```
-
-Here, you can notice the use of a function called `boundRequest`. What is it? This function establishes a connection between the request and the engine,
-allowing the engine to implement cache flushing and destruction of requests created within the engine.
-`boundRequest` can accept `RequestPromise`, `RequestResponseObject`, and `Provider` as input.
 
 It is possible to use other approaches, for example, creating a simple function that will make several requests, and there is no arguing with you.
 But as mentioned in the module description, first and foremost, this engine is needed to expand the capabilities of data providers.
@@ -65,12 +62,12 @@ for example, on the query parameters, need to make one or another request.
 ```typescript
 const r = request({engine: compositionEngine([
   {
-    request: (opts, params, {boundRequest}) => boundRequest(request('http://locahost:5555/json/1')),
+    request: () => request('http://locahost:5555/json/1'),
     as: 'val1',
     requestFilter: (opts, params) => opts.query.auth != null
   },
   {
-    request: (opts, params, {boundRequest}) => boundRequest(request('http://locahost:5555/json/2')),
+    request: () => request('http://locahost:5555/json/2'),
     as: 'val2'
   },
 ])});
@@ -104,23 +101,23 @@ try {
 }
 ```
 
-If both request objects have the failCompositionOnError flag set, the error will be thrown as soon as any of them responds with an error.
+If both request objects have the `failCompositionOnError` flag set, the error will be thrown as soon as any of them responds with an error.
 However, this behavior can be changed by setting the aggregateErrors flag,
 which will alter the engine's behavior in this situation.
 If the flag is set to true, the engine will wait for all requests to complete and gather errors from
-all requests that have the failCompositionOnError flag set.
+all requests that have the `failCompositionOnError` flag set.
 Additionally, instead of the request's own error,
 the engine will return an AggregateError that will contain all the errors from the requests.
 
 ```typescript
 const r = request({engine: compositionEngine([
   {
-    request: (opts, params, {boundRequest}) => boundRequest(request('http://locahost:5555/json/1')),
+    request: () => request('http://locahost:5555/json/1'),
     as: 'val1',
     failCompositionOnError: true
   },
   {
-    request: (opts, params, {boundRequest}) => boundRequest(request('http://locahost:5555/json/2')),
+    request: () => request('http://locahost:5555/json/2'),
     as: 'val2',
     failCompositionOnError: true
   },
@@ -162,7 +159,7 @@ class MainProvider extends Provider {
   static override request: Provider['request'] = Provider.request({
     engine: compositionEngine([
       {
-        request: (opts, params, {boundRequest}) => {
+        request: ({boundRequest}) => {
           const result = {
             val1: undefined,
             val2: undefined
@@ -182,7 +179,7 @@ class MainProvider extends Provider {
         as: 'request1'
       },
       {
-        request: (opts, params, {boundRequest}) => boundRequest(new Provider3()).get(),
+        request: () => new Provider3().get(),
         as: 'request2'
       }
     ])
@@ -192,6 +189,11 @@ class MainProvider extends Provider {
 const data = await new MainProvider().get().data;
 console.log(data) // {request1: {val1: data, val2: data}, request2: data}
 ```
+
+Notice that, the request function provides a special function called `boundRequest`,
+which is needed to bind the request object to the provider engine. The request object returned
+from the request function is automatically wrapped in this function. However, if you make 
+multiple requests within the request function, it is important to use `boundRequest` to avoid memory leaks.
 
 #### Making a POST Request
 
@@ -209,7 +211,7 @@ class Provider2 extends Provider {
   override baseURL: string = 'http://localhost:5000/json/2';
 }
 
-class MainProvider extends Providers {
+class MainProvider extends Provider {
   static override request: Provider['request'] = Provider.request({
     engine: compositionEngine([
       {
@@ -231,7 +233,7 @@ class MainProvider extends Providers {
         as: 'request1'
       },
       {
-        request: (opts, params, {boundRequest}) => boundRequest(new Provider2()).get(),
+        request: () => new Provider2().get(),
         as: 'request2'
       }
     ])
@@ -240,6 +242,33 @@ class MainProvider extends Providers {
 
 const getData = await new MainProvider().get().data; // {request1: {getData: data}, request2: data};
 const postData = await new MainProvider().post().data // {request1: {postData: data}, request2: data};
+```
+
+#### Spread Data Into Result
+
+There is also an option to merge the result of a request with the resulting object
+instead of storing it in a specific property of the resulting object.
+To do this, specify 'spread' in the 'as' field, and the result of
+the request will be merged with the resulting object.
+
+```typescript
+export class MyCompositionProvider extends Provider {
+  static override request: typeof Provider.request = Provider.request({
+    engine: providerCompositionEngine([
+      {
+        request: () => new Provider1().get() // returns {foo: 'value', bar: 'value'}
+        as: 'spread'
+      },
+      {
+        request: () => new Provider2().get() // returns {data: [...]}
+        as: 'banners'
+      }
+    ])
+  });
+}
+
+const data = await MyCompositionProvider.get().data;
+console.log(data); // {foo: 'value', bar: 'value', banners: {data: [...]}}
 ```
 
 #### Passing constructor parameters of a provider to child providers
@@ -258,7 +287,7 @@ class MainProvider extends Provider {
   static override request: Provider['request'] = Provider.request({
     engine: compositionEngine([
       {
-        request: (opts, params, {boundRequest, providerOptions}) => boundRequest(new Provider1(providerOptions)).get(),
+        request: ({providerOptions}) => new Provider1(providerOptions).get(),
         as: 'request1'
       },
       ...

@@ -25,7 +25,7 @@ describe('core/request/engines/composition', () => {
 
 		const engine = compositionEngine([
 			{
-				request: (opts, params, {boundRequest}) => boundRequest(r = request('http://localhost:5000/json/1')),
+				request: () => r = request('http://localhost:5000/json/1'),
 				as: 'result'
 			}
 		]);
@@ -39,7 +39,6 @@ describe('core/request/engines/composition', () => {
 		expect(spy).toHaveBeenCalledTimes(0);
 		engine.destroy();
 
-		expect(engine.boundedRequests.size).toBe(0);
 		expect(spy).toHaveBeenCalledTimes(1);
 	});
 
@@ -48,7 +47,7 @@ describe('core/request/engines/composition', () => {
 
 		const engine = compositionEngine([
 			{
-				request: (opts, params, {boundRequest}) => boundRequest(r = request('http://localhost:5000/json/1')),
+				request: () => r = request('http://localhost:5000/json/1'),
 				as: 'result'
 			}
 		]);
@@ -65,33 +64,12 @@ describe('core/request/engines/composition', () => {
 		expect(spy).toHaveBeenCalledTimes(1);
 	});
 
-	it('calling destroy on a provider used in the engine leads to the provider being cleared from the engine cache', async () => {
-		const
-			r = request('http://localhost:5000/json/1'),
-			engine = compositionEngine([
-				{
-					request: (opts, params, {boundRequest}) => boundRequest(r),
-					as: 'result'
-				}
-			]);
-
-		await request('', {engine}).data;
-
-		const
-			requestResponseObject = await r;
-
-		expect(engine.boundedRequests.size).toBe(1);
-		requestResponseObject.destroy();
-
-		expect(engine.boundedRequests.size).toBe(0);
-	});
-
 	it('error in a request without failCompositionOnError should not throw an error.', async () => {
 		server.handles.json1.response(500, {});
 
 		const engine = compositionEngine([
 			{
-				request: (opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/1')),
+				request: () => request('http://localhost:5000/json/1'),
 				as: 'val'
 			}
 		]);
@@ -116,7 +94,7 @@ describe('core/request/engines/composition', () => {
 
 		const engine = compositionEngine([
 			{
-				request: (opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/1')),
+				request: () => request('http://localhost:5000/json/1'),
 				as: 'val',
 				failCompositionOnError: true
 			}
@@ -147,12 +125,12 @@ describe('core/request/engines/composition', () => {
 
 		const engine = compositionEngine([
 			{
-				request: (opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/1')),
+				request: () => request('http://localhost:5000/json/1'),
 				as: 'val1',
 				requestFilter: () => false
 			},
 			{
-				request: (opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/2')),
+				request: () => request('http://localhost:5000/json/2'),
 				as: 'val2'
 			}
 		]);
@@ -171,12 +149,12 @@ describe('core/request/engines/composition', () => {
 
 		const engine = compositionEngine([
 			{
-				request: (opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/1')),
+				request: () => request('http://localhost:5000/json/1'),
 				as: 'val1',
 				requestFilter: () => new Promise((res) => resolver = res)
 			},
 			{
-				request: (opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/2')),
+				request: () => request('http://localhost:5000/json/2'),
 				as: 'val2'
 			}
 		]);
@@ -207,12 +185,12 @@ describe('core/request/engines/composition', () => {
 
 		const engine = compositionEngine([
 			{
-				request: (opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/1')),
+				request: () => request('http://localhost:5000/json/1'),
 				as: 'val1',
 				requestFilter: () => new Promise((res) => resolver = res)
 			},
 			{
-				request: (opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/2')),
+				request: () => request('http://localhost:5000/json/2'),
 				as: 'val2'
 			}
 		]);
@@ -241,12 +219,12 @@ describe('core/request/engines/composition', () => {
 
 		const engine = compositionEngine([
 			{
-				request: (opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/1')),
+				request: () => request('http://localhost:5000/json/1'),
 				as: 'val1',
 				requestFilter: () => true
 			},
 			{
-				request: (opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/2')),
+				request: () => request('http://localhost:5000/json/2'),
 				as: 'val2'
 			}
 		]);
@@ -265,12 +243,12 @@ describe('core/request/engines/composition', () => {
 
 		const engine = compositionEngine([
 			{
-				request: (opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/1')),
+				request: () => request('http://localhost:5000/json/1'),
 				as: 'val1',
 				requestFilter: () => new Promise((res) => resolver = res)
 			},
 			{
-				request: (opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/2')),
+				request: () => request('http://localhost:5000/json/2'),
 				as: 'val2'
 			}
 		]);
@@ -299,12 +277,12 @@ describe('core/request/engines/composition', () => {
 
 		const engine = compositionEngine([
 			{
-				request: (opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/1')),
+				request: () => request('http://localhost:5000/json/1'),
 				as: 'val1',
 				failCompositionOnError: true
 			},
 			{
-				request: (opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/2')),
+				request: () => request('http://localhost:5000/json/2'),
 				as: 'val2',
 				failCompositionOnError: true
 			}
@@ -340,14 +318,36 @@ describe('core/request/engines/composition', () => {
 		expect(details2?.response!.status).toBe(401);
 	});
 
+	it('should spread result if spread is specified in "as"', async () => {
+		server.handles.json1.response(200, {test: 1});
+		server.handles.json2.response(200, {test: 2});
+
+		const engine = compositionEngine([
+			{
+				request: () => request('http://localhost:5000/json/1'),
+				as: 'spread',
+				requestFilter: () => true
+			},
+			{
+				request: () => request('http://localhost:5000/json/2'),
+				as: 'val2'
+			}
+		]);
+
+		const
+			data = await request('', {engine}).data;
+
+		expect(data).toEqual({test: 1, val2: {test: 2}});
+	});
+
 	describe('caching strategy is set to "never"', () => {
 		test('should always call the request functions', async () => {
 			server.handles.json1.responseOnce(200, {test: 1}).responseOnce(200, {test: 3});
 			server.handles.json2.responseOnce(200, {test: 2}).responseOnce(200, {test: 4});
 
 			const
-				request1 = jest.fn((opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/1'))),
-				request2 = jest.fn((opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/2')));
+				request1 = jest.fn(({boundRequest}) => boundRequest(request('http://localhost:5000/json/1'))),
+				request2 = jest.fn(({boundRequest}) => boundRequest(request('http://localhost:5000/json/2')));
 
 			const engine = compositionEngine([
 				{
@@ -380,8 +380,8 @@ describe('core/request/engines/composition', () => {
 			server.handles.json2.responseOnce(200, {test: 2}).responseOnce(200, {test: 4});
 
 			const
-				request1 = jest.fn((opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/1', {cacheStrategy: 'queue'}))),
-				request2 = jest.fn((opts, params, {boundRequest}) => boundRequest(request('http://localhost:5000/json/2')));
+				request1 = jest.fn(() => request('http://localhost:5000/json/1', {cacheStrategy: 'queue'})),
+				request2 = jest.fn(() => request('http://localhost:5000/json/2'));
 
 			const engine = compositionEngine([
 				{

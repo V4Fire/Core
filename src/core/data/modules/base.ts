@@ -287,10 +287,13 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 		requestCache[this.cacheId] = Object.createDict();
 		this.async.terminateWorker({group: 'extraProvidersCache'});
+
+		this.emitter.emit('dropCache', recursive);
 	}
 
 	/** @inheritDoc */
 	destroy(): void {
+
 		const
 			cache = requestCache[this.cacheId];
 
@@ -310,6 +313,8 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		Object.keys(this.params).forEach((key, _, data) => {
 			delete data[key];
 		});
+
+		this.emitter.emit('destroy');
 	}
 
 	/** @inheritDoc */

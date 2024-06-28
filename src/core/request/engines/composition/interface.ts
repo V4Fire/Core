@@ -6,84 +6,112 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import type Async from 'core/async';
 import type Provider from 'core/data';
 import type { ProviderOptions } from 'core/data';
 import type { RequestOptions, RequestResponseObject, MiddlewareParams, RequestPromise, RequestEngine } from 'core/request';
 
-export interface CompositionEngineParams {
-	/**
-	 * A wrapper function for requests/providers used inside the {@link CompositionRequests.request} function.
-	 * It should wrap each provider you use inside the {@link CompositionRequests.request} function.
-	 */
-	boundRequest<T extends Provider | RequestPromise | RequestResponseObject>(request: T): T;
-
-	/**
-	 * Options passed with the provider constructor.
-	 */
-	providerOptions?: ProviderOptions;
-}
-
 export interface CompositionEngineOpts {
 	/**
-   * If true, the engine will change its behavior and will now wait for the completion
-   * of all requests, regardless of whether they completed with an error or not.
-   *
-   * In case the requests that have the failCompositionOnError flag set completed
-   * with an error, all these errors will be aggregated into {@link AggregateError} and given
-   * to the user.
+	 * If true, the engine will change its behavior and will now wait for the completion
+	 * of all requests, regardless of whether they completed with an error or not.
+	 *
+	 * In case the requests that have the failCompositionOnError flag set completed
+	 * with an error, all these errors will be aggregated into {@link AggregateError} and given
+	 * to the user.
 	 *
 	 * @default false
 	 */
 	aggregateErrors?: boolean;
 }
 
-export interface CompositionRequests {
+export interface CompositionRequest {
 	/**
 	 * A function that will be called when the get method or other provider methods are called,
 	 * takes several arguments: request options, request parameters, provider constructor parameters,
 	 * and a wrapper function for your providers.
 	 *
-	 * Let's dive deeper into the wrapper function and why it is needed.
-	 * Each request/provider that you use in the request function should be wrapped with this wrapper.
-	 * Thanks to this wrapper, when the destroy/dropCache methods are called on MyCompositionProvider,
-	 * these same methods will be called on all providers that were wrapped.
-	 * Otherwise, a memory leak may occur.
-	 *
-	 * @param requestOptions
-	 * @param requestParams
-	 * @param params
-	 *
-	 * @example
-	 *
 	 * ```typescript
 	 * export class MyCompositionProvider extends Provider {
-	 *  static override request: typeof Provider.request = Provider.request({
-	 *    engine: providerCompositionEngine([
-	 *      {
-	 *        request: (_, params, {providerWrapper}) =>
-	 *          providerWrapper(new Banners()).get(Object.get(params, 'opts.query.bannersQuery')),
-	 *        as: 'banners'
-	 *      },
-	 *      {
-	 *        request: (_, params, {providerWrapper}) =>
-	 *          providerWrapper(new Cards()).get(Object.get(params, 'opts.query.cardsQuery')),
-	 *        as: 'content'
-	 *      }
-	 *    ])
-	 *  });
+	 *   static override request: typeof Provider.request = Provider.request({
+	 *     engine: providerCompositionEngine([
+	 *       {
+	 *         request: () => new Provider1().get()
+	 *         as: 'banners'
+	 *       },
+	 *       {
+	 *         request: () => new Provider2().get()
+	 *         as: 'content'
+	 *       }
+	 *     ])
+	 *   });
 	 * }
 	 * ```
+	 *
+	 * The request function also passes an argument, which is an object containing various data
+	 * such as request parameters, some helper functions, and more.
+	 *
+	 * Let's implement an example where different query parameters are used for requests in the request function:
+	 *
+	 * ```typescript
+	 * class MyCompositionProvider extends Provider {
+	 *   static override request: Provider['request'] = Provider.request({
+	 *     engine: compositionEngine([
+	 *       {
+	 *         request: ({params}) => new Provider1().get(Object.get(params, 'opts.query.provider1')),
+	 *         as: 'request1'
+	 *       },
+	 *       {
+	 *         request: ({params}) => new Provider2().get(Object.get(params, 'opts.query.provider2')),
+	 *         as: 'request2'
+	 *       }
+	 *     ])
+	 *   });
+	 * }
+	 * ```
+	 *
+	 * Additionally, the request function provides a special function called boundRequest,
+	 * which is needed to bind the request object to the provider engine. The request object returned
+	 * from the request function is automatically wrapped in this function. However, if you make
+	 * multiple requests within the request function, it is important to use boundRequest to avoid memory leaks:
+	 *
+	 * ```typescript
+	 * class CompositionProviderDropCache extends Provider {
+	 *   static override request: Provider['request'] = Provider.request({
+	 *     engine: compositionEngine([
+	 *       {
+	 *         request: async ({boundRequest}) => {
+	 *           const data = await boundRequest(new Provider1().get()).data;
+	 *
+	 *           if (data.something) {
+	 *             return new Provider3().get().data;
+	 *           }
+	 *
+	 *           return data;
+	 *         },
+	 *         as: 'request1'
+	 *       },
+	 *       {
+	 *         request: () => new Provider2().get(),
+	 *         as: 'request2'
+	 *       }
+	 *     ])
+	 *   });
+	 * }
+	 * ```
+	 *
+	 * @param options
 	 */
-	request(
-		requestOptions: RequestOptions,
-		requestParams: MiddlewareParams,
-		params: CompositionEngineParams
-	): Promise<RequestResponseObject>;
+	request(options: CompositionRequestOptions): Promise<RequestResponseObject | unknown>;
 
 	/**
-	 * In which fields of the resulting object the response of this request will be stored.
+	 * Specifies the fields of the resulting object where the response of this request will be stored.
+	 *
+	 * If `spread` is specified, the result will be added to the resulting object not as a separate
+	 * property, but using Object.assign. This means all properties from the request result will be
+	 * set on the resulting object.
 	 */
-	as: string;
+	as: 'spread' | string;
 
 	/**
 	 * Function that will be called before the request is initiated.
@@ -96,10 +124,7 @@ export interface CompositionRequests {
 	 * @param options
 	 * @param params
 	 */
-	requestFilter?(
-		options: RequestOptions,
-		params: MiddlewareParams
-	): CanPromise<boolean>;
+	requestFilter?(options: CompositionRequestOptions): CanPromise<boolean>;
 
 	/**
 	 * If true, when there is an error in this request, the provider request will be terminated.
@@ -108,10 +133,39 @@ export interface CompositionRequests {
 	failCompositionOnError?: boolean;
 }
 
+export interface CompositionRequestOptions {
+	/**
+	 * A wrapper function for requests/providers used inside the {@link CompositionRequest.request} function.
+	 * It should wrap each provider you use inside the {@link CompositionRequest.request} function.
+	 */
+	boundRequest<T extends Provider | RequestPromise | RequestResponseObject>(request: T): T;
+
+	/**
+	 * Options passed with the provider constructor.
+	 */
+	providerOptions?: ProviderOptions;
+
+	/** {@link RequestOptions} */
+	options: RequestOptions;
+
+	/** {@link MiddlewareParams} */
+	params: MiddlewareParams;
+
+	/** {@link CompositionEngineOpts} */
+	engineOptions?: CompositionEngineOpts;
+
+	/** {@link CompositionRequest} */
+	compositionRequests: CompositionRequest[];
+}
+
+export interface BoundedCompositionEngineRequest {
+	dropCache?(recursive?: boolean): void;
+	destroy?(): void;
+}
+
 export interface CompositionRequestEngine extends RequestEngine {
 	dropCache: NonNullable<RequestEngine['dropCache']>;
 	destroy: NonNullable<RequestEngine['destroy']>;
 
-	boundedRequests: Map<string, RequestResponseObject>;
-	boundedProviders: Set<Provider>;
+	async: Async;
 }
