@@ -23,17 +23,16 @@ import Parser, { Token } from 'core/json/stream/parser';
 import { createControllablePromise } from 'core/promise';
 import AbortablePromise from 'core/promise/abortable';
 
-import Range from 'core/range';
 import symbolGenerator from 'core/symbol';
 
 import Headers from 'core/request/headers';
 import { FormData, Blob } from 'core/request/engines';
 
-import { defaultResponseOpts, noContentStatusCodes } from 'core/request/response/const';
+import { defaultResponseOpts } from 'core/request/response/const';
 
 import type {
 
-	OkStatuses,
+	Statuses,
 	RequestResponseChunk,
 
 	WrappedDecoder,
@@ -53,10 +52,13 @@ import type {
 
 } from 'core/request/response/interface';
 
+import { statusesContainStatus } from 'core/request/response/helpers';
+
 export * from 'core/request/headers';
 
 export * from 'core/request/response/const';
 export * from 'core/request/response/interface';
+export * from 'core/request/response/helpers';
 
 export const
 	$$ = symbolGenerator();
@@ -131,10 +133,22 @@ export default class Response<
 	readonly ok: boolean;
 
 	/**
+	 * True if the response status matches with no content status codes
+	 * (by default it should match range from 100 to 199, 204 or 304)
+	 */
+	readonly hasNoContent: boolean;
+
+	/**
 	 * A list of status codes (or a single code) that match successful operation.
 	 * Also, you can pass a range of codes.
 	 */
-	readonly okStatuses: OkStatuses;
+	readonly okStatuses: Statuses;
+
+	/**
+	 * A list of status codes (or a single code) that match a response with no content.
+	 * Also, you can pass a range of codes.
+	 */
+	readonly noContentStatuses: Statuses;
 
 	/**
 	 * Set of response headers
@@ -225,15 +239,16 @@ export default class Response<
 		this.important = p.important;
 
 		const
-			ok = p.okStatuses;
+			ok = p.okStatuses,
+			noContent = p.noContentStatuses;
 
 		this.status = p.status;
 		this.okStatuses = ok;
+		this.noContentStatuses = noContent;
 		this.statusText = p.statusText;
 
-		this.ok = ok instanceof Range ?
-			ok.contains(this.status) :
-			Array.concat([], <number>ok).includes(this.status);
+		this.ok = statusesContainStatus(ok, this.status);
+		this.hasNoContent = statusesContainStatus(noContent, this.status);
 
 		this.headers = Object.freeze(new Headers(p.headers));
 
@@ -350,7 +365,7 @@ export default class Response<
 		let
 			data;
 
-		if (noContentStatusCodes.includes(this.status)) {
+		if (this.hasNoContent) {
 			data = null;
 
 		} else {
@@ -403,7 +418,7 @@ export default class Response<
 		let
 			stream;
 
-		if (noContentStatusCodes.includes(this.status)) {
+		if (this.hasNoContent) {
 			stream = [].values();
 
 		} else {

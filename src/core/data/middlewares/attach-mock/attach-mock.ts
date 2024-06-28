@@ -63,6 +63,7 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 				status: customResponse.status ?? mock.status ?? 200,
 				responseType: customResponse.responseType ?? (<any>mock).responseType ?? opts.responseType,
 				okStatuses: opts.okStatuses,
+				noContentStatuses: opts.noContentStatuses,
 				decoder: mock.decoders === false ? undefined : customResponse.decoders ?? ctx.decoders,
 				headers: customResponse.headers ?? mock.headers
 			});

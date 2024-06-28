@@ -478,6 +478,24 @@ request('//users', {
 }).data.then(console.log);
 ```
 
+#### [noContentStatuses = `[statusCodes.NO_CONTENT, statusCodes.NOT_MODIFIED].concat(new Range<number>(100, 199).toArray(1))`]
+
+A list of status codes (or a single code) that match response with no content.
+Also, you can pass a range of codes.
+
+```js
+import request from 'core/request';
+import Range from 'core/range';
+
+request('//users', {
+  noContentStatuses: [204, 304, 424]
+}).data.then(console.log);
+
+request('//users', {
+  noContentStatuses: new Range(420, 430)
+}).data.then(console.log);
+```
+
 #### timeout
 
 A value in milliseconds for a request timeout.
