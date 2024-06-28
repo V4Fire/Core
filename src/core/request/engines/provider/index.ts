@@ -210,6 +210,7 @@ export default function createProviderEngine(
 				important: providerResponse.important,
 
 				okStatuses: providerResponse.okStatuses,
+				noContentStatuses: providerResponse.noContentStatuses,
 				status: providerResponse.status,
 				statusText: providerResponse.statusText,
 
