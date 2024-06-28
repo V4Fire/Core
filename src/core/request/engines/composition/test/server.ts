@@ -120,8 +120,8 @@ export function createServer() {
 		server,
 		clearHandles,
 
-		destroy: async () => {
-			await server.close();
+		destroy: () => {
+			server.close();
 			clearHandles();
 		}
 	};

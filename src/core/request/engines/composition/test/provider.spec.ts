@@ -15,7 +15,7 @@ import { compositionEngine } from 'core/request/engines/composition';
 import { createServer } from 'core/request/engines/composition/test/server';
 import type { CompositionRequestOptions } from 'core/request/engines/provider';
 
-describe('core/request/engines/provider/compositor', () => {
+describe('core/request/engines/composition with provider', () => {
 	let server: ReturnType<typeof createServer>;
 
 	beforeAll(() => {
@@ -26,8 +26,8 @@ describe('core/request/engines/provider/compositor', () => {
 		server.clearHandles();
 	});
 
-	afterAll(async () => {
-		await server.destroy();
+	afterAll(() => {
+		server.destroy();
 	});
 
 	it('should invoke the decoder with correct data', async () => {

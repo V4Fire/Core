@@ -4,7 +4,7 @@ import { compositionEngine } from 'core/request/engines/composition';
 import { createServer } from 'core/request/engines/composition/test/server';
 
 // eslint-disable-next-line max-lines-per-function
-describe('core/request/engines/composition', () => {
+describe('core/request/engines/composition with request', () => {
 	let server: ReturnType<typeof createServer>;
 
 	beforeAll(() => {
@@ -16,8 +16,8 @@ describe('core/request/engines/composition', () => {
 		server.handles.json1.response(200, {test: 1});
 	});
 
-	afterAll(async () => {
-		await server.destroy();
+	afterAll(() => {
+		server.destroy();
 	});
 
 	it('engine destructor call should lead to triggering the destructors of all the providers created by the engine', async () => {
