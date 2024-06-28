@@ -87,10 +87,6 @@ export interface RequestResponseObject<D = unknown> {
      * Destroys the request context
      */
     destroy(): void;
-    /**
-     * If true, it means the object has been destroyed
-     */
-    destroyed: boolean;
 }
 export declare type RequestResponse<D = unknown> = AbortablePromise<RequestResponseObject<D>>;
 export interface RequestPromise<D = unknown> extends RequestResponse<D> {
