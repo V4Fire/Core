@@ -176,8 +176,6 @@ async function gatherDataFromRequests(
 				if (errors.length > 0) {
 					throw new AggregateError(errors);
 				}
-
-				return accumulator;
 			});
 	}
 
