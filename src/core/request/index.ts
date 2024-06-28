@@ -108,7 +108,6 @@ function request<D = unknown, A extends any[] = unknown[]>(
 	opts?: CreateRequestOptions<D>
 ): RequestFunctionResponse<D, A extends Array<infer V> ? V[] : unknown[]>;
 
-// eslint-disable-next-line max-lines-per-function
 function request<D = unknown>(
 	path: string | CreateRequestOptions<D>,
 	...args: unknown[]
@@ -411,12 +410,12 @@ function request<D = unknown>(
 				}
 
 				let
-					customData;
+					customData,
+					destroyed = false;
 
 				const res = {
 					ctx,
 					response,
-					destroyed: false,
 
 					get data() {
 						return customData ?? response.decode();
@@ -436,7 +435,7 @@ function request<D = unknown>(
 					dropCache: ctx.dropCache.bind(ctx),
 
 					destroy: () => {
-						if (res.destroyed) {
+						if (destroyed) {
 							return;
 						}
 
@@ -470,7 +469,7 @@ function request<D = unknown>(
 							delete errDetails[key];
 						});
 
-						res.destroyed = true;
+						destroyed = true;
 					}
 				};
 
