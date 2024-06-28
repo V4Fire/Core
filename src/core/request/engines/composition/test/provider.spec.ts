@@ -18,8 +18,8 @@ import type { CompositionRequestOptions } from 'core/request/engines/provider';
 describe('core/request/engines/composition with provider', () => {
 	let server: Awaited<ReturnType<typeof createServer>>;
 
-	beforeAll(async () => {
-		server = await createServer();
+	beforeAll(() => {
+		server = createServer(5555);
 	});
 
 	beforeEach(() => {
@@ -91,7 +91,7 @@ describe('core/request/engines/composition with provider', () => {
 		class TestProviderDropCache1 extends Provider {
 			static override request: Provider['request'] = Provider.request({
 				cacheStrategy: 'queue',
-				cacheTTL: (10).seconds()
+				cacheTTL: (20).seconds()
 			});
 
 			override baseURL: string = server.url('json/1');
@@ -101,7 +101,7 @@ describe('core/request/engines/composition with provider', () => {
 		class TestProviderDropCache2 extends Provider {
 			static override request: Provider['request'] = Provider.request({
 				cacheStrategy: 'queue',
-				cacheTTL: (10).seconds()
+				cacheTTL: (20).seconds()
 			});
 
 			override baseURL: string = server.url('json/2');

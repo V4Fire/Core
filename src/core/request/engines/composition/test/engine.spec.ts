@@ -7,8 +7,8 @@ import { createServer } from 'core/request/engines/composition/test/server';
 describe('core/request/engines/composition with request', () => {
 	let server: Awaited<ReturnType<typeof createServer>>;
 
-	beforeAll(async () => {
-		server = await createServer();
+	beforeAll(() => {
+		server = createServer(5000);
 	});
 
 	beforeEach(() => {
