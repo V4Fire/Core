@@ -34,7 +34,7 @@
     "test:typescript": "node node_modules/@v4fire/typescript-check",
     "test:eslint": "npx eslint config build src",
     "test:jest": "cross-env NODE_ENV=development && jest",
-    "test:ci:jest": "cross-env NODE_ENV=development && jest --runInBand --reporters=\"github-actions\" --reporters=\"default\" --silent=false",
+    "test:ci:jest": "cross-env NODE_ENV=development && jest --maxWorkers 4 --reporters=\"github-actions\" --reporters=\"default\"",
     "up": "yarn && gulp build:standalone && gulp build:doc"
   },
   "dependencies": {
