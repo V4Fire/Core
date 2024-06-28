@@ -54,6 +54,21 @@ export function compositionEngine(
 		};
 
 		return new AbortablePromise((resolve, reject) => {
+			// Sets up a handler to call dropCache/destroy on the provider
+			// that uses this CompositionRequestEngine.
+			// This is necessary to invoke the corresponding methods on the engine.
+			const {provider} = params.opts.meta;
+
+			if (provider) {
+				async.on(provider.emitter, 'dropCache', (...args) => {
+					engine.dropCache(...args);
+				}, {label: 'dropCacheListener'});
+
+				async.on(provider.emitter, 'destroy', () => {
+					engine.destroy();
+				}, {label: 'destroyListener'});
+			}
+
 			const promises = compositionRequests.map((r) => SyncPromise.resolve(r.requestFilter?.(options))
 				.then((filterValue) => {
 					if (filterValue === false) {
@@ -80,21 +95,6 @@ export function compositionEngine(
 					decoder: requestOptions.decoders
 				}));
 			}).catch(reject);
-
-			// Sets up a handler to call dropCache/destroy on the provider
-			// that uses this CompositionRequestEngine.
-			// This is necessary to invoke the corresponding methods on the engine.
-			const {provider} = params.opts.meta;
-
-			if (provider) {
-				async.on(provider.emitter, 'dropCache', (...args) => {
-					engine.dropCache(...args);
-				}, {label: 'dropCacheListener'});
-
-				async.on(provider.emitter, 'destroy', () => {
-					engine.destroy();
-				}, {label: 'destroyListener'});
-			}
 		});
 	};
 
