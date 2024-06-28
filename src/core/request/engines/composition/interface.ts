@@ -6,7 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type Async from 'core/async';
 import type Provider from 'core/data';
 import type { ProviderOptions } from 'core/data';
 import type { RequestOptions, RequestResponseObject, MiddlewareParams, RequestPromise, RequestEngine } from 'core/request';
@@ -166,6 +165,4 @@ export interface BoundedCompositionEngineRequest {
 export interface CompositionRequestEngine extends RequestEngine {
 	dropCache: NonNullable<RequestEngine['dropCache']>;
 	destroy: NonNullable<RequestEngine['destroy']>;
-
-	async: Async;
 }

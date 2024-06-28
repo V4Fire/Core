@@ -11,15 +11,22 @@
  * @packageDocumentation
  */
 
+import Async from 'core/async';
+import type { Provider } from 'core/data';
+import type { StatusCodes } from 'core/status-codes';
 import AbortablePromise from 'core/promise/abortable';
+import { SyncPromise } from 'core/prelude/structures';
 import { RequestOptions, Response, MiddlewareParams, RequestResponseObject } from 'core/request';
 
-import type { CompositionEngineOpts, CompositionRequestEngine, CompositionRequest, CompositionRequestOptions } from 'core/request/engines/composition/interface';
-import Async from 'core/async';
-import { SyncPromise } from 'core/prelude/structures';
-import type { BoundedCompositionEngineRequest } from 'core/request/engines/provider';
-import type { StatusCodes } from 'core/status-codes';
-import type { Provider } from 'core/data';
+import type {
+
+	BoundedCompositionEngineRequest,
+	CompositionEngineOpts,
+	CompositionRequestEngine,
+	CompositionRequest,
+	CompositionRequestOptions
+
+} from 'core/request/engines/composition/interface';
 
 export * from 'core/request/engines/composition/interface';
 
@@ -75,7 +82,7 @@ export function compositionEngine(
 			}).catch(reject);
 
 			// Sets up a handler to call dropCache/destroy on the provider
-			// that uses the requestEngine.
+			// that uses this CompositionRequestEngine.
 			// This is necessary to invoke the corresponding methods on the engine.
 			const {provider} = params.opts.meta;
 
@@ -93,7 +100,6 @@ export function compositionEngine(
 
 	engine.dropCache = () => async.clearAll({group: 'cache'});
 	engine.destroy = () => async.clearAll();
-	engine.async = async;
 
 	return engine;
 }

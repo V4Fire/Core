@@ -293,7 +293,6 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 	/** @inheritDoc */
 	destroy(): void {
-
 		const
 			cache = requestCache[this.cacheId];
 
