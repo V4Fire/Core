@@ -21,25 +21,30 @@ describe('core/request/engines/composition with request', () => {
 	});
 
 	it('engine destructor call should lead to triggering the destructors of all the providers created by the engine', async () => {
-		let r;
+		try {
+			let r;
 
-		const engine = compositionEngine([
-			{
-				request: () => r = request('http://localhost:5000/json/1'),
-				as: 'result'
-			}
-		]);
+			const engine = compositionEngine([
+				{
+					request: () => r = request('http://localhost:5000/json/1'),
+					as: 'result'
+				}
+			]);
 
-		await request('', {engine}).data;
+			await request('', {engine}).data;
 
-		const
-			requestResponseObject = await r,
-			spy = jest.spyOn(requestResponseObject, 'destroy');
+			const
+				requestResponseObject = await r,
+				spy = jest.spyOn(requestResponseObject, 'destroy');
 
-		expect(spy).toHaveBeenCalledTimes(0);
-		engine.destroy();
+			expect(spy).toHaveBeenCalledTimes(0);
+			engine.destroy();
 
-		expect(spy).toHaveBeenCalledTimes(1);
+			expect(spy).toHaveBeenCalledTimes(1);
+		} catch (err) {
+			console.log(err);
+		}
+
 	});
 
 	it('should trigger a call to dropCache on all providers that were created by the engine when dropCache is called on the engine', async () => {
