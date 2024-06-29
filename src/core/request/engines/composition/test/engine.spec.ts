@@ -8,7 +8,7 @@ describe('core/request/engines/composition with request', () => {
 	let server: Awaited<ReturnType<typeof createServer>>;
 
 	beforeAll(() => {
-		server = createServer(5000);
+		server = createServer(5555);
 	});
 
 	beforeEach(() => {
