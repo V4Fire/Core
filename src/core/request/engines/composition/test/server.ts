@@ -110,6 +110,7 @@ export async function createServer(startPort: number) {
 	};
 
 	const clearHandles = () => {
+		console.log('clear handles');
 		Object.values(handles).forEach((handle) => handle.clear());
 	};
 
@@ -118,6 +119,7 @@ export async function createServer(startPort: number) {
 
 		const start = () => {
 			const server = serverApp.listen(selectedPort, () => {
+				console.log('listen on port', selectedPort);
 				res([server, selectedPort]);
 			});
 
@@ -132,6 +134,8 @@ export async function createServer(startPort: number) {
 		start();
 	});
 
+	console.log('server return');
+
 	const result = {
 		handles,
 		server,
@@ -141,6 +145,7 @@ export async function createServer(startPort: number) {
 		url: (...paths: string[]) => concatURLs(`http://localhost:${startPort}/`, ...paths),
 
 		destroy: () => {
+			console.log('server destroy');
 			server.close();
 			clearHandles();
 		}
