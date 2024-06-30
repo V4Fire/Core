@@ -36,16 +36,12 @@ describe('core/request/engines/composition with provider', () => {
 
 		@provider
 		class TestProviderDecoder1 extends Provider {
-			static override request: Provider['request'] = Provider.request({api: {url: server.url()}});
-
-			override baseURL: string = '/json/1';
+			override baseGetURL: string = 'http://localhost:5000/json/1';
 		}
 
 		@provider
 		class TestProviderDecoder2 extends Provider {
-			static override request: Provider['request'] = Provider.request({api: {url: server.url()}});
-
-			override baseURL: string = '/json/2';
+			override baseGetURL: string = 'http://localhost:5000/json/2';
 		}
 
 		const
@@ -94,25 +90,21 @@ describe('core/request/engines/composition with provider', () => {
 		@provider
 		class TestProviderDropCache1 extends Provider {
 			static override request: Provider['request'] = Provider.request({
-				api: {url: server.url()},
-
 				cacheStrategy: 'queue',
 				cacheTTL: (20).seconds()
 			});
 
-			override baseURL: string = '/json/1';
+			override baseGetURL: string = 'http://localhost:5000/json/1';
 		}
 
 		@provider
 		class TestProviderDropCache2 extends Provider {
 			static override request: Provider['request'] = Provider.request({
-				api: {url: server.url()},
-
 				cacheStrategy: 'queue',
 				cacheTTL: (20).seconds()
 			});
 
-			override baseURL: string = '/json/2';
+			override baseGetURL: string = 'http://localhost:5000/json/2';
 		}
 
 		const
@@ -167,7 +159,7 @@ describe('core/request/engines/composition with provider', () => {
 				cacheTTL: (10).seconds()
 			});
 
-			override baseURL: string = '/json/1';
+			override baseGetURL: string = 'http://localhost:5000/json/1';
 		}
 
 		@provider
@@ -179,7 +171,7 @@ describe('core/request/engines/composition with provider', () => {
 				cacheTTL: (10).seconds()
 			});
 
-			override baseURL: string = '/json/2';
+			override baseGetURL: string = 'http://localhost:5000/json/2';
 		}
 
 		const
@@ -232,14 +224,12 @@ describe('core/request/engines/composition with provider', () => {
 
 		@provider
 		class TestProviderOptions1 extends Provider {
-			static override request: Provider['request'] = Provider.request({api: {url: server.url()}});
-			override baseURL: string = '/json/1';
+		override baseGetURL: string = 'http://localhost:5000/json/1';
 		}
 
 		@provider
 		class TestProviderOptions2 extends Provider {
-			static override request: Provider['request'] = Provider.request({api: {url: server.url()}});
-			override baseURL: string = '/json/2';
+		override baseGetURL: string = 'http://localhost:5000/json/2';
 		}
 
 		let
@@ -300,21 +290,19 @@ describe('core/request/engines/composition with provider', () => {
 		@provider
 		class TestProviderInstance1 extends Provider {
 			static override request: Provider['request'] = Provider.request({
-				api: {url: server.url()},
 				cacheStrategy: 'queue'
 			});
 
-			override baseURL: string = '/json/1';
+			override baseGetURL: string = 'http://localhost:5000/json/1';
 		}
 
 		@provider
 		class TestProviderInstance2 extends Provider {
 			static override request: Provider['request'] = Provider.request({
-				api: {url: server.url()},
 				cacheStrategy: 'queue'
 			});
 
-			override baseURL: string = '/json/2';
+			override baseGetURL: string = 'http://localhost:5000/json/2';
 		}
 
 		let i = 2;
