@@ -26,7 +26,7 @@ describe('core/request/engines/composition as request engine', () => {
 		server.destroy();
 	});
 
-	it.only('engine destructor call should lead to triggering the destructors of all the providers created by the engine', async () => {
+	it('engine destructor call should lead to triggering the destructors of all the providers created by the engine', async () => {
 		server.handles.json2.response(200, {test: 1});
 
 		let r: RequestResponseObject;
