@@ -25,7 +25,7 @@ describe('core/request/engines/composition with request', () => {
 
 		const engine = compositionEngine([
 			{
-				request: () => r = request(server.url('json/1')),
+				request: () => r = request('/json/1', {api: {url: server.url()}}),
 				as: 'result'
 			}
 		]);
@@ -47,7 +47,7 @@ describe('core/request/engines/composition with request', () => {
 
 		const engine = compositionEngine([
 			{
-				request: () => r = request(server.url('json/1')),
+				request: () => r = request('/json/1', {api: {url: server.url()}}),
 				as: 'result'
 			}
 		]);
@@ -69,7 +69,7 @@ describe('core/request/engines/composition with request', () => {
 
 		const engine = compositionEngine([
 			{
-				request: () => request(server.url('json/1')),
+				request: () => request('/json/1', {api: {url: server.url()}}),
 				as: 'val'
 			}
 		]);
@@ -94,7 +94,7 @@ describe('core/request/engines/composition with request', () => {
 
 		const engine = compositionEngine([
 			{
-				request: () => request(server.url('json/1')),
+				request: () => request('/json/1', {api: {url: server.url()}}),
 				as: 'val',
 				failCompositionOnError: true
 			}
@@ -125,12 +125,12 @@ describe('core/request/engines/composition with request', () => {
 
 		const engine = compositionEngine([
 			{
-				request: () => request(server.url('json/1')),
+				request: () => request('/json/1', {api: {url: server.url()}}),
 				as: 'val1',
 				requestFilter: () => false
 			},
 			{
-				request: () => request(server.url('json/2')),
+				request: () => request('/json/2', {api: {url: server.url()}}),
 				as: 'val2'
 			}
 		]);
@@ -149,12 +149,12 @@ describe('core/request/engines/composition with request', () => {
 
 		const engine = compositionEngine([
 			{
-				request: () => request(server.url('json/1')),
+				request: () => request('/json/1', {api: {url: server.url()}}),
 				as: 'val1',
 				requestFilter: () => new Promise((res) => resolver = res)
 			},
 			{
-				request: () => request(server.url('json/2')),
+				request: () => request('/json/2', {api: {url: server.url()}}),
 				as: 'val2'
 			}
 		]);
@@ -185,12 +185,12 @@ describe('core/request/engines/composition with request', () => {
 
 		const engine = compositionEngine([
 			{
-				request: () => request(server.url('json/1')),
+				request: () => request('/json/1', {api: {url: server.url()}}),
 				as: 'val1',
 				requestFilter: () => new Promise((res) => resolver = res)
 			},
 			{
-				request: () => request(server.url('json/2')),
+				request: () => request('/json/2', {api: {url: server.url()}}),
 				as: 'val2'
 			}
 		]);
@@ -219,12 +219,12 @@ describe('core/request/engines/composition with request', () => {
 
 		const engine = compositionEngine([
 			{
-				request: () => request(server.url('json/1')),
+				request: () => request('/json/1', {api: {url: server.url()}}),
 				as: 'val1',
 				requestFilter: () => true
 			},
 			{
-				request: () => request(server.url('json/2')),
+				request: () => request('/json/2', {api: {url: server.url()}}),
 				as: 'val2'
 			}
 		]);
@@ -243,12 +243,12 @@ describe('core/request/engines/composition with request', () => {
 
 		const engine = compositionEngine([
 			{
-				request: () => request(server.url('json/1')),
+				request: () => request('/json/1', {api: {url: server.url()}}),
 				as: 'val1',
 				requestFilter: () => new Promise((res) => resolver = res)
 			},
 			{
-				request: () => request(server.url('json/2')),
+				request: () => request('/json/2', {api: {url: server.url()}}),
 				as: 'val2'
 			}
 		]);
@@ -277,12 +277,12 @@ describe('core/request/engines/composition with request', () => {
 
 		const engine = compositionEngine([
 			{
-				request: () => request(server.url('json/1')),
+				request: () => request('/json/1', {api: {url: server.url()}}),
 				as: 'val1',
 				failCompositionOnError: true
 			},
 			{
-				request: () => request(server.url('json/2')),
+				request: () => request('/json/2', {api: {url: server.url()}}),
 				as: 'val2',
 				failCompositionOnError: true
 			}
@@ -324,12 +324,12 @@ describe('core/request/engines/composition with request', () => {
 
 		const engine = compositionEngine([
 			{
-				request: () => request(server.url('json/1')),
+				request: () => request('/json/1', {api: {url: server.url()}}),
 				as: 'spread',
 				requestFilter: () => true
 			},
 			{
-				request: () => request(server.url('json/2')),
+				request: () => request('/json/2', {api: {url: server.url()}}),
 				as: 'val2'
 			}
 		]);
@@ -346,8 +346,8 @@ describe('core/request/engines/composition with request', () => {
 			server.handles.json2.responseOnce(200, {test: 2}).responseOnce(200, {test: 4});
 
 			const
-				request1 = jest.fn(({boundRequest}) => boundRequest(request(server.url('json/1')))),
-				request2 = jest.fn(({boundRequest}) => boundRequest(request(server.url('json/2'))));
+				request1 = jest.fn(({boundRequest}) => boundRequest(request('/json/1', {api: {url: server.url()}}))),
+				request2 = jest.fn(({boundRequest}) => boundRequest(request('/json/2', {api: {url: server.url()}})));
 
 			const engine = compositionEngine([
 				{
@@ -380,8 +380,8 @@ describe('core/request/engines/composition with request', () => {
 			server.handles.json2.responseOnce(200, {test: 2}).responseOnce(200, {test: 4});
 
 			const
-				request1 = jest.fn(() => request(server.url('json/1'), {cacheStrategy: 'queue'})),
-				request2 = jest.fn(() => request(server.url('json/2')));
+				request1 = jest.fn(() => request('/json/1', {api: {url: server.url()}, cacheStrategy: 'queue'})),
+				request2 = jest.fn(() => request('/json/2', {api: {url: server.url()}}));
 
 			const engine = compositionEngine([
 				{
