@@ -162,7 +162,6 @@ const request: RequestEngine = (params) => {
 			}));
 
 		}, (error) => {
-			console.log('new error', error);
 			clearTimeout(timer);
 
 			const
