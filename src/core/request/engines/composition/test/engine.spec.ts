@@ -27,33 +27,37 @@ describe('core/request/engines/composition as request engine', () => {
 	});
 
 	it('engine destructor call should lead to triggering the destructors of all the providers created by the engine', async () => {
-		server.handles.json2.response(200, {test: 1});
+		try {
+			server.handles.json2.response(200, {test: 1});
 
-		let r: RequestResponseObject;
+			let r: RequestResponseObject;
 
-		const engine = compositionEngine([
-			{
-				request: async () => {
-					r = await request(server.url('json/2'));
-					return r;
-				},
-				as: 'result'
-			}
-		]);
+			const engine = compositionEngine([
+				{
+					request: async () => {
+						r = await request(server.url('json/2'));
+						return r;
+					},
+					as: 'result'
+				}
+			]);
 
-		const
-			_data = await request('', {engine}).data,
-			requestResponseObject = r!,
-			spy = jest.spyOn(requestResponseObject, 'destroy');
+			const
+				_data = await request('', {engine}).data,
+				requestResponseObject = r!,
+				spy = jest.spyOn(requestResponseObject, 'destroy');
 
-		expect(spy).toHaveBeenCalledTimes(0);
-		engine.destroy();
+			expect(spy).toHaveBeenCalledTimes(0);
+			engine.destroy();
 
-		expect(spy).toHaveBeenCalledTimes(1);
+			expect(spy).toHaveBeenCalledTimes(1);
+		} catch (err) {
+			console.log('megaerror');
+			console.log(err);
+		}
 	});
 
 	it('should trigger a call to dropCache on all providers that were created by the engine when dropCache is called on the engine', async () => {
-		try {
 			let r;
 
 			const engine = compositionEngine([
@@ -73,11 +77,6 @@ describe('core/request/engines/composition as request engine', () => {
 			engine.dropCache();
 
 			expect(spy).toHaveBeenCalledTimes(1);
-		} catch (err) {
-			console.log('megaerror');
-			console.log(err);
-		}
-
 	});
 
 	it('should not throw an error in a request without failCompositionOnError', async () => {
