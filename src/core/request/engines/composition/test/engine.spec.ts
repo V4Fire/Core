@@ -41,23 +41,16 @@ describe('core/request/engines/composition as request engine', () => {
 			}
 		]);
 
-		try {
-			await request('', {engine}).data;
+		await request('', {engine}).data;
 
-			const
-				requestResponseObject = r!,
-				spy = jest.spyOn(requestResponseObject, 'destroy');
+		const
+			requestResponseObject = r!,
+			spy = jest.spyOn(requestResponseObject, 'destroy');
 
-			expect(spy).toHaveBeenCalledTimes(0);
-			engine.destroy();
+		expect(spy).toHaveBeenCalledTimes(0);
+		engine.destroy();
 
-			expect(spy).toHaveBeenCalledTimes(1);
-
-		} catch (err) {
-			console.log('megaerror');
-			console.log(err);
-		}
-
+		expect(spy).toHaveBeenCalledTimes(1);
 	});
 
 	it('should trigger a call to dropCache on all providers that were created by the engine when dropCache is called on the engine', async () => {
