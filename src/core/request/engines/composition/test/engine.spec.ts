@@ -1,5 +1,5 @@
 import Async from 'core/async';
-import request, { globalOpts, RequestError } from 'core/request';
+import request, { globalOpts, RequestError, RequestPromise } from 'core/request';
 import { compositionEngine } from 'core/request/engines/composition';
 import { createServer } from 'core/request/engines/composition/test/server';
 
@@ -29,20 +29,16 @@ describe('core/request/engines/composition as request engine', () => {
 	it.only('engine destructor call should lead to triggering the destructors of all the providers created by the engine', async () => {
 		server.handles.json2.response(200, {test: 1});
 
-		let r;
-
 		const engine = compositionEngine([
 			{
-				request: () => r = request(server.url('json/2')),
+				request: () => request(server.url('json/2')),
 				as: 'result'
 			}
 		]);
 
 		try {
-			await request('', {engine}).data;
-
 			const
-				requestResponseObject = await r,
+				requestResponseObject = await request('', {engine}),
 				spy = jest.spyOn(requestResponseObject, 'destroy');
 
 			expect(spy).toHaveBeenCalledTimes(0);
