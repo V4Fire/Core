@@ -19,7 +19,7 @@ describe('core/request/engines/composition with provider', () => {
 	let server: Awaited<ReturnType<typeof createServer>>;
 
 	beforeAll(async () => {
-		server = await createServer();
+		server = await createServer(5000);
 	});
 
 	beforeEach(() => {

@@ -6,9 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import type { Server } from 'node:http';
 import express, { Request, Response } from 'express';
 import path from 'upath';
-import { getPortPromise } from 'portfinder';
 
 import Async from 'core/async';
 
@@ -18,7 +18,7 @@ interface HandleResponse {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export async function createServer() {
+export async function createServer(startPort: number) {
 	const serverApp = express();
 	serverApp.use(express.json());
 
@@ -113,9 +113,24 @@ export async function createServer() {
 		Object.values(handles).forEach((handle) => handle.clear());
 	};
 
-	const
-		port = await getPortPromise({startPort: 8000}),
-		server = serverApp.listen(port);
+	const [server, port] = await new Promise<[Server, number]>((res) => {
+		let selectedPort = startPort;
+
+		const start = () => {
+			const server = serverApp.listen(selectedPort, () => {
+				res([server, selectedPort]);
+			});
+
+			server.on('error', (err) => {
+				console.log('error', err);
+				selectedPort++;
+				server.close();
+				start();
+			});
+		};
+
+		start();
+	});
 
 	const result = {
 		handles,
@@ -123,7 +138,7 @@ export async function createServer() {
 		clearHandles,
 		port,
 
-		url: (...paths: string[]) => path.join(`http://localhost:${port}/`, ...paths),
+		url: (...paths: string[]) => path.join(`http://localhost:${startPort}/`, ...paths),
 
 		destroy: () => {
 			server.close();

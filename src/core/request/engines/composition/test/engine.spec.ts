@@ -13,7 +13,7 @@ describe('core/request/engines/composition as request engine', () => {
 	beforeAll(async () => {
 		api = globalOpts.api;
 		globalOpts.api = undefined;
-		server = await createServer();
+		server = await createServer(4444);
 	});
 
 	beforeEach(() => {
