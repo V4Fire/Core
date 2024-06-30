@@ -122,7 +122,7 @@ export async function createServer(startPort: number) {
 			});
 
 			server.on('error', (err) => {
-				console.log('error', err);
+				console.log('server error', err);
 				selectedPort++;
 				server.close();
 				start();

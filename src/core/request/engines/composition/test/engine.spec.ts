@@ -17,8 +17,11 @@ describe('core/request/engines/composition as request engine', () => {
 	});
 
 	beforeEach(() => {
-		server.clearHandles();
 		server.handles.json1.response(200, {test: 1});
+	});
+
+	afterEach(() => {
+		server.clearHandles();
 	});
 
 	afterAll(() => {
