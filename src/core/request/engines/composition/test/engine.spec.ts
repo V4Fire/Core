@@ -27,6 +27,8 @@ describe('core/request/engines/composition as request engine', () => {
 	});
 
 	it('engine destructor call should lead to triggering the destructors of all the providers created by the engine', async () => {
+		server.handles.json1.response(200, {test: 1});
+
 		let r;
 
 		const engine = compositionEngine([
@@ -78,7 +80,7 @@ describe('core/request/engines/composition as request engine', () => {
 	});
 
 	it('should not throw an error in a request without failCompositionOnError', async () => {
-		server.handles.json1.response(500, {});
+		server.handles.json1.responseOnce(500, {});
 
 		const engine = compositionEngine([
 			{
@@ -103,7 +105,7 @@ describe('core/request/engines/composition as request engine', () => {
 	});
 
 	it('error in a request with failCompositionOnError should throw an error', async () => {
-		server.handles.json1.response(500, {});
+		server.handles.json1.responseOnce(500, {});
 
 		const engine = compositionEngine([
 			{
