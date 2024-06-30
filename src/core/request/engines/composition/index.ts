@@ -89,7 +89,7 @@ export function compositionEngine(
 				resolve(new Response(data, {
 					parent: requestOptions.parent,
 					important: requestOptions.important,
-					responseType: 'object',
+					responseType: 'json',
 					okStatuses: requestOptions.okStatuses,
 					status: Object.cast<StatusCodes>(200),
 					decoder: requestOptions.decoders

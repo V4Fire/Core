@@ -280,7 +280,6 @@ describe('core/request/engines/composition with provider', () => {
 	});
 
 	it('should properly cache provider instances', async () => {
-
 		server.handles.json1.responseOnce(200, {test: 1}).response(200, {test: 2});
 		server.handles.json2.responseOnce(200, {foo: 2}).responseOnce(200, {foo: 3}).responseOnce(200, {foo: 4});
 
