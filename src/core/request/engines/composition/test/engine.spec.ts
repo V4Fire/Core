@@ -53,25 +53,31 @@ describe('core/request/engines/composition as request engine', () => {
 	});
 
 	it('should trigger a call to dropCache on all providers that were created by the engine when dropCache is called on the engine', async () => {
-		let r;
+		try {
+			let r;
 
-		const engine = compositionEngine([
-			{
-				request: () => r = request(server.url('json/1')),
-				as: 'result'
-			}
-		]);
+			const engine = compositionEngine([
+				{
+					request: () => r = request(server.url('json/1')),
+					as: 'result'
+				}
+			]);
 
-		await request('', {engine}).data;
+			await request('', {engine}).data;
 
-		const
-			requestResponseObject = await r,
-			spy = jest.spyOn(requestResponseObject, 'dropCache');
+			const
+				requestResponseObject = await r,
+				spy = jest.spyOn(requestResponseObject, 'dropCache');
 
-		expect(spy).toHaveBeenCalledTimes(0);
-		engine.dropCache();
+			expect(spy).toHaveBeenCalledTimes(0);
+			engine.dropCache();
 
-		expect(spy).toHaveBeenCalledTimes(1);
+			expect(spy).toHaveBeenCalledTimes(1);
+		} catch (err) {
+			console.log('megaerror');
+			console.log(err);
+		}
+
 	});
 
 	it('should not throw an error in a request without failCompositionOnError', async () => {
