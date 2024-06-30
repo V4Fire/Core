@@ -27,13 +27,13 @@ describe('core/request/engines/composition as request engine', () => {
 	});
 
 	it('engine destructor call should lead to triggering the destructors of all the providers created by the engine', async () => {
-		server.handles.json1.response(200, {test: 1});
+		server.handles.json2.response(200, {test: 1});
 
 		let r;
 
 		const engine = compositionEngine([
 			{
-				request: () => r = request(server.url('json/1')),
+				request: () => r = request(server.url('json/2')),
 				as: 'result'
 			}
 		]);
