@@ -60,8 +60,8 @@ export function compositionEngine(
 			const {provider} = params.opts.meta;
 
 			if (provider) {
-				async.on(provider.emitter, 'dropCache', (...args) => {
-					engine.dropCache(...args);
+				async.on(provider.emitter, 'dropCache', (recursive?: boolean) => {
+					engine.dropCache(recursive);
 				}, {label: 'dropCacheListener'});
 
 				async.on(provider.emitter, 'destroy', () => {
@@ -177,10 +177,11 @@ async function gatherDataFromRequests(
 					throw new AggregateError(errors);
 				}
 			});
-	}
 
-	(await Promise.all(promises))
-		.forEach((value, index) => accumulateData(accumulator, value, options.compositionRequests[index]));
+	} else {
+		const results = await Promise.all(promises);
+		results.forEach((value, index) => accumulateData(accumulator, value, options.compositionRequests[index]));
+	}
 
 	return accumulator;
 }
@@ -194,10 +195,12 @@ function accumulateData(
 		{as} = compositionRequest;
 
 	if (as === 'spread') {
-		return Object.assign(accumulator, data);
+		Object.assign(accumulator, data);
+
+	} else {
+		Object.set(accumulator, as, data);
 	}
 
-	accumulator[as] = data;
 	return accumulator;
 }
 
