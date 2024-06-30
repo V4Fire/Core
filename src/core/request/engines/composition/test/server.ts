@@ -8,6 +8,7 @@
 
 import express, { Request, Response } from 'express';
 import path from 'upath';
+import { getPortPromise } from 'portfinder';
 
 import Async from 'core/async';
 
@@ -17,7 +18,7 @@ interface HandleResponse {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function createServer(port: number) {
+export async function createServer() {
 	const serverApp = express();
 	serverApp.use(express.json());
 
@@ -112,7 +113,9 @@ export function createServer(port: number) {
 		Object.values(handles).forEach((handle) => handle.clear());
 	};
 
-	const server = serverApp.listen(port);
+	const
+		port = await getPortPromise({startPort: 8000}),
+		server = serverApp.listen(port);
 
 	const result = {
 		handles,

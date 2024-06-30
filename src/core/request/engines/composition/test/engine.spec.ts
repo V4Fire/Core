@@ -4,16 +4,16 @@ import { compositionEngine } from 'core/request/engines/composition';
 import { createServer } from 'core/request/engines/composition/test/server';
 
 // eslint-disable-next-line max-lines-per-function
-describe('core/request/engines/composition with request', () => {
+describe('core/request/engines/composition as request engine', () => {
 	let server: Awaited<ReturnType<typeof createServer>>;
 
 	let
 		api;
 
-	beforeAll(() => {
+	beforeAll(async () => {
 		api = globalOpts.api;
 		globalOpts.api = undefined;
-		server = createServer(4444);
+		server = await createServer();
 	});
 
 	beforeEach(() => {
