@@ -186,6 +186,13 @@ async function gatherDataFromRequests(
 	return accumulator;
 }
 
+/**
+ * Accumulates data into an accumulator object based on the composition request.
+ *
+ * @param accumulator
+ * @param data
+ * @param compositionRequest
+ */
 function accumulateData(
 	accumulator: Dictionary,
 	data: unknown,

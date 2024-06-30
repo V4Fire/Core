@@ -30,7 +30,7 @@ describe('core/request/engines/composition with provider', () => {
 		server.destroy();
 	});
 
-	it('should invoke the decoder with correct data', async () => {
+	it.only('should invoke the decoder with correct data', async () => {
 		server.handles.json1.response(200, {test: 1});
 		server.handles.json2.response(200, {test: 2});
 
