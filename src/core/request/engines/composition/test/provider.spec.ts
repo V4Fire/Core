@@ -30,18 +30,22 @@ describe('core/request/engines/composition with provider', () => {
 		server.destroy();
 	});
 
-	it.only('should invoke the decoder with correct data', async () => {
+	it('should invoke the decoder with correct data', async () => {
 		server.handles.json1.response(200, {test: 1});
 		server.handles.json2.response(200, {test: 2});
 
 		@provider
 		class TestProviderDecoder1 extends Provider {
-			override baseURL: string = server.url('json/1');
+			static override request: Provider['request'] = Provider.request({api: {url: server.url()}});
+
+			override baseURL: string = '/json/1';
 		}
 
 		@provider
 		class TestProviderDecoder2 extends Provider {
-			override baseURL: string = server.url('json/2');
+			static override request: Provider['request'] = Provider.request({api: {url: server.url()}});
+
+			override baseURL: string = '/json/2';
 		}
 
 		const
@@ -90,21 +94,25 @@ describe('core/request/engines/composition with provider', () => {
 		@provider
 		class TestProviderDropCache1 extends Provider {
 			static override request: Provider['request'] = Provider.request({
+				api: {url: server.url()},
+
 				cacheStrategy: 'queue',
 				cacheTTL: (20).seconds()
 			});
 
-			override baseURL: string = server.url('json/1');
+			override baseURL: string = '/json/1';
 		}
 
 		@provider
 		class TestProviderDropCache2 extends Provider {
 			static override request: Provider['request'] = Provider.request({
+				api: {url: server.url()},
+
 				cacheStrategy: 'queue',
 				cacheTTL: (20).seconds()
 			});
 
-			override baseURL: string = server.url('json/2');
+			override baseURL: string = '/json/2';
 		}
 
 		const
@@ -153,21 +161,25 @@ describe('core/request/engines/composition with provider', () => {
 		@provider
 		class TestProviderDestructor1 extends Provider {
 			static override request: Provider['request'] = Provider.request({
+				api: {url: server.url()},
+
 				cacheStrategy: 'queue',
 				cacheTTL: (10).seconds()
 			});
 
-			override baseURL: string = server.url('json/1');
+			override baseURL: string = '/json/1';
 		}
 
 		@provider
 		class TestProviderDestructor2 extends Provider {
 			static override request: Provider['request'] = Provider.request({
+				api: {url: server.url()},
+
 				cacheStrategy: 'queue',
 				cacheTTL: (10).seconds()
 			});
 
-			override baseURL: string = server.url('json/2');
+			override baseURL: string = '/json/2';
 		}
 
 		const
@@ -220,12 +232,14 @@ describe('core/request/engines/composition with provider', () => {
 
 		@provider
 		class TestProviderOptions1 extends Provider {
-			override baseURL: string = server.url('json/1');
+			static override request: Provider['request'] = Provider.request({api: {url: server.url()}});
+			override baseURL: string = '/json/1';
 		}
 
 		@provider
 		class TestProviderOptions2 extends Provider {
-			override baseURL: string = server.url('json/2');
+			static override request: Provider['request'] = Provider.request({api: {url: server.url()}});
+			override baseURL: string = '/json/2';
 		}
 
 		let
@@ -286,19 +300,21 @@ describe('core/request/engines/composition with provider', () => {
 		@provider
 		class TestProviderInstance1 extends Provider {
 			static override request: Provider['request'] = Provider.request({
+				api: {url: server.url()},
 				cacheStrategy: 'queue'
 			});
 
-			override baseURL: string = server.url('json/1');
+			override baseURL: string = '/json/1';
 		}
 
 		@provider
 		class TestProviderInstance2 extends Provider {
 			static override request: Provider['request'] = Provider.request({
+				api: {url: server.url()},
 				cacheStrategy: 'queue'
 			});
 
-			override baseURL: string = server.url('json/2');
+			override baseURL: string = '/json/2';
 		}
 
 		let i = 2;
