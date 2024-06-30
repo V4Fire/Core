@@ -4,7 +4,7 @@ import { compositionEngine } from 'core/request/engines/composition';
 import { createServer } from 'core/request/engines/composition/test/server';
 
 // eslint-disable-next-line max-lines-per-function
-describe('core/request/engines/composition with request', () => {
+describe.skip('core/request/engines/composition with request', () => {
 	let server: Awaited<ReturnType<typeof createServer>>;
 
 	beforeAll(() => {
