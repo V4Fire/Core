@@ -71,8 +71,6 @@ export async function createServer(startPort: number) {
 			},
 
 			clear: () => {
-				// F requests.forEach(({response}) => response.sendStatus(521));
-
 				requests.length = 0;
 				responses.length = 0;
 				calls.length = 0;
