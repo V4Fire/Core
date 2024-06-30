@@ -17,16 +17,13 @@ describe('core/request/engines/composition as request engine', () => {
 	});
 
 	beforeEach(() => {
+		server.clearHandles();
 		server.handles.json1.response(200, {test: 1});
-	});
-
-	afterEach(() => {
-		// F server.clearHandles();
 	});
 
 	afterAll(() => {
 		globalOpts.api = api;
-		// F server.destroy();
+		server.destroy();
 	});
 
 	it('engine destructor call should lead to triggering the destructors of all the providers created by the engine', async () => {
