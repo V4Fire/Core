@@ -118,8 +118,9 @@ export async function createServer(startPort: number) {
 		let selectedPort = startPort;
 
 		const start = () => {
-			const server = serverApp.listen(selectedPort, () => {
+			const server = serverApp.listen(selectedPort, async () => {
 				console.log('listen on port', selectedPort);
+				await new Promise((res) => setTimeout(res, 100));
 				res([server, selectedPort]);
 			});
 
