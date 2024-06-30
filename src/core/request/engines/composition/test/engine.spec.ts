@@ -38,22 +38,16 @@ describe('core/request/engines/composition as request engine', () => {
 			}
 		]);
 
-		try {
-			await request('', {engine}).data;
+		await request('', {engine}).data;
 
-			const
-				requestResponseObject = await r,
-				spy = jest.spyOn(requestResponseObject, 'destroy');
+		const
+			requestResponseObject = await r,
+			spy = jest.spyOn(requestResponseObject, 'destroy');
 
-			expect(spy).toHaveBeenCalledTimes(0);
-			engine.destroy();
+		expect(spy).toHaveBeenCalledTimes(0);
+		engine.destroy();
 
-			expect(spy).toHaveBeenCalledTimes(1);
-
-		} catch (err) {
-			console.log('megaerror');
-			console.log(err);
-		}
+		expect(spy).toHaveBeenCalledTimes(1);
 
 	});
 
