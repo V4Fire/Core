@@ -8,9 +8,9 @@
 
 import type { Server } from 'node:http';
 import express, { Request, Response } from 'express';
-import path from 'upath';
 
 import Async from 'core/async';
+import { concatURLs } from 'core/url';
 
 interface HandleResponse {
 	statusCode: number;
@@ -138,7 +138,7 @@ export async function createServer(startPort: number) {
 		clearHandles,
 		port,
 
-		url: (...paths: string[]) => path.join(`http://localhost:${startPort}/`, ...paths),
+		url: (...paths: string[]) => concatURLs(`http://localhost:${startPort}/`, ...paths),
 
 		destroy: () => {
 			server.close();
