@@ -20,7 +20,7 @@ import { RequestOptions, Response, MiddlewareParams, RequestResponseObject } fro
 
 import type {
 
-	BoundedCompositionEngineRequest,
+	DestroyableObject,
 	CompositionEngineOpts,
 	CompositionRequestEngine,
 	CompositionRequest,
@@ -92,7 +92,8 @@ export function compositionEngine(
 					responseType: 'object',
 					okStatuses: requestOptions.okStatuses,
 					status: StatusCodes.OK,
-					decoder: requestOptions.decoders
+					decoder: requestOptions.decoders,
+					noContentStatuses: requestOptions.noContentStatuses
 				}));
 			}).catch(reject);
 		});
@@ -114,7 +115,7 @@ function boundRequest<T extends unknown>(
 	async: Async,
 	requestObject: T
 ): T {
-	if (isRequestLikeObject(requestObject)) {
+	if (isDestroyableObject(requestObject)) {
 		// If the request is made using a provider method,
 		// calling destroy/dropCache on the RequestResponseObject
 		// is not identical to calling dropCache/destroy on the provider that
@@ -220,7 +221,7 @@ function accumulateData(
  * @returns True if the argument is a BoundedCompositionEngineRequest, otherwise false.
  */
 
-function isRequestLikeObject(something: unknown): something is BoundedCompositionEngineRequest {
+function isDestroyableObject(something: unknown): something is DestroyableObject {
 	return Object.isPlainObject(something) &&
 		(
 			'dropCache' in something ||
@@ -237,7 +238,7 @@ function isRequestLikeObject(something: unknown): something is BoundedCompositio
  * @param something
  */
 function isRequestResponseObject(something: unknown): something is RequestResponseObject {
-	return isRequestLikeObject(something) && 'data' in something && 'response' in something;
+	return isDestroyableObject(something) && 'data' in something && 'response' in something;
 }
 
 /**

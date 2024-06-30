@@ -70,7 +70,7 @@ describe('core/request/engines/composition as request engine', () => {
 		expect(spy).toHaveBeenCalledTimes(1);
 	});
 
-	it('error in a request without failCompositionOnError should not throw an error.', async () => {
+	it('should not throw an error in a request without failCompositionOnError', async () => {
 		server.handles.json1.response(500, {});
 
 		const engine = compositionEngine([

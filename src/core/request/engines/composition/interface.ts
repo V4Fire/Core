@@ -157,7 +157,7 @@ export interface CompositionRequestOptions {
 	compositionRequests: CompositionRequest[];
 }
 
-export interface BoundedCompositionEngineRequest {
+export interface DestroyableObject {
 	dropCache?(recursive?: boolean): void;
 	destroy?(): void;
 }

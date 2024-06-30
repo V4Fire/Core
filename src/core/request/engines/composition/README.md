@@ -46,13 +46,13 @@ const r = request({engine: compositionEngine([
 const data = await r('').data; // {val1: data, val2: data}
 ```
 
-It is possible to use other approaches, for example, creating a simple function that will make several requests, and there is no arguing with you.
+It is possible to use other approaches, for example, creating a simple function that will make several requests.
 But as mentioned in the module description, first and foremost, this engine is needed to expand the capabilities of data providers.
 Let's now consider how this engine helps to enhance the abilities of data providers.
 
 ### Using the `requestFilter` Property
 
-Each «request» object has the `requestFilter` property.
+Each "request" object has the `requestFilter` property.
 The `requestFilter` is called before the request function is called.
 If the `requestFilter` returns false, the request will not be called and, consequently,
 there will be no data from this request in the response.
@@ -83,12 +83,12 @@ it will be thrown as a `ComposedProvider` request error.
 ```typescript
 const r = request({engine: compositionEngine([
   {
-    request: (opts, params, {boundRequest}) => boundRequest(request('http://locahost:5555/json/1')),
+    request: () => request('http://locahost:5555/json/1'),
     as: 'val1',
     failCompositionOnError: true
   },
   {
-    request: (opts, params, {boundRequest}) => boundRequest(request('http://locahost:5555/json/2')),
+    request: () => request('http://locahost:5555/json/2'),
     as: 'val2'
   },
 ])});
@@ -104,8 +104,7 @@ try {
 If both request objects have the `failCompositionOnError` flag set, the error will be thrown as soon as any of them responds with an error.
 However, this behavior can be changed by setting the aggregateErrors flag,
 which will alter the engine's behavior in this situation.
-If the flag is set to true, the engine will wait for all requests to complete and gather errors from
-all requests that have the `failCompositionOnError` flag set.
+In this case the engine will return an AggregateError that will contain all the errors from the requests.
 Additionally, instead of the request's own error,
 the engine will return an AggregateError that will contain all the errors from the requests.
 
@@ -192,7 +191,7 @@ console.log(data) // {request1: {val1: data, val2: data}, request2: data}
 
 Notice that, the request function provides a special function called `boundRequest`,
 which is needed to bind the request object to the provider engine. The request object returned
-from the request function is automatically wrapped in this function. However, if you make 
+from the request function is automatically wrapped in this function. However, if you make
 multiple requests within the request function, it is important to use `boundRequest` to avoid memory leaks.
 
 #### Making a POST Request
@@ -215,7 +214,7 @@ class MainProvider extends Provider {
   static override request: Provider['request'] = Provider.request({
     engine: compositionEngine([
       {
-        request: (opts, params, {boundRequest}) => {
+        request: ({boundRequest}) => {
           if (opts.method === 'GET') {
             const data = await boundRequest(new Provider1()).get().data;
 
@@ -254,7 +253,7 @@ the request will be merged with the resulting object.
 ```typescript
 export class MyCompositionProvider extends Provider {
   static override request: typeof Provider.request = Provider.request({
-    engine: providerCompositionEngine([
+    engine: compositionEngine([
       {
         request: () => new Provider1().get() // returns {foo: 'value', bar: 'value'}
         as: 'spread'
