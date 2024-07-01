@@ -91,15 +91,13 @@ export function compositionEngine(
 					responseType: 'object',
 					okStatuses: requestOptions.okStatuses,
 					status: StatusCodes.OK,
-					decoder: requestOptions.decoders,
-					noContentStatuses: requestOptions.noContentStatuses
+					decoder: requestOptions.decoders
 				}));
 			}).catch(reject);
 		});
 	};
 
 	engine.dropCache = () => async.clearAll({group: 'cache'});
-	engine.destroy = () => async.clearAll();
 
 	return engine;
 }

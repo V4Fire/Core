@@ -163,6 +163,5 @@ export interface DestroyableObject {
 }
 
 export interface CompositionRequestEngine extends RequestEngine {
-	dropCache: NonNullable<RequestEngine['dropCache']>;
-	destroy: NonNullable<RequestEngine['destroy']>;
+	dropCache: Function;
 }
