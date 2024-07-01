@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -7,6 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 
 import Provider, { DecodersMap, provider } from 'core/data';
