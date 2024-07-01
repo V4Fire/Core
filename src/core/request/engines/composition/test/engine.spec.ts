@@ -1,8 +1,15 @@
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
 import Async from 'core/async';
-import request, { globalOpts, RequestError, RequestResponseObject } from 'core/request';
-import { compositionEngine } from 'core/request/engines/composition';
+import request, { globalOpts, RequestError } from 'core/request';
+import { compositionEngine, compositionEngineSpreadResult } from 'core/request/engines/composition';
 import { createServer } from 'core/request/engines/composition/test/server';
-import { compositionEngineSpreadResult } from 'core/request/engines/provider';
 
 // eslint-disable-next-line max-lines-per-function
 describe('core/request/engines/composition as request engine', () => {
@@ -25,32 +32,6 @@ describe('core/request/engines/composition as request engine', () => {
 	afterAll(() => {
 		globalOpts.api = api;
 		server.destroy();
-	});
-
-	it('engine destructor should trigger the destructors of all providers it created', async () => {
-		server.handles.json2.response(200, {test: 1});
-
-		let r: RequestResponseObject;
-
-		const engine = compositionEngine([
-			{
-				request: async () => {
-					r = await request(server.url('json/2'));
-					return r;
-				},
-				as: 'result'
-			}
-		]);
-
-		const
-			_data = await request('', {engine}).data,
-			requestResponseObject = r!,
-			spy = jest.spyOn(requestResponseObject, 'destroy');
-
-		expect(spy).toHaveBeenCalledTimes(0);
-		engine.destroy();
-
-		expect(spy).toHaveBeenCalledTimes(1);
 	});
 
 	it('calling dropCache on the engine should trigger dropCache on all created providers', async () => {
@@ -122,7 +103,7 @@ describe('core/request/engines/composition as request engine', () => {
 			error = err;
 		}
 
-		const details = error.details.deref()!;
+		const {details} = error;
 
 		expect(result).toBeUndefined();
 		expect(error).toBeInstanceOf(RequestError);
@@ -315,18 +296,18 @@ describe('core/request/engines/composition as request engine', () => {
 			error2: RequestError = error.errors[1];
 
 		const
-			details1 = error1.details.deref(),
-			details2 = error2.details.deref();
+			details1 = error1.details,
+			details2 = error2.details;
 
 		expect(result).toBeUndefined();
 		expect(error).toBeInstanceOf(AggregateError);
 		expect(error.errors).toHaveLength(2);
 
 		expect(error1).toBeInstanceOf(RequestError);
-		expect(details1?.response!.status).toBe(500);
+		expect(details1.response!.status).toBe(500);
 
 		expect(error2).toBeInstanceOf(RequestError);
-		expect(details2?.response!.status).toBe(401);
+		expect(details2.response!.status).toBe(401);
 	});
 
 	it('should spread result if spread is specified in "as"', async () => {

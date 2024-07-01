@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -13,7 +12,7 @@ import Provider, { DecodersMap, provider } from 'core/data';
 
 import { compositionEngine } from 'core/request/engines/composition';
 import { createServer } from 'core/request/engines/composition/test/server';
-import type { CompositionRequestOptions } from 'core/request/engines/provider';
+import type { CompositionRequestOptions } from 'core/request/engines/composition';
 
 describe('core/request/engines/composition with provider', () => {
 	let server: Awaited<ReturnType<typeof createServer>>;
@@ -144,78 +143,6 @@ describe('core/request/engines/composition with provider', () => {
 			request1: {json1: 'json1'},
 			request2: {json2: 'json2'}
 		});
-	});
-
-	it('should call the destructor for each provider', async () => {
-		server.handles.json1.response(200, {test: 1});
-		server.handles.json2.response(200, {test: 2});
-
-		@provider
-		class TestProviderDestructor1 extends Provider {
-			static override request: Provider['request'] = Provider.request({
-				api: {url: server.url()},
-
-				cacheStrategy: 'queue',
-				cacheTTL: (10).seconds()
-			});
-
-			override baseGetURL: string = server.url('/json/1');
-		}
-
-		@provider
-		class TestProviderDestructor2 extends Provider {
-			static override request: Provider['request'] = Provider.request({
-				api: {url: server.url()},
-
-				cacheStrategy: 'queue',
-				cacheTTL: (10).seconds()
-			});
-
-			override baseGetURL: string = server.url('/json/2');
-		}
-
-		const
-			provider1 = new TestProviderDestructor1(),
-			provider2 = new TestProviderDestructor2();
-
-		const
-			destroy1 = jest.spyOn(provider1, 'destroy'),
-			destroy2 = jest.spyOn(provider2, 'destroy');
-
-		const
-			request1 = () => provider1.get(),
-			request2 = () => provider2.get();
-
-		const engine = compositionEngine([
-			{
-				request: request1,
-				as: 'request1'
-			},
-			{
-				request: request2,
-				as: 'request2'
-			}
-		]);
-
-		@provider
-		class CompositionProviderDestructor extends Provider {
-			static override request: Provider['request'] = Provider.request({
-				engine
-			});
-		}
-
-		const
-			dp = new CompositionProviderDestructor();
-
-		expect(await dp.get().data).toEqual({
-			request1: {test: 1},
-			request2: {test: 2}
-		});
-
-		dp.destroy();
-
-		expect(destroy1).toBeCalledTimes(1);
-		expect(destroy2).toBeCalledTimes(1);
 	});
 
 	it('should provide the constructor options of the Provider to the request', async () => {
