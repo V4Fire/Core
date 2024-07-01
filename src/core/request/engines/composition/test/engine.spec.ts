@@ -26,7 +26,7 @@ describe('core/request/engines/composition as request engine', () => {
 		server.destroy();
 	});
 
-	it('engine destructor call should lead to triggering the destructors of all the providers created by the engine', async () => {
+	it('engine destructor should trigger the destructors of all providers it created', async () => {
 		server.handles.json2.response(200, {test: 1});
 
 		let r: RequestResponseObject;
@@ -52,7 +52,7 @@ describe('core/request/engines/composition as request engine', () => {
 		expect(spy).toHaveBeenCalledTimes(1);
 	});
 
-	it('should trigger a call to dropCache on all providers that were created by the engine when dropCache is called on the engine', async () => {
+	it('calling dropCache on the engine should trigger dropCache on all created providers', async () => {
 			let r;
 
 			const engine = compositionEngine([
@@ -74,7 +74,7 @@ describe('core/request/engines/composition as request engine', () => {
 			expect(spy).toHaveBeenCalledTimes(1);
 	});
 
-	it('should not throw an error in a request without failCompositionOnError', async () => {
+	it('a request without failCompositionOnError option should not throw an error', async () => {
 		server.handles.json1.responseOnce(500, {});
 
 		const engine = compositionEngine([
@@ -99,7 +99,7 @@ describe('core/request/engines/composition as request engine', () => {
 		expect(error).toBeUndefined();
 	});
 
-	it('error in a request with failCompositionOnError should throw an error', async () => {
+	it('should throw an error in a request with failCompositionOnError', async () => {
 		server.handles.json1.responseOnce(500, {});
 
 		const engine = compositionEngine([
@@ -129,7 +129,7 @@ describe('core/request/engines/composition as request engine', () => {
 		expect(details.response!.ok).toBe(false);
 	});
 
-	it('request should not be made if the requestFilter returns false', async () => {
+	it('a request should be prevented if the requestFilter returns false', async () => {
 		server.handles.json1.response(200, {test: 1});
 		server.handles.json2.response(200, {test: 2});
 
@@ -151,7 +151,7 @@ describe('core/request/engines/composition as request engine', () => {
 		expect(data).toEqual({val2: {test: 2}});
 	});
 
-	it('request should not be made until the requestFilter promise is resolved', async () => {
+	it('a request should be delayed until the requestFilter promise resolves', async () => {
 		server.handles.json1.response(200, {test: 1});
 		server.handles.json2.response(200, {test: 2});
 
@@ -187,7 +187,7 @@ describe('core/request/engines/composition as request engine', () => {
 		expect(server.handles.json2.calls).toHaveLength(1);
 	});
 
-	it('request should not be made if the requestFilter promise is resolved with a result of false', async () => {
+	it('a request should be prevented if the requestFilter promise resolves with a result of false', async () => {
 		server.handles.json1.response(200, {test: 1});
 		server.handles.json2.response(200, {test: 2});
 
@@ -223,7 +223,7 @@ describe('core/request/engines/composition as request engine', () => {
 		expect(server.handles.json2.calls).toHaveLength(1);
 	});
 
-	it('request should be made if the requestFilter returns true', async () => {
+	it('a request should be made if the requestFilter returns true', async () => {
 		server.handles.json1.response(200, {test: 1});
 		server.handles.json2.response(200, {test: 2});
 
@@ -245,7 +245,7 @@ describe('core/request/engines/composition as request engine', () => {
 		expect(data).toEqual({val1: {test: 1}, val2: {test: 2}});
 	});
 
-	it('request should be made if the requestFilter promise is resolved with a result of true', async () => {
+	it('a request should be made if the requestFilter promise resolves with a result of true', async () => {
 		server.handles.json1.response(200, {test: 1});
 		server.handles.json2.response(200, {test: 2});
 
@@ -281,7 +281,7 @@ describe('core/request/engines/composition as request engine', () => {
 		expect(server.handles.json2.calls).toHaveLength(1);
 	});
 
-	it('should return AggregateErrors with errors from all requests that have failCompositionOnError set', async () => {
+	it('should return an AggregateError containing errors from all requests configured with failCompositionOnError set to true', async () => {
 		server.handles.json1.response(500, {});
 		server.handles.json2.response(401, {});
 
@@ -384,8 +384,8 @@ describe('core/request/engines/composition as request engine', () => {
 		});
 	});
 
-	describe('request created in the request function has a cacheStrategy of "queue"', () => {
-		test('caches the request and does not make duplicate requests', async () => {
+	describe('when a request created in the request function has a cacheStrategy of "queue"', () => {
+		test('the engine should cache the request and avoid making duplicate requests', async () => {
 			server.handles.json1.responseOnce(200, {test: 1}).responseOnce(200, {test: 3});
 			server.handles.json2.responseOnce(200, {test: 2}).responseOnce(200, {test: 4});
 
