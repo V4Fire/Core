@@ -288,6 +288,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		}
 
 		requestCache[this.cacheId] = Object.createDict();
+		this.emitter.emit('dropCache');
 	}
 
 	/** @inheritDoc */
