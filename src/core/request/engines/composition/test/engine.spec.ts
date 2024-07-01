@@ -1,8 +1,7 @@
 import Async from 'core/async';
 import request, { globalOpts, RequestError, RequestResponseObject } from 'core/request';
-import { compositionEngine } from 'core/request/engines/composition';
+import { compositionEngine, compositionEngineSpreadResult } from 'core/request/engines/composition';
 import { createServer } from 'core/request/engines/composition/test/server';
-import { compositionEngineSpreadResult } from 'core/request/engines/provider';
 
 // eslint-disable-next-line max-lines-per-function
 describe('core/request/engines/composition as request engine', () => {
