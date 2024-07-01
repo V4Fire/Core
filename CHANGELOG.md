@@ -11,6 +11,11 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.39 (2024-07-01)
+
+* Added a new engine for the request module - `compositionEngine`. `compositionEngine` allows you to solve problems
+composition of requests in more complex structures (such as Provider). `core/request/engines/composition`
+
 ## v4.0.0-alpha.38 (2024-06-28)
 
 #### :rocket: New Feature
