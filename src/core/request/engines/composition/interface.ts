@@ -33,7 +33,7 @@ export interface CompositionRequest {
 	 * ```typescript
 	 * export class MyCompositionProvider extends Provider {
 	 *   static override request: typeof Provider.request = Provider.request({
-	 *     engine: providerCompositionEngine([
+	 *     engine: compositionEngine([
 	 *       {
 	 *         request: () => new Provider1().get()
 	 *         as: 'banners'

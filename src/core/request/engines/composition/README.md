@@ -247,16 +247,18 @@ const postData = await new MainProvider().post().data // {request1: {postData: d
 
 There is also an option to merge the result of a request with the resulting object
 instead of storing it in a specific property of the resulting object.
-To do this, specify 'spread' in the 'as' field, and the result of
+To do this, specify '[[SPREAD]]' in the 'as' field, and the result of
 the request will be merged with the resulting object.
 
 ```typescript
+import { compositionEngineSpreadResult, ... } from 'core/request/engines/composition';
+
 export class MyCompositionProvider extends Provider {
   static override request: typeof Provider.request = Provider.request({
     engine: compositionEngine([
       {
         request: () => new Provider1().get() // returns {foo: 'value', bar: 'value'}
-        as: 'spread'
+        as: compositionEngineSpreadResult // equals to [[SPREAD]]
       },
       {
         request: () => new Provider2().get() // returns {data: [...]}

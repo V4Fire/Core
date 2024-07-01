@@ -28,6 +28,9 @@ import type {
 
 } from 'core/request/engines/composition/interface';
 
+import { compositionEngineSpreadResult } from 'core/request/engines/composition/const';
+
+export * from 'core/request/engines/composition/const';
 export * from 'core/request/engines/composition/interface';
 
 /**
@@ -202,7 +205,7 @@ function accumulateData(
 	const
 		{as} = compositionRequest;
 
-	if (as === 'spread') {
+	if (as === compositionEngineSpreadResult) {
 		Object.assign(accumulator, data);
 
 	} else {
