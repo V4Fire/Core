@@ -9,7 +9,7 @@
 import type AbortablePromise from '../../../core/promise/abortable';
 import type { StatusCodes } from '../../../core/status-codes';
 import type { DataType } from '../../../core/mime-type';
-import type { OkStatuses, WrappedDecoder, WrappedDecoders, WrappedStreamDecoder, WrappedStreamDecoders } from '../../../core/request/interface';
+import type { Statuses, WrappedDecoder, WrappedDecoders, WrappedStreamDecoder, WrappedStreamDecoders } from '../../../core/request/interface';
 import type { defaultResponseOpts } from '../../../core/request/response/const';
 import type { RawHeaders } from '../../../core/request/headers';
 export declare type ResponseModeType = 'basic' | 'cors' | 'default' | 'error' | 'opaque' | 'opaqueredirect';
@@ -30,7 +30,8 @@ export interface ResponseOptions {
     important?: boolean;
     status?: StatusCodes;
     statusText?: string;
-    okStatuses?: OkStatuses;
+    okStatuses?: Statuses;
+    noContentStatuses?: Statuses;
     responseType?: ResponseType;
     forceResponseType?: boolean;
     headers?: RawHeaders;

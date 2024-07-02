@@ -16,6 +16,7 @@ export const availableParams = [
 	'query',
 	'headers',
 	'okStatuses',
+	'noContentStatuses',
 	'timeout',
 	'important',
 	'meta',

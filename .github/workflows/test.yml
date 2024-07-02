@@ -2,10 +2,10 @@ name: build
 
 on:
   push:
-    branches: [master, v4]
+    branches: [master, v4, v4-rc]
 
   pull_request:
-    branches: [master, v4]
+    branches: [master, v4, v4-rc]
 
 jobs:
   linters:

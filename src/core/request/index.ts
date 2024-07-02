@@ -44,6 +44,7 @@ import type {
 
 export * from 'core/request/helpers';
 export * from 'core/request/interface';
+export * from 'core/request/response/helpers';
 export * from 'core/request/response/interface';
 
 export { globalOpts, cache, pendingCache } from 'core/request/const';
