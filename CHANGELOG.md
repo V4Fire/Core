@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.?? (2024-07-??)
+
+#### :bug: Bug Fix
+
+* Fixed an incorrect import from `core/status-codes`. `core/request/engines/composition`
+
 ## v4.0.0-alpha.39 (2024-07-01)
 
 #### :rocket: New Feature
