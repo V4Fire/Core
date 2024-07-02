@@ -13,7 +13,7 @@
 
 import Async from 'core/async';
 import type { Provider } from 'core/data';
-import { StatusCodes } from 'core/status-codes';
+import statusCodes from 'core/status-codes';
 import AbortablePromise from 'core/promise/abortable';
 import { SyncPromise } from 'core/prelude/structures';
 import { RequestOptions, Response, MiddlewareParams, RequestResponseObject } from 'core/request';
@@ -90,7 +90,7 @@ export function compositionEngine(
 					important: requestOptions.important,
 					responseType: 'object',
 					okStatuses: requestOptions.okStatuses,
-					status: StatusCodes.OK,
+					status: statusCodes.OK,
 					decoder: requestOptions.decoders
 				}));
 			}).catch(reject);
