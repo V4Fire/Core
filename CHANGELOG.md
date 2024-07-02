@@ -11,6 +11,19 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.100.0-rc.2 (2024-07-02)
+
+#### :bug: Bug Fix
+
+* Fixed an incorrect import from `core/status-codes`. `core/request/engines/composition`
+
+## v3.100.0-rc.1 (2024-07-01)
+
+#### :rocket: New Feature
+
+* Added a new engine for the request module - `compositionEngine`. `compositionEngine` allows you to solve problems
+composition of requests in more complex structures (such as Provider). `core/request/engines/composition`
+
 ## v3.99.0 (2024-04-25)
 
 #### :rocket: New Feature
