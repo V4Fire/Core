@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.100.0-rc.? (2024-07-??)
+
+#### :bug: Bug Fix
+
+* Fixed an incorrect import from `core/status-codes`. `core/request/engines/composition`
+
 ## v3.100.0-rc.1 (2024-07-01)
 
 #### :rocket: New Feature

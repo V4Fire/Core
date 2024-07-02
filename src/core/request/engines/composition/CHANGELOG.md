@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.100.0-rc.? (2024-07-??)
+
+#### :bug: Bug Fix
+
+* Fixed an incorrect import from `core/status-codes`
+
 ## v3.100.0-rc.1 (2024-07-01)
 
 #### :rocket: New Feature
