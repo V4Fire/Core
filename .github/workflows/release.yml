@@ -19,6 +19,9 @@ jobs:
 
       - run: yarn install
 
+      - name: Build standalone version
+        run: yarn build:standalone
+
       - uses: actions/github-script@v7
         name: Extract tag
         id: extract-tag
@@ -44,6 +47,6 @@ jobs:
             const tag = prerelease[0];
             return typeof tag === 'string' ? tag : DEFAULT_TAG;
 
-      - run: yarn npm publish --tag "${{ steps.extract-tag.outputs.result }}"
+      - run: npm publish --access public --tag "${{ steps.extract-tag.outputs.result }}"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
