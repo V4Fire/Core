@@ -90,6 +90,7 @@ export function compositionEngine(
 					important: requestOptions.important,
 					responseType: 'object',
 					okStatuses: requestOptions.okStatuses,
+					noContentStatuses: requestOptions.noContentStatuses,
 					status: statusCodes.OK,
 					decoder: requestOptions.decoders
 				}));
