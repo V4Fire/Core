@@ -152,6 +152,7 @@ const request: RequestEngine = (params) => {
 				important: p.important,
 
 				okStatuses: p.okStatuses,
+				noContentStatuses: p.noContentStatuses,
 				status: response.statusCode,
 				statusText: response.statusMessage,
 

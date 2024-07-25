@@ -11,6 +11,14 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.100.0-rc.3 (2024-07-25)
+
+#### :rocket: New Feature
+
+* Added a new option `noContentStatuses`. This option allows to pass custom status code, array or range of status codes
+  which indicate a no-content response. By default, an array `[...Range(100, 199), 204, 304]` is used, but it may be useful
+  to override this value if your backend uses different status codes for no-content responses. `core/request`
+
 ## v3.100.0-rc.2 (2024-07-02)
 
 #### :bug: Bug Fix
