@@ -7,7 +7,7 @@
  */
 import type AbortablePromise from '../../../../core/promise/abortable';
 import type { Provider, ModelMethod } from '../../../../core/data';
-import type { OkStatuses, RequestBody, RequestMethod, RequestQuery } from '../../../../core/request';
+import type { Statuses, RequestBody, RequestMethod, RequestQuery } from '../../../../core/request';
 /**
  * Meta parameters for the engine
  */
@@ -26,7 +26,8 @@ export interface AvailableOptions {
     body?: RequestBody;
     timeout?: number;
     contentType?: string;
-    okStatuses?: OkStatuses;
+    okStatuses?: Statuses;
+    noContentStatuses?: Statuses;
     meta: Meta;
     important?: boolean;
     parent?: AbortablePromise;

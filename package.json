@@ -5,7 +5,7 @@
   "main": "lib/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "4.0.0-alpha.38",
+  "version": "4.0.0-alpha.42",
   "author": "kobezzza <kobezzza@gmail.com> (https://github.com/kobezzza)",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "dev": "SOURCEMAPS=true gulp watch:server",
+    "dev": "cross-env SOURCEMAPS=true && gulp watch:server",
     "build": "gulp build:server",
     "build:tsconfig": "node build/build-tsconfig",
     "build:standalone": "gulp build:standalone",
@@ -96,6 +96,7 @@
     "xhr2": "^0.2.1"
   },
   "devDependencies": {
+    "@types/express": "4.17.21",
     "@types/fs-extra-promise": "1.0.10",
     "@types/gulp": "4.0.9",
     "@types/gulp-load-plugins": "0.0.33",

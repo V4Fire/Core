@@ -11,11 +11,32 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v4.0.0-alpha.38 (2024-07-29)
+## v4.0.0-alpha.42 (2024-07-29)
 
 #### :bug: Bug Fix
 
 * Fixed memory leak with singleton providers cache `core/data/modules`
+
+## v4.0.0-alpha.40 (2024-07-02)
+
+#### :bug: Bug Fix
+
+* Fixed an incorrect import from `core/status-codes`. `core/request/engines/composition`
+
+## v4.0.0-alpha.39 (2024-07-01)
+
+#### :rocket: New Feature
+
+* Added a new engine for the request module - `compositionEngine`. `compositionEngine` allows you to solve problems
+composition of requests in more complex structures (such as Provider). `core/request/engines/composition`
+
+## v4.0.0-alpha.38 (2024-06-28)
+
+#### :rocket: New Feature
+
+* Added a new option `noContentStatuses`. This option allows to pass custom status code, array or range of status codes
+  which indicate a no-content response. By default, an array `[...Range(100, 199), 204, 304]` is used, but it may be useful
+  to override this value if your backend uses different status codes for no-content responses. `core/request`
 
 ## v4.0.0-alpha.37 (2024-06-03)
 

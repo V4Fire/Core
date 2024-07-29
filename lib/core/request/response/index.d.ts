@@ -13,11 +13,12 @@ import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import { Token } from '../../../core/json/stream/parser';
 import AbortablePromise from '../../../core/promise/abortable';
 import Headers from '../../../core/request/headers';
-import type { OkStatuses, RequestResponseChunk, WrappedDecoder, WrappedStreamDecoder } from '../../../core/request/interface';
+import type { Statuses, RequestResponseChunk, WrappedDecoder, WrappedStreamDecoder } from '../../../core/request/interface';
 import type { ResponseType, ResponseTypeValue, ResponseTypeValueP, ResponseModeType, ResponseOptions, JSONLikeValue } from '../../../core/request/response/interface';
 export * from '../../../core/request/headers';
 export * from '../../../core/request/response/const';
 export * from '../../../core/request/response/interface';
+export * from '../../../core/request/response/helpers';
 export declare const $$: StrictDictionary<symbol>;
 /**
  * Class to work with server response data
@@ -72,10 +73,20 @@ export default class Response<D extends Nullable<string | JSONLikeValue | ArrayB
      */
     readonly ok: boolean;
     /**
+     * True if the response status matches with no content status codes
+     * (by default it should match range from 100 to 199, 204 or 304)
+     */
+    readonly hasNoContent: boolean;
+    /**
      * A list of status codes (or a single code) that match successful operation.
      * Also, you can pass a range of codes.
      */
-    readonly okStatuses: OkStatuses;
+    readonly okStatuses: Statuses;
+    /**
+     * A list of status codes (or a single code) that match a response with no content.
+     * Also, you can pass a range of codes.
+     */
+    readonly noContentStatuses: Statuses;
     /**
      * Set of response headers
      */
