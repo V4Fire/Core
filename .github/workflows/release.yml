@@ -44,6 +44,6 @@ jobs:
             const tag = prerelease[0];
             return typeof tag === 'string' ? tag : DEFAULT_TAG;
 
-      - run: yarn npm publish --tag "${{ steps.extract-tag.outputs.result }}"
+      - run: yarn npm publish --access public --tag "${{ steps.extract-tag.outputs.result }}"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
