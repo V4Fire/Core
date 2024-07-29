@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.100.0 (2024-07-29)
+
+#### :house: Internal
+
+* RC branch merge
+
 ## v3.100.0-rc.3 (2024-07-25)
 
 #### :rocket: New Feature
