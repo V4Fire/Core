@@ -9,6 +9,7 @@
 import type { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import type { AbstractCache } from 'core/cache';
 
+import type Data from 'core/data';
 import type Range from 'core/range';
 import type AbortablePromise from 'core/promise/abortable';
 
@@ -23,6 +24,7 @@ import type RequestContext from 'core/request/modules/context';
 
 import type { defaultRequestOpts } from 'core/request/const';
 import type { StatusCodes } from 'core/status-codes';
+import type { ModelMethod } from 'core/data';
 
 export type RequestMethod =
 	'GET' |
@@ -65,7 +67,7 @@ export type NormalizedRequestBody = Exclude<
 	number | boolean | Dictionary
 >;
 
-export type OkStatuses =
+export type Statuses =
 	Range<number> |
 	StatusCodes |
 	StatusCodes[];
@@ -160,6 +162,12 @@ export interface RequestResolver<D = unknown, ARGS extends any[] = unknown[]> {
 }
 
 export type ResolverResult = CanUndef<CanArray<string>>;
+
+export interface RequestMeta extends Dictionary {
+	provider?: Data;
+	providerMethod?: ModelMethod;
+	providerParams?: CreateRequestOptions<any>;
+}
 
 /**
  * Options for a request
@@ -267,7 +275,16 @@ export interface CreateRequestOptions<D = unknown> {
 	 *
 	 * @default `new Range(200, 299)`
 	 */
-	okStatuses?: OkStatuses;
+	okStatuses?: Statuses;
+
+	/**
+	 * A list of status codes (or a single code) that match response with no content.
+	 * Also, you can pass a range of codes.
+	 *
+	 * @default `[statusCodes.NO_CONTENT, statusCodes.NOT_MODIFIED]
+	 *   .concat(new Range<number>(100, 199).toArray(1))`
+	 */
+	noContentStatuses?: Statuses;
 
 	/**
 	 * Value in milliseconds for a request timeout
@@ -482,7 +499,7 @@ export interface CreateRequestOptions<D = unknown> {
 	 * A dictionary with some extra parameters for the request: is usually used with middlewares to provide
 	 * domain-specific information
 	 */
-	meta?: Dictionary;
+	meta?: RequestMeta;
 
 	/**
 	 * A meta flag that indicates that the request is important: is usually used with middlewares to indicate that
@@ -671,7 +688,8 @@ export interface RequestOptions {
 	readonly parent: AbortablePromise;
 
 	readonly timeout?: number;
-	readonly okStatuses?: OkStatuses;
+	readonly okStatuses?: Statuses;
+	readonly noContentStatuses?: Statuses;
 
 	readonly contentType?: string;
 	readonly responseType?: ResponseType;
@@ -681,6 +699,7 @@ export interface RequestOptions {
 	readonly streamDecoders?: WrappedStreamDecoders;
 	readonly jsonReviver?: JSONCb | false;
 
+	readonly meta?: RequestMeta;
 	readonly headers?: Headers;
 	readonly body?: RequestBody;
 
