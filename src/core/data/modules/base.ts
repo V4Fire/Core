@@ -118,9 +118,8 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 			}
 
 			instanceCache[id] = this;
+			requestCache[id] = Object.createDict();
 		}
-
-		requestCache[id] = Object.createDict();
 
 		this.cacheId = id;
 		this.params = opts;
