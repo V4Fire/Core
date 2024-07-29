@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.38 (2024-07-29)
+
+#### :bug: Bug Fix
+
+* Fixed memory leak with singleton providers cache `core/data/modules`
+
 ## v4.0.0-alpha.37 (2024-06-03)
 
 #### :bug: Bug Fix
