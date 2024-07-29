@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.43 (2024-07-29)
+
+#### :house: Internal
+
+* RC branch merge
+
 ## v4.0.0-alpha.42 (2024-07-29)
 
 #### :bug: Bug Fix
