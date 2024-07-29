@@ -17,6 +17,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Fixed memory leak with singleton providers cache `core/data/modules`
 
+## v4.0.0-alpha.40 (2024-07-02)
+
+#### :bug: Bug Fix
+
+* Fixed an incorrect import from `core/status-codes`. `core/request/engines/composition`
+
 ## v4.0.0-alpha.39 (2024-07-01)
 
 #### :rocket: New Feature
