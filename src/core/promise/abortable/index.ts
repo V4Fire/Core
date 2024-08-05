@@ -611,8 +611,28 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Aborts the current promise (the promise will be rejected)
-	 * @param [reason] - abort reason
+	 * Aborts the current promise.
+	 * The promise will be rejected only if it doesn't have any active consumers.
+	 * You can follow the link to see how to get around this behavior.
+	 * @see https://github.com/V4Fire/Core/blob/master/src/core/promise/abortable/README.md#tied-promises
+	 *
+	 * @param [reason]
+	 *
+	 * @example
+	 * ```js
+	 * const promise1 = new AbortablePromise(...);
+	 * const promise2 = new AbortablePromise(...);
+	 *
+	 * promise1.then((res) => doSomething(res));
+	 * promise2.then((res) => doSomething(res));
+	 * promise2.then((res) => doSomethingElse(res));
+	 *
+	 * // It will be aborted, because it has only 1 consumer
+	 * promise1.abort();
+	 *
+	 * // It won't be aborted, because it has 2 consumers
+	 * promise2.abort();
+	 * ```
 	 */
 	abort(reason?: unknown): boolean {
 		if (!this.isPending || this.aborted || Object.get(reason, [IGNORE]) === true) {
