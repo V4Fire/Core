@@ -150,6 +150,10 @@ export default interface Provider {
 
   readonly emitter: EventEmitterLike;
 
+  readonly sharedCacheId: string | symbol;
+
+  readonly sharedCacheMethods: ModelMethod[];
+
   name(): CanUndef<ModelMethod>;
   name(value: ModelMethod): Provider;
 
@@ -182,7 +186,9 @@ export default interface Provider {
 Many of these methods look familiar, but we also have some new methods and properties:
 
 1. `providerName` — contains the full name of a provider.
-2. `name` — a pair of get/set methods to provide "logical" meaning for a request:
+2. `sharedCacheId` — a shared cache id, can be defined to share cache across different providers:
+3. `sharedCacheMethods` — a list of request methods that support shared caching.
+4. `name` — a pair of get/set methods to provide "logical" meaning for a request:
 
 ```js
 // There will be fired the "init" event after successfully receiving the data
@@ -192,21 +198,21 @@ myProvider.name('init').get('foo');
 Mind that the default V4Fire implementation of a data provider by default sends events for `upd`, `add`, `del` requests.
 These events have the same name with methods that produce them.
 
-3. `method` — a pair of get/set methods to provide a type of HTTP request:
+5. `method` — a pair of get/set methods to provide a type of HTTP request:
 
 ```js
 // The request uses POST to get data
 myProvider.method('POST').get('foo');
 ```
 
-4. `base` — a pair of get/set methods to provide a base URL for requests:
+6. `base` — a pair of get/set methods to provide a base URL for requests:
 
 ```js
 // The request is addressed for https://google.com/foo
 myProvider.base('https://google.com').get('foo');
 ```
 
-5. `url` — a pair of get/set methods to provide URL for requests:
+7. `url` — a pair of get/set methods to provide URL for requests:
 
 ```js
 // The request is addressed for https://google.com/foo
@@ -217,13 +223,13 @@ myProvider.url('https://google.com').get('foo');
 myProvider.base('https://google.com').url('bla/baz').get('foo');
 ```
 
-6. `dropCache` — a method that drops any request cache.
+8. `dropCache` — a method that drops any request cache.
 
-7. `destroy` — a method that destroys the provider.
+9. `destroy` — a method that destroys the provider.
 
-8. `peek` — a request that logically is similar to the checking of API accessibility. It uses `HEAD` by default.
+10. `peek` — a request that logically is similar to the checking of API accessibility. It uses `HEAD` by default.
 
-9. `post` — a request that sends to a server some data without any logical representation. It uses `POST` by default.
+11. `post` — a request that sends to a server some data without any logical representation. It uses `POST` by default.
 
 ## Default implementation
 
@@ -817,3 +823,39 @@ setEnv('mock', {patterns: ['.*']});
 
 The values of patterns are converted to RegExp objects and applied to provider names (including namespaces).
 Config settings are stored within a local browser storage.
+
+### Sharing cache across providers
+
+When you need to request similar data from different providers, you can define a `sharedCacheId`. This ensures that only one request is made, and subsequent requests retrieve data from the shared cache.
+
+```js
+import Provider, { provider } from 'core/data';
+
+@provider
+export default class User extends Provider {
+  static request = request({
+    contentType: 'json',
+    cacheStrategy: 'forever',
+    cacheTTL: (10).seconds()
+  });
+
+  readonly sharedCacheId = 'UserData';
+
+  baseURL = 'user/:id';
+}
+
+@provider
+export default class Admin extends User {
+  static decoders = {
+    get: [convertUserToAdmin]
+  };
+}
+
+// Makes the request
+new User.get({id: 1})
+
+// Retrieves the response from the shared cache
+new Admin.get({id: 1})
+```
+
+By default, it only works with `GET` requests, but you can override the `sharedCacheMethods` field and specify other methods.

@@ -11,6 +11,11 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.?? (2024-08-??)
+
+#### :rocket: New Feature
+* Added a shared cache feature for data providers
+
 ## v4.0.0-alpha.43 (2024-07-29)
 
 #### :house: Internal

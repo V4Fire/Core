@@ -9,6 +9,11 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.?? (2024-08-??)
+
+#### :rocket: New Feature
+* Added a shared cache feature for data providers
+
 ## v4.0.0-alpha.29 (2024-04-04)
 
 #### :bug: Bug Fix
