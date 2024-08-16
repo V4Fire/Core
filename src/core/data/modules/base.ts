@@ -55,6 +55,7 @@ import {
 
 	requestCache,
 	instanceCache,
+	sharedRequestCache,
 	connectCache
 
 } from 'core/data/const';
@@ -67,6 +68,17 @@ export const
 	$$ = symbolGenerator();
 
 export default abstract class Provider extends ParamsProvider implements IProvider {
+	/**
+	 * It can be useful to share cache across different Providers
+	 */
+	readonly sharedCacheId?: string;
+
+	/**
+	 * List of request methods that support shared caching
+	 * @default `['get']`
+	 */
+	readonly sharedCacheMethods: ModelMethod[] = ['get'];
+
 	/**
 	 * Cache identifier
 	 */
@@ -119,6 +131,10 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 			instanceCache[id] = this;
 			requestCache[id] = Object.createDict();
+
+			if (this.sharedCacheId != null) {
+				sharedRequestCache[this.sharedCacheId] = Object.createDict();
+			}
 		}
 
 		this.cacheId = id;
@@ -275,31 +291,31 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 	/** @inheritDoc */
 	dropCache(recursive?: boolean): void {
-		const
-			cache = requestCache[this.cacheId];
+		clearCache(requestCache[this.cacheId]);
 
-		if (cache != null) {
-			Object.values(cache).forEach((cache) => {
-				cache?.dropCache(recursive);
-			});
+		if (this.sharedCacheId != null) {
+			clearCache(sharedRequestCache[this.sharedCacheId]);
 		}
 
-		requestCache[this.cacheId] = Object.createDict();
 		this.async.terminateWorker({group: 'extraProvidersCache'});
 
 		this.emitter.emit('dropCache', recursive);
+
+		function clearCache(cache: CanUndef<Dictionary<RequestResponseObject<unknown>>>): void {
+			if (cache != null) {
+				Object.values(cache).forEach((cache) => {
+					cache?.dropCache(recursive);
+				});
+			}
+
+			cache = Object.createDict();
+		}
 	}
 
 	/** @inheritDoc */
 	destroy(): void {
-		const
-			cache = requestCache[this.cacheId];
-
-		if (cache != null) {
-			Object.values(cache).forEach((cache) => {
-				cache?.destroy();
-			});
-		}
+		clearCache(requestCache[this.cacheId]);
+		clearCache(sharedRequestCache[this.sharedCacheId ?? '']);
 
 		this.async.clearAll().locked = true;
 		this.emitter.removeAllListeners();
@@ -307,12 +323,21 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		delete instanceCache[this.cacheId];
 		delete connectCache[this.cacheId];
 		delete requestCache[this.cacheId];
+		delete sharedRequestCache[this.sharedCacheId ?? ''];
 
 		Object.keys(this.params).forEach((key, _, data) => {
 			delete data[key];
 		});
 
 		this.emitter.emit('destroy');
+
+		function clearCache(cache: CanUndef<Dictionary<RequestResponseObject<unknown>>>): void {
+			if (cache != null) {
+				Object.values(cache).forEach((cache) => {
+					cache?.destroy();
+				});
+			}
+		}
 	}
 
 	/** @inheritDoc */
@@ -615,10 +640,14 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 			mappedMiddlewares[key] = mappedMiddlewares[key].bind(this);
 		}
 
+		const cacheId = this.sharedCacheMethods.includes(method) && this.sharedCacheId != null ?
+			this.sharedCacheId :
+			this.cacheId;
+
 		return {
 			...params,
 
-			cacheId: this.cacheId,
+			cacheId,
 			middlewares: mappedMiddlewares,
 
 			encoder: merge(encoders[method] ?? encoders['def'], params?.encoder),
@@ -679,15 +708,17 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		req
 			.then((res) => {
 				try {
-					const
-						cache = requestCache[this.cacheId];
-
 					const {
 						ctx: {
 							canCache,
-							cacheKey
+							cacheKey,
+							params
 						}
 					} = res;
+
+					const cache = params.cacheMethods.includes(params.method) && this.sharedCacheId != null ?
+						sharedRequestCache[this.sharedCacheId] :
+						requestCache[this.cacheId];
 
 					if (canCache && cacheKey != null && cache != null) {
 						cache[cacheKey] = Object.cast(res);
