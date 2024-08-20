@@ -56,20 +56,20 @@ export default interface AsyncCache<V = unknown, K = string> {
 	/**
 	 * Returns an iterator by the cache keys
 	 */
-	[Symbol.asyncIterator](): AsyncIterableIterator<K>;
+	[Symbol.asyncIterator](): Promise<AsyncIterableIterator<K> | IterableIterator<K>>;
 
 	/**
 	 * Returns an iterator by the cache keys
 	 */
-	keys(): AsyncIterableIterator<K>;
+	keys(): Promise<AsyncIterableIterator<K> | IterableIterator<K>>;
 
 	/**
 	 * Returns an iterator by the cache values
 	 */
-	values(): AsyncIterableIterator<V>;
+	values(): Promise<AsyncIterableIterator<K> | IterableIterator<K>>;
 
 	/**
 	 * Returns an iterator from the cache that produces pairs of keys and values
 	 */
-	entries(): AsyncIterableIterator<[K, V]>;
+	entries(): Promise<AsyncIterableIterator<[K, V]> | IterableIterator<[K, V]>>;
 }
