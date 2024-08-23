@@ -15,4 +15,4 @@ export declare function isAsyncOptions<T extends object = AsyncOptions>(value: u
  * @deprecated
  * @see isAsyncOptions
  */
-export declare const isParams: import("../../../../core/functools").WarnedFn<[value: unknown], boolean>;
+export declare const isParams: import("../../../functools").WarnedFn<[value: unknown], boolean>;

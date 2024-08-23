@@ -5,4 +5,4 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-export declare const emptyArray: readonly any[];
+export {};
