@@ -278,10 +278,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			configurable: true,
 			writable: true,
 			value: (event, ...args) => {
-				for (let i = 0; i < emitLikeEvents.length; i++) {
-					const
-						key = emitLikeEvents[i],
-						property = emitter[key];
+				for (const key of emitLikeEvents) {
+					const property = emitter[key];
 
 					if (Object.isFunction(property)) {
 						return property.call(emitter, event, ...args);

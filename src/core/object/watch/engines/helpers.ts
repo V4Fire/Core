@@ -86,7 +86,7 @@ export function getProxyValue(
 
 	if (opts.deep && getProxyType(rawValue) != null) {
 		const
-			fullPath = Array.concat([], path ?? [], key),
+			fullPath = Array.toArray(path, key),
 			obj = <object>rawValue;
 
 		return (opts.engine ?? watchEngine).watch(obj, fullPath, null, handlers, opts, root, top ?? obj);

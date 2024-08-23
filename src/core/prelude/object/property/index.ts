@@ -289,7 +289,7 @@ extend(Object, 'set', function set(
 			}
 
 			const val = ref.has(cursor) && p.concat ?
-				Array.concat([], ref[cursor], finalValue) :
+				Array.toArray(ref[cursor], finalValue) :
 				finalValue;
 
 			if (p.setter != null) {
@@ -303,7 +303,7 @@ extend(Object, 'set', function set(
 
 		const
 			box = Object.cast<object>(ref),
-			val = cursor in box && p.concat ? Array.concat([], box[cursor], finalValue) : finalValue;
+			val = cursor in box && p.concat ? Array.toArray(box[cursor], finalValue) : finalValue;
 
 		if (p.setter != null) {
 			p.setter(box, cursor, val);

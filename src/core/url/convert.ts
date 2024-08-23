@@ -278,7 +278,7 @@ export function fromQueryString(
 			normalizedVal = opts.convert !== false ? Object.parse(val, convertIfDate) : val;
 
 		if (oldVal !== undefined) {
-			normalizedVal = Array.concat([], oldVal, Object.isArray(normalizedVal) ? [normalizedVal] : normalizedVal);
+			normalizedVal = Array.toArray(oldVal, Object.isArray(normalizedVal) ? [normalizedVal] : normalizedVal);
 		}
 
 		if (isInvalidKey.test(key)) {

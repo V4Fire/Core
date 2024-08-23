@@ -102,7 +102,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			periodic: opts?.single === false,
 
 			onMerge(...args: unknown[]): void {
-				Array.concat([], opts?.onMerge).forEach((handler) => {
+				Array.toArray(opts?.onMerge).forEach((handler) => {
 					handler.apply(this, args);
 				});
 
@@ -719,8 +719,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				},
 
 				onMutedCall: (link) => {
-					const
-						handlers = Array.concat([], opts?.onMutedResolve);
+					const handlers = Array.toArray(opts?.onMutedResolve);
 
 					if (handlers.length > 0) {
 						handlers.forEach((handler) => {
@@ -1005,7 +1004,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			if (replacedBy != null && obj.join === 'replace' && obj.link.onClear.length < MAX_PROMISE_DEPTH) {
 				replacedBy.onComplete.push([resolve, reject]);
 
-				Array.concat([], obj.link.onClear, reject).forEach((onClear) => {
+				Array.toArray(obj.link.onClear, reject).forEach((onClear) => {
 					replacedBy.onClear.push(onClear);
 				});
 

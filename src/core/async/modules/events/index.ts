@@ -87,8 +87,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		opts?: AsyncOnOptions<CTX> | unknown[],
 		...args: unknown[]
 	): Nullable<EventId> {
-		let
-			p: AsyncOnOptions<CTX>;
+		let p: AsyncOnOptions<CTX>;
 
 		if (Object.isArray(opts)) {
 			args.unshift(opts);
@@ -99,7 +98,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		}
 
 		p = {...p};
-		events = Object.isArray(events) ? events : events.split(/\s+/);
+
+		if (Object.isString(events)) {
+			events = events.includes(' ') ? events.split(/\s+/) : [events];
+		}
 
 		if (p.options) {
 			args.unshift(p.options);
@@ -292,8 +294,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		opts?: AsyncPromisifyOnceOptions<E, R, CTX> | unknown[],
 		...args: unknown[]
 	): Promise<R> {
-		let
-			p: AsyncPromisifyOnceOptions<E, R, CTX>;
+		let p: AsyncPromisifyOnceOptions<E, R, CTX>;
 
 		if (Object.isArray(opts)) {
 			args.unshift(opts);
@@ -469,9 +470,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	protected markEvent(label: string, opts: StrictClearOptionsId<EventId>): this;
 	protected markEvent(label: string, task?: EventId | StrictClearOptionsId<EventId>): this {
 		if (Object.isArray(task)) {
-			for (let i = 0; i < task.length; i++) {
-				this.markEvent(label, <EventId>task[i]);
-			}
+			task.forEach((task) => {
+				this.markEvent(label, task);
+			});
 
 			return this;
 		}

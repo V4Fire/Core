@@ -243,15 +243,13 @@ export default class Async<CTX extends object = Async<any>> {
 
 		this.usedNamespaces.add(task.promise ? 'promise' : task.name);
 
-		const
-			{ctx} = this;
+		const {ctx} = this;
 
 		const
 			baseCache = this.getCache(task.name, task.promise),
 			callable = task.callable ?? task.needCall;
 
-		let
-			cache: LocalCache;
+		let cache: LocalCache;
 
 		if (task.group != null) {
 			cache = baseCache.groups[task.group] ?? {
@@ -270,14 +268,12 @@ export default class Async<CTX extends object = Async<any>> {
 			{labels, links} = cache,
 			{links: baseLinks} = baseCache.root;
 
-		const
-			labelCache = label != null ? labels[label] : null;
+		const labelCache = label != null ? labels[label] : null;
 
 		if (labelCache != null && task.join === true) {
-			const
-				link = links.get(labelCache);
+			const link = links.get(labelCache);
 
-			Array.concat([], task.onMerge).forEach((handler) => {
+			Array.toArray(task.onMerge).forEach((handler) => {
 				handler.call(ctx, link);
 			});
 
@@ -294,11 +290,10 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (!task.periodic || Object.isFunction(wrappedObj)) {
 			wrappedObj = (...args) => {
-				const
-					link = links.get(taskId);
+				const link = links.get(taskId);
 
 				if (link?.muted === true) {
-					Array.concat([], task.onMutedCall).forEach((handler) => {
+					Array.toArray(task.onMutedCall).forEach((handler) => {
 						handler.call(ctx, link);
 					});
 				}
@@ -367,8 +362,7 @@ export default class Async<CTX extends object = Async<any>> {
 		}
 
 		if (task.wrapper) {
-			const
-				link = task.wrapper.apply(null, [wrappedObj].concat(callable ? taskId : [], task.args));
+			const link = task.wrapper.apply(null, Array.toArray(wrappedObj, callable ? taskId : null, task.args));
 
 			if (task.linkByWrapper) {
 				taskId = link;
@@ -390,7 +384,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 			clearFn: task.clearFn,
 			onComplete: [],
-			onClear: Array.concat([], task.onClear),
+			onClear: Array.toArray(task.onClear),
 
 			unregister: () => {
 				links.delete(taskId);
@@ -451,11 +445,9 @@ export default class Async<CTX extends object = Async<any>> {
 			p = task ?? {};
 		}
 
-		const
-			baseCache = this.getCache(p.name, p.promise);
+		const baseCache = this.getCache(p.name, p.promise);
 
-		let
-			cache: LocalCache;
+		let cache: LocalCache;
 
 		if (p.group != null) {
 			if (Object.isRegExp(p.group)) {
@@ -485,12 +477,10 @@ export default class Async<CTX extends object = Async<any>> {
 			cache = baseCache.root;
 		}
 
-		const
-			{labels, links} = cache;
+		const {labels, links} = cache;
 
 		if (p.label != null) {
-			const
-				tmp = labels[p.label];
+			const tmp = labels[p.label];
 
 			if (p.id != null && p.id !== tmp) {
 				return this;
@@ -508,8 +498,7 @@ export default class Async<CTX extends object = Async<any>> {
 		}
 
 		if (p.id != null) {
-			const
-				link = links.get(p.id);
+			const link = links.get(p.id);
 
 			if (link != null) {
 				const skipZombie =

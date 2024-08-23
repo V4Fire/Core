@@ -22,8 +22,7 @@ export * from 'core/object/select/interface';
  * @param [params] - search parameters
  */
 export default function select<T = unknown>(obj: unknown, params: SelectParams = {}): CanUndef<T> {
-	const
-		{where, from} = params;
+	const {where, from} = params;
 
 	let
 		target = obj,
@@ -49,7 +48,7 @@ export default function select<T = unknown>(obj: unknown, params: SelectParams =
 	const
 		NULL = {};
 
-	where: for (let conditions = Array.concat([], where), i = 0; i < conditions.length; i++) {
+	where: for (let conditions = Array.toArray(where), i = 0; i < conditions.length; i++) {
 		const
 			where = conditions[i];
 

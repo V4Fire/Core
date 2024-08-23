@@ -55,4 +55,14 @@ interface ArrayConstructor {
 	): A extends Array<infer V> ?
 		Array<IterableType<NonNullable<T>> | V> :
 		Array<IterableType<NonNullable<T>> | NonNullable<A>>;
+
+	/**
+	 * Returns an array based on the provided arguments.
+	 * If a single argument is passed, and it is already an array, it will be returned "as is".
+	 * Arguments with values `null` and `undefined` are ignored.
+	 * This method is useful as a more efficient alternative to `Array.concat`.
+	 *
+	 * @param args
+	 */
+	toArray<A extends CanArray<any>>(...args: Array<CanArray<A>>): A extends any[] ? A : Array<NonNullable<A>>;
 }
