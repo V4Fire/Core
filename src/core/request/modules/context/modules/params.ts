@@ -71,7 +71,7 @@ export default class RequestContext<D = unknown> {
 	/**
 	 * Sets a new string key to cache the request
 	 */
-	protected set cacheKey(value: CanUndef<string>) {
+	set cacheKey(value: CanUndef<string>) {
 		this[$$.cacheKey] = value;
 	}
 
