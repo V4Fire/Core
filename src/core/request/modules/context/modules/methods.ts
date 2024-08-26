@@ -24,6 +24,10 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	 * @param url
 	 */
 	getRequestKey(url: string): string {
+		if (this.customRequestCacheKey) {
+			return this.customRequestCacheKey(url);
+		}
+
 		const
 			p = this.params,
 			cacheId = p.cacheId ?? '',

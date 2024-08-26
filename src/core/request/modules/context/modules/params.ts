@@ -71,7 +71,7 @@ export default class RequestContext<D = unknown> {
 	/**
 	 * Sets a new string key to cache the request
 	 */
-	set cacheKey(value: CanUndef<string>) {
+	protected set cacheKey(value: CanUndef<string>) {
 		this[$$.cacheKey] = value;
 	}
 
@@ -96,6 +96,8 @@ export default class RequestContext<D = unknown> {
 	 * Request parameters
 	 */
 	readonly params!: NormalizedCreateRequestOptions<D>;
+
+	readonly customRequestCacheKey?: (url:string) => string;
 
 	/**
 	 * Alias for `params.query`
@@ -215,6 +217,10 @@ export default class RequestContext<D = unknown> {
 
 		if (IS_SSR) {
 			delete p.offlineCache;
+		}
+
+		if (p.customRequestCacheKey) {
+			this.customRequestCacheKey = p.customRequestCacheKey;
 		}
 
 		this.isReady = (async () => {

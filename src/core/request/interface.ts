@@ -393,6 +393,8 @@ export interface CreateRequestOptions<D = unknown> {
 	 */
 	cacheTTL?: number;
 
+	customRequestCacheKey?(url: string): string;
+
 	/**
 	 * Enables support of offline caching.
 	 * By default, a request can only be taken from a cache if there is no network.
