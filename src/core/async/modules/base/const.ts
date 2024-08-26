@@ -9,11 +9,18 @@
 export const
 	asyncCounter = Symbol('Async counter id');
 
-export const
-	isZombieGroup = /:zombie\b/;
+export const isZombieGroup = {
+	test(group: string): boolean {
+		return group.includes(':zombie');
+	}
+};
+
+export const isPromisifyNamespace = {
+	test(namespace: string): boolean {
+		return namespace.endsWith('Promise');
+	}
+};
 
 export const
-	isPromisifyNamespace = /Promise$/,
-
 	/** @deprecated */
 	isPromisifyLinkName = isPromisifyNamespace;

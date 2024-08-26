@@ -213,7 +213,7 @@ export interface Task<CTX extends object = Async> {
 	/**
 	 * Function to clear the task
 	 */
-	clearFn?: ClearFn;
+	clearFn: CanNull<ClearFn>;
 }
 
 /**

@@ -13,8 +13,10 @@
 
 import { deprecate, deprecated } from 'core/functools';
 
-import { namespaces, NamespacesDictionary } from 'core/async/const';
+import { namespaces, usedNamespaces, Namespaces, NamespacesDictionary } from 'core/async/const';
 import { isZombieGroup, isPromisifyNamespace } from 'core/async/modules/base/const';
+
+import Task from 'core/async/modules/base/task';
 
 import type {
 
@@ -83,7 +85,7 @@ export default class Async<CTX extends object = Async<any>> {
 	/**
 	 * Set of used asynchronous namespaces
 	 */
-	protected readonly usedNamespaces: Set<string> = new Set();
+	protected readonly usedNamespaces: boolean[] = usedNamespaces.slice();
 
 	/**
 	 * Link to `Async.namespaces`
@@ -121,8 +123,13 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [opts] - additional options for the operation
 	 */
 	clearAll(opts?: ClearOptions): this {
-		this.usedNamespaces.forEach((key) => {
+		this.usedNamespaces.forEach((used, i) => {
+			if (!used) {
+				return;
+			}
+
 			const
+				key = Namespaces[i],
 				alias = `clear-${this.namespaces[key]}`.camelize(false);
 
 			if (Object.isFunction(this[alias])) {
@@ -141,8 +148,13 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [opts] - additional options for the operation
 	 */
 	muteAll(opts?: ClearOptions): this {
-		this.usedNamespaces.forEach((key) => {
+		this.usedNamespaces.forEach((used, i) => {
+			if (!used) {
+				return;
+			}
+
 			const
+				key = Namespaces[i],
 				alias = `mute-${this.namespaces[key]}`.camelize(false);
 
 			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
@@ -158,8 +170,13 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [opts] - additional options for the operation
 	 */
 	unmuteAll(opts?: ClearOptions): this {
-		this.usedNamespaces.forEach((key) => {
+		this.usedNamespaces.forEach((used, i) => {
+			if (!used) {
+				return;
+			}
+
 			const
+				key = Namespaces[i],
 				alias = `unmute-${this.namespaces[key]}`.camelize(false);
 
 			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
@@ -175,8 +192,13 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [opts] - additional options for the operation
 	 */
 	suspendAll(opts?: ClearOptions): this {
-		this.usedNamespaces.forEach((key) => {
+		this.usedNamespaces.forEach((used, i) => {
+			if (!used) {
+				return;
+			}
+
 			const
+				key = Namespaces[i],
 				alias = `suspend-${this.namespaces[key]}`.camelize(false);
 
 			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
@@ -192,8 +214,13 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [opts] - additional options for the operation
 	 */
 	unsuspendAll(opts?: ClearOptions): this {
-		this.usedNamespaces.forEach((key) => {
+		this.usedNamespaces.forEach((used, i) => {
+			if (!used) {
+				return;
+			}
+
 			const
+				key = Namespaces[i],
 				alias = `unsuspend-${this.namespaces[key]}`.camelize(false);
 
 			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
@@ -241,9 +268,10 @@ export default class Async<CTX extends object = Async<any>> {
 			return null;
 		}
 
-		this.usedNamespaces.add(task.promise ? 'promise' : task.name);
-
 		const {ctx} = this;
+
+		const namespaceId: number = Namespaces[task.promise ? 'promise' : task.name];
+		this.usedNamespaces[namespaceId] = true;
 
 		const
 			baseCache = this.getCache(task.name, task.promise),
@@ -289,7 +317,7 @@ export default class Async<CTX extends object = Async<any>> {
 			taskId = normalizedObj;
 
 		if (!task.periodic || Object.isFunction(wrappedObj)) {
-			wrappedObj = (...args) => {
+			wrappedObj = (...args: unknown[]) => {
 				const link = links.get(taskId);
 
 				if (link?.muted === true) {
@@ -311,46 +339,7 @@ export default class Async<CTX extends object = Async<any>> {
 					}
 				}
 
-				const invokeHandlers = (i = 0) => (...args) => {
-					const
-						fns = link.onComplete;
-
-					if (Object.isArray(fns)) {
-						fns.forEach((fn) => {
-							if (Object.isFunction(fn)) {
-								fn.apply(ctx, args);
-
-							} else {
-								fn[i].apply(ctx, args);
-							}
-						});
-					}
-				};
-
-				const
-					needDelete = !task.periodic && link.paused;
-
-				const exec = () => {
-					if (needDelete) {
-						link.unregister();
-					}
-
-					let
-						res = normalizedObj;
-
-					if (Object.isFunction(normalizedObj)) {
-						res = normalizedObj.apply(ctx, args);
-					}
-
-					if (Object.isPromiseLike(res)) {
-						res.then(invokeHandlers(), invokeHandlers(1));
-
-					} else {
-						invokeHandlers()(...args);
-					}
-
-					return res;
-				};
+				const needDelete = !task.periodic && link.paused;
 
 				if (link.paused) {
 					link.queue.push(exec);
@@ -358,43 +347,123 @@ export default class Async<CTX extends object = Async<any>> {
 				}
 
 				return exec();
+
+				function exec() {
+					if (link == null) {
+						return;
+					}
+
+					if (needDelete) {
+						link.unregister();
+					}
+
+					let res = normalizedObj;
+
+					if (Object.isFunction(normalizedObj)) {
+						switch (args.length) {
+							case 0:
+								res = normalizedObj.call(ctx);
+								break;
+
+							case 1:
+								res = normalizedObj.call(ctx, args[0]);
+								break;
+
+							case 2:
+								res = normalizedObj.call(ctx, args[0], args[1]);
+								break;
+
+							default:
+								res = normalizedObj.apply(ctx, args);
+						}
+					}
+
+					if (Object.isPromiseLike(res)) {
+						res.then(invokeHandlers(), invokeHandlers(1));
+
+					} else {
+						const handler = invokeHandlers();
+
+						switch (args.length) {
+							case 0:
+								handler();
+								break;
+
+							case 1:
+								handler(args[0]);
+								break;
+
+							case 2:
+								handler(args[0], args[1]);
+								break;
+
+							default:
+								res = handler(...args);
+						}
+					}
+
+					return res;
+				}
+
+				function invokeHandlers(i: number = 0) {
+					return (...args: unknown[]) => {
+						const fns = link?.onComplete;
+
+						if (Object.isArray(fns)) {
+							fns.forEach((fn) => {
+								const resolvedFn = Object.isFunction(fn) ? fn : fn[i];
+
+								switch (args.length) {
+									case 0:
+										resolvedFn.call(ctx);
+										break;
+
+									case 1:
+										resolvedFn.call(ctx, args[0]);
+										break;
+
+									case 2:
+										resolvedFn.call(ctx, args[0], args[1]);
+										break;
+
+									default:
+										resolvedFn.apply(ctx, args);
+								}
+							});
+						}
+					};
+				}
 			};
 		}
 
 		if (task.wrapper) {
-			const link = task.wrapper.apply(null, Array.toArray(wrappedObj, callable ? taskId : null, task.args));
+			const args = Array.toArray(wrappedObj, callable ? taskId : null, task.args);
+
+			let wrapperRes: unknown;
+
+			switch (args.length) {
+				case 0:
+					wrapperRes = task.wrapper();
+					break;
+
+				case 1:
+					wrapperRes = task.wrapper(args[0]);
+					break;
+
+				case 2:
+					wrapperRes = task.wrapper(args[0], args[1]);
+					break;
+
+				default:
+					wrapperRes = task.wrapper(...args);
+			}
 
 			if (task.linkByWrapper) {
-				taskId = link;
+				taskId = wrapperRes;
 			}
 		}
 
-		const link = {
-			id: taskId,
-
-			obj: task.obj,
-			objName: task.obj.name,
-
-			group: task.group,
-			label: task.label,
-
-			paused: false,
-			muted: false,
-			queue: [],
-
-			clearFn: task.clearFn,
-			onComplete: [],
-			onClear: Array.toArray(task.onClear),
-
-			unregister: () => {
-				links.delete(taskId);
-				baseCache.root.links.delete(taskId);
-
-				if (label != null && labels[label] != null) {
-					labels[label] = undefined;
-				}
-			}
-		};
+		const link = new Task(taskId, task, cache, baseCache);
 
 		if (labelCache != null) {
 			this.cancelTask({...task, replacedBy: link, reason: 'collision'});
@@ -460,8 +529,7 @@ export default class Async<CTX extends object = Async<any>> {
 				return this;
 			}
 
-			const
-				group = baseCache.groups[p.group];
+			const group = baseCache.groups[p.group];
 
 			if (group == null) {
 				return this;
@@ -557,8 +625,7 @@ export default class Async<CTX extends object = Async<any>> {
 	protected markTask(label: string, task: CanUndef<ClearProxyOptions | any>, name?: string): this {
 		task = task != null ? this.idsMap.get(task) ?? task : task;
 
-		let
-			p: FullClearOptions;
+		let p: FullClearOptions;
 
 		if (name != null) {
 			if (task === undefined) {
@@ -571,11 +638,9 @@ export default class Async<CTX extends object = Async<any>> {
 			p = task ?? {};
 		}
 
-		const
-			baseCache = this.getCache(p.name);
+		const baseCache = this.getCache(p.name);
 
-		let
-			cache: LocalCache;
+		let cache: LocalCache;
 
 		if (p.group != null) {
 			if (Object.isRegExp(p.group)) {
@@ -588,8 +653,7 @@ export default class Async<CTX extends object = Async<any>> {
 				return this;
 			}
 
-			const
-				groupCache = baseCache.groups[p.group];
+			const groupCache = baseCache.groups[p.group];
 
 			if (groupCache == null) {
 				return this;
@@ -601,8 +665,7 @@ export default class Async<CTX extends object = Async<any>> {
 			cache = baseCache.root;
 		}
 
-		const
-			{labels, links} = cache;
+		const {labels, links} = cache;
 
 		if (p.label != null) {
 			const
@@ -624,8 +687,7 @@ export default class Async<CTX extends object = Async<any>> {
 		}
 
 		if (p.id != null) {
-			const
-				link = links.get(p.id);
+			const link = links.get(p.id);
 
 			if (link) {
 				const skipZombie =

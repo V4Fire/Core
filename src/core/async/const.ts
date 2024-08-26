@@ -8,6 +8,8 @@
 
 import { Namespaces } from 'core/async/interface';
 
+export { Namespaces };
+
 export const
 	namespaces = Object.convertEnumToDict(Namespaces),
 
@@ -15,3 +17,5 @@ export const
 	linkNamesDictionary = namespaces;
 
 export type NamespacesDictionary = typeof namespaces;
+
+export const usedNamespaces = Object.values(Namespaces).filter((val) => Object.isNumber(val)).map(() => false);
