@@ -132,7 +132,7 @@ extend(Object, 'fastHash', (obj) => {
 	}
 
 	const res = JSON.stringify(obj, createSerializer(obj, undefined, funcCache));
-	return cyrb53(res != '' ? res : 'null');
+	return cyrb53(res !== '' ? res : 'null');
 
 	/* eslint-disable no-bitwise */
 
