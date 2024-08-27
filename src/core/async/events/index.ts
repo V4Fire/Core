@@ -42,6 +42,8 @@ export * from 'core/async/events/helpers';
 
 export * from 'core/async/interface';
 
+const OFF = Symbol('off');
+
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * Attaches an event listener to the specified event emitter.
@@ -102,6 +104,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			events = events.includes(' ') ? events.split(/\s+/) : [events];
 		}
 
+		if (events.length === 0) {
+			return null;
+		}
+
 		if (p.options) {
 			args.unshift(p.options);
 			p.options = undefined;
@@ -109,10 +115,15 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 		const
 			that = this,
-			links: IdObject[] = [],
-			multipleEvent = events.length > 1;
+			originalEmitter = emitter;
+
+		const
+			ids: IdObject[] = new Array(events.length),
+			hasMultipleEvent = events.length > 1;
 
 		events.forEach((event) => {
+			let emitter = originalEmitter;
+
 			const link = this.registerTask<IdObject>({
 				...p,
 
@@ -126,19 +137,17 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				clearFn: this.eventListenerDestructor.bind(this),
 
 				wrapper(cb: AnyFunction): unknown {
-					if (Object.isFunction(emitter)) {
-						const originalEmitter = emitter;
-
+					if (Object.isFunction(originalEmitter)) {
 						// eslint-disable-next-line func-name-matching
 						emitter = function wrappedEmitter(this: unknown): CanUndef<Function> {
 							// eslint-disable-next-line prefer-rest-params
-							const res = originalEmitter.apply(this, arguments);
+							const destructor = originalEmitter.apply(this, arguments);
 
-							if (Object.isFunction(res)) {
-								Object.set(wrappedEmitter, 'off', res);
+							if (Object.isFunction(destructor)) {
+								Object.defineProperty(wrappedEmitter, OFF, {value: destructor});
 							}
 
-							return res;
+							return destructor;
 						};
 					}
 
@@ -151,7 +160,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 						emitter.addEventListener;
 
 					if (Object.isFunction(on)) {
-						on.call(emitter, event, handler, ...args);
+						switch (args.length) {
+							case 0:
+								on.call(emitter, event, handler);
+								break;
+
+							default:
+								on.call(emitter, event, handler, ...args);
+						}
 
 					} else {
 						throw new ReferenceError('A method to attach events is not defined');
@@ -165,33 +181,50 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 					};
 
 					function handler(this: unknown, ...handlerArgs: unknown[]): unknown {
-						if (p.single && (multipleEvent || !emitter.once)) {
-							if (multipleEvent) {
-								that.clearEventListener(links);
+						if (p.single && (hasMultipleEvent || !emitter.once)) {
+							if (hasMultipleEvent) {
+								that.clearEventListener(ids);
 
 							} else {
 								that.eventListenerDestructor({emitter, event, handler, args});
 							}
 						}
 
-						const res = cb.apply(this, handlerArgs);
+						let cbRes: unknown;
 
-						if (Object.isPromise(res)) {
-							res.catch(stderr);
+						switch (handlerArgs.length) {
+							case 0:
+								cbRes = cb.call(this);
+								break;
+
+							case 1:
+								cbRes = cb.call(this, handlerArgs[0]);
+								break;
+
+							case 2:
+								cbRes = cb.call(this, handlerArgs[0], handlerArgs[1]);
+								break;
+
+							default:
+								cbRes = cb.apply(this, handlerArgs);
 						}
 
-						return res;
+						if (Object.isPromise(cbRes)) {
+							cbRes.catch(stderr);
+						}
+
+						return cbRes;
 					}
 				}
 			});
 
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			if (link != null) {
-				links.push(link);
+				ids.push(link);
 			}
 		});
 
-		return events.length <= 1 ? links[0] ?? null : links;
+		return hasMultipleEvent ? ids : ids[0] ?? null;
 	}
 
 	/**
@@ -437,7 +470,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	eventListenerDestructor(event: Event): void {
 		const
 			emitter = <EventEmitterLike>event.emitter,
-			off = emitter.off ?? emitter.removeListener ?? emitter.removeEventListener;
+			off = emitter[OFF] ?? emitter.off ?? emitter.removeListener ?? emitter.removeEventListener;
 
 		if (Object.isFunction(off)) {
 			off.call(emitter, event.event, event.handler);
