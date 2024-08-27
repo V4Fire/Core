@@ -51,7 +51,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Note that if you don't provide a group for the operation, it will be taken from the event name.
 	 *
 	 * @param emitter - the event emitter
-	 * @param events - the event or a list of events (can also specify multiple events by using spaces)
+	 * @param events - the event name or a list of events (can also specify multiple events by using spaces)
 	 * @param handler - the event handler
 	 * @param [args] - additional arguments for the emitter
 	 */
@@ -68,7 +68,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Note that if you don't provide a group for the operation, it will be taken from the event name.
 	 *
 	 * @param emitter - the event emitter
-	 * @param events - the event or a list of events (can also specify multiple events by using spaces)
+	 * @param events - the event name or a list of events (can also specify multiple events by using spaces)
 	 * @param handler - the event handler
 	 * @param opts - options for the operation
 	 * @param [args] - additional arguments for the emitter
@@ -289,13 +289,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Note that if you don't provide a group for the operation, it will be taken from the event name.
 	 *
 	 * @param emitter - the event emitter
-	 * @param events - the event or a list of events (can also specify multiple events by using spaces)
+	 * @param event - the event name
 	 * @param opts - options for the operation
 	 * @param [args] - additional arguments for the emitter
 	 */
 	promisifyOnce<R = unknown, E = unknown>(
 		emitter: EventEmitterLikeP,
-		events: CanArray<string>,
+		event: string,
 		opts: AsyncPromisifyOnceOptions<E, R, CTX>,
 		...args: unknown[]
 	): Promise<R>;
@@ -306,18 +306,18 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Note that if you don't provide a group for the operation, it will be taken from the event name.
 	 *
 	 * @param emitter - the event emitter
-	 * @param events - the event or a list of events (can also specify multiple events by using spaces)
+	 * @param event - the event name
 	 * @param [args] - additional arguments for the emitter
 	 */
 	promisifyOnce<R = unknown>(
 		emitter: EventEmitterLikeP,
-		events: CanArray<string>,
+		event: string,
 		...args: unknown[]
 	): Promise<R>;
 
 	promisifyOnce<R, E>(
 		emitter: EventEmitterLikeP,
-		events: CanArray<string>,
+		event: string,
 		opts?: AsyncPromisifyOnceOptions<E, R, CTX> | unknown[],
 		...args: unknown[]
 	): Promise<R> {
@@ -340,9 +340,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				resolve(e);
 			};
 
-			this.once(emitter, events, handler, {
+			this.once(emitter, [event], handler, {
 				...p,
-				promise: true,
+				promise: this.Namespaces.eventListenerPromise,
 				onClear: this.onPromiseClear(handler, reject),
 				onMerge: this.onPromiseMerge(handler, reject)
 			}, ...args);
