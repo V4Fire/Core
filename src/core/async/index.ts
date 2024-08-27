@@ -16,6 +16,7 @@ import Super from 'core/async/wrappers';
 export * from 'core/async/const';
 export * from 'core/async/interface';
 export * from 'core/async/wrappers';
+export * from 'core/async/helpers';
 
 /**
  * Class to control asynchronous operations
