@@ -66,7 +66,7 @@ export default interface AsyncCache<V = unknown, K = string> {
 	/**
 	 * Returns an iterator by the cache values
 	 */
-	values(): Promise<AsyncIterableIterator<K> | IterableIterator<K>>;
+	values(): Promise<AsyncIterableIterator<V> | IterableIterator<V>>;
 
 	/**
 	 * Returns an iterator from the cache that produces pairs of keys and values
