@@ -76,16 +76,25 @@ export default class Async<CTX extends object = Async<any>> {
 	protected getCache(
 		task: Pick<FullAsyncOptions<any>, 'namespace' | 'promise' | 'label'> & {group?: string | RegExp}
 	): GlobalCache {
-		const nms = task.promise ?? task.namespace;
+		const pos = task.promise ?? task.namespace;
 
-		return this.cache[nms] = this.cache[nms] ?? {
+		const cache = this.cache[pos] ?? {
 			root: {
-				labels: task.label != null ? Object.createDict() : null,
+				labels: null,
 				links: new Map()
 			},
 
-			groups: task.group != null ? Object.createDict() : null
+			groups: null
 		};
+
+		if (task.group != null && cache.groups == null) {
+			cache.groups = Object.createDict();
+			cache.root.labels = Object.createDict();
+		}
+
+		this.cache[pos] = cache;
+
+		return cache;
 	}
 
 	/**

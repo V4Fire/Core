@@ -136,7 +136,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 			id = this.setInterval(cb, opts?.delay ?? 15, {
 				...opts,
-				promise: this.Namespaces.animationFramePromise,
+				promise: this.Namespaces.intervalPromise,
 				onClear: <AsyncCb<CTX>>this.onPromiseClear(resolve, reject),
 				onMerge: <AsyncCb<CTX>>this.onPromiseMerge(resolve, reject)
 			});
