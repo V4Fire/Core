@@ -121,10 +121,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			ids: IdObject[] = new Array(events.length),
 			hasMultipleEvent = events.length > 1;
 
-		events.forEach((event) => {
+		events.forEach((event, i) => {
 			let emitter = originalEmitter;
 
-			const link = this.registerTask<IdObject>({
+			const id = this.registerTask<IdObject>({
 				...p,
 
 				task: handler,
@@ -219,8 +219,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			});
 
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			if (link != null) {
-				ids.push(link);
+			if (id != null) {
+				ids[i] = id;
 			}
 		});
 
