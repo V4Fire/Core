@@ -71,6 +71,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * Returns a cache object by the specified name
+	 *
 	 * @param task
 	 */
 	protected getCache(
@@ -89,6 +90,9 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (task.group != null && cache.groups == null) {
 			cache.groups = Object.createDict();
+		}
+
+		if (task.label != null && cache.root.labels == null) {
 			cache.root.labels = Object.createDict();
 		}
 
