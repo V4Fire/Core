@@ -120,9 +120,13 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (group != null && commonCache.groups != null) {
 			cache = commonCache.groups[group] ?? {
-				labels: label != null ? Object.createDict() : null,
+				labels: null,
 				links: new Map()
 			};
+
+			if (label != null && cache.labels == null) {
+				cache.labels = Object.createDict();
+			}
 
 			commonCache.groups[group] = cache;
 
