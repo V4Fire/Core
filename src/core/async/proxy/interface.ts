@@ -7,10 +7,12 @@
  */
 
 import type Async from 'core/async';
+
+import type { Namespaces } from 'core/async/const';
 import type { AsyncOptions, AsyncProxyOptions, ProxyCb } from 'core/async/interface';
 
 /**
- * Something that looks like a worker
+ * Something that resembles a worker
  */
 export interface WorkerLike {
 	terminate?: Function;
@@ -24,12 +26,12 @@ export interface WorkerLike {
 }
 
 /**
- * Extended type of worker
+ * An extended type of worker
  */
 export type WorkerLikeP = Function | WorkerLike;
 
 /**
- * Promise that supports canceling
+ * A promise that supports cancellation
  */
 export interface CancelablePromise<T = unknown> extends Promise<T> {
 	abort?: Function;
@@ -37,38 +39,38 @@ export interface CancelablePromise<T = unknown> extends Promise<T> {
 }
 
 /**
- * Extended type of promise
+ * An extended type of promise
  */
 export type PromiseLikeP<T = unknown> = (() => PromiseLike<T>) | PromiseLike<T>;
 
 export interface AsyncRequestOptions extends AsyncOptions {
 	/**
-	 * Name of a destructor method
+	 * The name of the destructor method
 	 */
 	destructor?: string;
 }
 
 export interface AsyncWorkerOptions<CTX extends object = Async> extends AsyncProxyOptions<CTX> {
 	/**
-	 * Name of a destructor method
+	 * The name of the destructor method
 	 */
 	destructor?: string;
 }
 
 export interface AsyncPromiseOptions extends AsyncOptions {
 	/**
-	 * Namespace of the proxy
+	 * Namespace for the proxy
 	 */
-	name?: string;
+	namespace?: Namespaces;
 
 	/**
-	 * Name of a destructor method
+	 * The name of the destructor method
 	 */
 	destructor?: string;
 
 	/**
-	 * Handler/s of muted promise resolving.
-	 * These handlers are invoked when occurring resolving the promise if it is muted.
+	 * Handler(s) for muted promise resolution.
+	 * These handlers are invoked when the muted promise is resolved.
 	 */
 	onMutedResolve?: CanArray<ProxyCb<AnyFunction, AnyFunction>>;
 }

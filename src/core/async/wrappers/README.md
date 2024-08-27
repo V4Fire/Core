@@ -1,4 +1,4 @@
-# core/async/modules/wrappers
+# core/async/wrappers
 
 This module provides a bunch of helpers to wrap some objects, like event emitters or data providers.
 

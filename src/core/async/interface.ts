@@ -8,6 +8,8 @@
 
 import type Async from 'core/async';
 
+import type { Namespaces } from 'core/async/const';
+
 import type {
 
 	Task,
@@ -21,46 +23,22 @@ import type {
 	AsyncProxyOptions,
 	ClearProxyOptions
 
-} from 'core/async/modules/base/interface';
+} from 'core/async/core/interface';
 
 import type {
 
 	AsyncWorkerOptions,
 	AsyncPromiseOptions
 
-} from 'core/async/modules/proxy/interface';
+} from 'core/async/proxy/interface';
 
-import type { AsyncPromisifyOnceOptions } from 'core/async/modules/events/interface';
+import type { AsyncPromisifyOnceOptions } from 'core/async/events/interface';
 
-export * from 'core/async/modules/base/interface';
-export * from 'core/async/modules/events/interface';
-export * from 'core/async/modules/proxy/interface';
-export * from 'core/async/modules/timers/interface';
-export * from 'core/async/modules/wrappers/interface';
-
-export enum Namespaces {
-	proxy,
-	proxyPromise,
-	promise,
-	iterable,
-	request,
-	idleCallback,
-	idleCallbackPromise,
-	timeout,
-	timeoutPromise,
-	interval,
-	intervalPromise,
-	immediate,
-	immediatePromise,
-	worker,
-	eventListener,
-	eventListenerPromise
-}
-
-export type Namespace = keyof typeof Namespaces;
-
-/** @deprecated */
-export { Namespaces as LinkNames };
+export * from 'core/async/core/interface';
+export * from 'core/async/events/interface';
+export * from 'core/async/proxy/interface';
+export * from 'core/async/timers/interface';
+export * from 'core/async/wrappers/interface';
 
 export type FullAsyncOptions<CTX extends object = Async> =
 	{
@@ -74,7 +52,7 @@ export type FullAsyncOptions<CTX extends object = Async> =
 		 *     ...opts,
 		 *
 		 *     // This operation has a namespace from this.namespaces.immediate
-		 *     name: this.namespaces.immediate,
+		 *     name: Namespaces.immediate,
 		 *
 		 *     obj: cb,
 		 *     clearFn: clearImmediate,
@@ -84,7 +62,7 @@ export type FullAsyncOptions<CTX extends object = Async> =
 		 * }
 		 * ```
 		 */
-		name: string;
+		namespace: Namespaces;
 
 		/**
 		 * Object to wrap with Async
@@ -106,7 +84,7 @@ export type FullAsyncOptions<CTX extends object = Async> =
 		 * }
 		 * ```
 		 */
-		obj: object & {name?: string};
+		task: object & {name?: string};
 
 		/**
 		 * True, if the task can fire multiple times
@@ -134,12 +112,6 @@ export type FullAsyncOptions<CTX extends object = Async> =
 		 * If true, then the passed object can be executed as a function if it is possible
 		 */
 		callable?: boolean;
-
-		/**
-		 * @deprecated
-		 * @see [[FullAsyncOptions.needCall]]
-		 */
-		needCall?: boolean;
 
 		/**
 		 * Function that wraps the original object
@@ -242,7 +214,7 @@ export interface FullClearOptions<ID = any> extends ClearProxyOptions<ID> {
 	/**
 	 * Namespace of the task to clear
 	 */
-	name: string;
+	namespace: Namespaces;
 
 	/**
 	 * Reason to clear or mark the task
@@ -252,7 +224,7 @@ export interface FullClearOptions<ID = any> extends ClearProxyOptions<ID> {
 	/**
 	 * If true, the operation was registered as a promise
 	 */
-	promise?: boolean;
+	promise?: Namespaces;
 
 	/**
 	 * Link to a task that replaces the current

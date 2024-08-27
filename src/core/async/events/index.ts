@@ -7,27 +7,26 @@
  */
 
 /**
- * [[include:core/async/modules/events/README.md]]
+ * [[include:core/async/events/README.md]]
  * @packageDocumentation
  */
 
 import SyncPromise from 'core/promise/sync';
 
-import Super, {
+import Super from 'core/async/timers';
 
-	IdObject,
-	ProxyCb,
-
-	StrictClearOptionsId
-
-} from 'core/async/modules/timers';
-
-import { isEvent } from 'core/async/modules/events/helpers';
+import { isEvent } from 'core/async/events/helpers';
 
 import type {
 
-	Event,
+	IdObject,
 	EventId,
+	StrictClearOptionsId,
+
+	Event,
+	Marker,
+
+	ProxyCb,
 
 	EventEmitterLike,
 	EventEmitterLikeP,
@@ -38,20 +37,20 @@ import type {
 
 } from 'core/async/interface';
 
-export * from 'core/async/modules/timers';
-export * from 'core/async/modules/events/helpers';
+export * from 'core/async/timers';
+export * from 'core/async/events/helpers';
 
 export * from 'core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
-	 * Attaches an event listener from the specified event emitter.
-	 * If the emitter is a function, it is interpreted as the function to attach events.
-	 * Notice, if you don't provide a group for the operation, it will be taken from the event name.
+	 * Attaches an event listener to the specified event emitter.
+	 * If the emitter is a function, it is interpreted as the function to attach events to.
+	 * Note that if you don't provide a group for the operation, it will be taken from the event name.
 	 *
-	 * @param emitter - event emitter
-	 * @param events - event or list of events (can also specify multiple events by using spaces)
-	 * @param handler - event handler
+	 * @param emitter - the event emitter
+	 * @param events - the event or a list of events (can also specify multiple events by using spaces)
+	 * @param handler - the event handler
 	 * @param [args] - additional arguments for the emitter
 	 */
 	on<E = unknown, R = unknown>(
@@ -62,13 +61,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	): Nullable<EventId>;
 
 	/**
-	 * Attaches an event listener from the specified event emitter.
-	 * If the emitter is a function, it is interpreted as the function to attach events.
-	 * Notice, if you don't provide a group for the operation, it will be taken from the event name.
+	 * Attaches an event listener to the specified event emitter.
+	 * If the emitter is a function, it is interpreted as the function to attach events to.
+	 * Note that if you don't provide a group for the operation, it will be taken from the event name.
 	 *
-	 * @param emitter - event emitter
-	 * @param events - event or list of events (can also specify multiple events by using spaces)
-	 * @param handler - event handler
+	 * @param emitter - the event emitter
+	 * @param events - the event or a list of events (can also specify multiple events by using spaces)
+	 * @param handler - the event handler
 	 * @param opts - options for the operation
 	 * @param [args] - additional arguments for the emitter
 	 */
@@ -117,26 +116,23 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			const link = this.registerTask<IdObject>({
 				...p,
 
-				name: this.namespaces.eventListener,
-				obj: handler,
-
+				task: handler,
+				namespace: this.Namespaces.eventListener,
 				group: p.group ?? event,
+
 				periodic: !p.single,
 				linkByWrapper: true,
 
-				clearFn: this.eventListenerDestructor
-					.bind(this),
+				clearFn: this.eventListenerDestructor.bind(this),
 
 				wrapper(cb: AnyFunction): unknown {
 					if (Object.isFunction(emitter)) {
-						const
-							originalEmitter = emitter;
+						const originalEmitter = emitter;
 
 						// eslint-disable-next-line func-name-matching
 						emitter = function wrappedEmitter(this: unknown): CanUndef<Function> {
-							const
-								// eslint-disable-next-line prefer-rest-params
-								res = originalEmitter.apply(this, arguments);
+							// eslint-disable-next-line prefer-rest-params
+							const res = originalEmitter.apply(this, arguments);
 
 							if (Object.isFunction(res)) {
 								Object.set(wrappedEmitter, 'off', res);
@@ -178,8 +174,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 							}
 						}
 
-						const
-							res = cb.apply(this, handlerArgs);
+						const res = cb.apply(this, handlerArgs);
 
 						if (Object.isPromise(res)) {
 							res.catch(stderr);
@@ -200,13 +195,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Attaches an event listener from the specified event emitter, but the event is listened only once.
-	 * If the emitter is a function, it is interpreted as the function to attach events.
-	 * Notice, if you don't provide a group for the operation, it will be taken from the event name.
+	 * Attaches an event listener to the specified event emitter, but the event is listened to only once.
+	 * If the emitter is a function, it is interpreted as the function to attach events to.
+	 * Note that if you don't provide a group for the operation, it will be taken from the event name.
 	 *
-	 * @param emitter - event emitter
-	 * @param events - event or list of events (can also specify multiple events by using spaces)
-	 * @param handler - event handler
+	 * @param emitter - the event emitter
+	 * @param events - the event or list of events (can also specify multiple events by using spaces)
+	 * @param handler - the event handler
 	 * @param [args] - additional arguments for the emitter
 	 */
 	once<E = unknown, R = unknown>(
@@ -217,13 +212,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	): Nullable<EventId>;
 
 	/**
-	 * Attaches an event listener from the specified event emitter, but the event is listened only once.
-	 * If the emitter is a function, it is interpreted as the function to attach events.
-	 * Notice, if you don't provide a group for the operation, it will be taken from the event name.
+	 * Attaches an event listener to the specified event emitter, but the event is listened to only once.
+	 * If the emitter is a function, it is interpreted as the function to attach events to.
+	 * Note that if you don't provide a group for the operation, it will be taken from the event name.
 	 *
-	 * @param emitter - event emitter
-	 * @param events - event or list of events (can also specify multiple events with a space)
-	 * @param handler - event handler
+	 * @param emitter - the event emitter
+	 * @param events - the event or list of events (can also specify multiple events by using spaces)
+	 * @param handler - the event handler
 	 * @param opts - options for the operation
 	 * @param [args] - additional arguments for the emitter
 	 */
@@ -242,8 +237,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		opts?: AsyncOnceOptions<CTX> | unknown[],
 		...args: unknown[]
 	): Nullable<EventId> {
-		let
-			p: AsyncOnceOptions<CTX>;
+		let p: AsyncOnceOptions<CTX>;
 
 		if (Object.isArray(opts)) {
 			args.unshift(opts);
@@ -258,11 +252,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Returns a promise that is resolved after emitting the specified event.
-	 * If the emitter is a function, it is interpreted as the function to attach events.
-	 * Notice, if you don't provide a group for the operation, it will be taken from the event name.
+	 * If the emitter is a function, it is interpreted as the function to attach events to.
+	 * Note that if you don't provide a group for the operation, it will be taken from the event name.
 	 *
-	 * @param emitter - event emitter
-	 * @param events - event or list of events (can also specify multiple events with a space)
+	 * @param emitter - the event emitter
+	 * @param events - the event or a list of events (can also specify multiple events by using spaces)
 	 * @param opts - options for the operation
 	 * @param [args] - additional arguments for the emitter
 	 */
@@ -275,11 +269,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Returns a promise that is resolved after emitting the specified event.
-	 * If the emitter is a function, it is interpreted as the function to attach events.
-	 * Notice, if you don't provide a group for the operation, it will be taken from the event name.
+	 * If the emitter is a function, it is interpreted as the function to attach events to.
+	 * Note that if you don't provide a group for the operation, it will be taken from the event name.
 	 *
-	 * @param emitter - event emitter
-	 * @param events - event or list of events (can also specify multiple events with a space)
+	 * @param emitter - the event emitter
+	 * @param events - the event or a list of events (can also specify multiple events by using spaces)
 	 * @param [args] - additional arguments for the emitter
 	 */
 	promisifyOnce<R = unknown>(
@@ -305,7 +299,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		}
 
 		return new SyncPromise((resolve, reject) => {
-			const handler = (e) => {
+			const handler = (e: unknown) => {
 				if (Object.isFunction(p.handler)) {
 					return resolve(p.handler.call(this.ctx, e));
 				}
@@ -326,13 +320,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Removes the specified event listener
 	 *
 	 * @alias
-	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
+	 * @param [id] - the operation identifier (if not specified, the operation will be applied to all registered tasks)
 	 */
 	off(id?: EventId): this;
 
 	/**
 	 * Removes the specified event listener or a group of listeners.
-	 * Notice, you can't remove event listeners by a label without providing a group.
+	 * Note that you can't remove event listeners by label without providing a group.
 	 *
 	 * @alias
 	 * @param opts - options for the operation
@@ -345,13 +339,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Removes the specified event listener
-	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
+	 * @param [id] - the operation identifier (if not specified, the operation will be applied to all registered tasks)
 	 */
 	clearEventListener(id?: EventId): this;
 
 	/**
 	 * Removes the specified event listener or a group of listeners.
-	 * Notice, you can't remove event listeners by a label without providing a group.
+	 * Note that you can't remove event listeners by label without providing a group.
 	 *
 	 * @param opts - options for the operation
 	 */
@@ -365,18 +359,18 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			return this;
 		}
 
-		return this.cancelTask(isEvent(task) ? {id: task} : task, this.namespaces.eventListener);
+		return this.cancelTask(isEvent(task) ? {id: task} : task, this.Namespaces.eventListener);
 	}
 
 	/**
 	 * Mutes the specified event listener
-	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
+	 * @param [id] - the operation identifier (if not specified, the operation will be applied to all registered tasks)
 	 */
 	muteEventListener(id?: EventId): this;
 
 	/**
 	 * Mutes the specified event listener or a group of listeners.
-	 * Notice, you can't mute event listeners by a label without providing a group.
+	 * Notice, you can't mute event listeners by label without providing a group.
 	 *
 	 * @param opts - options for the operation
 	 */
@@ -387,13 +381,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unmutes the specified event listener
-	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
+	 * @param [id] - the operation identifier (if not specified, the operation will be applied to all registered tasks)
 	 */
 	unmuteEventListener(id?: EventId): this;
 
 	/**
 	 * Unmutes the specified event listener or a group of listeners.
-	 * Notice, you can't unmute event listeners by a label without providing a group.
+	 * Notice, you can't unmute event listeners by label without providing a group.
 	 *
 	 * @param opts - options for the operation
 	 */
@@ -404,13 +398,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Suspends the specified event listener
-	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
+	 * @param [id] - the operation identifier (if not specified, the operation will be applied to all registered tasks)
 	 */
 	suspendEventListener(id?: EventId): this;
 
 	/**
 	 * Suspends the specified event listener or a group of listeners.
-	 * Notice, you can't suspend event listeners by a label without providing a group.
+	 * Notice, you can't suspend event listeners by label without providing a group.
 	 *
 	 * @param opts - options for the operation
 	 */
@@ -421,13 +415,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unsuspends the specified event listener
-	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
+	 * @param [id] - the operation identifier (if not specified, the operation will be applied to all registered tasks)
 	 */
 	unsuspendEventListener(id?: EventId): this;
 
 	/**
 	 * Unsuspends the specified event listener or a group of listeners.
-	 * Notice, you can't unsuspend event listeners by a label without providing a group.
+	 * Notice, you can't unsuspend event listeners by label without providing a group.
 	 *
 	 * @param opts - options for the operation
 	 */
@@ -462,21 +456,21 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	protected markEvent(label: string, id?: EventId): this;
 
 	/**
-	 * Marks an event task or group of tasks with the specified label
+	 * Marks an event task or group of tasks using the given marker
 	 *
-	 * @param label
+	 * @param marker
 	 * @param opts - additional options
 	 */
-	protected markEvent(label: string, opts: StrictClearOptionsId<EventId>): this;
-	protected markEvent(label: string, task?: EventId | StrictClearOptionsId<EventId>): this {
+	protected markEvent(marker: Marker, opts: StrictClearOptionsId<EventId>): this;
+	protected markEvent(marker: Marker, task?: EventId | StrictClearOptionsId<EventId>): this {
 		if (Object.isArray(task)) {
 			task.forEach((task) => {
-				this.markEvent(label, task);
+				this.markEvent(marker, task);
 			});
 
 			return this;
 		}
 
-		return this.markTask(label, isEvent(task) ? {id: task} : task, this.namespaces.eventListener);
+		return this.markTask(marker, isEvent(task) ? {id: task} : task, this.Namespaces.eventListener);
 	}
 }

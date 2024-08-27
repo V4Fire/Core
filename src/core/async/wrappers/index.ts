@@ -7,14 +7,14 @@
  */
 
 /**
- * [[include:core/async/modules/wrappers/README.md]]
+ * [[include:core/async/wrappers/README.md]]
  * @packageDocumentation
  */
 
 import type { Provider } from 'core/data';
 import type { CreateRequestOptions, RequestQuery, RequestBody } from 'core/request';
 
-import Super, { AsyncOptions, EventEmitterLike } from 'core/async/modules/events';
+import Super, { AsyncOptions, EventEmitterLike } from 'core/async/events';
 
 import type { AsyncStorage, AsyncStorageNamespace } from 'core/kv-storage';
 
@@ -24,7 +24,7 @@ import {
 	asyncOptionsKeys,
 	dataProviderMethodsToReplace
 
-} from 'core/async/modules/wrappers/consts';
+} from 'core/async/wrappers/consts';
 
 import type {
 
@@ -42,8 +42,8 @@ import type {
 
 } from 'core/async/interface';
 
-export * from 'core/async/modules/events';
-export * from 'core/async/modules/wrappers/consts';
+export * from 'core/async/events';
+export * from 'core/async/wrappers/consts';
 export * from 'core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {

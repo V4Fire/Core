@@ -26,27 +26,21 @@ import type {
 
 export default class Task<CTX extends object = Async> implements AbstractTask<CTX> {
 	/** @inheritDoc */
-	id: object;
+	readonly id: object;
 
 	/** @inheritDoc */
-	get obj(): unknown {
-		return this.task.obj;
+	readonly task: FullAsyncOptions<CTX>['task'];
+
+	/** @inheritDoc */
+	get name(): CanUndef<string> {
+		return this.params.task.name;
 	}
 
 	/** @inheritDoc */
-	get objName(): CanUndef<string> {
-		return this.task.obj.name;
-	}
+	readonly group: CanUndef<string>;
 
 	/** @inheritDoc */
-	get group(): CanUndef<string> {
-		return this.task.group;
-	}
-
-	/** @inheritDoc */
-	get label(): CanUndef<Label> {
-		return this.task.label;
-	}
+	readonly label: CanUndef<Label>;
 
 	/** @inheritDoc */
 	paused: boolean = false;
@@ -55,40 +49,58 @@ export default class Task<CTX extends object = Async> implements AbstractTask<CT
 	muted: boolean = false;
 
 	/** @inheritDoc */
-	queue: Function[] = [];
+	readonly queue: Function[] = [];
 
 	/** @inheritDoc */
-	onComplete: Array<Array<BoundFn<CTX>>> = [];
+	readonly onComplete: Array<Array<BoundFn<CTX>>> = [];
 
 	/** @inheritDoc */
-	onClear: Array<AsyncCb<CTX>>;
+	readonly onClear: Array<AsyncCb<CTX>>;
 
 	/** @inheritDoc */
-	get clearFn(): CanNull<ClearFn> {
-		return this.task.clearFn ?? null;
-	}
+	readonly clearFn: CanNull<ClearFn<CTX>>;
 
-	protected task: FullAsyncOptions<any>;
+	/**
+	 * Operation parameters
+	 */
+	protected params: FullAsyncOptions<CTX>;
 
+	/**
+	 * Local cache
+	 */
 	protected cache: LocalCache;
 
+	/**
+	 * Global cache
+	 */
 	protected globalCache: GlobalCache;
 
-	constructor(id: object, task: FullAsyncOptions<any>, cache: LocalCache, globalCache: GlobalCache) {
+	constructor(id: object, params: FullAsyncOptions<CTX>, cache: LocalCache, globalCache: GlobalCache) {
 		this.id = id;
-		this.task = task;
-		this.onClear = Array.toArray(task.onClear);
+
+		this.params = params;
+		this.task = params.task;
+
+		this.group = params.group;
+		this.label = params.label;
+
+		this.onClear = Array.toArray(params.onClear);
+		this.clearFn = params.clearFn ?? null;
+
 		this.cache = cache;
 		this.globalCache = globalCache;
 	}
 
+	/**
+	 * Unregisters the current task
+	 */
 	unregister(): void {
 		const {id, label, cache: {links, labels}} = this;
 
 		links.delete(id);
 		this.globalCache.root.links.delete(id);
 
-		if (label != null && labels[label] != null) {
+		if (label != null && labels?.[label] != null) {
 			labels[label] = undefined;
 		}
 	}

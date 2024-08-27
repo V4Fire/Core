@@ -1,4 +1,4 @@
-# core/async/modules/timers
+# core/async/timers
 
 This module provides Async wrappers for timer functions, like, `setTimeout`, `setInterval` and `requestIdleCallback`.
 

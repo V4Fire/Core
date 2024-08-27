@@ -1,4 +1,4 @@
-# core/async/modules/events
+# core/async/events
 
 This module provides Async wrappers for event emitters.
 

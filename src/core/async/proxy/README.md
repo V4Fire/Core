@@ -1,4 +1,4 @@
-# core/async/modules/proxy
+# core/async/proxy
 
 This module provides common proxy wrappers for the Async API, like, `proxy`, `worker` and `promise`.
 

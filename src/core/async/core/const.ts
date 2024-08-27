@@ -6,8 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export const
-	asyncCounter = Symbol('Async counter id');
+export const asyncCounter = Symbol('Async counter id');
 
 export const isZombieGroup = {
 	test(group: string): boolean {
@@ -20,7 +19,3 @@ export const isPromisifyNamespace = {
 		return namespace.endsWith('Promise');
 	}
 };
-
-export const
-	/** @deprecated */
-	isPromisifyLinkName = isPromisifyNamespace;

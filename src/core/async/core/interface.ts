@@ -6,29 +6,25 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import type { Namespaces } from 'core/async/const';
+
 import type Async from 'core/async';
 
 export type Label = string | symbol;
 export type Group = string;
 export type Join = boolean | 'replace';
 
-/**
- * Reason why a task can be marked
- */
-export type MarkReason =
-	'id' |
-	'label' |
-	'group' |
-	'rgxp' |
-	'all';
+export type Marker = 'muted' | '!muted' | 'paused' | '!paused';
 
 /**
- * Reason why a task can be killed (cleared)
+ * The reason why a task can be marked
  */
-export type ClearReason =
-	MarkReason |
-	'muting'|
-	'collision';
+export type MarkReason = 'id' | 'label' | 'group' | 'rgxp' | 'all';
+
+/**
+ * The reason why a task can be killed (cleared)
+ */
+export type ClearReason = MarkReason | 'muting'| 'collision';
 
 export interface IdObject {
 	__id__: unknown;
@@ -36,50 +32,52 @@ export interface IdObject {
 
 export interface AsyncOptions {
 	/**
-	 * Label of a task (the previous task with the same label will be canceled)
+	 * A label of the task.
+	 * Any previous task with the same label will be canceled.
 	 */
 	label?: Label;
 
 	/**
-	 * Group name of a task
+	 * A group name of the task
 	 */
 	group?: Group;
 
 	/**
-	 * Strategy to join competitive tasks (with the same labels):
-	 *   1. `true` - all tasks are joined to the first;
-	 *   1. `'replace'` - all tasks are joined (replaced) to the last (only for promises).
+	 * Strategy to join competitive tasks (tasks with the same labels):
+	 *   1. `true` - all following tasks are joined to the first task;
+	 *   2. `'replace'` - all following tasks are joined (replaced) to the last one (only for promises).
 	 */
 	join?: Join;
 }
 
 export interface AsyncCbOptions<CTX extends object = Async> extends AsyncOptions {
 	/**
-	 * If true, then a task namespace is marked as promisified
+	 * The task namespace for operations when they are used as promisified
 	 * @default `false`
 	 */
-	promise?: boolean;
+	promise?: Namespaces;
 
 	/**
-	 * Handler/s of task clearing
+	 * Handler(s) responsible for task clearing
 	 */
 	onClear?: CanArray<AsyncCb<CTX>>;
 
 	/**
-	 * Handler/s of task merging: a task should merge to another task with the same label and with "join: true" strategy
+	 * Handler(s) of task merging: a task should merge with another task that has
+	 * the same label and a `join: true` strategy
 	 */
 	onMerge?: CanArray<AsyncCb<CTX>>;
 
 	/**
-	 * Handler/s of muted task calling.
-	 * These handlers are invoked when occurring calling the task if it is muted.
+	 * Handler(s) of muted task calling.
+	 * These handlers are invoked when a muted task is called.
 	 */
 	onMutedCall?: CanArray<AsyncCb<CTX>>;
 }
 
 export interface AsyncCbOptionsSingle<CTX extends object = Async> extends AsyncCbOptions<CTX> {
 	/**
-	 * If false, then the proxy supports multiple callings
+	 * If set to false, the proxy supports multiple calls
 	 * @default `true`
 	 */
 	single?: boolean;
@@ -87,45 +85,45 @@ export interface AsyncCbOptionsSingle<CTX extends object = Async> extends AsyncC
 
 export interface AsyncProxyOptions<CTX extends object = Async> extends AsyncCbOptionsSingle<CTX> {
 	/**
-	 * Namespace of the proxy
+	 * The proxy namespace
 	 */
-	name?: string;
+	namespace?: Namespaces;
 
 	/**
-	 * Function to clear memory of the proxy
+	 * A function to clear proxy memory
 	 */
 	clearFn?: ClearFn<CTX>;
 }
 
 export interface ClearOptions {
 	/**
-	 * Label of the task to clear
+	 * A label of the task to clear.
 	 */
 	label?: Label;
 
 	/**
-	 * Group name of the task to clear
+	 * A group name of the task to clear
 	 */
 	group?: Group | RegExp;
 
 	/**
-	 * If true, then a cleanup handler of the task is prevented
+	 * If set to true, the cleanup handler of the task is prevented
 	 */
 	preventDefault?: boolean;
 }
 
 export interface ClearOptionsId<ID = any> extends ClearOptions {
 	/**
-	 * Identifier of the task to clear
+	 * An identifier of the task to clear
 	 */
 	id?: ID;
 }
 
 export interface ClearProxyOptions<ID = any> extends ClearOptionsId<ID> {
 	/**
-	 * Namespace of the proxy to clear
+	 * A namespace of the proxy to clear
 	 */
-	name?: string;
+	namespace?: Namespaces;
 }
 
 export type StrictClearOptions =
@@ -148,7 +146,7 @@ export type AsyncCb<CTX extends object = Async> =
 	ProxyCb<TaskCtx<CTX>, void, CTX>;
 
 /**
- * Registered task object
+ * The registered task object
  */
 export interface Task<CTX extends object = Async> {
 	/**
@@ -159,20 +157,20 @@ export interface Task<CTX extends object = Async> {
 	/**
 	 * Raw task object
 	 */
-	obj: unknown;
+	task: unknown;
 
 	/**
-	 * Name of the raw task object
+	 * The name of the raw task object
 	 */
-	objName?: string;
+	name?: string;
 
 	/**
-	 * Group name the task
+	 * The group name associated with the task
 	 */
 	group?: string;
 
 	/**
-	 * Label of the task
+	 * The label associated with the task
 	 */
 	label?: Label;
 
@@ -187,51 +185,47 @@ export interface Task<CTX extends object = Async> {
 	muted: boolean;
 
 	/**
-	 * Queue of pending handlers
-	 * (if the task is paused)
+	 * A queue of pending handlers in case the task is paused
 	 */
 	queue: Function[];
 
 	/**
-	 * List of complete handlers:
-	 *
-	 * [0] - onFulfilled
-	 * [1] - onRejected
+	 * A list of complete handlers: `[onFulfilled, onRejected][]`
 	 */
 	onComplete: Array<Array<BoundFn<CTX>>>;
 
 	/**
-	 * List of clear handlers
+	 * A list of clear handlers
 	 */
 	onClear: Array<AsyncCb<CTX>>;
 
 	/**
-	 * Unregisters the task
+	 * A function to clear the task
 	 */
-	unregister: Function;
+	clearFn: CanNull<ClearFn<CTX>>;
 
 	/**
-	 * Function to clear the task
+	 * Unregisters the task
 	 */
-	clearFn: CanNull<ClearFn>;
+	unregister(): void;
 }
 
 /**
- * Context of a task
+ * The context of a task
  */
 export type TaskCtx<CTX extends object = Async> = {
 	/**
-	 * Task type
+	 * The task type
 	 */
 	type: string;
 
 	/**
-	 * Link to the registered task
+	 * A link to the registered task
 	 */
 	link: Task<CTX>;
 
 	/**
-	 * Link to a new task that replaces the current
+	 * A link to a new task that replaces the current one
 	 */
 	replacedBy?: Task<CTX>;
 
@@ -250,11 +244,11 @@ export interface BoundFn<CTX extends object = Async> extends Function {
 }
 
 export interface LocalCache {
-	labels: Record<Label, any>;
+	labels: CanNull<Record<Label, any>>;
 	links: Map<object, Task<any>>;
 }
 
 export interface GlobalCache {
 	root: LocalCache;
-	groups: Dictionary<LocalCache>;
+	groups: CanNull<Dictionary<LocalCache>>;
 }

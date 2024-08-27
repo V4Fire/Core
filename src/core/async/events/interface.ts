@@ -17,7 +17,7 @@ import type {
 	AsyncCbOptions,
 	AsyncCbOptionsSingle
 
-} from 'core/async/modules/base';
+} from 'core/async/core';
 
 export type EventId = CanArray<IdObject>;
 

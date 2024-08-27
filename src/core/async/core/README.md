@@ -1,4 +1,4 @@
-# core/async/modules/base
+# core/async/core
 
 This module provides the base class for the Async module.
 
