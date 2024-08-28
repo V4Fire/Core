@@ -11,13 +11,13 @@ import type Async from 'core/async';
 import type {
 
 	Label,
-	FullAsyncOptions,
+	FullAsyncParams,
 
 	LocalCache,
 	GlobalCache,
 
 	AsyncCb,
-	BoundFn,
+	BoundedCb,
 	ClearFn,
 
 	Task as AbstractTask
@@ -29,7 +29,7 @@ export default class Task<CTX extends object = Async> implements AbstractTask<CT
 	readonly id: object;
 
 	/** @inheritDoc */
-	readonly task: FullAsyncOptions<CTX>['task'];
+	readonly task: FullAsyncParams<CTX>['task'];
 
 	/** @inheritDoc */
 	get name(): CanUndef<string> {
@@ -52,18 +52,18 @@ export default class Task<CTX extends object = Async> implements AbstractTask<CT
 	readonly queue: Function[] = [];
 
 	/** @inheritDoc */
-	readonly onComplete: Array<Array<BoundFn<CTX>>> = [];
+	readonly onComplete: Array<Array<BoundedCb<CTX>>> = [];
 
 	/** @inheritDoc */
 	readonly onClear: Array<AsyncCb<CTX>>;
 
 	/** @inheritDoc */
-	readonly clearFn: CanNull<ClearFn<CTX>>;
+	readonly clear: CanNull<ClearFn<CTX>>;
 
 	/**
 	 * Operation parameters
 	 */
-	protected params: FullAsyncOptions<CTX>;
+	protected params: FullAsyncParams<CTX>;
 
 	/**
 	 * Local cache
@@ -75,7 +75,7 @@ export default class Task<CTX extends object = Async> implements AbstractTask<CT
 	 */
 	protected globalCache: GlobalCache;
 
-	constructor(id: object, params: FullAsyncOptions<CTX>, cache: LocalCache, globalCache: GlobalCache) {
+	constructor(id: object, params: FullAsyncParams<CTX>, cache: LocalCache, globalCache: GlobalCache) {
 		this.id = id;
 
 		this.params = params;
@@ -85,7 +85,7 @@ export default class Task<CTX extends object = Async> implements AbstractTask<CT
 		this.label = params.label;
 
 		this.onClear = Array.toArray(params.onClear);
-		this.clearFn = params.clearFn ?? null;
+		this.clear = params.clear ?? null;
 
 		this.cache = cache;
 		this.globalCache = globalCache;

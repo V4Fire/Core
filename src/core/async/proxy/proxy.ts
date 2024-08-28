@@ -11,7 +11,7 @@ import Super, {
 	asyncCounter,
 	isAsyncOptions,
 
-	BoundFn,
+	BoundedCb,
 
 	AsyncCbOptions,
 	AsyncProxyOptions,
@@ -65,7 +65,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			worker[asyncCounter] = Number(worker[asyncCounter] ?? 0) + 1;
 		}
 
-		const clearFn = this.workerDestructor.bind(this, opts?.destructor);
+		const clear = this.workerDestructor.bind(this, opts?.destructor);
 
 		return this.registerTask({
 			...opts,
@@ -73,7 +73,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			task: worker,
 			namespace: PrimitiveNamespaces.worker,
 
-			clearFn,
+			clear,
 			periodic: opts?.single === false,
 
 			onMerge(...args: unknown[]): void {
@@ -81,7 +81,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 					handler.apply(this, args);
 				});
 
-				clearFn(worker);
+				clear(worker);
 			}
 		}) ?? worker;
 	}
@@ -143,7 +143,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * });
 	 * ```
 	 */
-	proxy<F extends BoundFn<C>, C extends object = CTX>(fn: F, opts?: AsyncProxyOptions<C>): F {
+	proxy<F extends BoundedCb<C>, C extends object = CTX>(fn: F, opts?: AsyncProxyOptions<C>): F {
 		return this.registerTask<F>({
 			...opts,
 
@@ -165,7 +165,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param delay
 	 * @param [opts] - additional options for the operation
 	 */
-	debounce<F extends BoundFn<C>, C extends object = CTX>(
+	debounce<F extends BoundedCb<C>, C extends object = CTX>(
 		fn: F,
 		delay: number,
 		opts?: AsyncCbOptions<C>
@@ -180,7 +180,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param delay
 	 * @param [opts] - additional options for the operation
 	 */
-	throttle<F extends BoundFn<C>, C extends object = CTX>(
+	throttle<F extends BoundedCb<C>, C extends object = CTX>(
 		fn: F,
 		delay: number,
 		opts?: AsyncCbOptions<C>

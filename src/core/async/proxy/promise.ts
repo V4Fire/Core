@@ -85,7 +85,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			wrappedResolve = that.proxy(resolve, {
 				...p,
 
-				clearFn: () => {
+				clear: () => {
 					that.promiseDestructor(p.destructor, <Promise<unknown>>promise);
 
 					if (proxyReject != null) {

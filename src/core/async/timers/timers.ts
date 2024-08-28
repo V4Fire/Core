@@ -26,8 +26,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			task: cb,
 			namespace: PrimitiveNamespaces.immediate,
 
-			clearFn: clearImmediate,
 			wrapper: setImmediate,
+			clear: clearImmediate,
 
 			linkByWrapper: true
 		});
@@ -122,8 +122,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			task: cb,
 			namespace: PrimitiveNamespaces.interval,
 
-			clearFn: clearInterval,
 			wrapper: setInterval,
+			clear: clearInterval,
 
 			periodic: true,
 			linkByWrapper: true,
@@ -221,8 +221,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			task: cb,
 			namespace: PrimitiveNamespaces.timeout,
 
-			clearFn: clearTimeout,
 			wrapper: setTimeout,
+			clear: clearTimeout,
 
 			linkByWrapper: true,
 			args: [timeout]

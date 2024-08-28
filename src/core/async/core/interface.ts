@@ -10,10 +10,13 @@ import type { Namespaces, PrimitiveNamespaces, PromiseNamespaces } from 'core/as
 
 import type Async from 'core/async';
 
-export type Label = string | symbol;
 export type Group = string;
+export type Label = string | symbol;
 export type Join = boolean | 'replace';
 
+/**
+ * Values by which a task can be marked
+ */
 export type Marker = 'muted' | '!muted' | 'paused' | '!paused';
 
 /**
@@ -43,12 +46,22 @@ export interface AsyncOptions {
 	group?: Group;
 
 	/**
-	 * Strategy to join competitive tasks (tasks with the same labels):
+	 * A strategy to join competitive tasks (tasks with the same labels):
 	 *   1. `true` - all following tasks are joined to the first task;
 	 *   2. `'replace'` - all following tasks are joined (replaced) to the last one (only for promises).
 	 */
 	join?: Join;
 }
+
+export type ProxyCb<A = unknown, R = unknown, CTX extends object = Async> =
+	A extends never ?
+		((this: CTX) => R) :
+
+		A extends any[] ?
+			((this: CTX, ...args: A) => R) :
+			((this: CTX, e: A) => R) | Function;
+
+export type AsyncCb<CTX extends object = Async> = ProxyCb<TaskCtx<CTX>, void, CTX>;
 
 export interface AsyncCbOptions<CTX extends object = Async> extends AsyncOptions {
 	/**
@@ -83,21 +96,23 @@ export interface AsyncCbOptionsSingle<CTX extends object = Async> extends AsyncC
 	single?: boolean;
 }
 
+export type TaskNamespaces = Namespaces | PrimitiveNamespaces | PromiseNamespaces;
+
 export interface AsyncProxyOptions<CTX extends object = Async> extends AsyncCbOptionsSingle<CTX> {
 	/**
 	 * The proxy namespace
 	 */
-	namespace?: PrimitiveNamespaces;
+	namespace?: TaskNamespaces;
 
 	/**
-	 * A function to clear proxy memory
+	 * A function to clear the proxy memory
 	 */
-	clearFn?: ClearFn<CTX>;
+	clear?: ClearFn<CTX>;
 }
 
 export interface ClearOptions {
 	/**
-	 * A label of the task to clear.
+	 * A label of the task to clear
 	 */
 	label?: Label;
 
@@ -107,23 +122,23 @@ export interface ClearOptions {
 	group?: Group | RegExp;
 
 	/**
-	 * If set to true, the cleanup handler of the task is prevented
+	 * If set to true, the task's cleanup handler is prevented
 	 */
 	preventDefault?: boolean;
 }
 
 export interface ClearOptionsId<ID = any> extends ClearOptions {
 	/**
-	 * An identifier of the task to clear
+	 * The identifier of the task to clear
 	 */
 	id?: ID;
 }
 
 export interface ClearProxyOptions<ID = any> extends ClearOptionsId<ID> {
 	/**
-	 * A namespace of the proxy to clear
+	 * The proxy namespace to clear
 	 */
-	namespace?: Namespaces | PrimitiveNamespaces | PromiseNamespaces;
+	namespace?: TaskNamespaces;
 }
 
 export type StrictClearOptions =
@@ -134,28 +149,22 @@ export type StrictClearOptionsId<ID = any> =
 	Omit<ClearOptionsId<ID>, 'label'> |
 	Overwrite<ClearOptionsId<ID>, {label: Label; group: Group | RegExp}>;
 
-export type ProxyCb<
-	A = unknown,
-	R = unknown,
-	CTX extends object = Async
-> = A extends never ?
-	((this: CTX) => R) : A extends any[] ?
-		((this: CTX, ...args: A) => R) : ((this: CTX, e: A) => R) | Function;
+export interface ClearFn<CTX extends object = Async> extends Function {
+	(id: any, ctx: TaskCtx<CTX>): void;
+}
 
-export type AsyncCb<CTX extends object = Async> =
-	ProxyCb<TaskCtx<CTX>, void, CTX>;
+export interface BoundedCb<CTX extends object = Async> extends Function {
+	(this: CTX, ...args: any[]): void;
+}
 
-/**
- * The registered task object
- */
 export interface Task<CTX extends object = Async> {
 	/**
-	 * Task unique identifier
+	 * The task unique identifier
 	 */
 	id: unknown;
 
 	/**
-	 * Raw task object
+	 * The raw task object
 	 */
 	task: unknown;
 
@@ -192,7 +201,7 @@ export interface Task<CTX extends object = Async> {
 	/**
 	 * A list of complete handlers: `[onFulfilled, onRejected][]`
 	 */
-	onComplete: Array<Array<BoundFn<CTX>>>;
+	onComplete: Array<Array<BoundedCb<CTX>>>;
 
 	/**
 	 * A list of clear handlers
@@ -202,7 +211,7 @@ export interface Task<CTX extends object = Async> {
 	/**
 	 * A function to clear the task
 	 */
-	clearFn: CanNull<ClearFn<CTX>>;
+	clear: CanNull<ClearFn<CTX>>;
 
 	/**
 	 * Unregisters the task
@@ -210,9 +219,6 @@ export interface Task<CTX extends object = Async> {
 	unregister(): void;
 }
 
-/**
- * The context of a task
- */
 export type TaskCtx<CTX extends object = Async> = {
 	/**
 	 * The task type
@@ -230,18 +236,10 @@ export type TaskCtx<CTX extends object = Async> = {
 	replacedBy?: Task<CTX>;
 
 	/**
-	 * Reason to clear the task
+	 * The reason to clear the task
 	 */
 	reason?: ClearReason;
 } & AsyncOptions & ClearOptionsId<unknown>;
-
-export interface ClearFn<CTX extends object = Async> extends Function {
-	(id: any, ctx: TaskCtx<CTX>): void;
-}
-
-export interface BoundFn<CTX extends object = Async> extends Function {
-	(this: CTX, ...args: any[]): void;
-}
 
 export interface LocalCache {
 	labels: CanNull<Record<Label, any>>;

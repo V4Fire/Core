@@ -9,8 +9,8 @@
 import type { AsyncOptions } from 'core/async/interface';
 
 /**
- * Takes an object with async options and returns a new one with a modified group to support task suspending.
- * To prevent suspending provide a group with the  `:!suspend` modifier.
+ * Takes an object with async options and returns a new one with a modified group to support task suspension.
+ * To prevent suspension, provide a group with the `:!suspend` modifier.
  *
  * @param opts
  * @param [groupMod] - additional group modifier

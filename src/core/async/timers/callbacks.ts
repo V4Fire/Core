@@ -36,15 +36,15 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	): Nullable<TimerId> {
 		let
 			wrapper: AnyFunction,
-			clearFn: AnyFunction;
+			clear: AnyFunction;
 
 		if (typeof requestIdleCallback !== 'function') {
 			wrapper = (fn: IdleRequestCallback) => setTimeout(() => fn({timeRemaining: () => 0, didTimeout: true}), 50);
-			clearFn = clearTimeout;
+			clear = clearTimeout;
 
 		} else {
 			wrapper = requestIdleCallback;
-			clearFn = cancelIdleCallback;
+			clear = cancelIdleCallback;
 		}
 
 		return this.registerTask({
@@ -53,8 +53,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			task: cb,
 			namespace: PrimitiveNamespaces.idleCallback,
 
-			clearFn,
 			wrapper,
+			clear,
 
 			linkByWrapper: true,
 			args: opts != null ? {timeout: opts.timeout} : undefined
@@ -181,20 +181,25 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		if (Object.isDictionary(p)) {
 			return this.registerTask({
 				...p,
-				namespace: PrimitiveNamespaces.animationFrame,
+
 				task: cb,
-				clearFn: cancelAnimationFrame,
+				namespace: PrimitiveNamespaces.animationFrame,
+
 				wrapper: requestAnimationFrame,
+				clear: cancelAnimationFrame,
+
 				linkByWrapper: true,
 				args: p.element
 			});
 		}
 
 		return this.registerTask({
-			namespace: PrimitiveNamespaces.animationFrame,
 			task: cb,
-			clearFn: cancelAnimationFrame,
+			namespace: PrimitiveNamespaces.animationFrame,
+
 			wrapper: requestAnimationFrame,
+			clear: cancelAnimationFrame,
+
 			linkByWrapper: true,
 			args: p
 		});

@@ -13,8 +13,8 @@ import { isZombieGroup } from 'core/async/core/const';
 
 import type {
 
-	FullAsyncOptions,
-	FullClearOptions,
+	FullAsyncParams,
+	FullClearParams,
 	ClearProxyOptions,
 
 	Marker,
@@ -80,7 +80,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param task
 	 */
 	protected getCache(
-		task: Pick<FullAsyncOptions<any> | FullClearOptions, 'namespace' | 'promise' | 'label'> & {group?: string | RegExp}
+		task: Pick<FullAsyncParams<any> | FullClearParams, 'namespace' | 'promise' | 'label'> & {group?: string | RegExp}
 	): GlobalCache {
 		const pos = task.promise ?? task.namespace;
 
@@ -110,7 +110,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Registers an asynchronous task with the specified parameters
 	 * @param params
 	 */
-	protected registerTask<R = unknown>(params: FullAsyncOptions<any>): R | null {
+	protected registerTask<R = unknown>(params: FullAsyncParams<any>): R | null {
 		if (this.locked) {
 			return null;
 		}
@@ -352,12 +352,12 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [namespace] - the namespace from which the task or tasks should be canceled
 	 */
 	protected cancelTask(
-		task: CanUndef<FullClearOptions | any>,
+		task: CanUndef<FullClearParams | any>,
 		namespace?: Namespaces | PrimitiveNamespaces | PromiseNamespaces
 	): this {
 		task = task != null ? this.ids.get(task) ?? task : task;
 
-		let p: FullClearOptions;
+		let p: FullClearParams;
 
 		if (namespace != null) {
 			if (task === undefined) {
@@ -448,8 +448,8 @@ export default class Async<CTX extends object = Async<any>> {
 					handler.call(this.ctx, ctx);
 				});
 
-				if (link.clearFn != null && !p.preventDefault) {
-					link.clearFn(link.id, ctx);
+				if (link.clear != null && !p.preventDefault) {
+					link.clear(link.id, ctx);
 				}
 			}
 
@@ -476,7 +476,7 @@ export default class Async<CTX extends object = Async<any>> {
 	): this {
 		task = task != null ? this.ids.get(task) ?? task : task;
 
-		let p: FullClearOptions;
+		let p: FullClearParams;
 
 		if (namespace != null) {
 			if (task === undefined) {
@@ -581,7 +581,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param marker
 	 * @param opts - the operation options
 	 */
-	protected markAllTasks(marker: Marker, opts: FullClearOptions): this {
+	protected markAllTasks(marker: Marker, opts: FullClearParams): this {
 		this.markTask(marker, opts);
 		return this;
 	}

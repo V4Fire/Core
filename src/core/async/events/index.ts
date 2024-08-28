@@ -135,7 +135,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				periodic: !p.single,
 				linkByWrapper: true,
 
-				clearFn: this.eventListenerDestructor.bind(this),
+				clear: this.eventListenerDestructor.bind(this),
 
 				wrapper(cb: AnyFunction): unknown {
 					if (Object.isFunction(originalEmitter)) {

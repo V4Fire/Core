@@ -12,19 +12,13 @@
  */
 
 import type { Provider } from 'core/data';
+
 import type { CreateRequestOptions, RequestQuery, RequestBody } from 'core/request';
+import type { AsyncStorage, AsyncStorageNamespace } from 'core/kv-storage';
 
 import Super, { AsyncOptions, EventEmitterLike } from 'core/async/events';
 
-import type { AsyncStorage, AsyncStorageNamespace } from 'core/kv-storage';
-
-import {
-
-	emitLikeEvents,
-	asyncOptionsKeys,
-	dataProviderMethodsToReplace
-
-} from 'core/async/wrappers/consts';
+import { emitLikeEvents, asyncOptionsKeys, dataProviderMethodsToReplace } from 'core/async/wrappers/consts';
 
 import type {
 
@@ -96,7 +90,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * // If we are providing a group to the method, it will be joined with the global group by using the `:` character
 	 * $a.suspendAll({group: 'api.User:bla'});
 	 *
-	 * // Obviously, we can use a group as RegExp
+	 * // We can use a group as RegExp
 	 * $a.muteAll({group: /api\.User/});
 	 *
 	 * // We can use any methods or properties from the original data provider
