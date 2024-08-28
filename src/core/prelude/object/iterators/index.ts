@@ -65,8 +65,7 @@ extend(Object, 'forEach', (
 			i = 0;
 
 		for (const el of obj) {
-			let
-				iterVal: string | PropertyDescriptor = el;
+			let iterVal: string | PropertyDescriptor = el;
 
 			if (passDescriptor) {
 				iterVal = {
@@ -89,7 +88,8 @@ extend(Object, 'forEach', (
 
 	if (!passDescriptor && notOwn == null) {
 		if (Object.isArrayLike(obj)) {
-			for (let i = 0; i < obj.length; i++) {
+			// eslint-disable-next-line vars-on-top, no-var
+			for (var i = 0; i < obj.length; i++) {
 				cb(obj[i], i, obj);
 			}
 
@@ -97,8 +97,7 @@ extend(Object, 'forEach', (
 		}
 
 		if (Object.isMap(obj) || Object.isSet(obj)) {
-			for (let o = obj.entries(), i = o.next(); !i.done; i = o.next()) {
-				const [key, el] = i.value;
+			for (const [key, el] of obj.entries()) {
 				cb(el, key, obj);
 			}
 
@@ -106,8 +105,7 @@ extend(Object, 'forEach', (
 		}
 
 		if (Object.isIterable(obj)) {
-			let
-				i = 0;
+			let i = 0;
 
 			for (const el of obj) {
 				if (Object.isArray(el) && el.length === 2) {
@@ -150,14 +148,10 @@ extend(Object, 'forEach', (
 		return;
 	}
 
-	const
-		keys = Object[p.withNonEnumerables ? 'getOwnPropertyNames' : 'keys'](obj);
+	const keys = p.withNonEnumerables ? Object.getOwnPropertyNames(obj) : Object.keys(obj);
 
-	for (let i = 0; i < keys.length; i++) {
-		const
-			key = keys[i],
-			el = passDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key];
-
+	keys.forEach((key) => {
+		const el = passDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key];
 		cb(el, key, obj);
-	}
+	});
 });
