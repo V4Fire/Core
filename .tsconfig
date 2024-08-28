@@ -24,7 +24,9 @@
     "strictPropertyInitialization": true,
 
     "noImplicitOverride": true,
-    "importsNotUsedAsValues": "error"
+    "importsNotUsedAsValues": "error",
+
+    "isolatedModules": false
   },
 
   "include": [
