@@ -14,7 +14,7 @@
 import type { Provider } from 'core/data';
 
 import type { CreateRequestOptions, RequestQuery, RequestBody } from 'core/request';
-import type { AsyncStorage, AsyncStorageNamespace } from 'core/kv-storage';
+import type { AsyncStorage, AsyncStorageNamespace, ClearFilter } from 'core/kv-storage';
 
 import Super, { AsyncOptions, EventEmitterLike } from 'core/async/events';
 
@@ -42,9 +42,10 @@ export * from 'core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
-	 * The wrapper takes a link to the "raw" data provider and returns a new object that based
-	 * on the original, but all asynchronous methods and properties are wrapped by Async.
-	 * Notice, the wrapped methods can take additional Async parameters, like group or label.
+	 * The wrapper takes a link to the "raw" data provider and returns a new object based on the original.
+	 * All asynchronous methods and properties are wrapped by Async.
+	 *
+	 * Note that the wrapped methods can take additional Async parameters, such as `group` or `label`.
 	 * If you don't provide a group, it will be taken from the provider name.
 	 *
 	 * @param provider
@@ -68,17 +69,17 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *   console.log(res);
 	 * });
 	 *
-	 * // By default, all wrapped methods have a group name that is equal to the provider name.
-	 * // So we can use it to clear or suspend requests, etc.
+	 * // By default, all wrapped methods have a group name that is equal to the provider's name.
+	 * // This allows us to clear or suspend requests, among other things.
 	 * $a.clearAll({group: 'api.User'})
 	 *
 	 * wrappedProvider.update({uuid: 1}, {
-	 *   // All wrapped methods can take additional Async parameters as the second argument: `group`, `label` and `join`
+	 *   // All wrapped methods can take additional Async parameters as the second argument: group, label, and join
 	 *   group: 'bla',
 	 *   label: 'foo',
 	 *   join: true,
 	 *
-	 *   // Also, the second argument of the wrapped method can take the original parameters from a provider
+	 *   // Additionally, the second argument of the wrapped method can take the original parameters from the provider
 	 *   headers: {
 	 *     'X-Foo': '1'
 	 *   }
@@ -87,10 +88,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *   console.log(res);
 	 * });
 	 *
-	 * // If we are providing a group to the method, it will be joined with the global group by using the `:` character
+	 * // If we provide a group to the method, it will be joined with the global group using the `:` character
 	 * $a.suspendAll({group: 'api.User:bla'});
 	 *
-	 * // We can use a group as RegExp
+	 * // We can use a group as a RegExp
 	 * $a.muteAll({group: /api\.User/});
 	 *
 	 * // We can use any methods or properties from the original data provider
@@ -148,10 +149,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * The wrapper takes a link to the "raw" event emitter and returns a new object that based
-	 * on the original, but all asynchronous methods and properties are wrapped by Async.
-	 * Notice, the wrapped methods can take additional Async parameters, like group or label.
-	 * In addition, the wrapper adds new methods, like "on" or "off", to make the emitter API more standard.
+	 * The wrapper takes a link to the "raw" event emitter and returns a new object based on the original,
+	 * but all asynchronous methods and properties are wrapped by Async.
+	 *
+	 * Note that the wrapped methods can take additional Async parameters, such as `group` or `label`.
+	 * In addition, the wrapper adds new methods, such as "on" and "off", to make the emitter API more standard.
 	 *
 	 * @param emitter
 	 * @param [opts] - additional options for the wrapper
@@ -166,19 +168,20 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * const handler = () => console.log('scroll event');
 	 *
-	 * // We can safely listen to emitter events,
-	 * // cause all emitter methods, like `addListener` or `on` are wrapped by Async.
+	 * // We can safely listen to emitter events because all emitter methods,
+	 * // such as addListener or on, are wrapped by Async
 	 * const id = wrappedEventEmitter.addEventListener('scroll', handler, {
-	 *   // Notice, the third argument can take Async parameters in addition to the native emitter parameters
+	 *   // Note that the third argument can take Async parameters in addition to the native emitter parameters
 	 *   capture: true,
 	 *   label: 'label'
 	 * });
 	 *
-	 * // The wrapper preserves the original API of emitter methods, so we can call something like this
+	 * // The wrapper preserves the original API of the emitter methods, so we can call something like this:
 	 * wrappedEventEmitter.removeEventListener('scroll', handler);
 	 *
-	 * // Finally, the wrapper adds a bunch of standard methods to the emitter, like `on`, `once`, and other stuff.
-	 * // We can use their instead of the original methods to make our code more universal.
+	 * // Finally, the wrapper adds a bunch of standard methods to the emitter,
+	 * // such as on, once, and other functionalities.
+	 * // We can use them instead of the original methods to make our code more universal.
 	 * wrappedEventEmitter.once('resize', (e) => {
 	 *   console.log(e);
 	 * }, {group: 'resizers'});
@@ -200,17 +203,17 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		Object.defineProperty(wrappedEmitter, 'on', {
 			configurable: true,
 			writable: true,
-			value: (event, fn, ...params) => {
-				if (!Object.isFunction(fn)) {
+			value: (event: string, cb: Function, ...args: unknown[]) => {
+				if (!Object.isFunction(cb)) {
 					throw new TypeError('Wrapped emitters methods `on, addEventListener, addListener` accept only a function as the second parameter');
 				}
 
 				const link = Object.cast<Nullable<{handler: Function}>>(
-					this.on(emitter, event, fn, ...normalizeAdditionalArgs(params))
+					this.on(emitter, event, cb, ...normalizeAdditionalArgs(args))
 				);
 
 				if (link != null) {
-					links.set(fn, link.handler);
+					links.set(cb, link.handler);
 				}
 
 				return link;
@@ -232,16 +235,18 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		Object.defineProperty(wrappedEmitter, 'once', {
 			configurable: true,
 			writable: true,
-			value: (event, fn, ...params) => this.once(emitter, event, fn, ...normalizeAdditionalArgs(params))
+			value: (event: string, cb: Function, ...args: unknown[]) =>
+				this.once(emitter, event, cb, ...normalizeAdditionalArgs(args))
 		});
 
 		Object.defineProperty(wrappedEmitter, 'promisifyOnce', {
 			configurable: true,
 			writable: true,
-			value: (event, ...params) => this.promisifyOnce(emitter, event, ...normalizeAdditionalArgs(params))
+			value: (event: string, ...args: unknown[]) =>
+				this.promisifyOnce(emitter, event, ...normalizeAdditionalArgs(args))
 		});
 
-		const wrapOff = (originalMethod) => (link, ...args) => {
+		const wrapOff = (originalMethod: Nullable<Function>) => (link: any, ...args: any[]) => {
 			if (link != null && typeof link !== 'object' || args.length > 0) {
 				args = args.map((val) => links.get(val) ?? val);
 				return Object.isFunction(originalMethod) ? originalMethod.call(emitter, link, ...args) : null;
@@ -271,7 +276,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		Object.defineProperty(wrappedEmitter, 'emit', {
 			configurable: true,
 			writable: true,
-			value: (event, ...args) => {
+			value: (event: string, ...args: unknown[]) => {
 				for (const key of emitLikeEvents) {
 					const property = emitter[key];
 
@@ -306,9 +311,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * The wrapper takes a link to the "raw" asynchronous storage and returns a new object that based
-	 * on the original, but all asynchronous methods and properties are wrapped by Async.
-	 * Notice, the wrapped methods can take additional Async parameters, like group or label.
+	 * The wrapper takes a link to the "raw" asynchronous storage and returns a new object based on the original,
+	 * but all asynchronous methods and properties are wrapped by Async.
+	 *
+	 * Note that the wrapped methods can take additional Async parameters, such as `group` or `label`.
 	 *
 	 * @param storage
 	 * @param opts
@@ -323,7 +329,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *   wrappedStorage = $a.wrapStorage(asyncLocal, {group: 'bar'});
 	 *
 	 * wrappedStorage.set('someKey', 'someValue', {
-	 *   // If we are providing a group to the method, it will be joined with the global group by using the `:` character
+	 *   // If we provide a group to the method, it will be joined with the global group using the ":" character
 	 *   group: 'bla',
 	 *   label: 'foo',
 	 *   join: true,
@@ -333,7 +339,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * $a.suspendAll({group: 'bar:bla'});
 	 *
-	 * // We can provide own global group to namespace, it will be joined with the parent's global group
+	 * // We can provide our own global group to the namespace, and it will be joined with the parent's global group
 	 * const blaStore = wrappedStorage.namespace('[[BLA]]', {group: 'bla'});
 	 *
 	 * blaStore.clear({group: 'foo'});
@@ -352,7 +358,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		Object.defineProperty(wrappedStorage, 'has', {
 			configurable: true,
 			writable: true,
-			value: (key, ...args) => {
+			value: (key: string, ...args: unknown[]) => {
 				const [asyncOpts, params] = separateArgs(args);
 				return this.promise(storage.has(key, ...params), asyncOpts);
 			}
@@ -361,7 +367,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		Object.defineProperty(wrappedStorage, 'get', {
 			configurable: true,
 			writable: true,
-			value: (key, ...args) => {
+			value: (key: string, ...args: unknown[]) => {
 				const [asyncOpts, params] = separateArgs(args);
 				return this.promise(storage.get<T>(key, ...params), asyncOpts);
 			}
@@ -370,7 +376,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		Object.defineProperty(wrappedStorage, 'set', {
 			configurable: true,
 			writable: true,
-			value: (key, value, ...args) => {
+			value: (key: string, value: unknown, ...args: unknown[]) => {
 				const [asyncOpts, params] = separateArgs(args);
 				return this.promise(storage.set(key, value, ...params), asyncOpts);
 			}
@@ -379,7 +385,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		Object.defineProperty(wrappedStorage, 'remove', {
 			configurable: true,
 			writable: true,
-			value: (key, ...args) => {
+			value: (key: string, ...args: unknown[]) => {
 				const [asyncOpts, params] = separateArgs(args);
 				return this.promise(storage.remove(key, ...params), asyncOpts);
 			}
@@ -388,7 +394,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		Object.defineProperty(wrappedStorage, 'clear', {
 			configurable: true,
 			writable: true,
-			value: (filter?, ...args) => {
+			value: (filter?: ClearFilter<T>, ...args: unknown[]) => {
 				if (Object.isPlainObject(filter)) {
 					filter = undefined;
 					args = [filter];
@@ -403,9 +409,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			Object.defineProperty(wrappedStorage, 'namespace', {
 				configurable: true,
 				writable: true,
-				value: (name, opts?) => {
+				value: (namespace: string, opts?: AsyncOptionsForWrappers) => {
 					const [asyncOpts] = separateArgs([opts]);
-					const storageNamespace = storage.namespace(name);
+					const storageNamespace = storage.namespace(namespace);
 					return this.wrapStorage(storageNamespace, asyncOpts);
 				}
 			});

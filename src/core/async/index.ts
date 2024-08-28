@@ -25,6 +25,7 @@ class Async<CTX extends object = Async<any>> extends Super<CTX> {}
 
 export default Async;
 
+// Eliminating excessive inheritance to improve performance
 borrowAPI(Wrappers);
 
 function borrowAPI(target: Function) {
