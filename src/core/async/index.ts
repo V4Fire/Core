@@ -19,7 +19,11 @@ export * from 'core/async/interface';
 export * from 'core/async/wrappers';
 export * from 'core/async/helpers';
 
-export default class Async<CTX extends object = Async<any>> extends Super<CTX> {}
+interface Async<CTX extends object = Async<any>> extends Wrappers<CTX> {}
+
+class Async<CTX extends object = Async<any>> extends Super<CTX> {}
+
+export default Async;
 
 borrowAPI(Wrappers);
 
