@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { Namespaces } from 'core/async/const';
+import type { Namespaces, PrimitiveNamespaces, PromiseNamespaces } from 'core/async/const';
 
 import type Async from 'core/async';
 
@@ -55,7 +55,7 @@ export interface AsyncCbOptions<CTX extends object = Async> extends AsyncOptions
 	 * The task namespace for operations when they are used as promisified
 	 * @default `false`
 	 */
-	promise?: Namespaces;
+	promise?: PromiseNamespaces;
 
 	/**
 	 * Handler(s) responsible for task clearing
@@ -87,7 +87,7 @@ export interface AsyncProxyOptions<CTX extends object = Async> extends AsyncCbOp
 	/**
 	 * The proxy namespace
 	 */
-	namespace?: Namespaces;
+	namespace?: PrimitiveNamespaces;
 
 	/**
 	 * A function to clear proxy memory
@@ -123,7 +123,7 @@ export interface ClearProxyOptions<ID = any> extends ClearOptionsId<ID> {
 	/**
 	 * A namespace of the proxy to clear
 	 */
-	namespace?: Namespaces;
+	namespace?: Namespaces | PrimitiveNamespaces | PromiseNamespaces;
 }
 
 export type StrictClearOptions =

@@ -8,7 +8,7 @@
 
 import type Async from 'core/async';
 
-import type { Namespaces } from 'core/async/const';
+import type { PrimitiveNamespaces } from 'core/async/const';
 import type { AsyncOptions, AsyncProxyOptions, ProxyCb } from 'core/async/interface';
 
 /**
@@ -61,7 +61,7 @@ export interface AsyncPromiseOptions extends AsyncOptions {
 	/**
 	 * Namespace for the proxy
 	 */
-	namespace?: Namespaces;
+	namespace?: PrimitiveNamespaces;
 
 	/**
 	 * The name of the destructor method

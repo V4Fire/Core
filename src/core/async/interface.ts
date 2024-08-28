@@ -8,7 +8,7 @@
 
 import type Async from 'core/async';
 
-import type { Namespaces } from 'core/async/const';
+import type { Namespaces, PrimitiveNamespaces, PromiseNamespaces } from 'core/async/const';
 
 import type {
 
@@ -62,7 +62,7 @@ export type FullAsyncOptions<CTX extends object = Async> =
 		 * }
 		 * ```
 		 */
-		namespace: Namespaces;
+		namespace: PrimitiveNamespaces;
 
 		/**
 		 * Object to wrap with Async
@@ -214,7 +214,7 @@ export interface FullClearOptions<ID = any> extends ClearProxyOptions<ID> {
 	/**
 	 * Namespace of the task to clear
 	 */
-	namespace: Namespaces;
+	namespace: Namespaces | PrimitiveNamespaces | PromiseNamespaces;
 
 	/**
 	 * Reason to clear or mark the task
@@ -224,7 +224,7 @@ export interface FullClearOptions<ID = any> extends ClearProxyOptions<ID> {
 	/**
 	 * If true, the operation was registered as a promise
 	 */
-	promise?: Namespaces;
+	promise?: PromiseNamespaces;
 
 	/**
 	 * Link to a task that replaces the current

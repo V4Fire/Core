@@ -10,6 +10,8 @@ import SyncPromise from 'core/promise/sync';
 
 import Super from 'core/async/proxy/proxy';
 
+import { PrimitiveNamespaces } from 'core/async/const';
+
 import {
 
 	isAsyncOptions,
@@ -63,7 +65,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			{ctx} = this;
 
 		const p = <AsyncPromiseOptions>({
-			namespace: this.Namespaces.promise,
+			namespace: PrimitiveNamespaces.promise,
 			...opts
 		});
 
@@ -211,11 +213,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	clearPromise(task?: Promise<unknown> | ClearProxyOptions<Promise<unknown>>): this {
 		const namespace = isAsyncOptions<ClearProxyOptions>(task) ? task.namespace : null;
 
-		this.cancelTask(task, namespace ?? this.Namespaces.promise);
+		this.cancelTask(task, namespace ?? PrimitiveNamespaces.promise);
 
 		if (namespace == null) {
-			Object.entries(this.Namespaces).forEach(([key, namespace]) => {
-				if (Object.isNumber(namespace) && isPromisifyNamespace.test(key)) {
+			Object.values(this.Namespaces).forEach((namespace) => {
+				if (Object.isNumber(namespace) && isPromisifyNamespace.test(namespace)) {
 					this.cancelTask(task, namespace);
 				}
 			});
@@ -315,7 +317,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * ```
 	 */
 	request<T = unknown>(request: (() => PromiseLike<T>) | PromiseLike<T>, opts?: AsyncRequestOptions): Promise<T> {
-		return this.promise(request, {...opts, namespace: this.Namespaces.request});
+		return this.promise(request, {...opts, namespace: PrimitiveNamespaces.request});
 	}
 
 	/**
@@ -357,7 +359,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	clearRequest(opts: ClearOptionsId<Promise<unknown>>): this;
 	clearRequest(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
-		return this.cancelTask(task, this.Namespaces.request);
+		return this.cancelTask(task, PrimitiveNamespaces.request);
 	}
 
 	/**
@@ -377,7 +379,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	muteRequest(opts: ClearOptionsId<Promise<unknown>>): this;
 	muteRequest(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
-		return this.markTask('muted', task, this.Namespaces.request);
+		return this.markTask('muted', task, PrimitiveNamespaces.request);
 	}
 
 	/**
@@ -394,7 +396,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unmuteRequest(opts: ClearOptionsId<Promise<unknown>>): this;
 	unmuteRequest(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
-		return this.markTask('!muted', task, this.Namespaces.request);
+		return this.markTask('!muted', task, PrimitiveNamespaces.request);
 	}
 
 	/**
@@ -411,7 +413,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	suspendRequest(opts: ClearOptionsId<Promise<unknown>>): this;
 	suspendRequest(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
-		return this.markTask('paused', task, this.Namespaces.request);
+		return this.markTask('paused', task, PrimitiveNamespaces.request);
 	}
 
 	/**
@@ -428,7 +430,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unsuspendRequest(opts: ClearOptionsId<Promise<unknown>>): this;
 	unsuspendRequest(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
-		return this.markTask('!paused', task, this.Namespaces.request);
+		return this.markTask('!paused', task, PrimitiveNamespaces.request);
 	}
 
 	/**
@@ -516,11 +518,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	protected markPromise(label: Marker, task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
 		const namespace = isAsyncOptions<ClearProxyOptions>(task) ? task.namespace : null;
 
-		this.markTask(label, task, namespace ?? this.Namespaces.promise);
+		this.markTask(label, task, namespace ?? PrimitiveNamespaces.promise);
 
 		if (namespace == null) {
-			Object.entries(this.Namespaces).forEach(([key, namespace]) => {
-				if (Object.isNumber(namespace) && isPromisifyNamespace.test(key)) {
+			Object.values(this.Namespaces).forEach((namespace) => {
+				if (Object.isNumber(namespace) && isPromisifyNamespace.test(namespace)) {
 					this.markTask(label, task, namespace);
 				}
 			});

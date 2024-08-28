@@ -8,6 +8,8 @@
 
 import Super, { AsyncCbOptions, ClearOptionsId } from 'core/async/proxy';
 
+import { PrimitiveNamespaces } from 'core/async/const';
+
 import type { TimerId } from 'core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
@@ -22,7 +24,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			...opts,
 
 			task: cb,
-			namespace: this.Namespaces.immediate,
+			namespace: PrimitiveNamespaces.immediate,
 
 			clearFn: clearImmediate,
 			wrapper: setImmediate,
@@ -43,7 +45,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	clearImmediate(opts: ClearOptionsId<TimerId>): this;
 	clearImmediate(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.cancelTask(task, this.Namespaces.immediate);
+		return this.cancelTask(task, PrimitiveNamespaces.immediate);
 	}
 
 	/**
@@ -58,7 +60,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	muteImmediate(opts: ClearOptionsId<TimerId>): this;
 	muteImmediate(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.markTask('muted', task, this.Namespaces.immediate);
+		return this.markTask('muted', task, PrimitiveNamespaces.immediate);
 	}
 
 	/**
@@ -73,7 +75,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unmuteImmediate(opts: ClearOptionsId<TimerId>): this;
 	unmuteImmediate(p?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.markTask('!muted', p, this.Namespaces.immediate);
+		return this.markTask('!muted', p, PrimitiveNamespaces.immediate);
 	}
 
 	/**
@@ -88,7 +90,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	suspendImmediate(opts: ClearOptionsId<TimerId>): this;
 	suspendImmediate(p?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.markTask('paused', p, this.Namespaces.immediate);
+		return this.markTask('paused', p, PrimitiveNamespaces.immediate);
 	}
 
 	/**
@@ -103,7 +105,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unsuspendImmediate(opts: ClearOptionsId<TimerId>): this;
 	unsuspendImmediate(p?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.markTask('!paused', p, this.Namespaces.immediate);
+		return this.markTask('!paused', p, PrimitiveNamespaces.immediate);
 	}
 
 	/**
@@ -118,7 +120,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			...opts,
 
 			task: cb,
-			namespace: this.Namespaces.interval,
+			namespace: PrimitiveNamespaces.interval,
 
 			clearFn: clearInterval,
 			wrapper: setInterval,
@@ -142,7 +144,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	clearInterval(opts: ClearOptionsId<TimerId>): this;
 	clearInterval(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.cancelTask(task, this.Namespaces.interval);
+		return this.cancelTask(task, PrimitiveNamespaces.interval);
 	}
 
 	/**
@@ -157,7 +159,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	muteInterval(opts: ClearOptionsId<TimerId>): this;
 	muteInterval(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.markTask('muted', task, this.Namespaces.interval);
+		return this.markTask('muted', task, PrimitiveNamespaces.interval);
 	}
 
 	/**
@@ -172,7 +174,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unmuteInterval(opts: ClearOptionsId<TimerId>): this;
 	unmuteInterval(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.markTask('!muted', task, this.Namespaces.interval);
+		return this.markTask('!muted', task, PrimitiveNamespaces.interval);
 	}
 
 	/**
@@ -187,7 +189,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	suspendInterval(opts: ClearOptionsId<TimerId>): this;
 	suspendInterval(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.markTask('paused', task, this.Namespaces.interval);
+		return this.markTask('paused', task, PrimitiveNamespaces.interval);
 	}
 
 	/**
@@ -202,7 +204,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unsuspendInterval(opts: ClearOptionsId<TimerId>): this;
 	unsuspendInterval(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.markTask('!paused', task, this.Namespaces.interval);
+		return this.markTask('!paused', task, PrimitiveNamespaces.interval);
 	}
 
 	/**
@@ -217,7 +219,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			...opts,
 
 			task: cb,
-			namespace: this.Namespaces.timeout,
+			namespace: PrimitiveNamespaces.timeout,
 
 			clearFn: clearTimeout,
 			wrapper: setTimeout,
@@ -239,7 +241,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	clearTimeout(opts: ClearOptionsId<TimerId>): this;
 	clearTimeout(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.cancelTask(task, this.Namespaces.timeout);
+		return this.cancelTask(task, PrimitiveNamespaces.timeout);
 	}
 
 	/**
@@ -254,7 +256,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	muteTimeout(opts: ClearOptionsId<TimerId>): this;
 	muteTimeout(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.markTask('muted', task, this.Namespaces.timeout);
+		return this.markTask('muted', task, PrimitiveNamespaces.timeout);
 	}
 
 	/**
@@ -269,7 +271,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unmuteTimeout(opts: ClearOptionsId<TimerId>): this;
 	unmuteTimeout(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.markTask('!muted', task, this.Namespaces.timeout);
+		return this.markTask('!muted', task, PrimitiveNamespaces.timeout);
 	}
 
 	/**
@@ -284,7 +286,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	suspendTimeout(opts: ClearOptionsId<TimerId>): this;
 	suspendTimeout(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.markTask('paused', task, this.Namespaces.timeout);
+		return this.markTask('paused', task, PrimitiveNamespaces.timeout);
 	}
 
 	/**
@@ -299,6 +301,6 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unsuspendTimeout(opts: ClearOptionsId<TimerId>): this;
 	unsuspendTimeout(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.markTask('!paused', task, this.Namespaces.timeout);
+		return this.markTask('!paused', task, PrimitiveNamespaces.timeout);
 	}
 }

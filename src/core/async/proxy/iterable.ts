@@ -7,6 +7,9 @@
  */
 
 import Super from 'core/async/proxy/promise';
+
+import { PrimitiveNamespaces } from 'core/async/const';
+
 import type { AsyncOptions, ClearOptionsId } from 'core/async/core';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
@@ -59,7 +62,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 					const promise = this.promise(Promise.resolve(iter.next()), {
 						...opts,
-						namespace: this.Namespaces.iterable,
+						namespace: PrimitiveNamespaces.iterable,
 
 						onMutedResolve: (resolve: AnyFunction, reject: AnyFunction) => {
 							// Prevent an infinity loop if the iterable is already done
@@ -145,7 +148,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	clearIterable(opts: ClearOptionsId<Promise<unknown>>): this;
 	clearIterable(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
-		return this.cancelTask(task, this.Namespaces.iterable);
+		return this.cancelTask(task, PrimitiveNamespaces.iterable);
 	}
 
 	/**
@@ -167,7 +170,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	muteIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
 	muteIterable(task?: AsyncIterable<unknown> | ClearOptionsId<AsyncIterable<unknown>>): this {
-		return this.markTask('muted', task, this.Namespaces.iterable);
+		return this.markTask('muted', task, PrimitiveNamespaces.iterable);
 	}
 
 	/**
@@ -184,7 +187,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unmuteIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
 	unmuteIterable(task?: AsyncIterable<unknown> | ClearOptionsId<AsyncIterable<unknown>>): this {
-		return this.markTask('!muted', task, this.Namespaces.iterable);
+		return this.markTask('!muted', task, PrimitiveNamespaces.iterable);
 	}
 
 	/**
@@ -204,7 +207,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	suspendIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
 	suspendIterable(task?: AsyncIterable<unknown> | ClearOptionsId<AsyncIterable<unknown>>): this {
-		return this.markTask('paused', task, this.Namespaces.iterable);
+		return this.markTask('paused', task, PrimitiveNamespaces.iterable);
 	}
 
 	/**
@@ -221,7 +224,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unsuspendIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
 	unsuspendIterable(task?: AsyncIterable<unknown> | ClearOptionsId<AsyncIterable<unknown>>): this {
-		return this.markTask('!paused', task, this.Namespaces.iterable);
+		return this.markTask('!paused', task, PrimitiveNamespaces.iterable);
 	}
 
 	/**

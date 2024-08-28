@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { Namespaces, PromiseNamespaces } from 'core/async/const';
+
 export const asyncCounter = Symbol('Async counter id');
 
 export const isZombieGroup = {
@@ -15,7 +17,7 @@ export const isZombieGroup = {
 };
 
 export const isPromisifyNamespace = {
-	test(namespace: string): boolean {
-		return namespace.endsWith('Promise');
+	test(namespace: Namespaces): boolean {
+		return namespace > PromiseNamespaces.first;
 	}
 };

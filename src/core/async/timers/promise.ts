@@ -15,6 +15,8 @@ import SyncPromise from 'core/promise/sync';
 
 import Super from 'core/async/timers/callbacks';
 
+import { PromiseNamespaces } from 'core/async/const';
+
 import type {
 
 	AsyncCb,
@@ -38,7 +40,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		return new SyncPromise((resolve, reject) => {
 			this.setTimeout(resolve, timeout, {
 				...opts,
-				promise: this.Namespaces.timeoutPromise,
+				promise: PromiseNamespaces.timeoutPromise,
 				onClear: <AsyncCb<CTX>>this.onPromiseClear(resolve, reject),
 				onMerge: <AsyncCb<CTX>>this.onPromiseMerge(resolve, reject)
 			});
@@ -53,7 +55,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		return new SyncPromise((resolve, reject) => {
 			this.setImmediate(resolve, {
 				...opts,
-				promise: this.Namespaces.immediatePromise,
+				promise: PromiseNamespaces.immediatePromise,
 				onClear: <AsyncCb<CTX>>this.onPromiseClear(resolve, reject),
 				onMerge: <AsyncCb<CTX>>this.onPromiseMerge(resolve, reject)
 			});
@@ -68,7 +70,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		return new SyncPromise((resolve, reject) => {
 			this.requestIdleCallback(resolve, {
 				...opts,
-				promise: this.Namespaces.idleCallbackPromise,
+				promise: PromiseNamespaces.idleCallbackPromise,
 				onClear: <AsyncCb<CTX>>this.onPromiseClear(resolve, reject),
 				onMerge: <AsyncCb<CTX>>this.onPromiseMerge(resolve, reject)
 			});
@@ -91,14 +93,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			if (Object.isPlainObject(p)) {
 				return this.requestAnimationFrame(resolve, {
 					...p,
-					promise: this.Namespaces.animationFramePromise,
+					promise: PromiseNamespaces.animationFramePromise,
 					element: p.element,
 					onClear: <AsyncCb<CTX>>this.onPromiseClear(resolve, reject)
 				});
 			}
 
 			return this.requestAnimationFrame(resolve, {
-				promise: this.Namespaces.animationFramePromise,
+				promise: PromiseNamespaces.animationFramePromise,
 				element: p,
 				onClear: <AsyncCb<CTX>>this.onPromiseClear(resolve, reject)
 			});
@@ -136,7 +138,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 			id = this.setInterval(cb, opts?.delay ?? 15, {
 				...opts,
-				promise: this.Namespaces.intervalPromise,
+				promise: PromiseNamespaces.intervalPromise,
 				onClear: <AsyncCb<CTX>>this.onPromiseClear(resolve, reject),
 				onMerge: <AsyncCb<CTX>>this.onPromiseMerge(resolve, reject)
 			});

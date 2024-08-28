@@ -15,6 +15,7 @@ import SyncPromise from 'core/promise/sync';
 
 import Super from 'core/async/timers';
 
+import { PromiseNamespaces, PrimitiveNamespaces } from 'core/async/const';
 import { isEvent } from 'core/async/events/helpers';
 
 import type {
@@ -128,7 +129,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				...p,
 
 				task: handler,
-				namespace: this.Namespaces.eventListener,
+				namespace: PrimitiveNamespaces.eventListener,
 				group: p.group ?? event,
 
 				periodic: !p.single,
@@ -342,7 +343,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 			this.once(emitter, [event], handler, {
 				...p,
-				promise: this.Namespaces.eventListenerPromise,
+				promise: PromiseNamespaces.eventListenerPromise,
 				onClear: this.onPromiseClear(handler, reject),
 				onMerge: this.onPromiseMerge(handler, reject)
 			}, ...args);
@@ -392,7 +393,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			return this;
 		}
 
-		return this.cancelTask(isEvent(task) ? {id: task} : task, this.Namespaces.eventListener);
+		return this.cancelTask(isEvent(task) ? {id: task} : task, PrimitiveNamespaces.eventListener);
 	}
 
 	/**
@@ -504,6 +505,6 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			return this;
 		}
 
-		return this.markTask(marker, isEvent(task) ? {id: task} : task, this.Namespaces.eventListener);
+		return this.markTask(marker, isEvent(task) ? {id: task} : task, PrimitiveNamespaces.eventListener);
 	}
 }

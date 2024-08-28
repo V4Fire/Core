@@ -8,7 +8,7 @@
 
 import Task from 'core/async/core/task';
 
-import { usedNamespaces, namespacesCache, Namespaces } from 'core/async/const';
+import { usedNamespaces, namespacesCache, Namespaces, PrimitiveNamespaces, PromiseNamespaces } from 'core/async/const';
 import { isZombieGroup } from 'core/async/core/const';
 
 import type {
@@ -26,6 +26,11 @@ import type {
 } from 'core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> {
+	/**
+	 * The enum containing all namespaces supported by Async
+	 */
+	static readonly Namespaces: typeof Namespaces = Namespaces;
+
 	/**
 	 * The lock status.
 	 * If set to true, all new tasks won't be registered.
@@ -75,7 +80,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param task
 	 */
 	protected getCache(
-		task: Pick<FullAsyncOptions<any>, 'namespace' | 'promise' | 'label'> & {group?: string | RegExp}
+		task: Pick<FullAsyncOptions<any> | FullClearOptions, 'namespace' | 'promise' | 'label'> & {group?: string | RegExp}
 	): GlobalCache {
 		const pos = task.promise ?? task.namespace;
 
@@ -110,7 +115,7 @@ export default class Async<CTX extends object = Async<any>> {
 			return null;
 		}
 
-		this.usedNamespaces[params.promise != null ? this.Namespaces.promise : params.namespace] = true;
+		this.usedNamespaces[params.promise != null ? PrimitiveNamespaces.promise : params.namespace] = true;
 
 		const commonCache = this.getCache(params);
 
@@ -346,7 +351,10 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param task - the operation options or a reference to the task to be canceled
 	 * @param [namespace] - the namespace from which the task or tasks should be canceled
 	 */
-	protected cancelTask(task: CanUndef<FullClearOptions | any>, namespace?: Namespaces): this {
+	protected cancelTask(
+		task: CanUndef<FullClearOptions | any>,
+		namespace?: Namespaces | PrimitiveNamespaces | PromiseNamespaces
+	): this {
 		task = task != null ? this.ids.get(task) ?? task : task;
 
 		let p: FullClearOptions;
@@ -464,7 +472,7 @@ export default class Async<CTX extends object = Async<any>> {
 	protected markTask(
 		marker: Marker,
 		task: CanUndef<ClearProxyOptions | any>,
-		namespace?: Namespaces
+		namespace?: Namespaces | PrimitiveNamespaces | PromiseNamespaces
 	): this {
 		task = task != null ? this.ids.get(task) ?? task : task;
 

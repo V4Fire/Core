@@ -20,6 +20,8 @@ import Super, {
 
 } from 'core/async/core';
 
+import { PrimitiveNamespaces } from 'core/async/const';
+
 import type { WorkerLikeP, AsyncWorkerOptions } from 'core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
@@ -69,7 +71,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			...opts,
 
 			task: worker,
-			namespace: this.Namespaces.worker,
+			namespace: PrimitiveNamespaces.worker,
 
 			clearFn,
 			periodic: opts?.single === false,
@@ -118,7 +120,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	clearWorker(opts: ClearProxyOptions<WorkerLikeP>): this;
 	clearWorker(task?: WorkerLikeP | ClearProxyOptions<WorkerLikeP>): this {
-		return this.cancelTask(task, isAsyncOptions<ClearProxyOptions>(task) && task.namespace || this.Namespaces.worker);
+		const namespace = isAsyncOptions<ClearProxyOptions>(task) && task.namespace || PrimitiveNamespaces.worker;
+		return this.cancelTask(task, namespace);
 	}
 
 	/**
@@ -145,7 +148,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			...opts,
 
 			task: fn,
-			namespace: opts?.namespace ?? this.Namespaces.proxy,
+			namespace: opts?.namespace ?? PrimitiveNamespaces.proxy,
 
 			wrapper: (fn) => fn,
 			linkByWrapper: true,
@@ -219,7 +222,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	clearProxy(opts: ClearProxyOptions<Function>): this;
 	clearProxy(task?: Function | ClearProxyOptions<Function>): this {
-		return this.cancelTask(task, isAsyncOptions<ClearProxyOptions>(task) && task.namespace || this.Namespaces.proxy);
+		const namespace = isAsyncOptions<ClearProxyOptions>(task) && task.namespace || PrimitiveNamespaces.proxy;
+		return this.cancelTask(task, namespace);
 	}
 
 	/**
@@ -236,7 +240,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	muteProxy(opts: ClearProxyOptions<Function>): this;
 	muteProxy(task?: Function | ClearProxyOptions<Function>): this {
-		const namespace = isAsyncOptions<ClearProxyOptions>(task) && task.namespace || this.Namespaces.proxy;
+		const namespace = isAsyncOptions<ClearProxyOptions>(task) && task.namespace || PrimitiveNamespaces.proxy;
 		return this.markTask('muted', task, namespace);
 	}
 
@@ -254,7 +258,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unmuteProxy(opts: ClearProxyOptions<Function>): this;
 	unmuteProxy(task?: Function | ClearProxyOptions<Function>): this {
-		const namespace = isAsyncOptions<ClearProxyOptions>(task) && task.namespace || this.Namespaces.proxy;
+		const namespace = isAsyncOptions<ClearProxyOptions>(task) && task.namespace || PrimitiveNamespaces.proxy;
 		return this.markTask('!muted', task, namespace);
 	}
 
@@ -272,7 +276,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	suspendProxy(opts: ClearProxyOptions<Function>): this;
 	suspendProxy(task?: Function | ClearProxyOptions<Function>): this {
-		const namespace = isAsyncOptions<ClearProxyOptions>(task) && task.namespace || this.Namespaces.proxy;
+		const namespace = isAsyncOptions<ClearProxyOptions>(task) && task.namespace || PrimitiveNamespaces.proxy;
 		return this.markTask('paused', task, namespace);
 	}
 
@@ -290,7 +294,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unsuspendProxy(opts: ClearProxyOptions<Function>): this;
 	unsuspendProxy(task?: Function | ClearProxyOptions<Function>): this {
-		const namespace = isAsyncOptions<ClearProxyOptions>(task) && task.namespace || this.Namespaces.proxy;
+		const namespace = isAsyncOptions<ClearProxyOptions>(task) && task.namespace || PrimitiveNamespaces.proxy;
 		return this.markTask('!paused', task, namespace);
 	}
 

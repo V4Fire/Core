@@ -30,7 +30,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			if (Object.isFunction(this[alias])) {
 				this[alias](opts);
 
-			} else if (!isPromisifyNamespace.test(key)) {
+			} else if (!isPromisifyNamespace.test(i)) {
 				throw new ReferenceError(`The method "${alias}" is not defined`);
 			}
 		});
@@ -52,7 +52,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				key = this.Namespaces[i],
 				alias = `mute-${key}`.camelize(false);
 
-			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
+			if (!isPromisifyNamespace.test(i) && Object.isFunction(this[alias])) {
 				this[alias](opts);
 			}
 		});
@@ -74,7 +74,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				key = this.Namespaces[i],
 				alias = `unmute-${key}`.camelize(false);
 
-			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
+			if (!isPromisifyNamespace.test(i) && Object.isFunction(this[alias])) {
 				this[alias](opts);
 			}
 		});
@@ -96,7 +96,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				key = this.Namespaces[i],
 				alias = `suspend-${key}`.camelize(false);
 
-			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
+			if (!isPromisifyNamespace.test(i) && Object.isFunction(this[alias])) {
 				this[alias](opts);
 			}
 		});
@@ -118,7 +118,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				key = this.Namespaces[i],
 				alias = `unsuspend-${key}`.camelize(false);
 
-			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
+			if (!isPromisifyNamespace.test(i) && Object.isFunction(this[alias])) {
 				this[alias](opts);
 			}
 		});

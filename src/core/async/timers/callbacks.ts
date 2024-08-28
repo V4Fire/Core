@@ -8,6 +8,8 @@
 
 import Super from 'core/async/timers/timers';
 
+import { PrimitiveNamespaces } from 'core/async/const';
+
 import type {
 
 	TimerId,
@@ -49,7 +51,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			...opts && Object.reject(opts, 'timeout'),
 
 			task: cb,
-			namespace: this.Namespaces.idleCallback,
+			namespace: PrimitiveNamespaces.idleCallback,
 
 			clearFn,
 			wrapper,
@@ -90,7 +92,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	clearIdleCallback(opts: ClearOptionsId<TimerId>): this;
 	clearIdleCallback(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.cancelTask(task, this.Namespaces.idleCallback);
+		return this.cancelTask(task, PrimitiveNamespaces.idleCallback);
 	}
 
 	/**
@@ -105,7 +107,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	muteIdleCallback(opts: ClearOptionsId<TimerId>): this;
 	muteIdleCallback(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.markTask('muted', task, this.Namespaces.idleCallback);
+		return this.markTask('muted', task, PrimitiveNamespaces.idleCallback);
 	}
 
 	/**
@@ -120,7 +122,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unmuteIdleCallback(opts: ClearOptionsId<TimerId>): this;
 	unmuteIdleCallback(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.markTask('!muted', task, this.Namespaces.idleCallback);
+		return this.markTask('!muted', task, PrimitiveNamespaces.idleCallback);
 	}
 
 	/**
@@ -135,7 +137,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	suspendIdleCallback(opts: ClearOptionsId<TimerId>): this;
 	suspendIdleCallback(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.markTask('paused', task, this.Namespaces.idleCallback);
+		return this.markTask('paused', task, PrimitiveNamespaces.idleCallback);
 	}
 
 	/**
@@ -150,7 +152,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unsuspendIdleCallback(opts: ClearOptionsId<TimerId>): this;
 	unsuspendIdleCallback(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.markTask('!paused', task, this.Namespaces.idleCallback);
+		return this.markTask('!paused', task, PrimitiveNamespaces.idleCallback);
 	}
 
 	/**
@@ -179,7 +181,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		if (Object.isDictionary(p)) {
 			return this.registerTask({
 				...p,
-				namespace: this.Namespaces.animationFrame,
+				namespace: PrimitiveNamespaces.animationFrame,
 				task: cb,
 				clearFn: cancelAnimationFrame,
 				wrapper: requestAnimationFrame,
@@ -189,7 +191,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		}
 
 		return this.registerTask({
-			namespace: this.Namespaces.animationFrame,
+			namespace: PrimitiveNamespaces.animationFrame,
 			task: cb,
 			clearFn: cancelAnimationFrame,
 			wrapper: requestAnimationFrame,
@@ -227,9 +229,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	clearAnimationFrame(opts: ClearOptionsId<number>): this;
 	clearAnimationFrame(task?: number | ClearOptionsId<number>): this {
-		return this
-			.cancelTask(task, this.Namespaces.animationFrame)
-			.cancelTask(task, this.Namespaces.animationFramePromise);
+		return this.cancelTask(task, PrimitiveNamespaces.animationFrame);
 	}
 
 	/**
@@ -244,7 +244,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	muteAnimationFrame(opts: ClearOptionsId<number>): this;
 	muteAnimationFrame(task?: number | ClearOptionsId<number>): this {
-		return this.markTask('muted', task, this.Namespaces.animationFrame);
+		return this.markTask('muted', task, PrimitiveNamespaces.animationFrame);
 	}
 
 	/**
@@ -259,7 +259,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unmuteAnimationFrame(opts: ClearOptionsId<number>): this;
 	unmuteAnimationFrame(task?: number | ClearOptionsId<number>): this {
-		return this.markTask('!muted', task, this.Namespaces.animationFrame);
+		return this.markTask('!muted', task, PrimitiveNamespaces.animationFrame);
 	}
 
 	/**
@@ -274,7 +274,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	suspendAnimationFrame(opts: ClearOptionsId<number>): this;
 	suspendAnimationFrame(task?: number | ClearOptionsId<number>): this {
-		return this.markTask('paused', task, this.Namespaces.animationFrame);
+		return this.markTask('paused', task, PrimitiveNamespaces.animationFrame);
 	}
 
 	/**
@@ -289,6 +289,6 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unsuspendAnimationFrame(opts: ClearOptionsId<number>): this;
 	unsuspendAnimationFrame(task?: number | ClearOptionsId<number>): this {
-		return this.markTask('!paused', task, this.Namespaces.animationFrame);
+		return this.markTask('!paused', task, PrimitiveNamespaces.animationFrame);
 	}
 }
