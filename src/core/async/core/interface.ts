@@ -184,6 +184,11 @@ export interface Task<CTX extends object = Async> {
 	label?: Label;
 
 	/**
+	 * True if the task is unregistered
+	 */
+	unregistered: boolean;
+
+	/**
 	 * True if the task is paused
 	 */
 	paused: boolean;

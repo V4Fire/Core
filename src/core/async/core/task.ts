@@ -43,6 +43,9 @@ export default class Task<CTX extends object = Async> implements AbstractTask<CT
 	readonly label: CanUndef<Label>;
 
 	/** @inheritDoc */
+	unregistered: boolean = false;
+
+	/** @inheritDoc */
 	paused: boolean = false;
 
 	/** @inheritDoc */
@@ -95,13 +98,15 @@ export default class Task<CTX extends object = Async> implements AbstractTask<CT
 	 * Unregisters the current task
 	 */
 	unregister(): void {
-		const {id, label, cache: {links, labels}} = this;
+		const {id, label, cache} = this;
 
-		links.delete(id);
+		cache.links.delete(id);
 		this.globalCache.root.links.delete(id);
 
-		if (label != null && labels?.[label] != null) {
-			labels[label] = undefined;
+		if (label != null && cache.labels?.[label] != null) {
+			cache.labels[label] = undefined;
 		}
+
+		this.unregistered = true;
 	}
 }

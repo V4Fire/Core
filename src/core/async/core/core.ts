@@ -142,7 +142,7 @@ export default class Async<CTX extends object = Async<any>> {
 		const
 			{ctx} = this,
 			{labels, links} = cache,
-			{links: commonLinks} = commonCache.root;
+			{links: globalLinks} = commonCache.root;
 
 		const labelCache = label != null && labels != null ? labels[label] : null;
 
@@ -167,7 +167,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (!params.periodic || Object.isFunction(wrappedTask)) {
 			wrappedTask = (...args: unknown[]) => {
-				if (task == null) {
+				if (task == null || task.unregistered) {
 					return;
 				}
 
@@ -334,8 +334,8 @@ export default class Async<CTX extends object = Async<any>> {
 
 		links.set(taskId, task);
 
-		if (links !== commonLinks) {
-			commonLinks.set(taskId, task);
+		if (links !== globalLinks) {
+			globalLinks.set(taskId, task);
 		}
 
 		if (label != null && labels != null) {
@@ -348,26 +348,26 @@ export default class Async<CTX extends object = Async<any>> {
 	/**
 	 * Cancels an asynchronous task (or a group of tasks) from the specified namespace
 	 *
-	 * @param task - the operation options or a reference to the task to be canceled
+	 * @param params - the operation parameters or a reference to the task to be canceled
 	 * @param [namespace] - the namespace from which the task or tasks should be canceled
 	 */
 	protected cancelTask(
-		task: CanUndef<FullClearParams | any>,
+		params: CanUndef<FullClearParams | any>,
 		namespace?: Namespaces | PrimitiveNamespaces | PromiseNamespaces
 	): this {
-		task = task != null ? this.ids.get(task) ?? task : task;
+		params = params != null ? this.ids.get(params) ?? params : params;
 
 		let p: FullClearParams;
 
 		if (namespace != null) {
-			if (task === undefined) {
+			if (params === undefined) {
 				return this.cancelTask({namespace, reason: 'all'});
 			}
 
-			p = Object.isDictionary(task) ? {...task, namespace} : {namespace, id: task};
+			p = Object.isDictionary(params) ? {...params, namespace} : {namespace, id: params};
 
 		} else {
-			p = task ?? {};
+			p = params ?? {};
 		}
 
 		const commonCache = this.getCache(p);
@@ -424,32 +424,32 @@ export default class Async<CTX extends object = Async<any>> {
 		}
 
 		if (p.id != null) {
-			const link = links.get(p.id);
+			const task = links.get(p.id);
 
-			if (link != null) {
+			if (task != null) {
 				const skipZombie =
-					link.group != null &&
+					task.group != null &&
 					p.reason === 'all' &&
-					isZombieGroup.test(link.group);
+					isZombieGroup.test(task.group);
 
 				if (skipZombie) {
 					return this;
 				}
 
-				link.unregister();
+				task.unregister();
 
 				const ctx = <TaskCtx>{
 					...p,
-					link,
+					link: task,
 					type: 'clearAsync'
 				};
 
-				link.onClear.forEach((handler) => {
+				task.onClear.forEach((handler) => {
 					handler.call(this.ctx, ctx);
 				});
 
-				if (link.clear != null && !p.preventDefault) {
-					link.clear.call(null, link.id, ctx);
+				if (task.clear != null && !p.preventDefault) {
+					task.clear.call(null, task.id, ctx);
 				}
 			}
 
@@ -466,27 +466,27 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Marks an asynchronous task (or a group of tasks) within the specified namespace using the given marker
 	 *
 	 * @param marker
-	 * @param task - the operation options or a reference to the task to be marked
+	 * @param params - the operation parameters or a reference to the task to be marked
 	 * @param [namespace] - the namespace from which the task or tasks should be marked
 	 */
 	protected markTask(
 		marker: Marker,
-		task: CanUndef<ClearProxyOptions | any>,
+		params: CanUndef<ClearProxyOptions | any>,
 		namespace?: Namespaces | PrimitiveNamespaces | PromiseNamespaces
 	): this {
-		task = task != null ? this.ids.get(task) ?? task : task;
+		params = params != null ? this.ids.get(params) ?? params : params;
 
 		let p: FullClearParams;
 
 		if (namespace != null) {
-			if (task === undefined) {
+			if (params === undefined) {
 				return this.markTask(marker, {namespace, reason: 'all'});
 			}
 
-			p = Object.isDictionary(task) ? {...task, namespace} : {namespace, id: task};
+			p = Object.isDictionary(params) ? {...params, namespace} : {namespace, id: params};
 
 		} else {
-			p = task ?? {};
+			p = params ?? {};
 		}
 
 		const commonCache = this.getCache(p);
@@ -539,30 +539,30 @@ export default class Async<CTX extends object = Async<any>> {
 		}
 
 		if (p.id != null) {
-			const link = links.get(p.id);
+			const task = links.get(p.id);
 
-			if (link) {
+			if (task) {
 				const skipZombie =
-					link.group != null &&
+					task.group != null &&
 					p.reason === 'all' &&
-					isZombieGroup.test(link.group);
+					isZombieGroup.test(task.group);
 
 				if (skipZombie) {
 					return this;
 				}
 
 				if (marker === '!paused') {
-					link.queue.forEach((fn) => fn());
+					task.queue.forEach((fn) => fn());
 
-					link.muted = false;
-					link.paused = false;
-					link.queue = [];
+					task.muted = false;
+					task.paused = false;
+					task.queue = [];
 
 				} else if (marker.startsWith('!')) {
-					link[marker.slice(1)] = false;
+					task[marker.slice(1)] = false;
 
 				} else {
-					link[marker] = true;
+					task[marker] = true;
 				}
 			}
 
