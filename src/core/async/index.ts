@@ -11,7 +11,6 @@
  * @packageDocumentation
  */
 
-import Super from 'core/async/core/core';
 import Wrappers from 'core/async/wrappers';
 
 export * from 'core/async/const';
@@ -19,25 +18,4 @@ export * from 'core/async/interface';
 export * from 'core/async/wrappers';
 export * from 'core/async/helpers';
 
-interface Async<CTX extends object = Async<any>> extends Wrappers<CTX> {}
-
-class Async<CTX extends object = Async<any>> extends Super<CTX> {}
-
-export default Async;
-
-// Eliminating excessive inheritance to improve performance
-borrowAPI(Wrappers);
-
-function borrowAPI(target: Function) {
-	if (target !== Super) {
-		borrowAPI(Object.getPrototypeOf(target.prototype).constructor);
-	}
-
-	Object.entries(Object.getOwnPropertyDescriptors(target.prototype)).forEach(([name, desc]) => {
-		if (name === 'constructor') {
-			return;
-		}
-
-		Object.defineProperty(Async.prototype, name, desc);
-	});
-}
+export default class Async<CTX extends object = Async<any>> extends Wrappers<CTX> {}

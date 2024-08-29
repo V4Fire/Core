@@ -17,7 +17,7 @@ import type {
 	GlobalCache,
 
 	AsyncCb,
-	BoundedCb,
+	BoundFn,
 	ClearFn,
 
 	Task as AbstractTask
@@ -52,7 +52,7 @@ export default class Task<CTX extends object = Async> implements AbstractTask<CT
 	readonly queue: Function[] = [];
 
 	/** @inheritDoc */
-	readonly onComplete: Array<Array<BoundedCb<CTX>>> = [];
+	readonly onComplete: Array<Array<BoundFn<CTX>>> = [];
 
 	/** @inheritDoc */
 	readonly onClear: Array<AsyncCb<CTX>>;

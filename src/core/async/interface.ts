@@ -18,7 +18,7 @@ import type {
 	MarkReason,
 	ClearReason,
 
-	BoundedCb,
+	BoundFn,
 	ClearFn,
 
 	AsyncProxyOptions,
@@ -132,7 +132,7 @@ export type FullAsyncParams<CTX extends object = Async> =
 		 * }
 		 * ```
 		 */
-		wrapper?: BoundedCb<CTX>;
+		wrapper?: BoundFn<CTX>;
 
 		/**
 		 * Additional arguments to the task wrapper

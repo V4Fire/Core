@@ -153,7 +153,7 @@ export interface ClearFn<CTX extends object = Async> extends Function {
 	(id: any, ctx: TaskCtx<CTX>): void;
 }
 
-export interface BoundedCb<CTX extends object = Async> extends Function {
+export interface BoundFn<CTX extends object = Async> extends Function {
 	(this: CTX, ...args: any[]): void;
 }
 
@@ -201,7 +201,7 @@ export interface Task<CTX extends object = Async> {
 	/**
 	 * A list of complete handlers: `[onFulfilled, onRejected][]`
 	 */
-	onComplete: Array<Array<BoundedCb<CTX>>>;
+	onComplete: Array<Array<BoundFn<CTX>>>;
 
 	/**
 	 * A list of clear handlers
