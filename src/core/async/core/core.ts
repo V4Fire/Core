@@ -449,7 +449,7 @@ export default class Async<CTX extends object = Async<any>> {
 				});
 
 				if (link.clear != null && !p.preventDefault) {
-					link.clear(link.id, ctx);
+					link.clear.call(null, link.id, ctx);
 				}
 			}
 
