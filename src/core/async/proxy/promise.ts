@@ -80,7 +80,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		function promiseConstructor(resolve: AnyFunction, reject: AnyFunction) {
 			let
 				canceled = false,
-				proxyReject: CanNull<AnyFunction> = null;
+				wrappedReject: CanNull<AnyFunction> = null;
 
 			wrappedResolve = that.proxy(resolve, {
 				...p,
@@ -88,8 +88,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				clear: () => {
 					that.promiseDestructor(p.destructor, <Promise<unknown>>promise);
 
-					if (proxyReject != null) {
-						that.clearProxy({id: proxyReject, namespace: p.namespace});
+					if (wrappedReject != null) {
+						that.clearProxy({id: wrappedReject, namespace: p.namespace});
 					}
 				},
 
@@ -108,7 +108,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 					if (handlers.length > 0) {
 						handlers.forEach((handler) => {
-							handler.call(ctx, wrappedResolve, proxyReject);
+							handler.call(ctx, wrappedResolve, wrappedReject);
 						});
 
 					} else {
@@ -128,7 +128,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 					promise = promise();
 				}
 
-				proxyReject = that.proxy((err) => {
+				wrappedReject = that.proxy((err) => {
 					if (canceled || p.namespace == null) {
 						return;
 					}
@@ -167,7 +167,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 				}, {namespace: p.namespace, group: p.group});
 
-				return promise.then(wrappedResolve, proxyReject);
+				return promise.then(wrappedResolve, wrappedReject);
 			}
 		}
 	}
