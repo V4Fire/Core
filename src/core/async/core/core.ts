@@ -306,15 +306,15 @@ export default class Async<CTX extends object = Async<any>> {
 
 			switch (args.length) {
 				case 1:
-					taskRes = params.wrapper(args[0]);
+					taskRes = params.wrapper.call(null, args[0]);
 					break;
 
 				case 2:
-					taskRes = params.wrapper(args[0], args[1]);
+					taskRes = params.wrapper.call(null, args[0], args[1]);
 					break;
 
 				case 3:
-					taskRes = params.wrapper(args[0], args[1], args[2]);
+					taskRes = params.wrapper.call(null, args[0], args[1], args[2]);
 					break;
 
 				default:
