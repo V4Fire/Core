@@ -78,9 +78,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		return wrappedPromise;
 
 		function promiseConstructor(resolve: AnyFunction, reject: AnyFunction) {
-			let
-				canceled = false,
-				wrappedReject: CanNull<AnyFunction> = null;
+			let canceled = false;
+
+			let wrappedReject: CanNull<AnyFunction> = null;
 
 			wrappedResolve = that.proxy(resolve, {
 				...p,
@@ -167,7 +167,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 				}, {namespace: p.namespace, group: p.group});
 
-				return promise.then(wrappedResolve, wrappedReject);
+				promise.then(wrappedResolve, wrappedReject);
 			}
 		}
 	}
