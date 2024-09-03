@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-beta.?? (2024-??-??)
+
+#### :rocket: New Feature
+
+* Added a new method `Array.toArray` `core/prelude/array`
+
 ## v4.0.0-alpha.34 (2024-05-06)
 
 #### :rocket: New Feature

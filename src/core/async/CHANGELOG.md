@@ -9,6 +9,17 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-beta.?? (2024-??-??)
+
+#### :boom: Breaking Change
+
+* Moved code from `V4/Client`
+* Removed deprecated API and refactored internal structures
+
+#### :house: Internal
+
+Conduct refactoring and optimization of the module
+
 ## v4.0.0-alpha.37 (2024-06-03)
 
 #### :bug: Bug Fix
