@@ -216,12 +216,12 @@ describe('core/lazy', () => {
 			set: () => {
 				throw ReferenceError('Prototype key is reassigned');
 			}
-		})
+		});
 
 		expect(
 			makeLazy(createObj, {
 				a: 2
 			})
 		).not.toThrowError('ReferenceError: Prototype key is reassigned');
-	})
+	});
 });
