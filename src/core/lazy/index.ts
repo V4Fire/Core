@@ -103,12 +103,8 @@ export function makeLazy<T extends ClassConstructor | AnyFunction>(
 			if (Object.isFunction(val)) {
 				res[key] = Object.cast(Function);
 
-			} else {
-				const scheme = getSchemeFromProto(val);
-
-				if (scheme === undefined) {
-					res[key] = getSchemeFromProto(val)
-				}
+			} else if (val !== undefined) {
+				res[key] = getSchemeFromProto(val);
 			}
 		});
 
