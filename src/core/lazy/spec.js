@@ -212,6 +212,7 @@ describe('core/lazy', () => {
 		}
 
 		Object.defineProperty(Object.prototype, 'test', {
+			get: () => undefined,
 			set: () => {
 				throw ReferenceError('Prototype key is reassigned');
 			}
@@ -219,7 +220,7 @@ describe('core/lazy', () => {
 
 		expect(
 			makeLazy(createObj, {
-				a: 2,
+				a: 2
 			})
 		).not.toThrowError('ReferenceError: Prototype key is reassigned');
 	})
