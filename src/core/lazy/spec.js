@@ -213,7 +213,7 @@ describe('core/lazy', () => {
 
 		Object.defineProperty(Object.prototype, 'test', {
 			set: () => {
-				throw ReferenceError(`Prototype key is reassigned: ${value}`);
+				throw ReferenceError('Prototype key is reassigned');
 			}
 		})
 
