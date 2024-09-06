@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.?? (2024-09-??)
+
+#### :bug: Bug Fix
+
+* Avoid reassigning an `undefined` value for the scheme from the prototype `core/lazy`
+
 ## v4.0.0-alpha.43 (2024-07-29)
 
 #### :house: Internal
