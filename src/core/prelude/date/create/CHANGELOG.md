@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.?? (2024-09-??)
+
+#### :bug: Bug Fix
+
+* Fixed an issue with the calculation of timezones without considering time
+
 ## v3.62.2 (2021-11-09)
 
 #### :bug: Bug Fix
