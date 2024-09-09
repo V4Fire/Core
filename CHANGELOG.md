@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.?? (2024-09-??)
+
+#### :bug: Bug Fix
+
+* Fixed an issue with the calculation of timezones without considering time `core/prelude/date/create`
+
 ## v4.0.0-alpha.44 (2024-09-06)
 
 #### :bug: Bug Fix
