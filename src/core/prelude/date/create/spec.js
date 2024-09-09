@@ -239,5 +239,20 @@ describe('core/prelude/date/create', () => {
 			expect(Date.create('2000-11-11')).toEqual(new Date('2000-11-10T22:00:00.000Z'));
 			expect(Date.create('1990-11-11')).toEqual(new Date('1990-11-10T21:00:00.000Z'));
 		});
+
+		it('should consider a time when getting the timezone', () => {
+			Date.prototype.getTimezoneOffset = function getTimezoneOffset() {
+				const dateISO = this.toISOString();
+
+				if (dateISO.startsWith('1992-01-19T00:00:00')) {
+					return -(2 * 60);
+				}
+
+				return -(3 * 60);
+			};
+
+			expect(Date.create('19.01.1992')).toEqual(new Date('1992-01-18T22:00:00.000Z'));
+			expect(Date.create('19.01.1992 10:00:00')).toEqual(new Date('1992-01-19T07:00:00.000Z'));
+		});
 	});
 });
