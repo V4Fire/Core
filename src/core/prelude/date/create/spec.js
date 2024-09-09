@@ -242,9 +242,10 @@ describe('core/prelude/date/create', () => {
 
 		it('should consider a time when getting the timezone', () => {
 			Date.prototype.getTimezoneOffset = function getTimezoneOffset() {
-				const date = this.getDate();
+				const dateISO = this.toISOString();
 
-				if (date < 20) {
+				console.log({dateISO});
+				if (dateISO.startsWith('1992-01-18')) {
 					return -(2 * 60);
 				}
 
@@ -252,7 +253,7 @@ describe('core/prelude/date/create', () => {
 			};
 
 			expect(Date.create('19.01.1992')).toEqual(new Date('1992-01-18T22:00:00.000Z'));
-			expect(Date.create('20.01.1992 10:00:00')).toEqual(new Date('1992-01-20T07:00:00.000Z'));
+			expect(Date.create('19.01.1992 10:00:00')).toEqual(new Date('1992-01-19T07:00:00.000Z'));
 		});
 	});
 });
