@@ -80,11 +80,9 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 			const normalizedDate = normalizeDate(date);
 
 			time = Object.isTruly(time) ? time : '00:00:00';
+			zone = Object.isTruly(zone) ? zone : getZone(normalizedDate);
 
-			const dateTime = `${normalizedDate}T${time}`;
-			zone = Object.isTruly(zone) ? zone : getZone(dateTime);
-
-			return `${dateTime}${normalizeZone(zone)}`;
+			return `${normalizedDate}T${time}${normalizeZone(zone)}`;
 		};
 
 		return new Date(Date.parse(pattern.replace(isDateStr, replacer)));
