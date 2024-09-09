@@ -244,8 +244,7 @@ describe('core/prelude/date/create', () => {
 			Date.prototype.getTimezoneOffset = function getTimezoneOffset() {
 				const dateISO = this.toISOString();
 
-				console.log({dateISO});
-				if (dateISO.startsWith('1992-01-18')) {
+				if (dateISO.startsWith('1992-01-19T00:00:00')) {
 					return -(2 * 60);
 				}
 
