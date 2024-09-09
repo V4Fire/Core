@@ -242,17 +242,17 @@ describe('core/prelude/date/create', () => {
 
 		it('should consider a time when getting the timezone', () => {
 			Date.prototype.getTimezoneOffset = function getTimezoneOffset() {
-				const dateISO = this.toISOString();
+				const date = this.getDate();
 
-				if (dateISO.startsWith('1992-01-18T22:00:00')) {
+				if (date < 20) {
 					return -(2 * 60);
 				}
 
 				return -(3 * 60);
-			}
+			};
 
 			expect(Date.create('19.01.1992')).toEqual(new Date('1992-01-18T22:00:00.000Z'));
-			expect(Date.create('19.01.1992 10:00:00')).toEqual(new Date('1992-01-19T07:00:00.000Z'))
-		})
+			expect(Date.create('20.01.1992 10:00:00')).toEqual(new Date('1992-01-20T07:00:00.000Z'));
+		});
 	});
 });
