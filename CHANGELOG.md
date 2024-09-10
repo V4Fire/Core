@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.100.?? (2024-09-??)
+
+#### :bug: Bug Fix
+
+* Fixed an issue with the calculation of timezones without considering time `core/prelude/date/create`
+
 ## v3.100.0 (2024-07-29)
 
 #### :house: Internal
