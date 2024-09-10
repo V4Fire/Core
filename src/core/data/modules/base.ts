@@ -95,7 +95,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	/**
 	 * API for asynchronous operations
 	 */
-	protected readonly async!: Async<this>;
+	protected readonly async!: Async;
 
 	/**
 	 * Socket connection
@@ -124,7 +124,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		this.cacheId = id;
 		this.params = opts;
 
-		this.async = new Async(this);
+		this.async = new Async();
 		this.emitter = new EventEmitter({maxListeners: 1e3, newListener: false});
 
 		if (opts.socket || this.socketURL != null) {
