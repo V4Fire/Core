@@ -97,6 +97,8 @@ export default class RequestContext<D = unknown> {
 	 */
 	readonly params!: NormalizedCreateRequestOptions<D>;
 
+	readonly customRequestCacheKey?: (url:string) => string;
+
 	/**
 	 * Alias for `params.query`
 	 * @alias
@@ -215,6 +217,10 @@ export default class RequestContext<D = unknown> {
 
 		if (IS_SSR) {
 			delete p.offlineCache;
+		}
+
+		if (p.customRequestCacheKey) {
+			this.customRequestCacheKey = p.customRequestCacheKey;
 		}
 
 		this.isReady = (async () => {

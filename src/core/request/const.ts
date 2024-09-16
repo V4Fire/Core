@@ -11,7 +11,7 @@ import config from 'config';
 import { memoize } from 'core/promise/sync';
 import { toQueryString } from 'core/url';
 
-import { Cache, RestrictedCache, NeverCache, AbstractCache } from 'core/cache';
+import { Cache, RestrictedCache, NeverCache, AbstractCache, AbstractAsyncCache } from 'core/cache';
 import type { AsyncStorage } from 'core/kv-storage';
 
 import engine from 'core/request/engines';
@@ -44,7 +44,9 @@ export const
 	caches = new Set<AbstractCache>(),
 	pendingCache = new Cache<RequestResponse>();
 
-export const cache: Record<Exclude<CacheStrategy, AbstractCache | Promise<AbstractCache>>, AbstractCache> = {
+export const cache: Record<Exclude<
+	CacheStrategy, AbstractCache | Promise<AbstractCache> | AbstractAsyncCache
+>, AbstractCache> = {
 	queue: new RestrictedCache(),
 	forever: new Cache(),
 	never: new NeverCache()

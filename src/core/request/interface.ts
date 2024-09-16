@@ -7,7 +7,7 @@
  */
 
 import type { EventEmitter2 as EventEmitter } from 'eventemitter2';
-import type { AbstractCache } from 'core/cache';
+import type { AbstractCache, AbstractAsyncCache } from 'core/cache';
 
 import type Data from 'core/data';
 import type { ModelMethod } from 'core/data';
@@ -43,7 +43,8 @@ export type CacheStrategy =
 	'forever' |
 	'never' |
 	AbstractCache |
-	Promise<AbstractCache>;
+	Promise<AbstractCache> |
+	AbstractAsyncCache;
 
 export type CacheType =
 	'memory' |
@@ -391,6 +392,8 @@ export interface CreateRequestOptions<D = unknown> {
 	 * (all requests are stored within the active session without expiring by default)
 	 */
 	cacheTTL?: number;
+
+	customRequestCacheKey?(url: string): string;
 
 	/**
 	 * Enables support of offline caching.
