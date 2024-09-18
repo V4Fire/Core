@@ -139,7 +139,7 @@ const addEmitter: AddEmitter = <T extends Cache<V, K>, V = unknown, K extends st
 		subscribe: ((method, obj, cb): void => {
 			emitter.on(method, (cacheWithEmitter: object, e: MutationEvent) => {
 				// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-				if (cacheWithEmitter === obj || cacheWithEmitter.isPrototypeOf(obj)) {
+				if (cacheWithEmitter === obj || {}.isPrototypeOf.call(cacheWithEmitter, obj)) {
 					cb(e);
 				}
 			});
