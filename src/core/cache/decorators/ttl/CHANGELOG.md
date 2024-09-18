@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.46 (2024-09-18)
+
+#### :house: Internal
+
+* Made `addTTL` functionality lazy
+
 ## v3.47.0 (2021-05-17)
 
 #### :bug: Bug Fix

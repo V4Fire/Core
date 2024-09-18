@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.46 (2024-09-18)
+
+#### :house: Internal
+
+* Made the `addTTL` functionality lazy `core/cache/docorators/ttl`
+
 ## v4.0.0-alpha.45 (2024-09-09)
 
 #### :bug: Bug Fix

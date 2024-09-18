@@ -54,8 +54,31 @@ export default function addTTL<
 	} = addEmitter<TTLCache<V, K>, V, K>(<TTLCache<V, K>><unknown>cache);
 
 	const
-		cacheWithTTL: TTLCache<V, K> = Object.create(cache),
-		ttlTimers = new Map<K, number | NodeJS.Timeout>();
+		ttlStore = new Map<K, number>(),
+		dateStore = new Map<K, number>();
+
+	const
+		cacheWithTTL: TTLCache<V, K> = Object.create(cache);
+
+	cacheWithTTL.get = (key: K) => {
+		const
+			dateSet = dateStore.get(key),
+			ttl = ttlStore.get(key);
+
+		if (dateSet != null && ttl != null) {
+			const
+				expired = Date.now() - dateSet > ttl;
+
+			if (expired) {
+				cacheWithTTL.remove(key);
+				return;
+			}
+		}
+
+		return cache.get(key);
+	};
+
+	cacheWithTTL.has = (key: K) => cacheWithTTL.get(key) !== undefined;
 
 	cacheWithTTL.set = (key: K, value: V, opts?: TTLDecoratorOptions & Parameters<T['set']>[2]) => {
 		updateTTL(key, opts?.ttl);
@@ -68,9 +91,10 @@ export default function addTTL<
 	};
 
 	cacheWithTTL.removeTTLFrom = (key: K) => {
-		if (ttlTimers.has(key)) {
-			clearTimeout(<number>ttlTimers.get(key));
-			ttlTimers.delete(key);
+		if (ttlStore.has(key) || dateStore.has(key)) {
+			ttlStore.delete(key);
+			dateStore.delete(key);
+
 			return true;
 		}
 
@@ -81,9 +105,13 @@ export default function addTTL<
 		const
 			removed = originalClear(filter);
 
-		removed.forEach((_, key) => {
-			cacheWithTTL.removeTTLFrom(key);
-		});
+		if (filter == null) {
+			ttlStore.clear();
+			dateStore.clear();
+
+		} else {
+			removed.forEach((_, key) => cacheWithTTL.removeTTLFrom(key));
+		}
 
 		return removed;
 	};
@@ -101,9 +129,11 @@ export default function addTTL<
 	return cacheWithTTL;
 
 	function updateTTL(key: K, optionTTL?: number): void {
-		if (optionTTL != null || ttl != null) {
-			const time = optionTTL ?? ttl;
-			ttlTimers.set(key, setTimeout(() => cacheWithTTL.remove(key), time));
+		const time = optionTTL ?? ttl;
+
+		if (time != null) {
+			ttlStore.set(key, time);
+			dateStore.set(key, Date.now());
 
 		} else {
 			cacheWithTTL.removeTTLFrom(key);
