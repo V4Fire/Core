@@ -13,7 +13,7 @@ Changelog
 
 #### :house: Internal
 
-* Made `addTTL` functionality lazy
+* Changed the logic of the `addTTL` decorator to be lazy
 
 ## v3.47.0 (2021-05-17)
 

@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :house: Internal
 
-* Made the `addTTL` functionality lazy `core/cache/docorators/ttl`
+* Changed the logic of the `addTTL` decorator to be lazy `core/cache/docorators/ttl`
 
 ## v4.0.0-alpha.45 (2024-09-09)
 
