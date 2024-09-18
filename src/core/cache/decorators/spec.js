@@ -17,8 +17,6 @@ import { INDEX_STORAGE_NAME } from 'core/cache/decorators/persistent/engines/con
 
 describe('core/cache/decorators', () => {
 	it('complex test', async () => {
-		jest.spyOn(Date, 'now').mockReturnValue(0);
-
 		const opts = {
 			loadFromStorage: 'onInit'
 		};
@@ -44,6 +42,11 @@ describe('core/cache/decorators', () => {
 		});
 
 		await new Promise((r) => setTimeout(r, 50));
+
+		expect(await persistentCache.get('bar')).toBe(undefined);
+
+		await new Promise((r) => setTimeout(r, 0));
+
 		expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({
 			baz: Number.MAX_SAFE_INTEGER
 		});
