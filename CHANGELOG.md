@@ -29,6 +29,18 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Conduct refactoring and optimization of the module `core/async`
 * Various performance optimizations
 
+## v4.0.0-alpha.45 (2024-09-09)
+
+#### :bug: Bug Fix
+
+* Fixed an issue with the calculation of timezones without considering time `core/prelude/date/create`
+
+## v4.0.0-alpha.44 (2024-09-06)
+
+#### :bug: Bug Fix
+
+* Avoid reassigning an `undefined` value for the scheme from the prototype `core/lazy`
+
 ## v4.0.0-alpha.43 (2024-07-29)
 
 #### :house: Internal

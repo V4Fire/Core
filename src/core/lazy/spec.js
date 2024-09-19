@@ -205,4 +205,23 @@ describe('core/lazy', () => {
 		expect(engine1.component('newAwesomeComponent')).toBe(newAwesomeComponent);
 		expect(engine2.component('newAwesomeComponent')).toBe(newAwesomeComponent);
 	});
+
+	it('should not reassign a prototype key when it is `undefined`', () => {
+		function createObj(a) {
+			return {a};
+		}
+
+		Object.defineProperty(Object.prototype, 'test', {
+			get: () => undefined,
+			set: () => {
+				throw ReferenceError('Prototype key is reassigned');
+			}
+		});
+
+		expect(
+			makeLazy(createObj, {
+				a: 2
+			})
+		).not.toThrowError('ReferenceError: Prototype key is reassigned');
+	});
 });

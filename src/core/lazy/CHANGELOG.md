@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.44 (2024-09-06)
+
+#### :bug: Bug Fix
+
+* Avoid reassigning an `undefined` value for the scheme from the prototype
+
 ## v4.0.0-alpha.28 (2024-03-21)
 
 #### :bug: Bug Fix
