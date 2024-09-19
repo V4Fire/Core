@@ -120,7 +120,7 @@ export declare type StrictClearOptionsId<ID = any> = Omit<ClearOptionsId<ID>, 'l
 export interface ClearFn<CTX extends object = Async> extends Function {
     (id: any, ctx: TaskCtx<CTX>): void;
 }
-export interface BoundedCb<CTX extends object = Async> extends Function {
+export interface BoundFn<CTX extends object = Async> extends Function {
     (this: CTX, ...args: any[]): void;
 }
 export interface Task<CTX extends object = Async> {
@@ -145,6 +145,10 @@ export interface Task<CTX extends object = Async> {
      */
     label?: Label;
     /**
+     * True if the task is unregistered
+     */
+    unregistered: boolean;
+    /**
      * True if the task is paused
      */
     paused: boolean;
@@ -159,7 +163,7 @@ export interface Task<CTX extends object = Async> {
     /**
      * A list of complete handlers: `[onFulfilled, onRejected][]`
      */
-    onComplete: Array<Array<BoundedCb<CTX>>>;
+    onComplete: Array<Array<BoundFn<CTX>>>;
     /**
      * A list of clear handlers
      */

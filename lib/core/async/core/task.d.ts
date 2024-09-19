@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 import type Async from '../../../core/async';
-import type { Label, FullAsyncParams, LocalCache, GlobalCache, AsyncCb, BoundedCb, ClearFn, Task as AbstractTask } from '../../../core/async/interface';
+import type { Label, FullAsyncParams, LocalCache, GlobalCache, AsyncCb, BoundFn, ClearFn, Task as AbstractTask } from '../../../core/async/interface';
 export default class Task<CTX extends object = Async> implements AbstractTask<CTX> {
     /** @inheritDoc */
     readonly id: object;
@@ -19,13 +19,15 @@ export default class Task<CTX extends object = Async> implements AbstractTask<CT
     /** @inheritDoc */
     readonly label: CanUndef<Label>;
     /** @inheritDoc */
+    unregistered: boolean;
+    /** @inheritDoc */
     paused: boolean;
     /** @inheritDoc */
     muted: boolean;
     /** @inheritDoc */
     readonly queue: Function[];
     /** @inheritDoc */
-    readonly onComplete: Array<Array<BoundedCb<CTX>>>;
+    readonly onComplete: Array<Array<BoundFn<CTX>>>;
     /** @inheritDoc */
     readonly onClear: Array<AsyncCb<CTX>>;
     /** @inheritDoc */

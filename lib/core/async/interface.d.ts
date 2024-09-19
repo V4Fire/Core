@@ -7,7 +7,7 @@
  */
 import type Async from '../../core/async';
 import type { PromiseNamespaces } from '../../core/async/const';
-import type { Task, TaskNamespaces, MarkReason, ClearReason, BoundedCb, ClearFn, AsyncProxyOptions, ClearProxyOptions } from '../../core/async/core/interface';
+import type { Task, TaskNamespaces, MarkReason, ClearReason, BoundFn, ClearFn, AsyncProxyOptions, ClearProxyOptions } from '../../core/async/core/interface';
 import type { AsyncWorkerOptions, AsyncPromiseOptions } from '../../core/async/proxy/interface';
 import type { AsyncPromisifyOnceOptions } from '../../core/async/events/interface';
 export * from '../../core/async/core/interface';
@@ -109,7 +109,7 @@ export declare type FullAsyncParams<CTX extends object = Async> = {
      * }
      * ```
      */
-    wrapper?: BoundedCb<CTX>;
+    wrapper?: BoundFn<CTX>;
     /**
      * Additional arguments to the task wrapper
      *

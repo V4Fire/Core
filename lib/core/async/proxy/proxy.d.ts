@@ -5,7 +5,7 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-import Super, { BoundedCb, AsyncCbOptions, AsyncProxyOptions, ClearProxyOptions } from '../../../core/async/core';
+import Super, { BoundFn, AsyncCbOptions, AsyncProxyOptions, ClearProxyOptions } from '../../../core/async/core';
 import type { WorkerLikeP, AsyncWorkerOptions } from '../../../core/async/interface';
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
     /**
@@ -87,7 +87,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
      * });
      * ```
      */
-    proxy<F extends BoundedCb<C>, C extends object = CTX>(fn: F, opts?: AsyncProxyOptions<C>): F;
+    proxy<F extends BoundFn<C>, C extends object = CTX>(fn: F, opts?: AsyncProxyOptions<C>): F;
     /**
      * Returns a new function that allows invoking the passed function only after the specified delay.
      * Any new invocation of the function will cancel the previous one.
@@ -96,7 +96,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
      * @param delay
      * @param [opts] - additional options for the operation
      */
-    debounce<F extends BoundedCb<C>, C extends object = CTX>(fn: F, delay: number, opts?: AsyncCbOptions<C>): AnyFunction<Parameters<F>, void>;
+    debounce<F extends BoundFn<C>, C extends object = CTX>(fn: F, delay: number, opts?: AsyncCbOptions<C>): AnyFunction<Parameters<F>, void>;
     /**
      * Returns a new function that allows invoking the passed function not more often than the specified delay
      *
@@ -104,7 +104,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
      * @param delay
      * @param [opts] - additional options for the operation
      */
-    throttle<F extends BoundedCb<C>, C extends object = CTX>(fn: F, delay: number, opts?: AsyncCbOptions<C>): AnyFunction<Parameters<F>, void>;
+    throttle<F extends BoundFn<C>, C extends object = CTX>(fn: F, delay: number, opts?: AsyncCbOptions<C>): AnyFunction<Parameters<F>, void>;
     /**
      * Cancels the specified proxy function
      *

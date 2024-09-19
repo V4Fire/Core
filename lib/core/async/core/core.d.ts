@@ -61,18 +61,18 @@ export default class Async<CTX extends object = Async<any>> {
     /**
      * Cancels an asynchronous task (or a group of tasks) from the specified namespace
      *
-     * @param task - the operation options or a reference to the task to be canceled
+     * @param params - the operation parameters or a reference to the task to be canceled
      * @param [namespace] - the namespace from which the task or tasks should be canceled
      */
-    protected cancelTask(task: CanUndef<FullClearParams | any>, namespace?: Namespaces | PrimitiveNamespaces | PromiseNamespaces): this;
+    protected cancelTask(params: CanUndef<FullClearParams | any>, namespace?: Namespaces | PrimitiveNamespaces | PromiseNamespaces): this;
     /**
      * Marks an asynchronous task (or a group of tasks) within the specified namespace using the given marker
      *
      * @param marker
-     * @param task - the operation options or a reference to the task to be marked
+     * @param params - the operation parameters or a reference to the task to be marked
      * @param [namespace] - the namespace from which the task or tasks should be marked
      */
-    protected markTask(marker: Marker, task: CanUndef<ClearProxyOptions | any>, namespace?: Namespaces | PrimitiveNamespaces | PromiseNamespaces): this;
+    protected markTask(marker: Marker, params: CanUndef<ClearProxyOptions | any>, namespace?: Namespaces | PrimitiveNamespaces | PromiseNamespaces): this;
     /**
      * Marks all asynchronous tasks within the specified namespace using the given marker
      *
