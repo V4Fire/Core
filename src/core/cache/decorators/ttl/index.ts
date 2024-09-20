@@ -54,20 +54,18 @@ export default function addTTL<
 	} = addEmitter<TTLCache<V, K>, V, K>(<TTLCache<V, K>><unknown>cache);
 
 	const
-		ttlStore = new Map<K, number>(),
-		dateStore = new Map<K, number>();
+		store = new Map<K, { ttl: number; date: number }>();
 
 	const
 		cacheWithTTL: TTLCache<V, K> = Object.create(cache);
 
 	cacheWithTTL.get = (key: K) => {
 		const
-			dateSet = dateStore.get(key),
-			ttl = ttlStore.get(key);
+			info = store.get(key);
 
-		if (dateSet != null && ttl != null) {
+		if (info != null) {
 			const
-				expired = Date.now() - dateSet > ttl;
+				expired = Date.now() - info.date > info.ttl;
 
 			if (expired) {
 				cacheWithTTL.remove(key);
@@ -90,24 +88,14 @@ export default function addTTL<
 		return originalRemove(key);
 	};
 
-	cacheWithTTL.removeTTLFrom = (key: K) => {
-		if (ttlStore.has(key) || dateStore.has(key)) {
-			ttlStore.delete(key);
-			dateStore.delete(key);
-
-			return true;
-		}
-
-		return false;
-	};
+	cacheWithTTL.removeTTLFrom = (key: K) => store.delete(key);
 
 	cacheWithTTL.clear = (filter?: ClearFilter<V, K>) => {
 		const
 			removed = originalClear(filter);
 
 		if (filter == null) {
-			ttlStore.clear();
-			dateStore.clear();
+			store.clear();
 
 		} else {
 			removed.forEach((_, key) => cacheWithTTL.removeTTLFrom(key));
@@ -132,8 +120,10 @@ export default function addTTL<
 		const time = optionTTL ?? ttl;
 
 		if (time != null) {
-			ttlStore.set(key, time);
-			dateStore.set(key, Date.now());
+			store.set(key, {
+				ttl: time,
+				date: Date.now()
+			});
 
 		} else {
 			cacheWithTTL.removeTTLFrom(key);
