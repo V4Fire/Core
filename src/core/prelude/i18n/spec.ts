@@ -82,7 +82,7 @@ describe('core/prelude/i18n', () => {
 	describe('pluralization for cyrillic language', () => {
 		it('russian language', () => {
 			const
-				rules = Intl.PluralRules('ru'),
+				rules = new Intl.PluralRules('ru'),
 				forms = {
 					one: '{count} яблоко',
 					few: '{count} яблока',
@@ -90,6 +90,7 @@ describe('core/prelude/i18n', () => {
 					zero: '{count} яблок'
 				};
 
+			expect(resolveTemplate(forms, {count: 1, rules})).toBe('1 яблоко');
 			expect(resolveTemplate(forms, {count: 2, rules})).toBe('2 яблока');
 			expect(resolveTemplate(forms, {count: 0, rules})).toBe('0 яблок');
 			expect(resolveTemplate(forms, {count: 12, rules})).toBe('12 яблок');
