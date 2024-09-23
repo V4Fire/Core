@@ -44,9 +44,15 @@ export function i18nFactory(
 		throw new ReferenceError('The locale for internationalization is not defined');
 	}
 
+	const pluralRules: Nullable<Intl.PluralRules> = 'PluralRules' in globalThis['Intl'] ? new globalThis['Intl'].PluralRules(resolvedLocale) : null;
+
 	return function i18n(value: string | TemplateStringsArray, params?: I18nParams) {
 		if (Object.isArray(value) && value.length !== 1) {
 			throw new SyntaxError('Using i18n with template literals is allowed only without variables');
+		}
+
+		if (params?.rules == null) {
+			params = Object.mixin({}, params, {rules: pluralRules});
 		}
 
 		const
@@ -79,19 +85,19 @@ export function i18nFactory(
  *
  * console.log(example); // 'My name is John, I live in Denver'
  *
- * const examplePluralize = resolveTemplate([
- *  {count} product,  // One
- *  {count} products, // Some
- *  {count} products, // Many
- *  {count} products, // None
- * ], {count: 5});
+ * const examplePluralize = resolveTemplate({
+ *  one: {count} product,
+ *  few: {count} products,
+ *  many: {count} products,
+ *  zero: {count} products,
+ * }, {count: 5});
  *
  * console.log(examplePluralize); // '5 products'
  * ```
  */
 export function resolveTemplate(value: Translation, params?: I18nParams): string {
 	const
-		template = Object.isArray(value) ? pluralizeText(value, params?.count) : value;
+		template = Object.isPlainObject(value) ? pluralizeText(value, params?.count, params?.rules) : value;
 
 	return template.replace(/{([^}]+)}/g, (_, key) => {
 		if (params?.[key] == null) {
@@ -108,20 +114,26 @@ export function resolveTemplate(value: Translation, params?: I18nParams): string
  *
  * @param pluralTranslation - list of translation variants
  * @param count - the value on the basis of which the form of pluralization will be selected
+ * @param rules - Intl plural rules for selected locale
  *
  * @example
  * ```typescript
- * const result = pluralizeText([
- *  {count} product,  // One
- *  {count} products, // Some
- *  {count} products, // Many
- *  {count} products, // None
- * ], 5);
+ * const result = pluralizeText({
+ *  one: {count} product,
+ *  few: {count} products,
+ *  many: {count} products,
+ *  zero: {count} products,
+ *  other: {count} products,
+ * }, 5, new Intl.PluralRulse('en'));
  *
  * console.log(result); // '{count} products'
  * ```
  */
-export function pluralizeText(pluralTranslation: PluralTranslation, count: CanUndef<PluralizationCount>): string {
+export function pluralizeText(
+	pluralTranslation: PluralTranslation,
+	count: CanUndef<PluralizationCount>,
+	rules: CanUndef<Intl.PluralRules>
+): string {
 	let normalizedCount;
 
 	if (Object.isNumber(count)) {
@@ -138,18 +150,35 @@ export function pluralizeText(pluralTranslation: PluralTranslation, count: CanUn
 		normalizedCount = 1;
 	}
 
-	switch (normalizedCount) {
+	const
+		pluralFormName = getPluralFormName(normalizedCount, rules),
+		translation = pluralTranslation[pluralFormName];
+
+	if (translation == null) {
+		logger.error(`Plural form ${pluralFormName} doesn't exist.`, `String: ${pluralTranslation[0]}`);
+		return pluralTranslation.one;
+	}
+
+	return translation;
+}
+
+function getPluralFormName(n: number, rules: CanUndef<Intl.PluralRules>): keyof Required<PluralTranslation> {
+	if (rules != null) {
+		return <keyof PluralTranslation>rules.select(n);
+	}
+
+	switch (n) {
 		case 0:
-			return pluralTranslation[3];
+			return 'zero';
 
 		case 1:
-			return pluralTranslation[0];
+			return 'one';
 
 		default:
-			if (normalizedCount > 1 && normalizedCount < 5) {
-				return pluralTranslation[1];
+			if (n > 1 && n < 5) {
+				return 'few';
 			}
 
-			return pluralTranslation[2];
+			return 'many';
 	}
 }

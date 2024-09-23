@@ -173,7 +173,7 @@ declare function i18n(
 /**
  * Parameters for the internationalization function
  */
-type I18nParams = {count?: number | StringPluralizationForms} & {
+type I18nParams = {count?: number | StringPluralizationForms; rules?: Intl.PluralRules} & {
 	[key: string]: string | number;
 };
 
