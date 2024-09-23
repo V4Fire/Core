@@ -37,14 +37,3 @@ export const region: RegionStore = {
 	value: undefined,
 	isDefault: false
 };
-
-/**
- * A dictionary to map literal pluralization forms to numbers
- */
-export const pluralizeMap = Object.createDict({
-	zero: 0,
-	one: 1,
-	few: 2,
-	many: 5,
-	other: -1
-});

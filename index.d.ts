@@ -180,7 +180,7 @@ type I18nParams = {count?: number | StringPluralizationForms; rules?: Intl.Plura
 /**
  * String pluralization constants that can be used instead of numbers
  */
-type StringPluralizationForms = 'one' | 'some' | 'many' | 'none';
+type StringPluralizationForms = 'one' | 'few' | 'many' | 'other' | 'zero';
 
 declare function setImmediate(fn: AnyFunction): number;
 declare function clearImmediate(id: number): void;

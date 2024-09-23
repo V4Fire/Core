@@ -41,4 +41,4 @@ export interface LocaleKVStorage {
 	set?: SyncStorage['set'];
 }
 
-export type PluralizationCount = StringPluralizationForms | string | number;
+export type PluralizationCount = StringPluralizationForms | number;
