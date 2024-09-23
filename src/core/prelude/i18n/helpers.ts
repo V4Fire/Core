@@ -10,7 +10,7 @@ import log from 'core/log';
 
 import langPacs, { Translation, PluralTranslation } from 'lang';
 
-import { locale, pluralizeMap } from 'core/prelude/i18n/const';
+import { locale } from 'core/prelude/i18n/const';
 import type { PluralizationCount } from 'core/prelude/i18n/interface';
 
 const
@@ -124,8 +124,10 @@ export function pluralizeText(pluralTranslation: PluralTranslation, count: CanUn
 		normalizedCount = count;
 
 	} else if (Object.isString(count)) {
-		if (count in pluralizeMap) {
-			normalizedCount = pluralizeMap[count];
+		const translation = pluralTranslation[count];
+
+		if (translation != null) {
+			return translation;
 		}
 	}
 
