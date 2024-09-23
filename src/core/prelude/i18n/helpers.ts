@@ -44,7 +44,7 @@ export function i18nFactory(
 		throw new ReferenceError('The locale for internationalization is not defined');
 	}
 
-	const pluralRules: Nullable<Intl.PluralRules> = 'PluralRules' in globalThis['Intl'] ? new globalThis['Intl'].PluralRules(resolvedLocale) : null;
+	const pluralRules: CanUndef<Intl.PluralRules> = 'PluralRules' in globalThis['Intl'] ? new globalThis['Intl'].PluralRules(resolvedLocale) : undefined;
 
 	return function i18n(value: string | TemplateStringsArray, params?: I18nParams) {
 		if (Object.isArray(value) && value.length !== 1) {
@@ -52,7 +52,7 @@ export function i18nFactory(
 		}
 
 		if (params?.rules == null) {
-			params = Object.mixin({}, params, {rules: pluralRules});
+			params = Object.mixin({deep: true}, params, {rules: pluralRules});
 		}
 
 		const
@@ -100,12 +100,22 @@ export function resolveTemplate(value: Translation, params?: I18nParams): string
 		template = Object.isPlainObject(value) ? pluralizeText(value, params?.count, params?.rules) : value;
 
 	return template.replace(/{([^}]+)}/g, (_, key) => {
-		if (params?.[key] == null) {
+		if (params?.vars?.[key] == null && params?.[key] == null) {
 			logger.error('Undeclared variable', `Name: "${key}", Template: "${template}"`);
 			return key;
 		}
 
-		return params[key];
+		const varsValue = params.vars?.[key];
+
+		if (varsValue != null) {
+			return varsValue;
+		}
+
+		const shortcutValue = params[key];
+
+		if (shortcutValue != null) {
+			return shortcutValue;
+		}
 	});
 }
 

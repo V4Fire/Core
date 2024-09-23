@@ -173,14 +173,16 @@ declare function i18n(
 /**
  * Parameters for the internationalization function
  */
-type I18nParams = {count?: number | StringPluralizationForms; rules?: Intl.PluralRules} & {
-	[key: string]: string | number;
-};
+interface I18nParams {
+	count?: number | StringPluralizationForms;
+	rules?: Intl.PluralRules;
+	vars?: {[key: string]: string | number};
+}
 
 /**
  * String pluralization constants that can be used instead of numbers
  */
-type StringPluralizationForms = 'one' | 'few' | 'many' | 'other' | 'zero';
+type StringPluralizationForms = 'one' | 'two' | 'few' | 'many' | 'other' | 'zero';
 
 declare function setImmediate(fn: AnyFunction): number;
 declare function clearImmediate(id: number): void;

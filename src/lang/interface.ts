@@ -14,6 +14,7 @@ export type Translation = string | PluralTranslation;
 
 export interface PluralTranslation {
 	one: string;
+	two?: string;
 	few?: string;
 	many?: string;
 	zero?: string;
