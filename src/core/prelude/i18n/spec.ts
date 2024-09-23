@@ -66,5 +66,34 @@ describe('core/prelude/i18n', () => {
 
 			expect(res).toBe('other 5');
 		});
+
+		it('override `count` shortcut variable', () => {
+			const res = resolveTemplate({
+				one: 'one {count}',
+				few: 'few {count}',
+				many: 'many {count}',
+				other: 'other {count}'
+			}, {count: 5, rules, vars: {count: 12}});
+
+			expect(res).toBe('other 12');
+		});
+	});
+
+	describe('pluralization for cyrillic language', () => {
+		it('russian language', () => {
+			const
+				rules = Intl.PluralRules('ru'),
+				forms = {
+					one: '{count} яблоко',
+					few: '{count} яблока',
+					many: '{count} яблок',
+					zero: '{count} яблок'
+				};
+
+			expect(resolveTemplate(forms, {count: 2, rules})).toBe('2 яблока');
+			expect(resolveTemplate(forms, {count: 0, rules})).toBe('0 яблок');
+			expect(resolveTemplate(forms, {count: 12, rules})).toBe('12 яблок');
+			expect(resolveTemplate(forms, {count: 22, rules})).toBe('22 яблока');
+		});
 	});
 });
