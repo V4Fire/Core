@@ -16,8 +16,6 @@ Changelog
 * changed `i18n` translations format.
 * added `intl` support for pluralization.
 * now `i18n` prefer to use `intl` api for pluralization if it's possible, otherwise fallback to old plural form logic.
-* now variables for template passed in `vars` field of `i18nparams` object.
-* for the `count` variable, you don't have to duplicate the value in the `vars` field. it will work like shortcut.
 
 ## v3.99.0 (2024-04-25)
 

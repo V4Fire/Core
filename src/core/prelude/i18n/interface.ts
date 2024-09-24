@@ -42,3 +42,7 @@ export interface LocaleKVStorage {
 }
 
 export type PluralizationCount = StringPluralizationForms | number;
+
+export interface I18nOpts {
+	pluralRules?: Intl.PluralRules;
+}

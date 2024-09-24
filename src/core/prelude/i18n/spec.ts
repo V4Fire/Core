@@ -48,12 +48,12 @@ describe('core/prelude/i18n', () => {
 
 		it('passing variables for template resolving', () => {
 			const tpl = 'foo {macros} {macros2}';
-			expect(resolveTemplate(tpl, {vars: {macros: 'bar', macros2: 'baz'}})).toBe('foo bar baz');
+			expect(resolveTemplate(tpl, {macros: 'bar', macros2: 'baz'})).toBe('foo bar baz');
 		});
 
 		it('if the variable is not set, then it should be displayed as text', () => {
 			const tpl = 'foo {macros} {macros2}';
-			expect(resolveTemplate(tpl, {vars: {macros: 'bar'}})).toBe('foo bar macros2');
+			expect(resolveTemplate(tpl, {macros: 'bar'})).toBe('foo bar macros2');
 		});
 
 		it('passing the `count` parameter for template resolving', () => {
@@ -62,27 +62,16 @@ describe('core/prelude/i18n', () => {
 				few: 'few {count}',
 				many: 'many {count}',
 				other: 'other {count}'
-			}, {count: 5, rules});
+			}, {count: 5}, {pluralRules: rules});
 
 			expect(res).toBe('other 5');
-		});
-
-		it('override `count` shortcut variable', () => {
-			const res = resolveTemplate({
-				one: 'one {count}',
-				few: 'few {count}',
-				many: 'many {count}',
-				other: 'other {count}'
-			}, {count: 5, rules, vars: {count: 12}});
-
-			expect(res).toBe('other 12');
 		});
 	});
 
 	describe('pluralization for cyrillic language', () => {
 		it('russian language', () => {
 			const
-				rules = new Intl.PluralRules('ru'),
+				cyrillicRules = new Intl.PluralRules('ru'),
 				forms = {
 					one: '{count} яблоко',
 					few: '{count} яблока',
@@ -90,11 +79,11 @@ describe('core/prelude/i18n', () => {
 					zero: '{count} яблок'
 				};
 
-			expect(resolveTemplate(forms, {count: 1, rules})).toBe('1 яблоко');
-			expect(resolveTemplate(forms, {count: 2, rules})).toBe('2 яблока');
-			expect(resolveTemplate(forms, {count: 0, rules})).toBe('0 яблок');
-			expect(resolveTemplate(forms, {count: 12, rules})).toBe('12 яблок');
-			expect(resolveTemplate(forms, {count: 22, rules})).toBe('22 яблока');
+			expect(resolveTemplate(forms, {count: 1}, {pluralRules: cyrillicRules})).toBe('1 яблоко');
+			expect(resolveTemplate(forms, {count: 2}, {pluralRules: cyrillicRules})).toBe('2 яблока');
+			expect(resolveTemplate(forms, {count: 0}, {pluralRules: cyrillicRules})).toBe('0 яблок');
+			expect(resolveTemplate(forms, {count: 12}, {pluralRules: cyrillicRules})).toBe('12 яблок');
+			expect(resolveTemplate(forms, {count: 22}, {pluralRules: cyrillicRules})).toBe('22 яблока');
 		});
 	});
 });

@@ -173,11 +173,11 @@ declare function i18n(
 /**
  * Parameters for the internationalization function
  */
-interface I18nParams {
+type I18nParams = {
 	count?: number | StringPluralizationForms;
-	rules?: Intl.PluralRules;
-	vars?: {[key: string]: string | number};
-}
+} & {
+	[key: string]: string | number;
+};
 
 /**
  * String pluralization constants that can be used instead of numbers
