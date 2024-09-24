@@ -89,7 +89,7 @@ export function i18nFactory(
  */
 export function resolveTemplate(value: Translation, params?: I18nParams, opts: I18nOpts = {}): string {
 	const
-		template = Object.isArray(value) ? pluralizeText(value, params?.count) : value;
+		template = Object.isPlainObject(value) ? pluralizeText(value, params?.count, opts.pluralRules) : value;
 
 	return template.replace(/{([^}]+)}/g, (_, key) => {
 		if (params?.[key] == null) {
@@ -119,7 +119,11 @@ export function resolveTemplate(value: Translation, params?: I18nParams, opts: I
  * console.log(result); // '{count} products'
  * ```
  */
-export function pluralizeText(pluralTranslation: PluralTranslation, count: CanUndef<PluralizationCount>): string {
+export function pluralizeText(
+	pluralTranslation: PluralTranslation,
+	count: CanUndef<PluralizationCount>,
+	rules: CanUndef<Intl.PluralRules>
+): string {
 	let normalizedCount;
 
 	if (Object.isNumber(count)) {
@@ -171,17 +175,17 @@ export function getPluralFormName(n: number, rules?: CanUndef<Intl.PluralRules>)
 
 	switch (n) {
 		case 0:
-			return pluralTranslation[3];
+			return 'zero';
 
 		case 1:
-			return pluralTranslation[0];
+			return 'one';
 
 		default:
-			if (normalizedCount > 1 && normalizedCount < 5) {
-				return pluralTranslation[1];
+			if (n > 1 && n < 5) {
+				return 'few';
 			}
 
-			return pluralTranslation[2];
+			return 'many';
 	}
 }
 

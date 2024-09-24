@@ -133,4 +133,4 @@ type Region =
 /**
  * String pluralization constants that can be used instead of numbers
  */
-type StringPluralizationForms = 'one' | 'some' | 'many' | 'none';
+type StringPluralizationForms = 'one' | 'two' | 'few' | 'many' | 'other' | 'zero';
