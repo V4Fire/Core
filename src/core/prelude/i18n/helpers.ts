@@ -11,7 +11,7 @@ import log from 'core/log';
 import langPacs, { Translation, PluralTranslation } from 'lang';
 
 import { locale } from 'core/prelude/i18n/const';
-import type { PluralizationCount } from 'core/prelude/i18n/interface';
+import type { I18nOpts, PluralizationCount } from 'core/prelude/i18n/interface';
 
 const
 	logger = log.namespace('i18n');
@@ -40,7 +40,7 @@ export function i18nFactory(
 		throw new ReferenceError('The locale for internationalization is not defined');
 	}
 
-	const pluralRules: CanUndef<Intl.PluralRules> = 'PluralRules' in globalThis['Intl'] ? new globalThis['Intl'].PluralRules(resolvedLocale) : undefined;
+	const pluralRules: CanUndef<Intl.PluralRules> = getPluralRules(resolvedLocale);
 
 	return function i18n(value: string | TemplateStringsArray, params?: I18nParams) {
 		if (Object.isArray(value) && value.length !== 1) {
@@ -53,7 +53,7 @@ export function i18nFactory(
 			translateValue = langPacs[resolvedLocale]?.[correctKeyset ?? '']?.[key];
 
 		if (translateValue != null && translateValue !== '') {
-			return resolveTemplate(translateValue, params);
+			return resolveTemplate(translateValue, params, {pluralRules});
 		}
 
 		logger.error(
@@ -61,7 +61,7 @@ export function i18nFactory(
 			`Key: ${key}, KeysetNames: ${keysetNames.join(', ')}, LocaleName: ${resolvedLocale}, available locales: ${Object.keys(langPacs).join(', ')}`
 		);
 
-		return resolveTemplate(key, params);
+		return resolveTemplate(key, params, {pluralRules});
 	};
 }
 
@@ -87,27 +87,17 @@ export function i18nFactory(
  * console.log(examplePluralize); // '5 products'
  * ```
  */
-export function resolveTemplate(value: Translation, params?: I18nParams): string {
+export function resolveTemplate(value: Translation, params?: I18nParams, opts: I18nOpts = {}): string {
 	const
 		template = Object.isArray(value) ? pluralizeText(value, params?.count) : value;
 
 	return template.replace(/{([^}]+)}/g, (_, key) => {
-		if (params?.vars[key] == null && params?.[key] == null) {
+		if (params?.[key] == null) {
 			logger.error('Undeclared variable', `Name: "${key}", Template: "${template}"`);
 			return key;
 		}
 
-		const varsValue = params.vars[key];
-
-		if (varsValue != null) {
-			return varsValue;
-		}
-
-		const shortcutValue = params[key];
-
-		if (shortcutValue != null) {
-			return shortcutValue;
-		}
+		return params[key];
 	});
 }
 
@@ -148,7 +138,38 @@ export function pluralizeText(pluralTranslation: PluralTranslation, count: CanUn
 		normalizedCount = 1;
 	}
 
-	switch (normalizedCount) {
+	const
+		pluralFormName = getPluralFormName(normalizedCount, rules),
+		translation = pluralTranslation[pluralFormName];
+
+	if (translation == null) {
+		logger.error(`Plural form ${pluralFormName} doesn't exist.`, `String: ${pluralTranslation[0]}`);
+		return pluralTranslation.one;
+	}
+
+	return translation;
+}
+
+/**
+ * Returns the plural form name for a given number `n` based on the specified pluralization rules.
+ * Otherwise will be used default set of rules.
+ *
+ * If a `rules` object implementing `Intl.PluralRules` is provided, it will use that to determine the plural form.
+ * Otherwise, it will fall back to a custom rule set:
+ * - Returns 'zero' for `n === 0`.
+ * - Returns 'one' for `n === 1`.
+ * - Returns 'few' for `n > 1 && n < 5`.
+ * - Returns 'many' for all other values of `n`.
+ *
+ * @param n - The number to evaluate for pluralization.
+ * @param rules - Plural rules object. If undefined, a default rule set is used.
+ */
+function getPluralFormName(n: number, rules?: CanUndef<Intl.PluralRules>): keyof Required<PluralTranslation> {
+	if (rules != null) {
+		return <keyof PluralTranslation>rules.select(n);
+	}
+
+	switch (n) {
 		case 0:
 			return pluralTranslation[3];
 
@@ -161,5 +182,15 @@ export function pluralizeText(pluralTranslation: PluralTranslation, count: CanUn
 			}
 
 			return pluralTranslation[2];
+	}
+}
+
+/**
+ * Returns an instance of `Intl.PluralRules` for a given locale, if supported.
+ * @param locale - The locale for which to generate plural rules.
+ */
+export function getPluralRules(locale: Language): CanUndef<Intl.PluralRules> {
+	if ('PluralRules' in globalThis['Intl']) {
+		return new globalThis['Intl'].PluralRules(locale);
 	}
 }
