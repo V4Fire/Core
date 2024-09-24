@@ -164,7 +164,7 @@ export function pluralizeText(pluralTranslation: PluralTranslation, count: CanUn
  * @param n - The number to evaluate for pluralization.
  * @param rules - Plural rules object. If undefined, a default rule set is used.
  */
-function getPluralFormName(n: number, rules?: CanUndef<Intl.PluralRules>): keyof Required<PluralTranslation> {
+export function getPluralFormName(n: number, rules?: CanUndef<Intl.PluralRules>): keyof Required<PluralTranslation> {
 	if (rules != null) {
 		return <keyof PluralTranslation>rules.select(n);
 	}

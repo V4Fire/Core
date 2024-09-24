@@ -7,6 +7,7 @@
  */
 
 import { pluralizeText, resolveTemplate } from 'core/prelude/i18n';
+import { getPluralFormName } from 'core/prelude/i18n/helpers';
 
 describe('core/prelude/i18n', () => {
 	const rules = new Intl.PluralRules('en');
@@ -21,6 +22,22 @@ describe('core/prelude/i18n', () => {
 	};
 
 	const formNames = <Array<keyof typeof forms>>Object.keys(forms);
+
+	describe('pluralization forms detection', () => {
+		it('detecting plural form without Intl rules', () => {
+			expect(getPluralFormName(0)).toBe('zero');
+			expect(getPluralFormName(1)).toBe('one');
+			expect(getPluralFormName(2)).toBe('few');
+			expect(getPluralFormName(5)).toBe('many');
+		});
+
+		it('detecting plural form using Intl rules', () => {
+			expect(getPluralFormName(0, rules)).toBe('other');
+			expect(getPluralFormName(1, rules)).toBe('one');
+			expect(getPluralFormName(2, rules)).toBe('other');
+			expect(getPluralFormName(5, rules)).toBe('other');
+		});
+	});
 
 	describe('text pluralization', () => {
 		it('using pluralization constants to choose the right form', () => {
