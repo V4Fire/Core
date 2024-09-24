@@ -73,7 +73,7 @@ export function i18nFactory(
  *
  * @example
  * ```typescript
- * const example = resolveTemplate('My name is {name}, I live in {city}', {vars: {name: 'John', city: 'Denver'}});
+ * const example = resolveTemplate('My name is {name}, I live in {city}', {name: 'John', city: 'Denver'});
  *
  * console.log(example); // 'My name is John, I live in Denver'
  *
