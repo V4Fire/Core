@@ -94,7 +94,7 @@ describe('core/prelude/i18n', () => {
 	});
 
 	describe('pluralization for cyrillic language', () => {
-		it('russian language', () => {
+		it('russian language with Intl', () => {
 			const
 				cyrillicRules = new Intl.PluralRules('ru'),
 				forms = {
@@ -109,6 +109,22 @@ describe('core/prelude/i18n', () => {
 			expect(resolveTemplate(forms, {count: 0}, {pluralRules: cyrillicRules})).toBe('0 яблок');
 			expect(resolveTemplate(forms, {count: 12}, {pluralRules: cyrillicRules})).toBe('12 яблок');
 			expect(resolveTemplate(forms, {count: 22}, {pluralRules: cyrillicRules})).toBe('22 яблока');
+		});
+
+		it('russian language without Intl', () => {
+			const
+				forms = {
+					one: '{count} яблоко',
+					few: '{count} яблока',
+					many: '{count} яблок',
+					zero: '{count} яблок'
+				};
+
+			expect(resolveTemplate(forms, {count: 1})).toBe('1 яблоко');
+			expect(resolveTemplate(forms, {count: 2})).toBe('2 яблока');
+			expect(resolveTemplate(forms, {count: 0})).toBe('0 яблок');
+			expect(resolveTemplate(forms, {count: 12})).toBe('12 яблок');
+			expect(resolveTemplate(forms, {count: 22})).toBe('22 яблок');
 		});
 	});
 });
