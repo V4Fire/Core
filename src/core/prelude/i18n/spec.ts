@@ -74,14 +74,22 @@ describe('core/prelude/i18n', () => {
 		});
 
 		it('passing the `count` parameter for template resolving', () => {
-			const res = resolveTemplate({
+			const res1 = resolveTemplate({
 				one: 'one {count}',
 				few: 'few {count}',
 				many: 'many {count}',
 				other: 'other {count}'
 			}, {count: 5}, {pluralRules: rules});
 
-			expect(res).toBe('other 5');
+			const res2 = resolveTemplate({
+				one: 'one {count}',
+				few: 'few {count}',
+				many: 'many {count}',
+				other: 'other {count}'
+			}, {count: 1}, {pluralRules: rules});
+
+			expect(res1).toBe('other 5');
+			expect(res2).toBe('one 1');
 		});
 	});
 
