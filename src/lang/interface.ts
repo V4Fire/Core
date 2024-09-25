@@ -12,7 +12,14 @@ export type LangPacs = {
 
 export type Translation = string | PluralTranslation;
 
-export type PluralTranslation = [one: string, some: string, many: string, none: string];
+export interface PluralTranslation {
+	one: string;
+	two?: string;
+	few?: string;
+	many?: string;
+	zero?: string;
+	other?: string;
+}
 
 export type Translations = Dictionary<Translation>;
 

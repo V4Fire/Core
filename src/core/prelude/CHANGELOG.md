@@ -9,6 +9,14 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.101.0 (2024-09-25)
+
+#### :boom: breaking change
+
+* changed `i18n` translations format.
+* added `intl` support for pluralization.
+* now `i18n` prefer to use `intl` api for pluralization if it's possible, otherwise fallback to old plural form logic.
+
 ## v3.99.0 (2024-04-25)
 
 #### :rocket: New Feature
