@@ -74,19 +74,27 @@ describe('core/prelude/i18n', () => {
 		});
 
 		it('passing the `count` parameter for template resolving', () => {
-			const res = resolveTemplate({
+			const res1 = resolveTemplate({
 				one: 'one {count}',
 				few: 'few {count}',
 				many: 'many {count}',
 				other: 'other {count}'
 			}, {count: 5}, {pluralRules: rules});
 
-			expect(res).toBe('other 5');
+			const res2 = resolveTemplate({
+				one: 'one {count}',
+				few: 'few {count}',
+				many: 'many {count}',
+				other: 'other {count}'
+			}, {count: 1}, {pluralRules: rules});
+
+			expect(res1).toBe('other 5');
+			expect(res2).toBe('one 1');
 		});
 	});
 
 	describe('pluralization for cyrillic language', () => {
-		it('russian language', () => {
+		it('russian language with Intl', () => {
 			const
 				cyrillicRules = new Intl.PluralRules('ru'),
 				forms = {
@@ -101,6 +109,22 @@ describe('core/prelude/i18n', () => {
 			expect(resolveTemplate(forms, {count: 0}, {pluralRules: cyrillicRules})).toBe('0 яблок');
 			expect(resolveTemplate(forms, {count: 12}, {pluralRules: cyrillicRules})).toBe('12 яблок');
 			expect(resolveTemplate(forms, {count: 22}, {pluralRules: cyrillicRules})).toBe('22 яблока');
+		});
+
+		it('russian language without Intl', () => {
+			const
+				forms = {
+					one: '{count} яблоко',
+					few: '{count} яблока',
+					many: '{count} яблок',
+					zero: '{count} яблок'
+				};
+
+			expect(resolveTemplate(forms, {count: 1})).toBe('1 яблоко');
+			expect(resolveTemplate(forms, {count: 2})).toBe('2 яблока');
+			expect(resolveTemplate(forms, {count: 0})).toBe('0 яблок');
+			expect(resolveTemplate(forms, {count: 12})).toBe('12 яблок');
+			expect(resolveTemplate(forms, {count: 22})).toBe('22 яблок');
 		});
 	});
 });

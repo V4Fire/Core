@@ -11,6 +11,15 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.46 (2024-09-25)
+
+#### :boom: breaking change
+
+* `core/prelude/i18n/helpers`
+  * changed `i18n` translations format.
+  * added `intl` support for pluralization.
+  * now `i18n` prefer to use `intl` api for pluralization if it's possible, otherwise fallback to old plural form logic.
+
 ## v4.0.0-alpha.45 (2024-09-09)
 
 #### :bug: Bug Fix
