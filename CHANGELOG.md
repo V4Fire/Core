@@ -11,7 +11,7 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.101.0 (2024-09-23)
+## v3.101.0 (2024-09-25)
 
 #### :boom: breaking change
 * `core/prelude/i18n/helpers`
