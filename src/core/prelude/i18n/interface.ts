@@ -41,4 +41,8 @@ export interface LocaleKVStorage {
 	set?: SyncStorage['set'];
 }
 
-export type PluralizationCount = StringPluralizationForms | string | number;
+export type PluralizationCount = StringPluralizationForms | number;
+
+export interface I18nOpts {
+	pluralRules?: Intl.PluralRules;
+}

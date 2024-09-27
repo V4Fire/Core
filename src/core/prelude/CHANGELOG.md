@@ -15,6 +15,15 @@ Changelog
 
 * Added a new method `Array.toArray` `core/prelude/array`
 
+## v4.0.0-alpha.46 (2024-09-25)
+
+#### :boom: breaking change
+
+* `core/prelude/i18n/helpers`
+  * changed `i18n` translations format.
+  * added `intl` support for pluralization.
+  * now `i18n` prefer to use `intl` api for pluralization if it's possible, otherwise fallback to old plural form logic.
+
 ## v4.0.0-alpha.34 (2024-05-06)
 
 #### :rocket: New Feature
