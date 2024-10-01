@@ -5,7 +5,7 @@
   "main": "lib/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "4.0.0-alpha.46",
+  "version": "4.0.0-alpha.47.speedup",
   "author": "kobezzza <kobezzza@gmail.com> (https://github.com/kobezzza)",
   "repository": {
     "type": "git",
