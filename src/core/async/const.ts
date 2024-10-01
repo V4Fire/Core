@@ -6,12 +6,55 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { Namespaces } from 'core/async/interface';
+export enum Namespaces {
+	proxy,
+	promise,
+	iterable,
+	request,
+	idleCallback,
+	timeout,
+	interval,
+	immediate,
+	worker,
+	eventListener,
+	animationFrame,
+	proxyPromise,
+	timeoutPromise,
+	intervalPromise,
+	immediatePromise,
+	idleCallbackPromise,
+	animationFramePromise,
+	eventListenerPromise,
+	length
+}
 
-export const
-	namespaces = Object.convertEnumToDict(Namespaces),
+export const enum PrimitiveNamespaces {
+	proxy,
+	promise,
+	iterable,
+	request,
+	idleCallback,
+	timeout,
+	interval,
+	immediate,
+	worker,
+	eventListener,
+	animationFrame,
+	length
+}
 
-	/** @deprecated */
-	linkNamesDictionary = namespaces;
+export const enum PromiseNamespaces {
+	first = PrimitiveNamespaces.length - 1,
+	proxyPromise,
+	timeoutPromise,
+	intervalPromise,
+	immediatePromise,
+	idleCallbackPromise,
+	animationFramePromise,
+	eventListenerPromise,
+	length
+}
 
-export type NamespacesDictionary = typeof namespaces;
+export const usedNamespaces = new Array(Namespaces.length).fill(false);
+
+export const namespacesCache = new Array(Namespaces.length).fill(null);

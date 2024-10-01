@@ -115,7 +115,7 @@ describe('core/prelude/object/compare/fastHash', () => {
 	});
 
 	it('primitive hashes', () => {
-		expect(Object.fastHash('')).toBe('151798dddd9f7');
+		expect(Object.fastHash('')).toBe('bdcb81aee8d83');
 		expect(Object.fastHash(null)).toBe('15e0da69fcb93a');
 		expect(Object.fastHash(undefined)).toBe('15e0da69fcb93a');
 		expect(Object.fastHash(0)).toBe('b2475ab050fb7');

@@ -7,23 +7,18 @@
  */
 
 import extend from 'core/prelude/extend';
-import { emptyArray } from 'core/prelude/array/const';
 
 /** @see [[Array.union]] */
 extend(Array.prototype, 'union', function union(
 	this: unknown[],
 	...args: Array<Iterable<unknown> | unknown>
 ): unknown[] {
-	const
-		that = this;
+	const that = this;
 
 	function* makeIterator(): Iterable<unknown> {
 		yield* that.values();
 
-		for (let i = 0; i < args.length; i++) {
-			const
-				val = args[i];
-
+		for (const val of args) {
 			if (val == null) {
 				continue;
 			}
@@ -58,43 +53,175 @@ extend(Array, 'concat', (arr: unknown[], ...args: Array<CanArray<unknown>>) => {
 	// Optimization for simple cases
 	switch (args.length) {
 		case 1:
-			return arr.concat(args[0] != null ? args[0] : emptyArray);
+			return arr.concat(args[0] != null ? args[0] : []);
 
 		case 2:
 			return arr.concat(
-				args[0] != null ? args[0] : emptyArray,
-				args[1] != null ? args[1] : emptyArray
+				args[0] != null ? args[0] : [],
+				args[1] != null ? args[1] : []
 			);
 
 		case 3:
 			return arr.concat(
-				args[0] != null ? args[0] : emptyArray,
-				args[1] != null ? args[1] : emptyArray,
-				args[2] != null ? args[2] : emptyArray
+				args[0] != null ? args[0] : [],
+				args[1] != null ? args[1] : [],
+				args[2] != null ? args[2] : []
 			);
 
 		case 4:
 			return arr.concat(
-				args[0] != null ? args[0] : emptyArray,
-				args[1] != null ? args[1] : emptyArray,
-				args[2] != null ? args[2] : emptyArray,
-				args[3] != null ? args[3] : emptyArray
+				args[0] != null ? args[0] : [],
+				args[1] != null ? args[1] : [],
+				args[2] != null ? args[2] : [],
+				args[3] != null ? args[3] : []
 			);
 
 		default: {
-			const
-				filteredArgs = <typeof args>[];
+			const res = <typeof args>[];
 
-			for (let i = 0; i < args.length; i++) {
-				const
-					el = args[i];
+			args.forEach((val) => {
+				if (val != null) {
+					if (Array.isArray(val)) {
+						res.push(...val);
 
-				if (el != null) {
-					filteredArgs.push(el);
+					} else {
+						res.push(val);
+					}
+				}
+			});
+
+			return res;
+		}
+	}
+});
+
+extend(Array, 'toArray', (...args: Array<CanArray<unknown>>) => {
+	// Optimization for simple cases
+	switch (args.length) {
+		case 0:
+			return [];
+
+		case 1:
+			if (args[0] == null) {
+				return [];
+			}
+
+			return Array.isArray(args[0]) ? args[0] : [args[0]];
+
+		case 2: {
+			const res = <typeof args>[];
+
+			if (args[0] != null) {
+				if (Array.isArray(args[0])) {
+					res.push(...args[0]);
+
+				} else {
+					res.push(args[0]);
 				}
 			}
 
-			return arr.concat(...filteredArgs);
+			if (args[1] != null) {
+				if (Array.isArray(args[1])) {
+					res.push(...args[1]);
+
+				} else {
+					res.push(args[1]);
+				}
+			}
+
+			return res;
+		}
+
+		case 3: {
+			const res = <typeof args>[];
+
+			if (args[0] != null) {
+				if (Array.isArray(args[0])) {
+					res.push(...args[0]);
+
+				} else {
+					res.push(args[0]);
+				}
+			}
+
+			if (args[1] != null) {
+				if (Array.isArray(args[1])) {
+					res.push(...args[1]);
+
+				} else {
+					res.push(args[1]);
+				}
+			}
+
+			if (args[2] != null) {
+				if (Array.isArray(args[2])) {
+					res.push(...args[2]);
+
+				} else {
+					res.push(args[2]);
+				}
+			}
+
+			return res;
+		}
+
+		case 4: {
+			const res = <typeof args>[];
+
+			if (args[0] != null) {
+				if (Array.isArray(args[0])) {
+					res.push(...args[0]);
+
+				} else {
+					res.push(args[0]);
+				}
+			}
+
+			if (args[1] != null) {
+				if (Array.isArray(args[1])) {
+					res.push(...args[1]);
+
+				} else {
+					res.push(args[1]);
+				}
+			}
+
+			if (args[2] != null) {
+				if (Array.isArray(args[2])) {
+					res.push(...args[2]);
+
+				} else {
+					res.push(args[2]);
+				}
+			}
+
+			if (args[3] != null) {
+				if (Array.isArray(args[3])) {
+					res.push(...args[3]);
+
+				} else {
+					res.push(args[3]);
+				}
+			}
+
+			return res;
+		}
+
+		default: {
+			const res = <typeof args>[];
+
+			args.forEach((val) => {
+				if (val != null) {
+					if (Array.isArray(val)) {
+						res.push(...val);
+
+					} else {
+						res.push(val);
+					}
+				}
+			});
+
+			return res;
 		}
 	}
 });

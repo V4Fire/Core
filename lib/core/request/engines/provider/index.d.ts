@@ -8,6 +8,7 @@
 import { ExtraProviderConstructor } from '../../../../core/data';
 import type { RequestEngine } from '../../../../core/request/interface';
 import type { MethodsMapping } from '../../../../core/request/engines/provider/interface';
+export * from '../../../../core/request/engines/composition';
 export * from '../../../../core/request/engines/provider/const';
 export * from '../../../../core/request/engines/provider/interface';
 /**

@@ -11,6 +11,24 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-beta.?? (2024-??-??)
+
+#### :boom: Breaking Change
+
+* `core/async`:
+  * Moved code from `V4/Client`
+  * Removed deprecated API and refactored internal structures
+
+#### :rocket: New Feature
+
+* Added a new method `Array.toArray` `core/prelude`
+* Added support for baked symbols `core/symbol`
+
+#### :house: Internal
+
+* Conduct refactoring and optimization of the module `core/async`
+* Various performance optimizations
+
 ## v4.0.0-alpha.46 (2024-09-25)
 
 #### :boom: breaking change

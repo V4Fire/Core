@@ -11,5 +11,5 @@ export * from '../../core/log/config';
  * API for logging
  * @defaultExport
  */
-declare const logger: import("../../core/log/interface").ExtendedLogger;
+declare const logger: import("./interface").ExtendedLogger;
 export default logger;

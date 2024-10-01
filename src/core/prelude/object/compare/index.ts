@@ -18,8 +18,7 @@ extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): bool
 	a = Object.unwrapProxy(a);
 	b = Object.unwrapProxy(b);
 
-	const
-		isEqual = a === b;
+	const isEqual = a === b;
 
 	if (isEqual) {
 		return true;
@@ -128,8 +127,12 @@ extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): bool
 
 /** @see [[ObjectConstructor.fastHash]] */
 extend(Object, 'fastHash', (obj) => {
+	if (Object.isPrimitive(obj)) {
+		return cyrb53(obj == null ? 'null' : String(obj));
+	}
+
 	const res = JSON.stringify(obj, createSerializer(obj, undefined, funcCache));
-	return cyrb53(Object.isTruly(res) ? res : 'null');
+	return cyrb53(res !== '' ? res : 'null');
 
 	/* eslint-disable no-bitwise */
 

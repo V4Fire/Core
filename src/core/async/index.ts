@@ -11,15 +11,11 @@
  * @packageDocumentation
  */
 
-import Super from 'core/async/modules/wrappers';
+import Wrappers from 'core/async/wrappers';
 
 export * from 'core/async/const';
 export * from 'core/async/interface';
-export * from 'core/async/modules/wrappers';
+export * from 'core/async/wrappers';
+export * from 'core/async/helpers';
 
-/**
- * Class to control asynchronous operations
- */
-export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
-
-}
+export default class Async<CTX extends object = Async<any>> extends Wrappers<CTX> {}

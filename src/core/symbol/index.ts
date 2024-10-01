@@ -18,21 +18,21 @@ import { PROXY, READONLY } from 'core/prelude/types/const';
  * @param fields - list of predefined fields (it can be useful to shim the Proxy API)
  */
 export default function generator(fields?: string[]): StrictDictionary<symbol> {
-	const
-		obj = <StrictDictionary<symbol>>Object.createDict();
+	const dict = <StrictDictionary<symbol>>Object.createDict();
 
-	if (typeof Proxy !== 'function') {
-		if (fields) {
-			for (let i = 0; i < fields.length; i++) {
-				const el = fields[i];
-				obj[el] = Symbol(el);
-			}
-		}
-
-		return obj;
+	if (fields != null) {
+		fields.forEach((field) => {
+			Object.defineProperty(dict, field, {
+				value: Symbol(field)
+			});
+		});
 	}
 
-	return new Proxy(obj, {
+	if (typeof Proxy !== 'function') {
+		return dict;
+	}
+
+	Object.setPrototypeOf(dict, new Proxy(Object.createDict(), {
 		get: (target, key) => {
 			if (key === PROXY) {
 				return target;
@@ -56,5 +56,7 @@ export default function generator(fields?: string[]): StrictDictionary<symbol> {
 
 			return Reflect.has(target, key);
 		}
-	});
+	}));
+
+	return dict;
 }

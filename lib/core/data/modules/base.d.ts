@@ -31,7 +31,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
     /**
      * API for asynchronous operations
      */
-    protected readonly async: Async<this>;
+    protected readonly async: Async;
     /**
      * Socket connection
      */
