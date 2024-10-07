@@ -46,3 +46,8 @@ export type PluralizationCount = StringPluralizationForms | number;
 export interface I18nOpts {
 	pluralRules?: Intl.PluralRules;
 }
+
+export interface I18nMeta {
+	language: string;
+	keysets: string;
+}

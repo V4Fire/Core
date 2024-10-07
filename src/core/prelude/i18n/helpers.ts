@@ -11,7 +11,7 @@ import log from 'core/log';
 import langPacs, { Translation, PluralTranslation } from 'lang';
 
 import { locale } from 'core/prelude/i18n/const';
-import type { I18nOpts, PluralizationCount } from 'core/prelude/i18n/interface';
+import type { I18nOpts, PluralizationCount, I18nMeta } from 'core/prelude/i18n/interface';
 
 const
 	logger = log.namespace('i18n');
@@ -50,18 +50,19 @@ export function i18nFactory(
 		const
 			key = Object.isString(value) ? value : value[0],
 			correctKeyset = keysetNames.find((keysetName) => langPacs[resolvedLocale]?.[keysetName]?.[key]),
-			translateValue = langPacs[resolvedLocale]?.[correctKeyset ?? '']?.[key];
+			translateValue = langPacs[resolvedLocale]?.[correctKeyset ?? '']?.[key],
+			meta: I18nMeta = {language: resolvedLocale, keysets: keysetNames.join(', ')};
 
 		if (translateValue != null && translateValue !== '') {
-			return resolveTemplate(translateValue, params, {pluralRules});
+			return resolveTemplate(translateValue, params, {pluralRules}, meta);
 		}
 
 		logger.error(
 			'Translation for the given key is not found',
-			`Key: ${key}, KeysetNames: ${keysetNames.join(', ')}, LocaleName: ${resolvedLocale}, available locales: ${Object.keys(langPacs).join(', ')}`
+			`Key: ${key}, KeysetNames: ${meta.keysets}, LocaleName: ${resolvedLocale}, available locales: ${Object.keys(langPacs).join(', ')}`
 		);
 
-		return resolveTemplate(key, params, {pluralRules});
+		return resolveTemplate(key, params, {pluralRules}, meta);
 	};
 }
 
@@ -70,6 +71,8 @@ export function i18nFactory(
  *
  * @param value - a string for the default case, or an array of strings for the plural case
  * @param params - a dictionary with parameters for internationalization
+ * @params [opts] = I18n options for current translation
+ * @param [meta] - I18n meta information about current translation
  *
  * @example
  * ```typescript
@@ -77,19 +80,19 @@ export function i18nFactory(
  *
  * console.log(example); // 'My name is John, I live in Denver'
  *
- * const examplePluralize = resolveTemplate([
- *  {count} product,  // One
- *  {count} products, // Some
- *  {count} products, // Many
- *  {count} products, // None
- * ], {count: 5});
+ * const examplePluralize = resolveTemplate({
+ *  one: {count} product,
+ *  few: {count} products,
+ *  many: {count} products,
+ *  zero: {count} products,
+ * }, {count: 5});
  *
  * console.log(examplePluralize); // '5 products'
  * ```
  */
-export function resolveTemplate(value: Translation, params?: I18nParams, opts: I18nOpts = {}): string {
+export function resolveTemplate(value: Translation, params?: I18nParams, opts: I18nOpts = {}, meta?: I18nMeta): string {
 	const
-		template = Object.isPlainObject(value) ? pluralizeText(value, params?.count, opts.pluralRules) : value;
+		template = Object.isPlainObject(value) ? pluralizeText(value, params?.count, opts.pluralRules, meta) : value;
 
 	return template.replace(/{([^}]+)}/g, (_, key) => {
 		if (params?.[key] == null) {
@@ -109,12 +112,13 @@ export function resolveTemplate(value: Translation, params?: I18nParams, opts: I
  *
  * @example
  * ```typescript
- * const result = pluralizeText([
- *  {count} product,  // One
- *  {count} products, // Some
- *  {count} products, // Many
- *  {count} products, // None
- * ], 5);
+ * const result = pluralizeText({
+ *  one: {count} product,
+ *  few: {count} products,
+ *  many: {count} products,
+ *  zero: {count} products,
+ *  other: {count} products,
+ * }, 5, new Intl.PluralRulse('en'));
  *
  * console.log(result); // '{count} products'
  * ```
@@ -122,7 +126,8 @@ export function resolveTemplate(value: Translation, params?: I18nParams, opts: I
 export function pluralizeText(
 	pluralTranslation: PluralTranslation,
 	count: CanUndef<PluralizationCount>,
-	rules: CanUndef<Intl.PluralRules>
+	rules: CanUndef<Intl.PluralRules>,
+	meta?: I18nMeta
 ): string {
 	let normalizedCount;
 
@@ -138,7 +143,11 @@ export function pluralizeText(
 	}
 
 	if (normalizedCount == null) {
-		logger.error('Invalid value of the `count` parameter for string pluralization', `String: ${pluralTranslation[0]}`);
+		logger.error(
+			'Invalid value of the `count` parameter for string pluralization',
+			`String: ${pluralTranslation.one}, Keysets: ${meta?.keysets}, Language: ${meta?.language}`
+		);
+
 		normalizedCount = 1;
 	}
 
@@ -147,7 +156,11 @@ export function pluralizeText(
 		translation = pluralTranslation[pluralFormName];
 
 	if (translation == null) {
-		logger.error(`Plural form ${pluralFormName} doesn't exist.`, `String: ${pluralTranslation[0]}`);
+		logger.error(
+			'Invalid value of the `count` parameter for string pluralization',
+			`String: ${pluralTranslation.one}, Keysets: ${meta?.keysets}, Language: ${meta?.language}`
+		);
+
 		return pluralTranslation.one;
 	}
 
