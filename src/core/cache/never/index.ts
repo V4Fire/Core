@@ -21,7 +21,7 @@ export * from 'core/cache/interface';
 /**
  * Loopback class for a cache data structure
  */
-export default class NeverCache<V = any, K = any> implements Cache<V, K> {
+export default class NeverCache<K = any, V = any> implements Cache<K, V> {
 	/** @see [[Cache.size]] */
 	get size(): number {
 		return this.storage.size;
@@ -74,5 +74,10 @@ export default class NeverCache<V = any, K = any> implements Cache<V, K> {
 	/** @see [[Cache.clear]] */
 	clear(filter?: ClearFilter<V, K>): Map<K, V> {
 		return new Map();
+	}
+
+	/** @see [[Cache.clone]] */
+	clone(): NeverCache<K, V> {
+		return new NeverCache<K, V>();
 	}
 }

@@ -21,7 +21,7 @@ export * from 'core/cache/simple';
  * @typeparam V - value type
  * @typeparam K - key type (`string` by default)
  */
-export default class RestrictedCache<V = unknown, K = string> extends SimpleCache<V, K> {
+export default class RestrictedCache<K = unknown, V = unknown> extends SimpleCache<K, V> {
 	/**
 	 * Queue object
 	 */
@@ -90,6 +90,16 @@ export default class RestrictedCache<V = unknown, K = string> extends SimpleCach
 		}
 
 		return removed;
+	}
+
+	override clone(): RestrictedCache<K, V> {
+		const
+			newCache = new RestrictedCache<K, V>(this.capacity),
+			mixin = {queue: new Set(this.queue), storage: new Map(this.storage)};
+
+		Object.assign(newCache, mixin);
+
+		return newCache;
 	}
 
 	/**

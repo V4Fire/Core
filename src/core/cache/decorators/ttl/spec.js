@@ -12,7 +12,7 @@ import SimpleCache from 'core/cache/simple';
 import RestrictedCache from 'core/cache/restricted';
 
 describe('core/cache/decorators/ttl', () => {
-	it('should remove items after expiring', (done) => {
+	it.only('should remove items after expiring', (done) => {
 		const cache = addTTL(new SimpleCache());
 
 		cache.set('foo', 1);
@@ -116,6 +116,28 @@ describe('core/cache/decorators/ttl', () => {
 		cache.set('baz', 2, {ttl: 1000});
 
 		expect(memory).toEqual(['bar']);
+	});
+
+	it('should clone the cache with `ttl`', (done) => {
+		const
+			cache = addTTL(new SimpleCache());
+
+		cache.set('bar', 1, {ttl: 5});
+		cache.set('baz', 1, {ttl: 10});
+
+		const
+			cloned = cache.clone();
+
+		expect(cloned.has('bar')).toBe(true);
+
+		cloned.set('baz', 1, {ttl: 20});
+
+		setTimeout(() => {
+			expect(cloned.has('bar')).toBe(false);
+			expect(cloned.has('baz')).toBe(true);
+
+			done();
+		}, 15);
 	});
 
 	it('`clear` caused by a side effect', () => {

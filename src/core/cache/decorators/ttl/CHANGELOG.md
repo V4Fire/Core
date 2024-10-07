@@ -9,6 +9,20 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.? (2022-0?-??)
+
+#### :bug: Bug Fix
+
+* Fixed type inference
+
+####  :boom: Breaking Change
+
+* Change type parameters from `<V, K>` to `<K, V>`
+
+####  :rocket: New Feature
+
+* Added a new method `clone` processing
+
 ## v3.47.0 (2021-05-17)
 
 #### :bug: Bug Fix

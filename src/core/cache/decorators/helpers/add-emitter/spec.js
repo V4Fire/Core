@@ -19,6 +19,7 @@ describe('core/cache/decorators/helpers/add-emitter', () => {
 				this.remove = () => null;
 				this.set = () => null;
 				this.clear = () => null;
+				this.clone = () => null;
 			}
 
 			const
@@ -144,6 +145,26 @@ describe('core/cache/decorators/helpers/add-emitter', () => {
 			expect(memory[0]).toEqual([cache, {args: ['foo', 1, {ttl: 100, cacheTTL: 200}], result: 1}]);
 
 			set('bar', 2);
+			expect(memory[1]).toEqual(undefined);
+		});
+	});
+
+	describe('clone', () => {
+		it('clones a cache', () => {
+			const
+				cache = new SimpleCache(),
+				{clone} = addEmitter(cache);
+
+			const memory = [];
+
+			cache[eventEmitter].on('clone', (...args) => {
+				memory.push(args);
+			});
+
+			cache.clone();
+			expect(memory[0]).toEqual([cache, {result: new SimpleCache()}]);
+
+			clone();
 			expect(memory[1]).toEqual(undefined);
 		});
 	});
