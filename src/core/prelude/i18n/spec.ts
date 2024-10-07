@@ -56,6 +56,17 @@ describe('core/prelude/i18n', () => {
 				expect(pluralizeText(input.forms, input.count[index], rules)).toBe(form);
 			});
 		});
+
+		it('return one form if correct form does not exists', () => {
+			const input = {
+				forms,
+				count: [1, 2, 100, 0]
+			};
+
+			[forms.one, forms.one, forms.one, forms.one].forEach((form, index) => {
+				expect(pluralizeText({one: input.forms.one}, input.count[index], rules)).toBe(form);
+			});
+		});
 	});
 
 	describe('substitution of variables and pluralization forms in a template', () => {
