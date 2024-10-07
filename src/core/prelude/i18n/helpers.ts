@@ -12,7 +12,7 @@ import extend from 'core/prelude/extend';
 import langPacs, { Translation, PluralTranslation } from 'lang';
 
 import { locale } from 'core/prelude/i18n/const';
-import type { I18nOpts, PluralizationCount, I18nMeta } from 'core/prelude/i18n/interface';
+import type { I18nOpts, I18nMeta, I18nPluralizationParams } from 'core/prelude/i18n/interface';
 
 /** @see [[i18n]] */
 extend(globalThis, 'i18n', i18nFactory);
@@ -58,7 +58,7 @@ export function i18nFactory(
 			meta: I18nMeta = {language: resolvedLocale, keyset: correctKeyset, key};
 
 		if (translateValue != null && translateValue !== '') {
-			return resolveTemplate(translateValue, params, {pluralRules}, meta);
+			return resolveTemplate(translateValue, {params, pluralRules}, meta);
 		}
 
 		logger.error(
@@ -66,7 +66,7 @@ export function i18nFactory(
 			`Key: ${key}, KeysetNames: ${keysetNames.join(', ')}, LocaleName: ${resolvedLocale}, available locales: ${Object.keys(langPacs).join(', ')}`
 		);
 
-		return resolveTemplate(key, params, {pluralRules}, meta);
+		return resolveTemplate(key, {params, pluralRules}, meta);
 	};
 }
 
@@ -74,13 +74,15 @@ export function i18nFactory(
  * Returns the form for plural sentences and resolves variables from the passed template
  *
  * @param value - a string for the default case, or an array of strings for the plural case
- * @param params - a dictionary with parameters for internationalization
- * @params [opts] = I18n options for current translation
+ * @params [opts] = I18n options for current translation. Plural rules, variables, e.t.c
  * @param [meta] - I18n meta information about current translation
  *
  * @example
  * ```typescript
- * const example = resolveTemplate('My name is {name}, I live in {city}', {name: 'John', city: 'Denver'});
+ * const example = resolveTemplate(
+ *  'My name is {name}, I live in {city}',
+ *  {params: {name: 'John', city: 'Denver'}
+ * });
  *
  * console.log(example); // 'My name is John, I live in Denver'
  *
@@ -89,14 +91,15 @@ export function i18nFactory(
  *  few: {count} products,
  *  many: {count} products,
  *  zero: {count} products,
- * }, {count: 5});
+ * }, {params: {count: 5}});
  *
  * console.log(examplePluralize); // '5 products'
  * ```
  */
-export function resolveTemplate(value: Translation, params?: I18nParams, opts: I18nOpts = {}, meta?: I18nMeta): string {
+export function resolveTemplate(value: Translation, opts: I18nOpts = {}, meta?: I18nMeta): string {
 	const
-		template = Object.isPlainObject(value) ? pluralizeText(value, params?.count, opts.pluralRules, meta) : value;
+		{params, pluralRules: rules} = opts,
+		template = Object.isPlainObject(value) ? pluralizeText(value, {count: params?.count, rules}, meta) : value;
 
 	return template.replace(/{([^}]+)}/g, (_, key) => {
 		if (params?.[key] == null) {
@@ -112,29 +115,29 @@ export function resolveTemplate(value: Translation, params?: I18nParams, opts: I
  * Returns the correct plural form to translate based on the given count
  *
  * @param pluralTranslation - list of translation variants
- * @param count - the value on the basis of which the form of pluralization will be selected
- * @param rules - Intl plural rules for selected locale
+ * @param params - Pluralization params for current text. Plural rules, count, e.t.c.
  * @param [meta] - I18n meta information about current translation
  *
  * @example
  * ```typescript
  * const result = pluralizeText({
- *  one: {count} product,
- *  few: {count} products,
- *  many: {count} products,
- *  zero: {count} products,
- *  other: {count} products,
- * }, 5, new Intl.PluralRulse('en'));
+ *   one: {count} product,
+ *   few: {count} products,
+ *   many: {count} products,
+ *   zero: {count} products,
+ *   other: {count} products,
+ * }, {count: 5, rules: new Intl.PluralRulse('en')});
  *
  * console.log(result); // '{count} products'
  * ```
  */
 export function pluralizeText(
 	pluralTranslation: PluralTranslation,
-	count: CanUndef<PluralizationCount>,
-	rules: CanUndef<Intl.PluralRules>,
+	params: I18nPluralizationParams,
 	meta?: I18nMeta
 ): string {
+	const {count, rules} = params;
+
 	let normalizedCount;
 
 	if (Object.isNumber(count)) {
