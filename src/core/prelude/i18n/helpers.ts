@@ -100,7 +100,7 @@ export function resolveTemplate(value: Translation, params?: I18nParams, opts: I
 
 	return template.replace(/{([^}]+)}/g, (_, key) => {
 		if (params?.[key] == null) {
-			logger.error('Undeclared variable', `Name: "${key}", Template: "${template}"`);
+			logger.error('Undeclared variable', `Name: "${key}", Template: "${template}", Keysets: "${meta?.keysets}", Language: "${meta?.language}"`);
 			return key;
 		}
 
@@ -151,7 +151,7 @@ export function pluralizeText(
 	if (normalizedCount == null) {
 		logger.error(
 			'Invalid value of the `count` parameter for string pluralization',
-			`String: ${pluralTranslation[0]}, keysets: ${meta?.keysets}, language: ${meta?.language}`
+			`String: ${pluralTranslation[0]}, Keysets: ${meta?.keysets}, Language: ${meta?.language}`
 		);
 
 		normalizedCount = 1;
@@ -164,7 +164,7 @@ export function pluralizeText(
 	if (translation == null) {
 		logger.error(
 			`Plural form ${pluralFormName} doesn't exist.`,
-			`String: ${pluralTranslation[0]}, keysets: ${meta?.keysets}, language: ${meta?.language}`
+			`String: ${pluralTranslation[0]}, Keysets: ${meta?.keysets}, Language: ${meta?.language}`
 		);
 
 		return pluralTranslation.one;
