@@ -151,7 +151,7 @@ export function pluralizeText(
 	if (normalizedCount == null) {
 		logger.error(
 			'Invalid value of the `count` parameter for string pluralization',
-			`String: ${pluralTranslation[0]}, Keysets: ${meta?.keysets}, Language: ${meta?.language}`
+			`String: ${pluralTranslation.one}, Keysets: ${meta?.keysets}, Language: ${meta?.language}`
 		);
 
 		normalizedCount = 1;
@@ -164,7 +164,7 @@ export function pluralizeText(
 	if (translation == null) {
 		logger.error(
 			`Plural form ${pluralFormName} doesn't exist.`,
-			`String: ${pluralTranslation[0]}, Keysets: ${meta?.keysets}, Language: ${meta?.language}`
+			`String: ${pluralTranslation.one}, Keysets: ${meta?.keysets}, Language: ${meta?.language}`
 		);
 
 		return pluralTranslation.one;
