@@ -49,5 +49,6 @@ export interface I18nOpts {
 
 export interface I18nMeta {
 	language: string;
-	keysets: string;
+	key: string;
+	keyset?: string;
 }

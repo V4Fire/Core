@@ -51,7 +51,7 @@ export function i18nFactory(
 			key = Object.isString(value) ? value : value[0],
 			correctKeyset = keysetNames.find((keysetName) => langPacs[resolvedLocale]?.[keysetName]?.[key]),
 			translateValue = langPacs[resolvedLocale]?.[correctKeyset ?? '']?.[key],
-			meta: I18nMeta = {language: resolvedLocale, keysets: keysetNames.join(', ')};
+			meta: I18nMeta = {language: resolvedLocale, keyset: correctKeyset, key};
 
 		if (translateValue != null && translateValue !== '') {
 			return resolveTemplate(translateValue, params, {pluralRules}, meta);
@@ -59,7 +59,7 @@ export function i18nFactory(
 
 		logger.error(
 			'Translation for the given key is not found',
-			`Key: ${key}, KeysetNames: ${meta.keysets}, LocaleName: ${resolvedLocale}, available locales: ${Object.keys(langPacs).join(', ')}`
+			`Key: ${key}, KeysetNames: ${keysetNames.join(', ')}, LocaleName: ${resolvedLocale}, available locales: ${Object.keys(langPacs).join(', ')}`
 		);
 
 		return resolveTemplate(key, params, {pluralRules}, meta);
@@ -145,7 +145,7 @@ export function pluralizeText(
 	if (normalizedCount == null) {
 		logger.error(
 			'Invalid value of the `count` parameter for string pluralization',
-			`String: ${pluralTranslation.one}, Keysets: ${meta?.keysets}, Language: ${meta?.language}`
+			`Count: ${count}, Key: ${meta?.key}, Language: ${meta?.language}, Keyset: ${meta?.keyset}`
 		);
 
 		normalizedCount = 1;
@@ -157,8 +157,8 @@ export function pluralizeText(
 
 	if (translation == null) {
 		logger.error(
-			'Invalid value of the `count` parameter for string pluralization',
-			`String: ${pluralTranslation.one}, Keysets: ${meta?.keysets}, Language: ${meta?.language}`
+			`Plural form ${pluralFormName} doesn't exist.`,
+			`Key: ${meta?.key}, Language: ${meta?.language}, Keyset: ${meta?.keyset}`
 		);
 
 		return pluralTranslation.one;
