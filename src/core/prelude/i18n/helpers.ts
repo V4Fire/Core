@@ -58,7 +58,7 @@ export function i18nFactory(
 			meta: I18nMeta = {language: resolvedLocale, keyset: correctKeyset, key};
 
 		if (translateValue != null && translateValue !== '') {
-			return resolveTemplate(translateValue, params, {pluralRules}, meta);
+			return resolveTemplate(translateValue, params, {pluralRules, meta});
 		}
 
 		logger.error(
@@ -66,7 +66,7 @@ export function i18nFactory(
 			`Key: ${key}, KeysetNames: ${keysetNames.join(', ')}, LocaleName: ${resolvedLocale}, available locales: ${Object.keys(langPacs).join(', ')}`
 		);
 
-		return resolveTemplate(key, params, {pluralRules}, meta);
+		return resolveTemplate(key, params, {pluralRules, meta});
 	};
 }
 
@@ -75,8 +75,7 @@ export function i18nFactory(
  *
  * @param value - a string for the default case, or an array of strings for the plural case
  * @param params - a dictionary with parameters for internationalization
- * @params [opts] = I18n options for current translation
- * @param [meta] - I18n meta information about current translation
+ * @params [opts] - additional options for current translation
  *
  * @example
  * ```typescript
@@ -94,9 +93,9 @@ export function i18nFactory(
  * console.log(examplePluralize); // '5 products'
  * ```
  */
-export function resolveTemplate(value: Translation, params?: I18nParams, opts: I18nOpts = {}, meta?: I18nMeta): string {
+export function resolveTemplate(value: Translation, params?: I18nParams, opts: I18nOpts = {}): string {
 	const
-		template = Object.isPlainObject(value) ? pluralizeText(value, params?.count, opts.pluralRules, meta) : value;
+		template = Object.isPlainObject(value) ? pluralizeText(value, params?.count, opts) : value;
 
 	return template.replace(/{([^}]+)}/g, (_, key) => {
 		if (params?.[key] == null) {
@@ -113,8 +112,7 @@ export function resolveTemplate(value: Translation, params?: I18nParams, opts: I
  *
  * @param pluralTranslation - list of translation variants
  * @param count - the value on the basis of which the form of pluralization will be selected
- * @param rules - Intl plural rules for selected locale
- * @param [meta] - I18n meta information about current translation
+ * @params [opts] - additional options for current translation
  *
  * @example
  * ```typescript
@@ -124,7 +122,7 @@ export function resolveTemplate(value: Translation, params?: I18nParams, opts: I
  *  many: {count} products,
  *  zero: {count} products,
  *  other: {count} products,
- * }, 5, new Intl.PluralRulse('en'));
+ * }, 5, {pluralRules: new Intl.PluralRulse('en')});
  *
  * console.log(result); // '{count} products'
  * ```
@@ -132,9 +130,10 @@ export function resolveTemplate(value: Translation, params?: I18nParams, opts: I
 export function pluralizeText(
 	pluralTranslation: PluralTranslation,
 	count: CanUndef<PluralizationCount>,
-	rules: CanUndef<Intl.PluralRules>,
-	meta?: I18nMeta
+	opts: I18nOpts = {}
 ): string {
+	const {pluralRules, meta} = opts;
+
 	let normalizedCount;
 
 	if (Object.isNumber(count)) {
@@ -158,7 +157,7 @@ export function pluralizeText(
 	}
 
 	const
-		pluralFormName = getPluralFormName(normalizedCount, rules),
+		pluralFormName = getPluralFormName(normalizedCount, pluralRules),
 		translation = pluralTranslation[pluralFormName];
 
 	if (translation == null) {
