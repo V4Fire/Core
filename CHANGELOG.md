@@ -19,14 +19,6 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
   * Fix logging bug in `pluralizeText`.
   * Add logging info in i18n helpers.
 
-## v4.0.0-alpha.48.speedup (2024-10-07)
-
-#### :bug: Bug Fix
-
-* `core/prelude/i18n/helpers`
-  * Fix logging bug in `pluralizeText`.
-  * Add logging info in i18n helpers.
-
 ## v4.0.0-alpha.47.speedup (2024-10-01)
 
 #### :boom: Breaking Change
