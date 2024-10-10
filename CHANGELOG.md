@@ -11,9 +11,18 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.101.1 (2024-10-07)
+
+#### :bug: Bug Fix
+
+* `core/prelude/i18n/helpers`
+  * Fix logging bug in `pluralizeText`.
+  * Add logging info in i18n helpers.
+
 ## v3.101.0 (2024-09-25)
 
-#### :boom: breaking change
+#### :boom: Breaking Change
+
 * `core/prelude/i18n/helpers`
   * changed `i18n` translations format.
   * added `intl` support for pluralization.
