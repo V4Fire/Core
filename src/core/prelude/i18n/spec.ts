@@ -67,6 +67,16 @@ describe('core/prelude/i18n', () => {
 				expect(pluralizeText({one: input.forms.one}, input.count[index], {pluralRules: rules})).toBe(form);
 			});
 		});
+
+		it('return one form if incorrect count was passed', () => {
+			const input = {
+				forms
+			};
+
+			[forms.one, forms.one, forms.one, forms.one].forEach((form) => {
+				expect(pluralizeText({one: input.forms.one}, undefined, {pluralRules: rules})).toBe(form);
+			});
+		});
 	});
 
 	describe('substitution of variables and pluralization forms in a template', () => {
