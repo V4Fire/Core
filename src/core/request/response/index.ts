@@ -664,7 +664,7 @@ export default class Response<
 	@once
 	arrayBuffer(): AbortablePromise<ArrayBuffer> {
 		return this.readBody().then((body) => {
-			if (body == null ||  body === '') {
+			if (body == null || body === '') {
 				return new ArrayBuffer(0);
 			}
 

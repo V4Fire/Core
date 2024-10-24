@@ -15,5 +15,5 @@ describe('core/request/response', () => {
 		});
 
 		await expect(response.decode()).resolves.toBeInstanceOf(ArrayBuffer);
-	})
-})
+	});
+});
