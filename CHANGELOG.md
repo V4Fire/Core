@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.?? (2024-??-??)
+
+#### :bug: Bug Fix
+
+* Fixed an issue when receiving an empty string with the `Content-Type: application/octet-stream` header `core/request/response`
+
 ## v4.0.0-alpha.47.speedup (2024-10-01)
 
 #### :boom: Breaking Change
