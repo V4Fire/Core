@@ -9,7 +9,7 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v4.0.0-alpha.??.speedup (2024-10-??)
+## v4.0.0-alpha.?? (2024-10-??)
 
 #### :bug: Bug Fix
 

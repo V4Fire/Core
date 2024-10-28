@@ -57,7 +57,7 @@ describe('core/prelude/i18n', () => {
 			});
 		});
 
-		it('return one form if correct form does not exists', () => {
+		it('returns "one" form when required plural form is missing', () => {
 			const input = {
 				forms,
 				count: [1, 2, 100, 0]
