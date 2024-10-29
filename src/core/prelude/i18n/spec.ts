@@ -68,7 +68,7 @@ describe('core/prelude/i18n', () => {
 			});
 		});
 
-		it('return one form if incorrect count was passed', () => {
+		it('returns "one" form when count is invalid', () => {
 			const input = {
 				forms
 			};
