@@ -42,7 +42,7 @@ describe('core/prelude/i18n', () => {
 	describe('text pluralization', () => {
 		it('using pluralization constants to choose the right form', () => {
 			formNames.forEach((form) => {
-				expect(pluralizeText(forms, form, rules)).toBe(forms[form]);
+				expect(pluralizeText(forms, form, {pluralRules: rules})).toBe(forms[form]);
 			});
 		});
 
@@ -53,7 +53,28 @@ describe('core/prelude/i18n', () => {
 			};
 
 			[forms.one, forms.other, forms.other, forms.other].forEach((form, index) => {
-				expect(pluralizeText(input.forms, input.count[index], rules)).toBe(form);
+				expect(pluralizeText(input.forms, input.count[index], {pluralRules: rules})).toBe(form);
+			});
+		});
+
+		it('returns "one" form when required plural form is missing', () => {
+			const input = {
+				forms,
+				count: [1, 2, 100, 0]
+			};
+
+			[forms.one, forms.one, forms.one, forms.one].forEach((form, index) => {
+				expect(pluralizeText({one: input.forms.one}, input.count[index], {pluralRules: rules})).toBe(form);
+			});
+		});
+
+		it('returns "one" form when count is invalid', () => {
+			const input = {
+				forms
+			};
+
+			[forms.one, forms.one, forms.one, forms.one].forEach((form) => {
+				expect(pluralizeText({one: input.forms.one}, undefined, {pluralRules: rules})).toBe(form);
 			});
 		});
 	});

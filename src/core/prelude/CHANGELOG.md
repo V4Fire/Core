@@ -9,6 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.49 (2024-10-31)
+
+#### :bug: Bug Fix
+
+* Fix logging bug in `pluralizeText`.
+* Add logging info in i18n helpers.
+
 ## v4.0.0-alpha.47.speedup (2024-10-01)
 
 #### :rocket: New Feature

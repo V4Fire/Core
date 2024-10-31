@@ -89,30 +89,32 @@ i18n('my-component')('My name is {name}', {name: 'John'});
 ## Pluralization of translations
 
 Some keys may have multiple translations depending on some numeric value. For example, "1 apple" or "5 apples".
-To specify such translations, a special macro `{count}` is used, and translations are specified as a tuple `[one, some, many, none]`.
+To specify such translations, a special macro `{count}` is used, and translations are specified as a dictionary `{zero, one, two, few, many, other}`.
 
 ```js
 export default {
   ru: {
     "my-component": {
       "time": "время",
-      "{count} product": [
-        "{count} продукт",
-        "{count} продукта",
-        "{count} продуктов",
-        "{count} продуктов"
-      ]
+      "{count} product": {
+        "one": "{count} product",
+        "few": "{count} products",
+        "many": "{count} products",
+        "zero": "{count} products",
+        "other": "{count} products",
+      }
     }
   },
 
   en: {
     "my-component": {
-      "{count} product": [
-        "{count} product",
-        "{count} products",
-        "{count} products",
-        "{count} products"
-      ]
+      "{count} product": {
+        "one": "{count} product",
+        "few": "{count} products",
+        "many": "{count} products",
+        "zero": "{count} products",
+        "other": "{count} products",
+      }
     }
   }
 };
