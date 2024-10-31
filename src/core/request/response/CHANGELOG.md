@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.48 (2024-10-30)
+
+#### :bug: Bug Fix
+
+* Fixed an issue when receiving an empty string with the `Content-Type: application/octet-stream` header
+
 ## v3.93.0 (2023-03-14)
 
 #### :rocket: New Feature

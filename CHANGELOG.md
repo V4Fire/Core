@@ -11,13 +11,19 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v4.0.0-alpha.48 (2024-10-??)
+## v4.0.0-alpha.49 (2024-10-31)
 
 #### :bug: Bug Fix
 
 * `core/prelude/i18n/helpers`
   * Fix logging bug in `pluralizeText`.
   * Add logging info in i18n helpers.
+
+## v4.0.0-alpha.48 (2024-10-30)
+
+#### :bug: Bug Fix
+
+* Fixed an issue when receiving an empty string with the `Content-Type: application/octet-stream` header `core/request/response`
 
 ## v4.0.0-alpha.47.speedup (2024-10-01)
 
