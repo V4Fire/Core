@@ -718,6 +718,7 @@ export interface RequestOptions {
 
 	readonly important?: boolean;
 	readonly credentials?: boolean | RequestCredentials;
+	readonly redirect?: RequestRedirect;
 }
 
 /**

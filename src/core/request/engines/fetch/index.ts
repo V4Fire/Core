@@ -57,10 +57,18 @@ const request: RequestEngine = (params) => {
 		credentials = 'include';
 	}
 
+	let
+		redirect: RequestRedirect = 'follow';
+
+	if (Object.isString(p.redirect)) {
+		redirect = p.redirect;
+	}
+
 	const fetchOpts: RequestInit = {
 		body,
 		headers,
 		credentials,
+		redirect,
 		method: p.method,
 		signal: abortController.signal
 	};
