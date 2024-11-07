@@ -9,7 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-_Note: Gaps between patch versions are faulty, broken or test releases._
+_Note: Gaps between patch versions are faulty, broken or test releases.
+
+## v?.??.? (????-??-??)
+
+#### :rocket: New Feature 
+
+* Added support for `redirect` option `core/request/engines/fetch`
 
 ## v4.0.0-alpha.49 (2024-10-31)
 
