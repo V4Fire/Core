@@ -13,10 +13,10 @@
 
 import Async from 'core/async';
 import type { Provider } from 'core/data';
-import statusCodes from 'core/status-codes';
+import statusCodes, { StatusCodes } from 'core/status-codes';
 import AbortablePromise from 'core/promise/abortable';
 import { SyncPromise } from 'core/prelude/structures';
-import { RequestOptions, Response, MiddlewareParams, RequestResponseObject } from 'core/request';
+import { RequestOptions, Response, MiddlewareParams, RequestResponseObject, ResponseOptions } from 'core/request';
 
 import type {
 
@@ -24,11 +24,13 @@ import type {
 	CompositionEngineOpts,
 	CompositionRequestEngine,
 	CompositionRequest,
-	CompositionRequestOptions
+	CompositionRequestOptions,
+	GatheredRequestsData
 
 } from 'core/request/engines/composition/interface';
 
 import { compositionEngineSpreadResult } from 'core/request/engines/composition/const';
+import { RawHeaders } from 'core/request/headers';
 
 export * from 'core/request/engines/composition/const';
 export * from 'core/request/engines/composition/interface';
@@ -80,7 +82,6 @@ export function compositionEngine(
 
 					return r.request(options)
 						.then(boundRequest.bind(null, async))
-						.then((request) => isRequestResponseObject(request) ? request.data : request)
 						.catch((err) => {
 							if (r.failCompositionOnError) {
 								throw err;
@@ -88,13 +89,14 @@ export function compositionEngine(
 						});
 				}));
 
-			gatherDataFromRequests(promises, options).then((data) => {
+			gatherDataFromRequests(promises, options).then(({data, status, headers}) => {
 				resolve(new Response(data, {
 					parent: requestOptions.parent,
 					important: requestOptions.important,
 					responseType: 'object',
 					okStatuses: requestOptions.okStatuses,
-					status: statusCodes.OK,
+					status,
+					headers,
 					decoder: requestOptions.decoders,
 					noContentStatuses: requestOptions.noContentStatuses
 				}));
@@ -153,10 +155,14 @@ function boundRequest<T extends unknown>(
  * @param options - Options related to composition requests.
  */
 async function gatherDataFromRequests(
-	promises: Array<Promise<unknown>>,
+	promises: Array<Promise<RequestResponseObject | unknown>>,
 	options: CompositionRequestOptions
-): Promise<Dictionary> {
-	const accumulator = {};
+): Promise<GatheredRequestsData> {
+	const accumulator = {
+		data: {},
+		status: StatusCodes.OK,
+		headers: {}
+	};
 
 	if (options.engineOptions?.aggregateErrors) {
 		await Promise.allSettled(promises)
@@ -198,18 +204,35 @@ async function gatherDataFromRequests(
  * @param compositionRequest
  */
 function accumulateData(
-	accumulator: Dictionary,
-	data: unknown,
+	accumulator: GatheredRequestsData,
+	responseOrData: RequestResponseObject | unknown,
 	compositionRequest: CompositionRequest
-): Dictionary {
+): GatheredRequestsData {
 	const
 		{as} = compositionRequest;
 
+	let
+		data: unknown = {},
+		{status, headers} = accumulator;
+
+	if (isRequestResponseObject(responseOrData)) {
+		data = responseOrData.data;
+		status = responseOrData.response.status;
+		headers = responseOrData.response.headers;
+	} else {
+		data = responseOrData;
+	}
+
 	if (as === compositionEngineSpreadResult) {
-		Object.assign(accumulator, data);
+		Object.assign(accumulator.data, data);
 
 	} else {
-		Object.set(accumulator, as, data);
+		Object.set(accumulator.data, as, data);
+	}
+
+	if (compositionRequest.propagateStatusAndHeaders === true) {
+		accumulator.status = status;
+		accumulator.headers = headers;
 	}
 
 	return accumulator;
