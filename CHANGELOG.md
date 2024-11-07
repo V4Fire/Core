@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v?.??.? (????-??-??)
+
+#### :rocket: New Feature 
+
+* Added support for `redirect` option `core/request/engines/fetch`
+
 ## v4.0.0-alpha.43 (2024-07-29)
 
 #### :house: Internal
