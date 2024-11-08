@@ -16,7 +16,7 @@ import type { Provider } from 'core/data';
 import statusCodes from 'core/status-codes';
 import AbortablePromise from 'core/promise/abortable';
 import { SyncPromise } from 'core/prelude/structures';
-import { RequestOptions, Response, MiddlewareParams, RequestResponseObject, ResponseOptions } from 'core/request';
+import { RequestOptions, Response, MiddlewareParams, RequestResponseObject } from 'core/request';
 
 import type {
 
@@ -30,7 +30,6 @@ import type {
 } from 'core/request/engines/composition/interface';
 
 import { compositionEngineSpreadResult } from 'core/request/engines/composition/const';
-import { RawHeaders } from 'core/request/headers';
 
 export * from 'core/request/engines/composition/const';
 export * from 'core/request/engines/composition/interface';
@@ -77,15 +76,37 @@ export function compositionEngine(
 			const promises = compositionRequests.map((r) => SyncPromise.resolve(r.requestFilter?.(options))
 				.then((filterValue) => {
 					if (filterValue === false) {
-						return;
+						return Promise.resolve(
+							{data: {}, headers: {}, status: statusCodes.NO_CONTENT}
+						);
 					}
 
 					return r.request(options)
 						.then(boundRequest.bind(null, async))
+						.then(
+							(request) => isRequestResponseObject(request) ?
+								({
+									data: request.data,
+									headers: request.response.headers,
+									status: request.response.status
+								}) : ({
+									data: request,
+									headers: {},
+									status: statusCodes.OK
+								})
+						)
 						.catch((err) => {
 							if (r.failCompositionOnError) {
 								throw err;
 							}
+
+							const details = err.details.deref()!;
+
+							return {
+								data: {},
+								status: details.response.status,
+								headers: details.response.headers
+							};
 						});
 				}));
 
@@ -155,7 +176,7 @@ function boundRequest<T extends unknown>(
  * @param options - Options related to composition requests.
  */
 async function gatherDataFromRequests(
-	promises: Array<Promise<RequestResponseObject | unknown>>,
+	promises: Array<Promise<GatheredRequestsData>>,
 	options: CompositionRequestOptions
 ): Promise<GatheredRequestsData> {
 	const accumulator = {
@@ -197,31 +218,20 @@ async function gatherDataFromRequests(
 }
 
 /**
- * Accumulates data into an accumulator object based on the composition request.
+ * Accumulates new data into an accumulator object based on the composition request.
  *
  * @param accumulator
- * @param data
+ * @param newData
  * @param compositionRequest
  */
 function accumulateData(
 	accumulator: GatheredRequestsData,
-	responseOrData: RequestResponseObject | unknown,
+	newData: GatheredRequestsData,
 	compositionRequest: CompositionRequest
 ): GatheredRequestsData {
 	const
-		{as} = compositionRequest;
-
-	let
-		data: unknown = {},
-		{status, headers} = accumulator;
-
-	if (isRequestResponseObject(responseOrData)) {
-		data = responseOrData.data;
-		status = responseOrData.response.status;
-		headers = responseOrData.response.headers;
-	} else {
-		data = responseOrData;
-	}
+		{as} = compositionRequest,
+		{status, headers, data} = newData;
 
 	if (as === compositionEngineSpreadResult) {
 		Object.assign(accumulator.data, data);
