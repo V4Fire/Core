@@ -177,7 +177,7 @@ export interface CompositionRequestEngine extends RequestEngine {
 }
 
 export interface GatheredRequestsData {
-	data: Dictionary;
-	headers: RawHeaders;
-	status: StatusCodes;
+	data?: Dictionary;
+	headers?: RawHeaders;
+	status?: StatusCodes;
 }
