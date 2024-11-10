@@ -84,13 +84,13 @@ export function compositionEngine(
 					return r.request(options)
 						.then(boundRequest.bind(null, async))
 						.then(
-							(request) => isRequestResponseObject(request) ?
+							async (request) => isRequestResponseObject(request) ?
 								({
-									data: request.data,
+									data: await request.data,
 									headers: request.response.headers,
 									status: request.response.status
 								}) : ({
-									data: request,
+									data: await request,
 									headers: {},
 									status: statusCodes.OK
 								})
