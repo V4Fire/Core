@@ -76,9 +76,7 @@ export function compositionEngine(
 			const promises = compositionRequests.map((r) => SyncPromise.resolve(r.requestFilter?.(options))
 				.then((filterValue) => {
 					if (filterValue === false) {
-						return Promise.resolve(
-							{data: {}, headers: {}, status: statusCodes.NO_CONTENT}
-						);
+						return {};
 					}
 
 					return r.request(options)
@@ -100,13 +98,7 @@ export function compositionEngine(
 								throw err;
 							}
 
-							const details = err.details.deref()!;
-
-							return {
-								data: {},
-								status: details.response.status,
-								headers: details.response.headers
-							};
+							return {};
 						});
 				}));
 
@@ -116,8 +108,8 @@ export function compositionEngine(
 					important: requestOptions.important,
 					responseType: 'object',
 					okStatuses: requestOptions.okStatuses,
-					status,
-					headers,
+					status: status ?? statusCodes.OK,
+					headers: headers ?? {},
 					decoder: requestOptions.decoders,
 					noContentStatuses: requestOptions.noContentStatuses
 				}));
@@ -180,9 +172,7 @@ async function gatherDataFromRequests(
 	options: CompositionRequestOptions
 ): Promise<GatheredRequestsData> {
 	const accumulator = {
-		data: {},
-		status: statusCodes.OK,
-		headers: {}
+		data: {}
 	};
 
 	if (options.engineOptions?.aggregateErrors) {
@@ -232,6 +222,8 @@ function accumulateData(
 	const
 		{as} = compositionRequest,
 		{status, headers, data} = newData;
+
+	accumulator.data ??= {};
 
 	if (as === compositionEngineSpreadResult) {
 		Object.assign(accumulator.data, data);
