@@ -14,13 +14,13 @@ import { errorsToIgnore } from 'core/prelude/global/const';
 extend(globalThis, 'Any', (obj) => obj);
 
 /** @see stderr */
-extend(globalThis, 'stderr', (err) => {
+extend(globalThis, 'stderr', (err, ...details: unknown[]) => {
 	if (err instanceof Object) {
 		if (errorsToIgnore[err.type] === true) {
-			log.info('stderr', err);
+			log.info('stderr', err, ...details);
 			return;
 		}
 
-		log.error('stderr', err);
+		log.error('stderr', err, ...details);
 	}
 });
