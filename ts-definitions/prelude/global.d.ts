@@ -47,8 +47,9 @@ declare function Any(obj: any): any;
 /**
  * STDERR wrapper
  * @param err
+ * @param details
  */
-declare function stderr(err: any): void;
+declare function stderr(err: any, ...details: unknown[]): void;
 
 type i18n = (key: string | TemplateStringsArray, params?: I18nParams) => string;
 
