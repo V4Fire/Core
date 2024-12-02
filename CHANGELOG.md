@@ -24,6 +24,12 @@ via `propagateStatusAndHeaders` option `core/request/engines/composition`
 
 * Added support for `redirect` option `core/request/engines/fetch`
 
+## v4.0.0-alpha.50 (2024-11-26)
+
+#### :rocket: New Feature
+
+* `stderr` can now accept error details and pass them to the logger `core/prelude/global`
+
 ## v4.0.0-alpha.49 (2024-10-31)
 
 #### :bug: Bug Fix
