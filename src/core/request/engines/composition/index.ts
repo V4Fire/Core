@@ -24,7 +24,8 @@ import type {
 	CompositionEngineOpts,
 	CompositionRequestEngine,
 	CompositionRequest,
-	CompositionRequestOptions
+	CompositionRequestOptions,
+	GatheredRequestsData
 
 } from 'core/request/engines/composition/interface';
 
@@ -75,26 +76,40 @@ export function compositionEngine(
 			const promises = compositionRequests.map((r) => SyncPromise.resolve(r.requestFilter?.(options))
 				.then((filterValue) => {
 					if (filterValue === false) {
-						return;
+						return {};
 					}
 
 					return r.request(options)
 						.then(boundRequest.bind(null, async))
-						.then((request) => isRequestResponseObject(request) ? request.data : request)
+						.then(
+							async (request) => isRequestResponseObject(request) ?
+								({
+									data: await request.data,
+									headers: request.response.headers,
+									status: request.response.status
+								}) : ({
+									data: await request,
+									headers: {},
+									status: statusCodes.OK
+								})
+						)
 						.catch((err) => {
 							if (r.failCompositionOnError) {
 								throw err;
 							}
+
+							return {};
 						});
 				}));
 
-			gatherDataFromRequests(promises, options).then((data) => {
+			gatherDataFromRequests(promises, options).then(({data, status, headers}) => {
 				resolve(new Response(data, {
 					parent: requestOptions.parent,
 					important: requestOptions.important,
 					responseType: 'object',
 					okStatuses: requestOptions.okStatuses,
-					status: statusCodes.OK,
+					status: status ?? statusCodes.OK,
+					headers: headers ?? {},
 					decoder: requestOptions.decoders,
 					noContentStatuses: requestOptions.noContentStatuses
 				}));
@@ -153,10 +168,12 @@ function boundRequest<T extends unknown>(
  * @param options - Options related to composition requests.
  */
 async function gatherDataFromRequests(
-	promises: Array<Promise<unknown>>,
+	promises: Array<Promise<GatheredRequestsData>>,
 	options: CompositionRequestOptions
-): Promise<Dictionary> {
-	const accumulator = {};
+): Promise<GatheredRequestsData> {
+	const accumulator = {
+		data: {}
+	};
 
 	if (options.engineOptions?.aggregateErrors) {
 		await Promise.allSettled(promises)
@@ -191,25 +208,33 @@ async function gatherDataFromRequests(
 }
 
 /**
- * Accumulates data into an accumulator object based on the composition request.
+ * Accumulates new data into an accumulator object based on the composition request.
  *
  * @param accumulator
- * @param data
+ * @param newData
  * @param compositionRequest
  */
 function accumulateData(
-	accumulator: Dictionary,
-	data: unknown,
+	accumulator: GatheredRequestsData,
+	newData: GatheredRequestsData,
 	compositionRequest: CompositionRequest
-): Dictionary {
+): GatheredRequestsData {
 	const
-		{as} = compositionRequest;
+		{as} = compositionRequest,
+		{status, headers, data} = newData;
+
+	accumulator.data ??= {};
 
 	if (as === compositionEngineSpreadResult) {
-		Object.assign(accumulator, data);
+		Object.assign(accumulator.data, data);
 
 	} else {
-		Object.set(accumulator, as, data);
+		Object.set(accumulator.data, as, data);
+	}
+
+	if (compositionRequest.propagateStatusAndHeaders === true) {
+		accumulator.status = status;
+		accumulator.headers = headers;
 	}
 
 	return accumulator;

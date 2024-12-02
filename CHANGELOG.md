@@ -13,6 +13,13 @@ _Note: Gaps between patch versions are faulty, broken or test releases.
 
 ## v?.??.? (????-??-??)
 
+#### :rocket: New Feature
+
+* Added support for propagating status code and headers from exactly one request of the composition
+via `propagateStatusAndHeaders` option `core/request/engines/composition`
+
+## v?.??.? (????-??-??)
+
 #### :rocket: New Feature 
 
 * Added support for `redirect` option `core/request/engines/fetch`
