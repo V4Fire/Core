@@ -11,17 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v?.??.? (????-??-??)
+## v4.0.0-alpha.43.1 (2024-12-02)
 
 #### :rocket: New Feature
 
 * Added support for propagating status code and headers from exactly one request of the composition
 via `propagateStatusAndHeaders` option `core/request/engines/composition`
-
-## v?.??.? (????-??-??)
-
-#### :rocket: New Feature 
-
 * Added support for `redirect` option `core/request/engines/fetch`
 
 ## v4.0.0-alpha.43 (2024-07-29)
