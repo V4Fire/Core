@@ -9,6 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.51 (2024-12-02)
+
+#### :rocket: New Feature
+
+* Added support for propagating status code and headers from exactly one request of the composition 
+via `propagateStatusAndHeaders` option
+
 ## v4.0.0-alpha.40 (2024-07-02)
 
 #### :bug: Bug Fix

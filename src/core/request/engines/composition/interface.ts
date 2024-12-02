@@ -9,6 +9,8 @@
 import type Provider from 'core/data';
 import type { ProviderOptions } from 'core/data';
 import type { RequestOptions, RequestResponseObject, MiddlewareParams, RequestPromise, RequestEngine } from 'core/request';
+import type { RawHeaders } from 'core/request/headers';
+import type { StatusCodes } from 'core/status-codes';
 
 export interface CompositionEngineOpts {
 	/**
@@ -130,6 +132,13 @@ export interface CompositionRequest {
 	 * If false / undefined, request errors will be ignored.
 	 */
 	failCompositionOnError?: boolean;
+
+	/**
+	 * If true, status code and reponse headers will be propagated from this request to the whole
+	 * composition. Note that if there are more than one request with this option set to true,
+	 * only last request's data will be propagated.
+	 */
+	propagateStatusAndHeaders?: boolean;
 }
 
 export interface CompositionRequestOptions {
@@ -165,4 +174,10 @@ export interface DestroyableObject {
 export interface CompositionRequestEngine extends RequestEngine {
 	dropCache: NonNullable<RequestEngine['dropCache']>;
 	destroy: NonNullable<RequestEngine['destroy']>;
+}
+
+export interface GatheredRequestsData {
+	data?: Dictionary;
+	headers?: RawHeaders;
+	status?: StatusCodes;
 }
