@@ -81,18 +81,21 @@ export function compositionEngine(
 
 					return r.request(options)
 						.then(boundRequest.bind(null, async))
-						.then(
-							async (request) => isRequestResponseObject(request) ?
-								({
+						.then(async (request) => {
+							if (isRequestResponseObject(request)) {
+								return {
 									data: await request.data,
 									headers: request.response.headers,
 									status: request.response.status
-								}) : ({
-									data: await request,
-									headers: {},
-									status: statusCodes.OK
-								})
-						)
+								};
+							}
+
+							return {
+								data: await request,
+								headers: {},
+								status: statusCodes.OK
+							};
+						})
 						.catch((err) => {
 							if (r.failCompositionOnError) {
 								throw err;
