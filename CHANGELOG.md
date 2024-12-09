@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.101.2 (2024-12-09)
+
+#### :bug: Bug Fix
+
+* Fixed an issue when receiving an empty string with the `Content-Type: application/octet-stream` header `core/request/response`
+
 ## v3.101.1 (2024-10-21)
 
 #### :bug: Bug Fix
