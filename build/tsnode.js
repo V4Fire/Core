@@ -72,7 +72,7 @@ module.exports = function initTsNode() {
 
 		compilerOptions: {
 			module: 'commonjs',
-			target: 'es2021'
+			target: 'esnext'
 		},
 
 		ignore: [],
