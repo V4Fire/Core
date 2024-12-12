@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.43.1a (2024-12-12)
+
+#### :rocket: New Feature
+
+* `stderr` can now accept error details and pass them to the logger `core/prelude/global`
+
 ## v4.0.0-alpha.43 (2024-07-29)
 
 #### :house: Internal

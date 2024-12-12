@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.43.1a (2024-12-12)
+
+#### :rocket: New Feature
+
+* `stderr` can now accept error details and pass them to the logger
+
 ## v4.0.0-alpha.34 (2024-05-06)
 
 #### :rocket: New Feature
