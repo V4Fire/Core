@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.52 (2024-12-12)
+
+#### :house: Internal
+
+* `target` option for `ts-node` set to `esnext`
+
 ## v4.0.0-alpha.51 (2024-12-02)
 
 #### :rocket: New Feature

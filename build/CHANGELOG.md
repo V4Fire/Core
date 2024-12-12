@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.52 (2024-12-12)
+
+#### :house: Internal
+
+* `target` option for `ts-node` set to `esnext`
+
 ## v3.86.2 (2022-05-18)
 
 #### :bug: Bug Fix
