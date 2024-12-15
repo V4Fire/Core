@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.53 (2024-12-16)
+
+#### :bug: Bug Fix 
+
+* Added handling the rejection of provider in provider request engine `core/request/engines/provider`
+
 ## v4.0.0-alpha.52 (2024-12-12)
 
 #### :house: Internal
