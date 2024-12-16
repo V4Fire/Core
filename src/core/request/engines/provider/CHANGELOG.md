@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.53 (2024-12-16)
+
+#### :bug: Bug Fix 
+
+* Added handling the rejection of provider in provider request engine `core/request/engines/provider`
+
 ## v3.78.0 (2022-03-16)
 
 #### :rocket: New Feature

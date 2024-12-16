@@ -171,11 +171,20 @@ export default function createProviderEngine(
 
 			params.emitter.emit('drainListeners');
 
-			const
-				providerResObj = await req,
-				providerResponse = providerResObj.response;
+			let providerResObj;
 
-			const getResponse = () => providerResObj.data;
+			try {
+				providerResObj = await req;
+
+			} catch (err) {
+				reject(err);
+				return;
+			}
+
+			const
+				providerResponse = providerResObj.response,
+				getResponse = () => providerResObj.data;
+
 			getResponse[Symbol.asyncIterator] = () => {
 				const
 					type = providerResponse.sourceResponseType;
