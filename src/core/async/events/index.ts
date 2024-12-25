@@ -140,7 +140,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				wrapper(cb: AnyFunction): unknown {
 					if (Object.isFunction(originalEmitter)) {
 						// eslint-disable-next-line func-name-matching
-						emitter = function wrappedEmitter(this: unknown): CanUndef<Function> {
+						emitter = function wrappedEmitter(this: unknown): CanUndef<AnyFunction> {
 							// eslint-disable-next-line prefer-rest-params
 							const destructor = originalEmitter.apply(this, arguments);
 
@@ -182,7 +182,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 					};
 
 					function handler(this: unknown, ...handlerArgs: unknown[]): unknown {
-						if (p.single && (hasMultipleEvent || !emitter.once)) {
+						if (p.single && (hasMultipleEvent || !('once' in emitter))) {
 							if (hasMultipleEvent) {
 								that.clearEventListener(ids);
 

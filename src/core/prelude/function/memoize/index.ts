@@ -8,8 +8,8 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see [[Function.once]] */
-extend(Function.prototype, 'once', function once(this: AnyFunction): AnyFunction {
+/** @see [[Function.memoize]] */
+extend(Function.prototype, 'memoize', function memoize(this: AnyFunction): AnyFunction {
 	const
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		fn = this;
@@ -18,7 +18,7 @@ extend(Function.prototype, 'once', function once(this: AnyFunction): AnyFunction
 		called = false,
 		res;
 
-	Object.defineProperty(wrapper, 'cancelOnce', {
+	Object.defineProperty(wrapper, 'cancelmemoize', {
 		configurable: true,
 		enumerable: false,
 		writable: true,
@@ -41,11 +41,11 @@ extend(Function.prototype, 'once', function once(this: AnyFunction): AnyFunction
 	}
 });
 
-/** @see [[Function.cancelOnce]] */
-extend(Function.prototype, 'cancelOnce', () => undefined);
+/** @see [[Function.cancelMemoize]] */
+extend(Function.prototype, 'cancelMemoize', () => undefined);
 
-/** @see [[FunctionConstructor.once]] */
-extend(Function, 'once', (fn: AnyFunction) => fn.once());
+/** @see [[FunctionConstructor.memoize]] */
+extend(Function, 'memoize', (fn: AnyFunction) => fn.memoize());
 
-/** @see [[FunctionConstructor.cancelOnce]] */
-extend(Function, 'cancelOnce', (fn: AnyFunction) => fn.cancelOnce());
+/** @see [[FunctionConstructor.cancelMemoize]] */
+extend(Function, 'cancelMemoize', (fn: AnyFunction) => fn.cancelMemoize());
