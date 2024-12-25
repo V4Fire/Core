@@ -12,7 +12,7 @@
  */
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
-import { once, deprecated } from 'core/functools';
+import { memoize, deprecated } from 'core/functools';
 import { IS_NODE } from 'core/env';
 
 import { convertIfDate } from 'core/json';
@@ -253,7 +253,7 @@ export default class Response<
 		this.headers = Object.freeze(new Headers(p.headers));
 
 		if (Object.isFunction(body)) {
-			this.body = body.once();
+			this.body = body.memoize();
 			this.body[Symbol.asyncIterator] = body[Symbol.asyncIterator].bind(body);
 
 		} else {
@@ -442,7 +442,7 @@ export default class Response<
 	/**
 	 * Parses the response body as a JSON object and returns it
 	 */
-	@once
+	@memoize
 	json(): AbortablePromise<JSONLikeValue> {
 		return this.readBody().then((body) => {
 			if (body == null) {
@@ -494,7 +494,7 @@ export default class Response<
 	/**
 	 * Parses the response data stream as a JSON tokens and yields them via an asynchronous iterator
 	 */
-	@once
+	@memoize
 	jsonStream(): AsyncIterableIterator<Token> {
 		const
 			iter = Parser.from(this.textStream());
@@ -511,7 +511,7 @@ export default class Response<
 	/**
 	 * Parses the response body as a FormData object and returns it
 	 */
-	@once
+	@memoize
 	formData(): AbortablePromise<FormData> {
 		const
 			that = this;
@@ -565,7 +565,7 @@ export default class Response<
 	/**
 	 * Parses the response body as a Document instance and returns it
 	 */
-	@once
+	@memoize
 	document(): AbortablePromise<Document> {
 		return this.readBody().then((body) => {
 			//#if node_js
@@ -595,7 +595,7 @@ export default class Response<
 	/**
 	 * Parses the response body as a string and returns it
 	 */
-	@once
+	@memoize
 	text(): AbortablePromise<string> {
 		return this.readBody().then((body) => this.decodeToString(body));
 	}
@@ -603,7 +603,7 @@ export default class Response<
 	/**
 	 * Parses the response data stream as a text chunks and yields them via an asynchronous iterator
 	 */
-	@once
+	@memoize
 	textStream(): AsyncIterableIterator<string> {
 		const
 			iter = this.stream();
@@ -628,7 +628,7 @@ export default class Response<
 	/**
 	 * Parses the response data stream as an ArrayBuffer chunks and yields them via an asynchronous iterator
 	 */
-	@once
+	@memoize
 	stream(): AsyncIterableIterator<ArrayBuffer | undefined> {
 		const
 			iter = this[Symbol.asyncIterator]();
@@ -653,7 +653,7 @@ export default class Response<
 	/**
 	 * Parses the response body as a Blob structure and returns it
 	 */
-	@once
+	@memoize
 	blob(): AbortablePromise<Blob> {
 		return this.readBody().then((body) => this.decodeToBlob(body));
 	}
@@ -661,7 +661,7 @@ export default class Response<
 	/**
 	 * Parses the response body as an ArrayBuffer and returns it
 	 */
-	@once
+	@memoize
 	arrayBuffer(): AbortablePromise<ArrayBuffer> {
 		return this.readBody().then((body) => {
 			if (body == null || body === '') {
@@ -688,7 +688,7 @@ export default class Response<
 		this.emitter.removeAllListeners();
 
 		if (Object.isFunction(this.body)) {
-			this.body.cancelOnce();
+			this.body.cancelMemoize();
 
 			Object.defineProperty(this.body, Symbol.asyncIterator, {
 				configurable: true,
@@ -707,7 +707,7 @@ export default class Response<
 		Object.delete(this, 'parent');
 
 		['json', 'formData', 'document', 'text', 'blob', 'arrayBuffer', 'decode'].forEach((key) => {
-			(<Function>this[key]).cancelOnce();
+			(<Function>this[key]).cancelMemoize();
 
 			Object.defineProperty(this, key, {
 				configurable: true,
@@ -718,7 +718,7 @@ export default class Response<
 		});
 
 		['jsonStream', 'textStream', 'stream', 'decodeStream', Symbol.asyncIterator].forEach((key) => {
-			(<Function>this[key]).cancelOnce();
+			(<Function>this[key]).cancelMemoize();
 
 			Object.defineProperty(this, key, {
 				configurable: true,

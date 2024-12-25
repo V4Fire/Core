@@ -28,7 +28,7 @@ export interface EventEmitterLike {
 /**
  * Extended type of event emitter
  */
-export declare type EventEmitterLikeP = ((event: string, handler: Function) => CanUndef<Function>) | EventEmitterLike;
+export declare type EventEmitterLikeP = ((event: string, handler: AnyFunction) => CanUndef<AnyFunction>) | EventEmitterLike;
 export interface AsyncOnOptions<CTX extends object = Async> extends AsyncCbOptionsSingle<CTX> {
     /**
      * Additional options for the emitter

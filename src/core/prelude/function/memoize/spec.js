@@ -7,9 +7,9 @@
  */
 
 describe('core/prelude/function/memoize', () => {
-	it('`once`', () => {
+	it('`memoize`', () => {
 		const
-			rand = Math.random.once(),
+			rand = Math.random.memoize(),
 			res = rand();
 
 		expect(Object.isNumber(res)).toBe(true);
@@ -17,15 +17,15 @@ describe('core/prelude/function/memoize', () => {
 		expect(rand()).toBe(res);
 	});
 
-	it('`once` with arguments', () => {
-		const fn = ((i) => i).once();
+	it('`memoize` with arguments', () => {
+		const fn = ((i) => i).memoize();
 		expect(fn(1)).toBe(1);
 		expect(fn(2)).toBe(1);
 	});
 
-	it('`Function.once`', () => {
+	it('`Function.memoize`', () => {
 		const
-			rand = Function.once(Math.random),
+			rand = Function.memoize(Math.random),
 			res = rand();
 
 		expect(Object.isNumber(res)).toBe(true);

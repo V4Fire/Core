@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v4.0.0-alpha.54 (2024-12-25)
+
+#### :boom: Breaking Change
+
+* Renamed `once` decorator to `memoize`
+
 ## v4.0.0-alpha.29 (2024-04-04)
 
 #### :bug: Bug Fix

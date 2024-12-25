@@ -7,12 +7,12 @@
  */
 
 /**
- * Decorator for `Function.prototype.once`
+ * Decorator for `Function.prototype.memoize`
  *
  * @decorator
- * @see [[Function.once]]
+ * @see [[Function.memoize]]
  */
-export function once(target: object, key: string | symbol, descriptor: PropertyDescriptor): void {
+export function memoize(target: object, key: string | symbol, descriptor: PropertyDescriptor): void {
 	const
 		method = descriptor.value;
 
@@ -23,7 +23,7 @@ export function once(target: object, key: string | symbol, descriptor: PropertyD
 	descriptor.value = function value(this: object, ...args: unknown[]): unknown {
 		Object.defineProperty(this, key, {
 			configurable: true,
-			value: method.once()
+			value: method.memoize()
 		});
 
 		return this[key](...args);

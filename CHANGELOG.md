@@ -11,9 +11,17 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v4.0.0-alpha.54 (2024-12-25)
+
+#### :boom: Breaking Change
+
+* Renamed `once` method in Function prototype to `memoize` `core/prelude/function/memoize`
+* Renamed `once` decorator to `memoize` `core/functools/memoize`
+* Removed deprecated module `core/decorators`
+
 ## v4.0.0-alpha.53 (2024-12-16)
 
-#### :bug: Bug Fix 
+#### :bug: Bug Fix
 
 * Added handling the rejection of provider in provider request engine `core/request/engines/provider`
 
