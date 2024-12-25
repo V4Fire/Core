@@ -6,9 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 /**
- * Decorator for `Function.prototype.once`
+ * Decorator for `Function.prototype.memoize`
  *
  * @decorator
- * @see [[Function.once]]
+ * @see [[Function.memoize]]
  */
-export declare function once(target: object, key: string | symbol, descriptor: PropertyDescriptor): void;
+export declare function memoize(target: object, key: string | symbol, descriptor: PropertyDescriptor): void;

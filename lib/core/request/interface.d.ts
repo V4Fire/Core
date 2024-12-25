@@ -590,6 +590,7 @@ export interface RequestOptions {
     readonly body?: RequestBody;
     readonly important?: boolean;
     readonly credentials?: boolean | RequestCredentials;
+    readonly redirect?: RequestRedirect;
 }
 /**
  * Request engine

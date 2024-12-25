@@ -12,12 +12,12 @@ interface Function {
 	/**
 	 * Returns a new function that allows to invoke the target function only once
 	 */
-	once<T>(this: T): T;
+	memoize<T>(this: T): T;
 
 	/**
 	 * Cancels the memoization of the function result
 	 */
-	cancelOnce(this: Function): void;
+	cancelMemoize(this: Function): void;
 
 	/**
 	 * Returns a new function that allows to invoke the target function only with the specified delay.

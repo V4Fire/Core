@@ -27,12 +27,12 @@ interface FunctionConstructor {
 	 * Returns a new function that allows to invoke the specified function only once
 	 * @param fn
 	 */
-	once<T extends AnyFunction>(fn: T): T;
+	memoize<T extends AnyFunction>(fn: T): T;
 
 	/**
 	 * Cancels the memoization of the function result
 	 */
-	cancelOnce(this: Function): void;
+	cancelMemoize(this: Function): void;
 
 	/**
 	 * Returns a new function that allows to invoke a function, which it takes, only with the specified delay.

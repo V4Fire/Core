@@ -33,4 +33,13 @@ export interface LocaleKVStorage {
      */
     set?: SyncStorage['set'];
 }
-export declare type PluralizationCount = StringPluralizationForms | string | number;
+export declare type PluralizationCount = StringPluralizationForms | number;
+export interface I18nMeta {
+    language: string;
+    key: string;
+    keyset?: string;
+}
+export interface I18nOpts {
+    pluralRules?: Intl.PluralRules;
+    meta?: I18nMeta;
+}
