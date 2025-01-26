@@ -31,10 +31,13 @@ import type {
 
 } from 'core/async/interface';
 
+import flatAsync from 'core/async/modules/flat';
+
 export * from 'core/async/modules/base/const';
 export * from 'core/async/modules/base/helpers';
 
 export * from 'core/async/interface';
+export * from 'core/async/modules/flat/interface';
 
 export default class Async<CTX extends object = Async<any>> {
 	/**
@@ -47,6 +50,16 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @see Async.namespaces
 	 */
 	static linkNames: NamespacesDictionary = namespaces;
+
+	/**
+	 * {@link flatAsync}
+	 */
+	static flat: typeof flatAsync = flatAsync;
+
+	/**
+	 * {@link flatAsync}
+	 */
+	flat: typeof flatAsync = flatAsync;
 
 	/**
 	 * The lock status.
