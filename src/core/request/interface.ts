@@ -523,6 +523,15 @@ export interface CreateRequestOptions<D = unknown> {
 	important?: boolean;
 
 	/**
+	 * By default, request errors are sent to the logger. However, sometimes
+	 * certain errors should not be logged. To disable logging for specific errors,
+	 * use this parameter. If it returns `false`, the error will not be logged.
+	 *
+	 * @param error - The error that occurred during the request.
+	 */
+	logError?(error?: RequestError | unknown): boolean;
+
+	/**
 	 * A request engine to use.
 	 * The engine - is a simple function that takes request parameters and returns an abortable promise resolved with the
 	 * `core/request/response` instance. Mind, some engines provide extra features. For instance, you can listen to upload

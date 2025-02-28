@@ -382,7 +382,7 @@ function request<D = unknown>(
 					}
 				})
 
-				.catch((err) => log.error('request', err));
+				.catch((err) => opts.logError?.(err) ? log.error('request', err) : undefined);
 
 			resolve(ctx.wrapRequest(resultPromise));
 
