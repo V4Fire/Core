@@ -50,9 +50,10 @@ export * from 'core/cache/decorators/persistent/interface';
  * ```
  */
 const addPersistent = <V>(
-	cache: Cache<V, string>,
+	cache: Cache<string, V>,
 	storage: SyncStorageNamespace | AsyncStorageNamespace,
 	opts?: PersistentOptions
-): Promise<PersistentCache<V>> => new PersistentWrapper<Cache<V, string>, V>(cache, storage, opts).getInstance();
+): Promise<PersistentCache<string, V>> =>
+	new PersistentWrapper<Cache<string, V>, V>(cache, storage, opts).getInstance();
 
 export default addPersistent;

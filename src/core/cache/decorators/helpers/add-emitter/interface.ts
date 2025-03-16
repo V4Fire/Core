@@ -14,7 +14,8 @@ import type Cache from 'core/cache/interface';
 export type MethodsToWrap =
 	'set' |
 	'remove' |
-	'clear';
+	'clear' |
+	'clone';
 
 export interface MutationEvent<M extends AnyFunction = AnyFunction> {
 	args: Parameters<M>;
@@ -25,7 +26,11 @@ export interface MutationHandler<M extends AnyFunction = AnyFunction> {
 	(e: MutationEvent<M>): void;
 }
 
-export interface CacheWithEmitter<V = unknown, K = string, T extends Cache<V, K> = Cache<V, K>> extends Cache<V, K> {
+export interface CacheWithEmitter<
+	K = unknown,
+	V = unknown,
+	T extends Cache<K, V> = Cache<K, V>
+	> extends Cache<K, V> {
 	/** @override */
 	set(key: K, value: V, opts?: Parameters<T['set']>[2]): V;
 
@@ -36,9 +41,9 @@ export interface CacheWithEmitter<V = unknown, K = string, T extends Cache<V, K>
 }
 
 export type AddEmitter =
-	<T extends Cache<V, K>, V = unknown, K extends string = string>(cache: T) => AddEmitterReturn<T>;
+	<T extends Cache<K, V>, K = unknown, V = unknown>(cache: T) => AddEmitterReturn<T>;
 
-export interface AddEmitterReturn<T extends Cache<V, K>, V = unknown, K extends string = string> {
+export interface AddEmitterReturn<T extends Cache<K, V>, K = unknown, V = unknown> {
 	/** @see [[Cache.set]] */
 	set: T['set'];
 
@@ -47,6 +52,9 @@ export interface AddEmitterReturn<T extends Cache<V, K>, V = unknown, K extends 
 
 	/** @see [[Cache.clear]] */
 	clear: T['clear'];
+
+	/** @see [[Cache.clone]] */
+	clone: T['clone'];
 
 	/**
 	 * Subscribes for mutations of the specified cache object

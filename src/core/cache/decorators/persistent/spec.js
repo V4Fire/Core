@@ -7,7 +7,7 @@
  */
 
 import * as netModule from 'core/net';
-import { asyncLocal } from 'core/kv-storage';
+import { asyncLocal, asyncSession } from 'core/kv-storage';
 
 import addPersistent from 'core/cache/decorators/persistent';
 
@@ -78,6 +78,32 @@ describe('core/cache/decorators/persistent', () => {
 
 			await new Promise((r) => setTimeout(r, 10));
 			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({bar: Number.MAX_SAFE_INTEGER});
+		});
+
+		it('should clone the cache', async () => {
+			const opts = {
+				loadFromStorage: 'onInit'
+			};
+
+			const
+				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
+
+			await persistentCache.set('foo', 1, {persistentTTL: 100});
+			await persistentCache.set('bar', 1, {persistentTTL: 10});
+
+			Date.now = () => 50;
+
+			const
+				fakeClonedCache = persistentCache.clone(),
+				clonedCache = await persistentCache.cloneTo(asyncSession);
+
+			expect(fakeClonedCache).toBe(undefined);
+			expect(await clonedCache.get('foo')).toBe(1);
+			expect(await clonedCache.get('bar')).toBe(undefined);
+
+			expect(await asyncSession.get(INDEX_STORAGE_NAME)).toEqual({foo: 100});
+
+			Date.now = () => 0;
 		});
 
 		it('`clear` caused by a side effect', async () => {

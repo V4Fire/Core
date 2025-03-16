@@ -19,10 +19,10 @@ export * from 'core/cache/interface';
 /**
  * Implementation for a simple in-memory cache data structure
  *
+ * @typeparam K - key type
  * @typeparam V - value type
- * @typeparam K - key type (`string` by default)
  */
-export default class SimpleCache<V = unknown, K = string> implements Cache<V, K> {
+export default class SimpleCache<K = unknown, V = unknown> implements Cache<K, V> {
 	/** @see [[Cache.size]] */
 	get size(): number {
 		return this.storage.size;
@@ -101,5 +101,16 @@ export default class SimpleCache<V = unknown, K = string> implements Cache<V, K>
 
 		this.storage.clear();
 		return removed;
+	}
+
+	/** @see [[Cache.clone]] */
+	clone(): SimpleCache<K, V> {
+		const
+			newCache = new SimpleCache<K, V>(),
+			mixin = {storage: new Map(this.storage)};
+
+		Object.assign(newCache, mixin);
+
+		return newCache;
 	}
 }
