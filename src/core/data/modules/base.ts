@@ -368,8 +368,12 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 			const compositionRes = res.then(
 				(res) => Promise.all(tasks).then(async () => {
-					const
+					let
 						data = <Nullable<D & object>>(await res.data);
+
+					if (data && Object.hasOwnProperty(data, alias)) {
+						data = data[alias];
+					}
 
 					Object.set(composition, alias, data);
 					cloneTasks.push((composition) => Object.set(composition, alias, data?.valueOf()));
