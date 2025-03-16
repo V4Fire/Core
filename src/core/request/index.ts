@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -250,7 +251,7 @@ function request<D = unknown>(
 				fromCache = false;
 
 			if (cacheKey != null && ctx.canCache) {
-				if (ctx.pendingCache.has(cacheKey)) {
+				if (await ctx.pendingCache.has(cacheKey)) {
 					try {
 						const
 							res = await ctx.pendingCache.get(cacheKey);
@@ -277,7 +278,7 @@ function request<D = unknown>(
 					})));
 				}
 
-				fromCache = await AbortablePromise.resolve(ctx.cache.has(cacheKey), requestPromise);
+				fromCache = await AbortablePromise.resolve(await ctx.cache.has(cacheKey), requestPromise);
 			}
 
 			let

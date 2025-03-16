@@ -14,6 +14,7 @@
 export * from 'core/cache/interface';
 
 export { default as AbstractCache } from 'core/cache/interface';
+export { default as AbstractAsyncCache } from 'core/cache/async/interface';
 export { default as Cache } from 'core/cache/simple';
 export { default as RestrictedCache } from 'core/cache/restricted';
 export { default as NeverCache } from 'core/cache/never';
