@@ -64,8 +64,22 @@ const request: RequestEngine = (params) => {
 			xhr.responseType = 'arraybuffer';
 	}
 
-	if (p.credentials !== false) {
-		xhr.withCredentials = true;
+	switch (p.credentials) {
+		case 'omit':
+		case false:
+			xhr.withCredentials = false;
+			xhr.setRequestHeader('Cookie', '');
+			break;
+
+		case 'include':
+		case true:
+			xhr.withCredentials = true;
+			break;
+
+		case 'same-origin':
+		default:
+			xhr.withCredentials = false;
+			break;
 	}
 
 	if (p.headers) {

@@ -57,6 +57,9 @@ const request: RequestEngine = (params) => {
 	if (Object.isString(p.credentials)) {
 		credentials = p.credentials;
 
+	} else if (p.credentials === false) {
+		credentials = 'omit';
+
 	} else if (p.credentials) {
 		credentials = 'include';
 	}

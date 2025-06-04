@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.102.0 (2025-06-04)
+
+#### :boom: Breaking Change
+
+* Unified behavior of the `credentials` parameter: now the value `false` completely removes cookies for all requests
+
 ## v3.78.0 (2022-03-16)
 
 #### :rocket: New Feature
